@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/background_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.VpnFragment"
+    android:id="@+id/fragment_vpn"
+    >
+
+    <androidx.cardview.widget.CardView
+        app:cardBackgroundColor="@android:color/transparent"
+        android:id="@+id/cv_country"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_60sdp"
+        android:layout_marginHorizontal="@dimen/_32sdp"
+        android:background="@color/gray_800"
+        app:cardCornerRadius="@dimen/_16sdp"
+        android:layout_marginTop="@dimen/_40sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/container_selector"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_bolder_gray_800">
+
+            <ImageView
+                android:id="@+id/imv_flag"
+                android:layout_width="@dimen/_30sdp"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:src="@drawable/ic_flag_america"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_country"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/_16sdp"
+                android:text="UnitedState"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_18sdp"
+                app:layout_constraintBottom_toBottomOf="@id/imv_flag"
+                app:layout_constraintStart_toEndOf="@+id/imv_flag"
+                app:layout_constraintTop_toTopOf="@id/imv_flag" />
+
+            <ImageView
+                android:id="@+id/imv_arrow"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:layout_marginEnd="@dimen/_16sdp"
+                android:src="@drawable/ic_arrow_down"
+                app:layout_constraintBottom_toBottomOf="@id/imv_flag"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/imv_flag" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+    <LinearLayout
+        android:id="@+id/container_status"
+        android:layout_marginTop="@dimen/_20sdp"
+        app:layout_constraintTop_toBottomOf="@id/cv_country"
+        app:layout_constraintStart_toStartOf="@id/cv_country"
+        app:layout_constraintEnd_toEndOf="@id/cv_country"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <TextView
+            android:textSize="@dimen/_16sdp"
+            android:id="@+id/tv_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Status:"
+            android:textColor="@color/white"
+            app:layout_constraintTop_toBottomOf="@+id/cv_country" />
+
+        <TextView
+            android:id="@+id/tv_status_value"
+            android:textSize="@dimen/_16sdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingStart="@dimen/_4sdp"
+            android:text="@string/connected"
+            android:textColor="@color/signal_poor"
+            />
+    </LinearLayout>
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/swOnOff"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:thumb="@drawable/custom_switch_thumb"
+        app:track="@drawable/custom_track"
+        app:layout_constraintEnd_toEndOf="@id/container_status"
+        app:layout_constraintStart_toStartOf="@+id/container_status"
+        app:layout_constraintTop_toBottomOf="@id/container_status"
+         />
+    <androidx.cardview.widget.CardView
+        app:cardBackgroundColor="@android:color/transparent"
+        android:id="@+id/cv_rate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_16sdp"
+        android:background="@color/gray_800"
+        android:layout_marginTop="@dimen/_20sdp"
+        app:cardCornerRadius="@dimen/_16sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/swOnOff"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/container_infor"
+            android:paddingHorizontal="@dimen/_16sdp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/gray_800">
+            <LinearLayout
+                android:layout_marginTop="@dimen/_16sdp"
+                android:id="@+id/container_download"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/container_clock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/imv_downArrow"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_download" />
+                <TextView
+                    android:textSize="16dp"
+                    android:paddingStart="@dimen/_4sdp"
+                    android:textColor="@color/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="00:00"/>
+            </LinearLayout>
+            <LinearLayout
+                app:layout_constraintStart_toEndOf="@id/container_download"
+                app:layout_constraintEnd_toStartOf="@id/container_upload"
+                app:layout_constraintTop_toTopOf="@id/container_download"
+                app:layout_constraintBottom_toBottomOf="@id/container_download"
+                android:id="@+id/container_clock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/imv_clock"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_download" />
+                <TextView
+                    android:textSize="16dp"
+                    android:paddingStart="@dimen/_4sdp"
+                    android:textColor="@color/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="00:00"/>
+            </LinearLayout>
+            <LinearLayout
+                app:layout_constraintStart_toEndOf="@id/container_clock"
+                app:layout_constraintTop_toTopOf="@id/container_download"
+                app:layout_constraintBottom_toBottomOf="@id/container_download"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:id="@+id/container_upload"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/imv_upArrow"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_upload" />
+                <TextView
+                    android:textSize="16dp"
+                    android:paddingStart="@dimen/_4sdp"
+                    android:textColor="@color/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="00:00"/>
+            </LinearLayout>
+            <LinearLayout
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/container_download"
+                android:id="@+id/container_hidden"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+
+                    android:id="@+id/container_location"
+                    android:background="@drawable/border_bottom"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_40sdp">
+
+                    <TextView
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:textColor="@color/white"
+                        android:id="@+id/tv_location"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/_14ssp"
+                        android:text="Location"/>
+
+                    <TextView
+                        android:paddingEnd="@dimen/_4sdp"
+                        android:gravity="end"
+                        android:id="@+id/tv_location_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:text="UnitedState"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <ImageView
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="@dimen/_30sdp"
+                        android:layout_height="@dimen/_30sdp"
+                        android:src="@drawable/ic_flag_america"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/container_ip"
+                    android:background="@drawable/border_bottom"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_40sdp">
+
+                    <TextView
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:textColor="@color/white"
+                        android:id="@+id/tv_ip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/_14ssp"
+                        android:text="IP"/>
+
+                    <TextView
+                        android:paddingEnd="@dimen/_4sdp"
+                        android:gravity="end"
+                        android:id="@+id/tv_ip_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:text="192.168.1.1"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_14ssp" />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/container_delay"
+                    android:orientation="horizontal"
+                    app:layout_constraintTop_toBottomOf="@id/container_ip"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_40sdp">
+
+                    <TextView
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:textColor="@color/white"
+                        android:id="@+id/tv_delay"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/_14ssp"
+                        android:text="Delay"/>
+
+                    <TextView
+                        android:paddingEnd="@dimen/_4sdp"
+                        android:gravity="end"
+                        android:id="@+id/tv_delay_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:text="323 ms"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_14ssp" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <androidx.constraintlayout.widget.Barrier
+                app:layout_constraintTop_toBottomOf="@id/container_hidden"
+                android:id="@+id/barrier"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="bottom"
+                app:constraint_referenced_ids="container_hidden,imv_arrow_down_2" />
+            <ImageView
+                android:id="@+id/imv_arrow_down_2"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:src="@drawable/ic_arrow_down"
+                app:layout_constraintTop_toBottomOf="@id/barrier"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>

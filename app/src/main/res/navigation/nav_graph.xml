@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/fragmentSplash">
+
+    <fragment
+        android:id="@+id/fragmentPermission"
+        android:name="com.example.speedtest_rework.ui.permissison.FragmentPermission"
+        android:label="FragmentPermission" >
+        <action
+            android:id="@+id/action_fragmentPermission_to_fragmentMain"
+            app:destination="@id/fragmentMain" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentSplash"
+        android:name="com.example.speedtest_rework.ui.splash.FragmentSplash"
+        android:label="FragmentSplash" >
+        <action
+            android:id="@+id/action_fragmentSplash_to_fragmentPermission"
+            app:destination="@id/fragmentPermission" />
+        <action
+            android:id="@+id/action_fragmentSplash_to_fragmentMain"
+            app:destination="@id/fragmentMain" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentMain"
+        android:name="com.example.speedtest_rework.ui.main.FragmentMain"
+        android:label="FragmentMain" />
+</navigation>
