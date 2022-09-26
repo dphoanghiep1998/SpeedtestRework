@@ -13,10 +13,11 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
 import com.example.speedtest_rework.R
+import com.example.speedtest_rework.base.fragment.BaseFragment
 import com.example.speedtest_rework.common.Constant
 import com.example.speedtest_rework.databinding.FragmentPermissionBinding
 
-class FragmentPermission : Fragment() {
+class FragmentPermission : BaseFragment() {
     private lateinit var binding: FragmentPermissionBinding
     override fun onCreateView(
         inflater: LayoutInflater,

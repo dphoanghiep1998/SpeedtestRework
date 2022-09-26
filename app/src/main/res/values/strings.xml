@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">SpeedTest_Rework</string>
+    <string name="default_notify_title">Message</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="connected">Connected</string>
     <string name="rate_app">Rate app</string>

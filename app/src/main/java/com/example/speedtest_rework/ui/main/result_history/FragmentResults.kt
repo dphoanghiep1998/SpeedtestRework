@@ -5,9 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.speedtest_rework.base.fragment.BaseFragment
 import com.example.speedtest_rework.databinding.FragmentResultsBinding
 
-class FragmentResults : Fragment() {
+class FragmentResults : BaseFragment() {
     private lateinit var binding: FragmentResultsBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

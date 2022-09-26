@@ -4,31 +4,39 @@ import android.Manifest
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.example.speedtest_rework.R
+import com.example.speedtest_rework.base.activity.BaseActivity
 import com.example.speedtest_rework.common.Constant
 import com.example.speedtest_rework.databinding.ActivityMainBinding
 import com.example.speedtest_rework.receivers.ConnectivityListener
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
     private lateinit var binding: ActivityMainBinding
-    private var navHostFragment: NavHostFragment ?= null
-    private val connectivityListener =  ConnectivityListener()
+    private var navHostFragment: NavHostFragment? = null
+    private val connectivityListener = ConnectivityListener()
+    val viewmodel: SpeedTestViewModel by viewModels()
 
-    val viewmodel : SpeedTestViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         registerConnectivityListener()
+
         initNavController()
         handlePermissionFlow()
     }
@@ -38,9 +46,11 @@ class MainActivity : AppCompatActivity() {
         unregisterConnectivityListener()
     }
 
-    private fun initNavController(){
-        navHostFragment = supportFragmentManager.findFragmentById(binding.navHostFragment.id) as NavHostFragment
+    private fun initNavController() {
+        navHostFragment =
+            supportFragmentManager.findFragmentById(binding.navHostFragment.id) as NavHostFragment
     }
+
     private fun handlePermissionFlow() {
 
         if (ContextCompat.checkSelfPermission(
@@ -57,14 +67,16 @@ class MainActivity : AppCompatActivity() {
             navHostFragment?.navController?.navigate(R.id.action_fragmentSplash_to_fragmentMain)
         }
     }
-    private fun registerConnectivityListener(){
+
+    private fun registerConnectivityListener() {
         val filter = IntentFilter(Constant.INTENTFILER_CONNECTIVITYCHANGE)
-        registerReceiver(connectivityListener,filter)
+        registerReceiver(connectivityListener, filter)
     }
 
-    private fun unregisterConnectivityListener(){
+    private fun unregisterConnectivityListener() {
         unregisterReceiver(connectivityListener)
     }
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String?>,
@@ -74,8 +86,10 @@ class MainActivity : AppCompatActivity() {
         if (requestCode == Constant.REQUEST_CODE_LOCATION_PERMISSION) {
             if (grantResults.size > 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                 navHostFragment?.navController?.navigate(R.id.action_fragmentPermission_to_fragmentMain)
-               viewmodel.isPermissionGrandted.postValue(true)
+                viewmodel.isPermissionGrandted.postValue(true)
             }
         }
     }
+
+
 }

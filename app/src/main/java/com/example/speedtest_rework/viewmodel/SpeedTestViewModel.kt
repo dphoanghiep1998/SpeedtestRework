@@ -1,13 +1,20 @@
 package com.example.speedtest_rework.viewmodel
 
-import android.app.Application
-import android.content.Context
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.speedtest_rework.base.viewmodel.BaseViewModel
+import com.example.speedtest_rework.data.model.HistoryModel
+import com.example.speedtest_rework.data.repositories.HistoryRepository
+import kotlinx.coroutines.launch
 
-class SpeedTestViewModel(application: Application) : AndroidViewModel(application) {
+
+class SpeedTestViewModel constructor(private val historyRepository: HistoryRepository) :
+    BaseViewModel() {
     val isScanning = MutableLiveData<Boolean>()
     val isPermissionGrandted = MutableLiveData<Boolean>()
     val isWifiEnabled = MutableLiveData<Boolean>()
+    private var _currentTestModel = MutableLiveData<HistoryModel?>()
+    fun insertNewHistoryAction(historyModel: HistoryModel) {
+
+    }
 }

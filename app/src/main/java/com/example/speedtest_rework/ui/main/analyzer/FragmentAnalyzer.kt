@@ -5,10 +5,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.speedtest_rework.base.fragment.BaseFragment
 import com.example.speedtest_rework.databinding.FragmentAnalyzerBinding
 
 
-class FragmentAnalyzer : Fragment() {
+class FragmentAnalyzer : BaseFragment() {
 private lateinit var binding : FragmentAnalyzerBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

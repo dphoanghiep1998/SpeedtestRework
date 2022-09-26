@@ -114,7 +114,7 @@ import java.nio.ByteOrder
          fun getNameWifi(context: Context): String? {
              val manager =
                  context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
-             if (manager != null && manager.isWifiEnabled) {
+             if (manager.isWifiEnabled) {
                  val wifiInfo = manager.connectionInfo
                  if (wifiInfo != null) {
                      val state = WifiInfo.getDetailedStateOf(wifiInfo.supplicantState)

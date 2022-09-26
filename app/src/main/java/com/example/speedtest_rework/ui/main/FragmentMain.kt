@@ -12,6 +12,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
 import com.example.speedtest_rework.R
+import com.example.speedtest_rework.base.fragment.BaseFragment
 import com.example.speedtest_rework.common.Constant
 import com.example.speedtest_rework.databinding.FragmentMainBinding
 import com.example.speedtest_rework.ui.main.analyzer.FragmentAnalyzer
@@ -20,7 +21,7 @@ import com.example.speedtest_rework.ui.main.speedtest.FragmentSpeedTest
 import com.example.speedtest_rework.ui.main.vpn.FragmentRoot
 import com.example.speedtest_rework.ui.viewpager.ViewPagerAdapter
 
-class FragmentMain : Fragment() {
+class FragmentMain : BaseFragment() {
     private lateinit var binding: FragmentMainBinding
     override fun onCreateView(
         inflater: LayoutInflater,

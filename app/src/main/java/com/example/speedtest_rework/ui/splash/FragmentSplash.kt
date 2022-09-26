@@ -5,9 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.example.speedtest_rework.base.fragment.BaseFragment
 import com.example.speedtest_rework.databinding.FragmentSplashBinding
 
-class FragmentSplash : Fragment() {
+class FragmentSplash : BaseFragment() {
     private lateinit var binding : FragmentSplashBinding
 
     override fun onCreateView(
