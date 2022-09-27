@@ -4,10 +4,10 @@ import android.Manifest
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
+
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
+
 import androidx.navigation.fragment.NavHostFragment
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.activity.BaseActivity
@@ -23,6 +23,7 @@ class MainActivity : BaseActivity() {
     private var navHostFragment: NavHostFragment? = null
     val viewModel: SpeedTestViewModel by viewModels()
     private lateinit var connectivityListener: ConnectivityListener
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,6 +87,8 @@ class MainActivity : BaseActivity() {
             if (grantResults.size > 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                 navHostFragment?.navController?.navigate(R.id.action_fragmentPermission_to_fragmentMain)
                 viewModel.setIsPermissionGranted(true)
+
+
             }
         }
     }

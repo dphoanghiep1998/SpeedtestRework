@@ -5,7 +5,8 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "history")
 data class HistoryEntity(
-    @PrimaryKey(autoGenerate = true) val id: Int,
+
+    @PrimaryKey(autoGenerate = true) var id: Int,
      var internalIP: String = "0.0.0.0",
      var externalIP: String = "0.0.0.0",
      var isp: String,

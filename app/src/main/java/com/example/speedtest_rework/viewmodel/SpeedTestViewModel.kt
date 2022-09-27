@@ -1,5 +1,4 @@
 package com.example.speedtest_rework.viewmodel
-
 import android.net.wifi.ScanResult
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
@@ -7,8 +6,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.speedtest_rework.base.viewmodel.BaseViewModel
 import com.example.speedtest_rework.data.model.HistoryModel
+
 import com.example.speedtest_rework.data.repositories.AppRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -76,4 +77,7 @@ class SpeedTestViewModel @Inject constructor(private val appRepository: AppRepos
     fun deleteAllHistoryAction() {
         viewModelScope.launch { appRepository.deleteAllHistory() }
     }
+
+
+
 }

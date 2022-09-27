@@ -8,5 +8,4 @@ import com.example.speedtest_rework.data.database.entities.HistoryEntity
 @Database(entities = [HistoryEntity::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
     abstract val historyDao: HistoryDao
-
 }
