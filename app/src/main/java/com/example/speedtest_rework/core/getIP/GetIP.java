@@ -16,6 +16,18 @@ public class GetIP extends Thread {
     HashMap<Integer, List<String>> mapValue = new HashMap<>();
     double selfLat = 0.0;
     double selfLon = 0.0;
+    String selfIsp = "";
+    String selfIspIp = "";
+    boolean finished = false;
+
+
+    public HashMap<Integer, String> getMapKey() {
+        return mapKey;
+    }
+
+    public HashMap<Integer, List<String>> getMapValue() {
+        return mapValue;
+    }
 
     public String getSelfIsp() {
         return selfIsp;
@@ -31,19 +43,6 @@ public class GetIP extends Thread {
 
     public void setSelfIspIp(String selfIspIp) {
         this.selfIspIp = selfIspIp;
-    }
-
-    String selfIsp = "";
-    String selfIspIp = "";
-    boolean finished = false;
-
-
-    public HashMap<Integer, String> getMapKey() {
-        return mapKey;
-    }
-
-    public HashMap<Integer, List<String>> getMapValue() {
-        return mapValue;
     }
 
     public double getSelfLat() {

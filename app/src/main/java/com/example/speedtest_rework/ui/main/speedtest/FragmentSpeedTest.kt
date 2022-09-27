@@ -1,33 +1,19 @@
 package com.example.speedtest_rework.ui.main.speedtest
 
-import android.animation.Animator
-import android.animation.ValueAnimator
-import android.graphics.LinearGradient
-import android.graphics.Shader
+import android.location.Location
 import android.os.Build
 import android.os.Bundle
-import android.os.CountDownTimer
-import android.text.SpannableString
-import android.text.style.UnderlineSpan
-import android.transition.AutoTransition
-import android.transition.TransitionManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AlphaAnimation
-import android.view.animation.Animation
-import android.widget.Toast
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import com.daimajia.androidanimations.library.Techniques
-import com.daimajia.androidanimations.library.YoYo
-import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.fragment.BaseFragment
 import com.example.speedtest_rework.common.NetworkUtils
 import com.example.speedtest_rework.core.SpeedTest
-import com.example.speedtest_rework.data.model.HistoryModel
+import com.example.speedtest_rework.core.getIP.GetIP
+import com.example.speedtest_rework.core.serverSelector.TestPoint
 import com.example.speedtest_rework.databinding.FragmentSpeedTestBinding
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
 import java.util.*
@@ -48,6 +34,84 @@ class FragmentSpeedTest : BaseFragment() {
     }
 
 
+    private fun loadServer() {
+        Log.d("TAG", "loadServer: vao day")
+        object : Thread() {
+            override fun run() {
+                try {
+                    requireActivity().runOnUiThread(Runnable { showLoadingPanel() })
+                    getIP = GetIP()
+                    getIP.run()
+                    getIP.join()
+                    val mapKey: HashMap<Int, String> = getIP.getMapKey()
+                    val mapValue: HashMap<Int, List<String>> = getIP.getMapValue()
+                    val selfLat: Double = getIP.getSelfLat()
+                    val selfLon: Double = getIP.getSelfLon()
+                    var tmp = 19349458.0
+                    var findServerIndex = 0
+                    for (index in mapKey.keys) {
+                        if (tempBlackList.contains(mapValue[index]!![5])) {
+                            continue
+                        }
+                        val source = Location("Source")
+                        source.latitude = selfLat
+                        source.longitude = selfLon
+                        val ls = mapValue[index]!!
+                        val dest = Location("Dest")
+                        dest.latitude = ls[0].toDouble()
+                        dest.longitude = ls[1].toDouble()
+                        val distance = source.distanceTo(dest).toDouble()
+                        if (tmp > distance) {
+                            tmp = distance
+                            findServerIndex = index
+                        }
+                    }
+                    val info = mapValue[findServerIndex]
+                    if (info == null) {
+                        requireActivity().runOnUiThread(Runnable {
+                            binding.tvIspName.setText("No connection")
+                            hideLoadingPanel()
+                            isLoadedServer = false
+                        })
+                        return
+                    } else {
+                        testPoint = TestPoint(
+                            info[3],
+                            "http://" + info[6],
+                            "speedtest/",
+                            "speedtest/upload",
+                            ""
+                        )
+                        requireActivity().runOnUiThread(Runnable {
+                            if (type == "wifi") {
+                                wifi.setWifi_external_ip(getIP.getSelfIspIp())
+                                wifi.setWifi_ISP(getIP.getSelfIsp())
+                            } else if (type == "mobile") {
+                                mobile.setMobile_external_ip(getIP.getSelfIspIp())
+                                mobile.setMobile_isp(getIP.getSelfIsp())
+                            }
+                            binding.tvIspName.setText(getIP.getSelfIsp())
+                            hideLoadingPanel()
+                        })
+                        isLoadedServer = true
+                    }
+                } catch (e: Exception) {
+                    Log.d("TAG", "run: to Exception ")
+                    e.printStackTrace()
+                }
+            }
+        }.start()
+    }
+
+    private fun showLoadingPanel() {
+        binding.containerInforWifi.visibility = View.GONE
+        binding.containerLoading.visibility = View.VISIBLE
+    }
+
+    private fun hideLoadingPanel() {
+        binding.containerInforWifi.visibility = View.VISIBLE
+        binding.containerLoading.visibility = View.GONE
+    }
 
 
     private fun ObserveConnectivityChanged() {
