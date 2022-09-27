@@ -6,17 +6,17 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "history")
 data class HistoryEntity(
     @PrimaryKey(autoGenerate = true) val id: Int,
-    private var internalIP: String = "0.0.0.0",
-    private var externalIP: String = "0.0.0.0",
-    private var isp: String,
-    private var jitter: Double,
-    private var loss: Double = 0.0,
-    private var name_network: String,
-    private var network: String,
-    private var ping: Double,
-    private var time: Long,
-    private var upload: Double,
-    private var download: Double
+     var internalIP: String = "0.0.0.0",
+     var externalIP: String = "0.0.0.0",
+     var isp: String,
+     var jitter: Double,
+     var loss: Double = 0.0,
+     var name_network: String,
+     var network: String,
+     var ping: Double,
+     var time: Long,
+     var upload: Double,
+     var download: Double
 ) {
 
 }

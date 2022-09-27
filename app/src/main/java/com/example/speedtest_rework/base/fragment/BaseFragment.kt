@@ -1,5 +1,7 @@
 package com.example.speedtest_rework.base.fragment
 
+import android.graphics.drawable.Drawable
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.findNavController
@@ -11,7 +13,7 @@ import com.example.speedtest_rework.common.EventObserver
 
 open class BaseFragment : Fragment() {
 
-    protected fun navigateToPage(actionId: Int){
+    protected fun navigateToPage(actionId: Int) {
         findNavController().navigate(actionId)
     }
 
@@ -22,9 +24,16 @@ open class BaseFragment : Fragment() {
         }
     }
 
+    protected fun getColor(resId: Int): Int {
+        return ContextCompat.getColor(requireContext(), resId)
+    }
+
+    protected fun getDrawable(resId: Int): Drawable? {
+        return ContextCompat.getDrawable(requireContext(), resId)
+    }
 
 
-    protected fun showErrorMessage(message: String){
+    protected fun showErrorMessage(message: String) {
         val activity = requireActivity()
         if (activity is BaseActivity) {
             activity.showErrorDialog(message)
@@ -46,15 +55,16 @@ open class BaseFragment : Fragment() {
     }
 
 
-    protected fun registerObserverLoadingMoreEvent(viewModel: BaseViewModel,
-    viewLifecycleOwner: LifecycleOwner){
-        viewModel.isLoadingMore.observe(viewLifecycleOwner, EventObserver{
-            isShow->
+    protected fun registerObserverLoadingMoreEvent(
+        viewModel: BaseViewModel,
+        viewLifecycleOwner: LifecycleOwner
+    ) {
+        viewModel.isLoadingMore.observe(viewLifecycleOwner, EventObserver { isShow ->
             showLoadingMore(isShow)
         })
     }
 
-    protected fun showLoadingMore(isShow: Boolean){
+    protected fun showLoadingMore(isShow: Boolean) {
 
     }
 
@@ -63,9 +73,11 @@ open class BaseFragment : Fragment() {
         return getString(R.string.default_notify_title)
     }
 
-    protected fun registerObserverLoadingEvent(viewModel: BaseViewModel,viewLifecycleOwner: LifecycleOwner){
-        viewModel.isLoading.observe(viewLifecycleOwner, EventObserver{
-                isShow ->
+    protected fun registerObserverLoadingEvent(
+        viewModel: BaseViewModel,
+        viewLifecycleOwner: LifecycleOwner
+    ) {
+        viewModel.isLoading.observe(viewLifecycleOwner, EventObserver { isShow ->
             showLoading(isShow)
         })
     }

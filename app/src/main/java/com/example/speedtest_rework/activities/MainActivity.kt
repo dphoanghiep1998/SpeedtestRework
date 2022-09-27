@@ -1,42 +1,34 @@
 package com.example.speedtest_rework.activities
 
 import android.Manifest
-import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
-import android.net.ConnectivityManager
-import android.net.Network
-import android.net.NetworkCapabilities
-import android.os.Build
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import androidx.activity.viewModels
-import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.activity.BaseActivity
 import com.example.speedtest_rework.common.Constant
 import com.example.speedtest_rework.databinding.ActivityMainBinding
 import com.example.speedtest_rework.receivers.ConnectivityListener
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : BaseActivity() {
     private lateinit var binding: ActivityMainBinding
     private var navHostFragment: NavHostFragment? = null
-    private val connectivityListener = ConnectivityListener()
-    val viewmodel: SpeedTestViewModel by viewModels()
-
+    val viewModel: SpeedTestViewModel by viewModels()
+    private lateinit var connectivityListener: ConnectivityListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         registerConnectivityListener()
-
         initNavController()
         handlePermissionFlow()
     }
@@ -69,11 +61,18 @@ class MainActivity : BaseActivity() {
     }
 
     private fun registerConnectivityListener() {
-        val filter = IntentFilter(Constant.INTENTFILER_CONNECTIVITYCHANGE)
+        connectivityListener = ConnectivityListener(applicationContext)
+        val filter = IntentFilter()
+        filter.addAction(Constant.INTENT_FILER_SCAN_RESULT)
+        filter.addAction(Constant.INTENT_FILER_CONNECTIVITYCHANGE)
+        viewModel.addIsConnectivityChangedSource(connectivityListener.isConnectivityChanged)
+        viewModel.addScanResultsSource(connectivityListener.scanResults)
         registerReceiver(connectivityListener, filter)
     }
 
     private fun unregisterConnectivityListener() {
+        viewModel.removeIsConnectivityChangedSource(connectivityListener.isConnectivityChanged)
+        viewModel.removeScanResultsSource(connectivityListener.scanResults)
         unregisterReceiver(connectivityListener)
     }
 
@@ -86,7 +85,7 @@ class MainActivity : BaseActivity() {
         if (requestCode == Constant.REQUEST_CODE_LOCATION_PERMISSION) {
             if (grantResults.size > 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                 navHostFragment?.navController?.navigate(R.id.action_fragmentPermission_to_fragmentMain)
-                viewmodel.isPermissionGrandted.postValue(true)
+                viewModel.setIsPermissionGranted(true)
             }
         }
     }

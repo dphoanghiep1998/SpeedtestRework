@@ -7,6 +7,7 @@ object Constant {
     const val PERMISSION_LOCATION_COARSE = "android.permission.ACCESS_COARSE_LOCATION"
     const val PERMISSION_LOCATION = "android.permission.ACCESS_LOCATION"
     const val INTENT_VALUE_SPEEDTEST = "from_speed_test"
-    const val INTENTFILER_CONNECTIVITYCHANGE = "android.net.conn.CONNECTIVITY_CHANGE"
+    const val INTENT_FILER_CONNECTIVITYCHANGE = "android.net.conn.CONNECTIVITY_CHANGE"
+    const val INTENT_FILER_SCAN_RESULT="android.net.wifi.SCAN_RESULTS"
 
 }

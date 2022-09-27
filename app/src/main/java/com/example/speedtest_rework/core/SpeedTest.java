@@ -5,7 +5,7 @@ import com.example.speedtest_rework.core.config.SpeedtestConfig;
 import com.example.speedtest_rework.core.serverSelector.TestPoint;
 import com.example.speedtest_rework.core.worker.SpeedtestWorker;
 
-public class Speedtest {
+public class SpeedTest {
     private TestPoint server = null;
     private SpeedtestConfig config = new SpeedtestConfig();
     private int state = 0; //0=configs, 1=test points, 2=server selection, 3=ready, 4=testing, 5=finished
