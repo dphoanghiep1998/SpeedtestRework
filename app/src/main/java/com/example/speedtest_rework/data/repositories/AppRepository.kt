@@ -3,15 +3,19 @@ package com.example.speedtest_rework.data.repositories
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Observer
+import com.example.speedtest_rework.core.getIP.CurrentNetworkInfo
 import com.example.speedtest_rework.data.model.HistoryModel
+import com.example.speedtest_rework.data.services.AddressInfoRemoteService
 import com.example.speedtest_rework.data.services.HistoryLocalService
 import com.example.speedtest_rework.di.IoDispatcher
+import com.example.speedtest_rework.network.NetworkResult
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
 class AppRepository @Inject constructor(
+    private val addressInfoRemoteService: AddressInfoRemoteService,
     private val historyLocalService: HistoryLocalService,
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) {
@@ -33,7 +37,24 @@ class AppRepository @Inject constructor(
     fun getAllHistory(): LiveData<List<HistoryModel>> =
         historyLocalService.historyDao.getListHistory()
 
+    suspend fun getAddressInfo() = withContext(dispatcher) {
+        when (val result = addressInfoRemoteService.getAddressInfoList()) {
+            is NetworkResult.Error -> {
+                throw result.exception
+            }
+            is NetworkResult.Success -> {
+                result.data
+            }
+        }
+    }
 
+    suspend fun getCurrentNetworkInfo(): CurrentNetworkInfo {
+        var currentNetworkInfo: CurrentNetworkInfo
+        withContext(dispatcher) {
+            currentNetworkInfo = CurrentNetworkInfo().currentNetWorkInfo
+        }
+        return currentNetworkInfo
+    }
 
 
 }

@@ -89,4 +89,20 @@ dependencies {
     //hilt
     implementation("com.google.dagger:hilt-android:2.42")
     kapt("com.google.dagger:hilt-android-compiler:2.42")
+
+
+    // retrofit
+    def retrofit_version = '2.9.0'
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-moshi:$retrofit_version"
+
+    // moshi
+    def  moshi_version ='1.11.0'
+    implementation "com.squareup.moshi:moshi-kotlin:$moshi_version"
+
+    // okhttpclient
+    def ok_httpclient_version = '4.9.0'
+    implementation "com.squareup.okhttp3:okhttp:$ok_httpclient_version"
+    implementation "com.squareup.okhttp3:logging-interceptor:$ok_httpclient_version"
+
 }

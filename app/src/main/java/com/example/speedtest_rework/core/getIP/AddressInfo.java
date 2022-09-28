@@ -1,19 +1,36 @@
 package com.example.speedtest_rework.core.getIP;
 
 public class AddressInfo {
-    private  String cc;
-    private  String country;
-    private  int distance;
-    private  int force_ping_select;
-    private  String host;
-    private  int https_functional;
-    private  int id;
-    private  String lat;
-    private  String lon;
-    private  String name;
-    private  int preferred;
-    private  String sponsor;
+    private String cc;
+    private String country;
+    private int distance;
+    private int force_ping_select = 0;
+    private String host;
+    private int https_functional;
+    private int id;
+    private double lat;
+    private double lon;
+    private String name;
+    private int preferred;
+    private String sponsor;
     private String url;
+
+    public AddressInfo(String cc, String country, int distance, int force_ping_select, String host,
+                       int https_functional, int id, double lat, double lon, String name, int preferred, String sponsor, String url) {
+        this.cc = cc;
+        this.country = country;
+        this.distance = distance;
+        this.force_ping_select = force_ping_select;
+        this.host = host;
+        this.https_functional = https_functional;
+        this.id = id;
+        this.lat = lat;
+        this.lon = lon;
+        this.name = name;
+        this.preferred = preferred;
+        this.sponsor = sponsor;
+        this.url = url;
+    }
 
     public String getCc() {
         return cc;
@@ -71,19 +88,19 @@ public class AddressInfo {
         this.id = id;
     }
 
-    public String getLat() {
+    public double getLat() {
         return lat;
     }
 
-    public void setLat(String lat) {
+    public void setLat(double lat) {
         this.lat = lat;
     }
 
-    public String getLon() {
+    public double getLon() {
         return lon;
     }
 
-    public void setLon(String lon) {
+    public void setLon(double lon) {
         this.lon = lon;
     }
 
@@ -118,11 +135,19 @@ public class AddressInfo {
     public void setUrl(String url) {
         this.url = url;
     }
+
     public final String getPingUrl() {
+        String pingUrl = this.url;
+        return pingUrl.replace("upload.php", "random4000x4000.jpg");
     }
 
     public final String getDownloadUrl() {
-        return this.url.replace( "upload.php", "random4000x4000.jpg");
+        String dlUrl = this.url;
+        return dlUrl.replace("upload.php", "random4000x4000.jpg");
+    }
+
+    public String toString() {
+        return "AddressInfo(url=" + this.url + ", lat=" + this.lat + ", lon=" + this.lon + ", distance=" + this.distance + ", name=" + this.name + ", country=" + this.country + ", cc=" + this.cc + ", sponsor=" + this.sponsor + ", id=" + this.id + ", preferred=" + this.preferred + ", https_functional=" + this.https_functional + ", host=" + this.host + ", force_ping_select=" + this.force_ping_select + ')';
     }
 
     public final String getUploadUrl() {

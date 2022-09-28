@@ -1,15 +1,17 @@
 package com.example.speedtest_rework.viewmodel
+
 import android.net.wifi.ScanResult
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.speedtest_rework.base.viewmodel.BaseViewModel
+import com.example.speedtest_rework.core.getIP.AddressInfo
+import com.example.speedtest_rework.core.getIP.CurrentNetworkInfo
 import com.example.speedtest_rework.data.model.HistoryModel
-
 import com.example.speedtest_rework.data.repositories.AppRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,9 +24,16 @@ class SpeedTestViewModel @Inject constructor(private val appRepository: AppRepos
         listHistory = appRepository.getAllHistory()
     }
 
+    var isMultiTaskSuccess: MutableLiveData<Boolean> = MutableLiveData()
+
+    var addressInfoList: MutableList<AddressInfo> = mutableListOf()
+    var currentNetworkInfo: CurrentNetworkInfo = CurrentNetworkInfo()
+
+
     private var isScanning = MutableLiveData<Boolean>()
     val _isScanning: LiveData<Boolean>
         get() = isScanning
+
     fun setIsScanning(status: Boolean) {
         isScanning.value = status
     }
@@ -54,16 +63,28 @@ class SpeedTestViewModel @Inject constructor(private val appRepository: AppRepos
     // ssot scanResults add/remove
     private var scanResults: MediatorLiveData<List<ScanResult>> =
         MediatorLiveData<List<ScanResult>>()
-
     val _scanResults: LiveData<List<ScanResult>>
         get() = scanResults
 
     fun addScanResultsSource(data: LiveData<List<ScanResult>>) {
-        isConnectivityChanged.addSource(data, scanResults::setValue)
+        scanResults.addSource(data, scanResults::setValue)
     }
 
     fun removeScanResultsSource(data: LiveData<List<ScanResult>>) {
-        isConnectivityChanged.removeSource(data)
+        scanResults.removeSource(data)
+    }
+
+    private var isWifiEnabled: MediatorLiveData<Boolean> =
+        MediatorLiveData<Boolean>()
+    val _isWifiEnabled: LiveData<Boolean>
+        get() = isWifiEnabled
+
+    fun addIsWifiEnabledSource(data: LiveData<Boolean>) {
+        isWifiEnabled.addSource(data, isWifiEnabled::setValue)
+    }
+
+    fun removeIsWifiEnabledSource(data: LiveData<List<ScanResult>>) {
+        isWifiEnabled.removeSource(data)
     }
 
     fun insertNewHistoryAction(historyModel: HistoryModel) {
@@ -78,6 +99,25 @@ class SpeedTestViewModel @Inject constructor(private val appRepository: AppRepos
         viewModelScope.launch { appRepository.deleteAllHistory() }
     }
 
+    suspend fun getServerList() {
+        val list = appRepository.getAddressInfo()
+        addressInfoList = list.toMutableList()
 
+    }
 
+    suspend fun getCurrentNetworkInfo() {
+        val cNetInfo = appRepository.getCurrentNetworkInfo()
+        currentNetworkInfo = cNetInfo
+
+    }
+
+    fun doMultiTask() {
+        showLoading(true)
+        parentJob = viewModelScope.launch(handler) {
+            getServerList()
+            getCurrentNetworkInfo()
+            isMultiTaskSuccess.postValue(true)
+        }
+        registerJobFinish()
+    }
 }

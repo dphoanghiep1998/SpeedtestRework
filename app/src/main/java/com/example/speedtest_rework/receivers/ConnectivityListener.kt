@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.wifi.ScanResult
 import android.net.wifi.WifiManager
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.speedtest_rework.common.Constant
 import javax.inject.Inject

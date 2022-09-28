@@ -1,15 +1,19 @@
 package com.example.speedtest_rework.core.serverSelector;
 
 public class TestPoint {
-    private final String name, server, dlURL, ulURL, pingURL;
-    protected float ping=-1;
+    private String name, server, dlURL, ulURL, pingURL;
+    protected float ping = -1;
 
-    public TestPoint(String name, String server, String dlURL, String ulURL, String pingURL){
-        this.name=name;
-        this.server=server;
-        this.dlURL=dlURL;
-        this.ulURL=ulURL;
-        this.pingURL=pingURL;
+    public TestPoint(String name, String server, String dlURL, String ulURL, String pingURL) {
+        this.name = name;
+        this.server = server;
+        this.dlURL = dlURL;
+        this.ulURL = ulURL;
+        this.pingURL = pingURL;
+
+    }
+
+    public TestPoint() {
 
     }
 

@@ -68,6 +68,7 @@ class MainActivity : BaseActivity() {
         filter.addAction(Constant.INTENT_FILER_CONNECTIVITYCHANGE)
         viewModel.addIsConnectivityChangedSource(connectivityListener.isConnectivityChanged)
         viewModel.addScanResultsSource(connectivityListener.scanResults)
+        viewModel.addIsWifiEnabledSource(connectivityListener.isWifiEnabled)
         registerReceiver(connectivityListener, filter)
     }
 

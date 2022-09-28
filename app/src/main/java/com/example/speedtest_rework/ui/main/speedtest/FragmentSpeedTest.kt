@@ -1,18 +1,22 @@
 package com.example.speedtest_rework.ui.main.speedtest
 
-import android.location.Location
 import android.os.Build
 import android.os.Bundle
+import android.transition.AutoTransition
+import android.transition.TransitionManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.fragment.BaseFragment
 import com.example.speedtest_rework.common.NetworkUtils
-import com.example.speedtest_rework.core.SpeedTest
-import com.example.speedtest_rework.core.getIP.GetIP
+import com.example.speedtest_rework.common.custom_view.SpeedView
+import com.example.speedtest_rework.core.getIP.AddressInfo
+import com.example.speedtest_rework.core.getIP.CurrentNetworkInfo
 import com.example.speedtest_rework.core.serverSelector.TestPoint
 import com.example.speedtest_rework.databinding.FragmentSpeedTestBinding
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
@@ -22,85 +26,101 @@ import java.util.*
 class FragmentSpeedTest : BaseFragment() {
 
     private lateinit var binding: FragmentSpeedTestBinding
-
-    private val viewModel: SpeedTestViewModel by viewModels()
+    private val viewModel: SpeedTestViewModel by activityViewModels()
+    private var testPoint: TestPoint? = null
+    private var isExpanded: Boolean = false
+    private var speedView: SpeedView? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentSpeedTestBinding.inflate(layoutInflater, container, false)
+    ): View {
+        binding = FragmentSpeedTestBinding.inflate(inflater, container, false)
+        observeIsLoading()
+//        observeConnectivityChanged()
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        observerServerList()
+        initView()
+    }
 
-    private fun loadServer() {
-        Log.d("TAG", "loadServer: vao day")
-        object : Thread() {
-            override fun run() {
-                try {
-                    requireActivity().runOnUiThread(Runnable { showLoadingPanel() })
-                    getIP = GetIP()
-                    getIP.run()
-                    getIP.join()
-                    val mapKey: HashMap<Int, String> = getIP.getMapKey()
-                    val mapValue: HashMap<Int, List<String>> = getIP.getMapValue()
-                    val selfLat: Double = getIP.getSelfLat()
-                    val selfLon: Double = getIP.getSelfLon()
-                    var tmp = 19349458.0
-                    var findServerIndex = 0
-                    for (index in mapKey.keys) {
-                        if (tempBlackList.contains(mapValue[index]!![5])) {
-                            continue
-                        }
-                        val source = Location("Source")
-                        source.latitude = selfLat
-                        source.longitude = selfLon
-                        val ls = mapValue[index]!!
-                        val dest = Location("Dest")
-                        dest.latitude = ls[0].toDouble()
-                        dest.longitude = ls[1].toDouble()
-                        val distance = source.distanceTo(dest).toDouble()
-                        if (tmp > distance) {
-                            tmp = distance
-                            findServerIndex = index
-                        }
-                    }
-                    val info = mapValue[findServerIndex]
-                    if (info == null) {
-                        requireActivity().runOnUiThread(Runnable {
-                            binding.tvIspName.setText("No connection")
-                            hideLoadingPanel()
-                            isLoadedServer = false
-                        })
-                        return
-                    } else {
-                        testPoint = TestPoint(
-                            info[3],
-                            "http://" + info[6],
-                            "speedtest/",
-                            "speedtest/upload",
-                            ""
-                        )
-                        requireActivity().runOnUiThread(Runnable {
-                            if (type == "wifi") {
-                                wifi.setWifi_external_ip(getIP.getSelfIspIp())
-                                wifi.setWifi_ISP(getIP.getSelfIsp())
-                            } else if (type == "mobile") {
-                                mobile.setMobile_external_ip(getIP.getSelfIspIp())
-                                mobile.setMobile_isp(getIP.getSelfIsp())
-                            }
-                            binding.tvIspName.setText(getIP.getSelfIsp())
-                            hideLoadingPanel()
-                        })
-                        isLoadedServer = true
-                    }
-                } catch (e: Exception) {
-                    Log.d("TAG", "run: to Exception ")
-                    e.printStackTrace()
-                }
+    private fun initView() {
+        initExpandView()
+        viewModel.doMultiTask()
+    }
+
+    private fun initExpandView() {
+        binding.containerExpandView.setOnClickListener { view ->
+            TransitionManager.beginDelayedTransition(
+                view as ViewGroup,
+                AutoTransition()
+            )
+            val layoutParams = view.getLayoutParams()
+            if (!isExpanded) {
+                layoutParams.width = ConstraintLayout.LayoutParams.MATCH_PARENT
+                view.setLayoutParams(layoutParams)
+                isExpanded = true
+            } else {
+                layoutParams.width = ConstraintLayout.LayoutParams.WRAP_CONTENT
+                view.setLayoutParams(layoutParams)
+                isExpanded = false
             }
-        }.start()
+        }
+    }
+
+
+    private fun loadServerAndNetWorkInfo() {
+        try {
+            binding.clSpeedview.initData(testPoint!!, viewModel._isScanning.value ?: false)
+
+        } catch (e: Exception) {
+        }
+    }
+
+    private fun observeIsLoading() {
+        viewModel.isLoading.observe(viewLifecycleOwner, Observer {
+            if (it.peekContent()) {
+                showLoadingPanel()
+            } else {
+                hideLoadingPanel()
+            }
+        })
+    }
+
+
+    private fun createTestPoint(addressInfo: List<AddressInfo>) {
+        if (addressInfo.isNotEmpty()) {
+            val server = addressInfo[0]
+            testPoint = TestPoint(
+                server.name,
+                server.host,
+                server.downloadUrl,
+                server.uploadUrl,
+                server.pingUrl
+            )
+
+        }
+    }
+
+    private fun setIspName(network: CurrentNetworkInfo) {
+        if (network.selfIsp != "") {
+            binding.tvIspName.text = network.selfIsp
+        }
+    }
+
+    private fun observerServerList() {
+
+        viewModel.isMultiTaskSuccess.observe(viewLifecycleOwner) {
+            if (it) {
+                createTestPoint(viewModel.addressInfoList)
+                setIspName(viewModel.currentNetworkInfo)
+                loadServerAndNetWorkInfo()
+            }
+        }
     }
 
     private fun showLoadingPanel() {
@@ -114,16 +134,29 @@ class FragmentSpeedTest : BaseFragment() {
     }
 
 
-    private fun ObserveConnectivityChanged() {
-        viewModel._isConnectivityChanged.observe(this, Observer {
-            if (it) {
-                NetworkUtils.isWifiConnected(requireContext())
-            }
+    private fun observeConnectivityChanged() {
+        viewModel._isConnectivityChanged.observe(viewLifecycleOwner, Observer {
+            onConnectivityChange()
         })
     }
 
-    private fun ObserveIsScanning() {
-        viewModel._isScanning.observe(this, Observer {
+    private fun onConnectivityChange() {
+        Log.e("", "onConnectivityChange: ")
+        if (NetworkUtils.isWifiConnected(requireContext())) {
+            binding.tvWifiName.text = NetworkUtils.getNameWifi(requireContext())
+        } else if (NetworkUtils.isMobileConnected(requireContext())) {
+            val info = NetworkUtils.getInforMobileConnected(requireContext())
+            val name = if (info != null) info?.typeName + " - " + info?.subtypeName else "Mobile"
+            binding.tvWifiName.text = name
+        } else {
+            binding.tvWifiName.text = getString(R.string.no_connection)
+            binding.tvIspName.text = getString(R.string.no_connection_isp)
+
+        }
+    }
+
+    private fun observeIsScanning() {
+        viewModel._isScanning.observe(viewLifecycleOwner, Observer {
 
         })
     }
