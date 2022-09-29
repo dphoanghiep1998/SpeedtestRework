@@ -2,6 +2,7 @@ package com.example.speedtest_rework.data.database.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.util.*
 
 @Entity(tableName = "history")
 data class HistoryEntity(
@@ -15,7 +16,7 @@ data class HistoryEntity(
      var name_network: String,
      var network: String,
      var ping: Double,
-     var time: Long,
+     var time: Date,
      var upload: Double,
      var download: Double
 ) {

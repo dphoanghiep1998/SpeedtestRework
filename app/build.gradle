@@ -42,6 +42,7 @@ kapt {
 }
 
 dependencies {
+    implementation project(path: ':speedviewlib')
     def room_version = "2.4.3"
     def lifecycle_version = "2.6.0-alpha01"
     def lottieVersion = "3.4.0"
@@ -80,8 +81,6 @@ dependencies {
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
     implementation("androidx.navigation:navigation-dynamic-features-fragment:$nav_version")
-    //speedview
-    implementation 'com.github.anastr:speedviewlib:1.6.0'
     // coroutine
     def  coroutines_version = '1.5.2'
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"

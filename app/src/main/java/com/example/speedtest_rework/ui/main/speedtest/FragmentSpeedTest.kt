@@ -10,17 +10,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.fragment.BaseFragment
 import com.example.speedtest_rework.common.NetworkUtils
-import com.example.speedtest_rework.common.custom_view.SpeedView
 import com.example.speedtest_rework.core.getIP.AddressInfo
 import com.example.speedtest_rework.core.getIP.CurrentNetworkInfo
 import com.example.speedtest_rework.core.serverSelector.TestPoint
+import com.example.speedtest_rework.data.model.HistoryModel
 import com.example.speedtest_rework.databinding.FragmentSpeedTestBinding
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
 import java.util.*
+import kotlin.math.roundToInt
 
 
 class FragmentSpeedTest : BaseFragment() {
@@ -29,7 +29,6 @@ class FragmentSpeedTest : BaseFragment() {
     private val viewModel: SpeedTestViewModel by activityViewModels()
     private var testPoint: TestPoint? = null
     private var isExpanded: Boolean = false
-    private var speedView: SpeedView? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,18 +37,28 @@ class FragmentSpeedTest : BaseFragment() {
     ): View {
         binding = FragmentSpeedTestBinding.inflate(inflater, container, false)
         observeIsLoading()
-//        observeConnectivityChanged()
+        observeConnectivityChanged()
+        observerMultiTaskDone()
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        observerServerList()
         initView()
+        initData()
     }
 
     private fun initView() {
         initExpandView()
+        initSpeedView()
+    }
+
+    private fun initData() {
+        loadServer()
+    }
+
+    private fun loadServer() {
         viewModel.doMultiTask()
     }
 
@@ -72,35 +81,67 @@ class FragmentSpeedTest : BaseFragment() {
         }
     }
 
+    private fun initSpeedView() {
+
+    }
+
 
     private fun loadServerAndNetWorkInfo() {
+        viewModel.networkException.value
+
         try {
-            binding.clSpeedview.initData(testPoint!!, viewModel._isScanning.value ?: false)
+            if (NetworkUtils.isWifiConnected(requireContext())) {
+                val testModel = HistoryModel(
+                    -1,
+                    binding.tvWifiName.text.toString(),
+                    NetworkUtils.wifiIpAddress(requireContext()),
+                    viewModel.currentNetworkInfo.selfIspIp,
+                    viewModel.currentNetworkInfo.selfIsp,
+                    0.0, 0.0, "wifi", 0.0, Date(), 0.0, 0.0
+                )
+                binding.clSpeedview.setData(testPoint!!, "wifi", testModel,viewModel)
+
+            } else if (NetworkUtils.isMobileConnected(requireContext())) {
+                val testModel = HistoryModel(
+                    -1,
+                    binding.tvWifiName.text.toString(),
+                    "0.0.0.0",
+                    viewModel.currentNetworkInfo.selfIspIp,
+                    viewModel.currentNetworkInfo.selfIsp,
+                    0.0, 0.0, "mobile", 0.0, Date(), 0.0, 0.0
+                )
+                binding.clSpeedview.setData(testPoint!!, "mobile",testModel,viewModel)
+
+            } else {
+                binding.clSpeedview.setData(testPoint!!, "no_connection")
+
+            }
 
         } catch (e: Exception) {
         }
     }
 
     private fun observeIsLoading() {
-        viewModel.isLoading.observe(viewLifecycleOwner, Observer {
+        viewModel.isLoading.observe(viewLifecycleOwner) {
             if (it.peekContent()) {
                 showLoadingPanel()
             } else {
                 hideLoadingPanel()
             }
-        })
+        }
     }
 
 
     private fun createTestPoint(addressInfo: List<AddressInfo>) {
         if (addressInfo.isNotEmpty()) {
             val server = addressInfo[0]
+            Log.d("TAG", "createTestPoint: " + server.host)
             testPoint = TestPoint(
                 server.name,
-                server.host,
-                server.downloadUrl,
-                server.uploadUrl,
-                server.pingUrl
+                "http://" + server.host,
+                "speedtest/",
+                "speedtest/upload",
+                ""
             )
 
         }
@@ -112,9 +153,9 @@ class FragmentSpeedTest : BaseFragment() {
         }
     }
 
-    private fun observerServerList() {
+    private fun observerMultiTaskDone() {
 
-        viewModel.isMultiTaskSuccess.observe(viewLifecycleOwner) {
+        viewModel.isMultiTaskDone.observe(viewLifecycleOwner) {
             if (it) {
                 createTestPoint(viewModel.addressInfoList)
                 setIspName(viewModel.currentNetworkInfo)
@@ -135,41 +176,40 @@ class FragmentSpeedTest : BaseFragment() {
 
 
     private fun observeConnectivityChanged() {
-        viewModel._isConnectivityChanged.observe(viewLifecycleOwner, Observer {
+        viewModel._isConnectivityChanged.observe(viewLifecycleOwner) {
             onConnectivityChange()
-        })
+        }
     }
 
     private fun onConnectivityChange() {
-        Log.e("", "onConnectivityChange: ")
         if (NetworkUtils.isWifiConnected(requireContext())) {
             binding.tvWifiName.text = NetworkUtils.getNameWifi(requireContext())
+            loadServer()
         } else if (NetworkUtils.isMobileConnected(requireContext())) {
             val info = NetworkUtils.getInforMobileConnected(requireContext())
             val name = if (info != null) info?.typeName + " - " + info?.subtypeName else "Mobile"
             binding.tvWifiName.text = name
+            loadServer()
         } else {
             binding.tvWifiName.text = getString(R.string.no_connection)
             binding.tvIspName.text = getString(R.string.no_connection_isp)
-
         }
     }
 
     private fun observeIsScanning() {
-        viewModel._isScanning.observe(viewLifecycleOwner, Observer {
+        viewModel._isScanning.observe(viewLifecycleOwner) {
 
-        })
+        }
     }
 
 
     private fun format(d: Double): String? {
-        val l: Locale
-        l = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        val l: Locale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             resources.configuration.locales[0]
         } else {
             resources.configuration.locale
         }
-        return if (d < 200) String.format(l, "%.2f", d) else "" + Math.round(d)
+        return if (d < 200) String.format(l, "%.2f", d) else "" + d.roundToInt()
     }
 
 

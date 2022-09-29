@@ -69,7 +69,7 @@ public class AddressInfo {
     }
 
     public void setHost(String host) {
-        this.host = host;
+        this.host =host;
     }
 
     public int getHttps_functional() {

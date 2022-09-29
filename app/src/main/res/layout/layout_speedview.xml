@@ -9,6 +9,7 @@
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/topView"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -365,7 +366,7 @@
             app:sv_indicator="NormalSmallIndicator"
             app:sv_indicatorColor="#ddd"
             app:sv_indicatorWidth="10dp"
-            app:sv_markStyle="BUTT"
+            app:sv_markStyle="ROUND"
             app:sv_speedTextColor="@android:color/transparent"
             app:sv_speedometerColor="@color/background_ads_start"
             app:sv_speedometerWidth="18dp"

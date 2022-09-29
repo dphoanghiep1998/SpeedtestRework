@@ -1,22 +1,23 @@
 package com.example.speedtest_rework.data.model
 
 import com.example.speedtest_rework.data.database.entities.HistoryEntity
+import java.util.*
 
 class HistoryModel(
-    private val id: Int = -1,
-    private var internalIP: String = "0.0.0.0",
-    private var externalIP: String = "0.0.0.0",
-    private var isp: String,
-    private var jitter: Double,
-    private var loss: Double = 0.0,
-    private var name_network: String,
-    private var network: String,
-    private var ping: Double,
-    private var time: Long,
-    private var upload: Double,
-    private var download: Double,
+     val id: Int = -1,
+     var name_network: String,
+     var internalIP: String = "0.0.0.0",
+     var externalIP: String = "0.0.0.0",
+     var isp: String,
+     var jitter: Double,
+     var loss: Double = 0.0,
+     var network: String,
+     var ping: Double,
+     var time: Date,
+     var upload: Double,
+     var download: Double,
 
-) {
+    ) {
     companion object {
         val NETWORK_MOBILE: String = "NETWORK_MOBILE"
         val NETWORK_UNKNOWN: String = "NETWORK_UNKNOWN"

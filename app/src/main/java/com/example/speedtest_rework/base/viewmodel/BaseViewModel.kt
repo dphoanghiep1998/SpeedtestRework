@@ -67,15 +67,11 @@ open class BaseViewModel : ViewModel() {
         when (e) {
             is BaseNetworkException -> {
                 baseNetworkException.postValue(Event(e))
-                Log.d("TAG", "BaseNetworkException: ")
             }
             is NetworkErrorException -> {
                 networkException.postValue(Event(e))
-                Log.d("TAG", "NetworkErrorException: ")
-
             }
             else -> {
-                Log.d("TAG", "else: ")
                 val unknowException = BaseNetworkException()
                 unknowException.mainMessage = e.message ?: "Something went wrong"
                 baseNetworkException.postValue(Event(unknowException))

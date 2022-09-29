@@ -24,9 +24,9 @@ class ConfirmDialog(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
         binding = CustomDialogBoxBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
         initView()
     }
 

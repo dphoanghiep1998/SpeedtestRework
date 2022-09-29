@@ -11,23 +11,19 @@ import com.example.speedtest_rework.core.getIP.CurrentNetworkInfo
 import com.example.speedtest_rework.data.model.HistoryModel
 import com.example.speedtest_rework.data.repositories.AppRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SpeedTestViewModel @Inject constructor(private val appRepository: AppRepository) :
     BaseViewModel() {
-    var listHistory: LiveData<List<HistoryModel>>? = null
 
-    init {
-        listHistory = appRepository.getAllHistory()
-    }
 
-    var isMultiTaskSuccess: MutableLiveData<Boolean> = MutableLiveData()
 
+    var isMultiTaskDone: MutableLiveData<Boolean> = MutableLiveData()
     var addressInfoList: MutableList<AddressInfo> = mutableListOf()
     var currentNetworkInfo: CurrentNetworkInfo = CurrentNetworkInfo()
+    var isError: MutableLiveData<Boolean> = MutableLiveData()
 
 
     private var isScanning = MutableLiveData<Boolean>()
@@ -87,6 +83,10 @@ class SpeedTestViewModel @Inject constructor(private val appRepository: AppRepos
         isWifiEnabled.removeSource(data)
     }
 
+    fun getListHistory(): LiveData<List<HistoryModel>> {
+        return appRepository.getAllHistory()
+    }
+
     fun insertNewHistoryAction(historyModel: HistoryModel) {
         viewModelScope.launch { appRepository.insertHistoryModel(historyModel) }
     }
@@ -116,8 +116,9 @@ class SpeedTestViewModel @Inject constructor(private val appRepository: AppRepos
         parentJob = viewModelScope.launch(handler) {
             getServerList()
             getCurrentNetworkInfo()
-            isMultiTaskSuccess.postValue(true)
+            isMultiTaskDone.postValue(true)
         }
         registerJobFinish()
     }
+
 }

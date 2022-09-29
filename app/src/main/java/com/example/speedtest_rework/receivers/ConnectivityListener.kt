@@ -17,25 +17,27 @@ class ConnectivityListener constructor(
     BroadcastReceiver() {
     private val wifiManager: WifiManager =
         context.getSystemService(Context.WIFI_SERVICE) as WifiManager
-     var isWifiEnabled: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
-     var isConnectivityChanged: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
-     var scanResults: MutableLiveData<List<ScanResult>> = MutableLiveData<List<ScanResult>>()
+    var isWifiEnabled: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
+    var isConnectivityChanged: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
+    var scanResults: MutableLiveData<List<ScanResult>> = MutableLiveData<List<ScanResult>>()
 
 
     override fun onReceive(context: Context?, intent: Intent?) {
         var action: String? = intent?.action
         if (action != null) {
-                when (action) {
-                    Constant.INTENT_FILER_CONNECTIVITYCHANGE -> {
-                        isConnectivityChanged.postValue(true)
-                        if (wifiManager.isWifiEnabled){
-                            isWifiEnabled.postValue(true)
-                        }
-                    }
-                    Constant.INTENT_FILER_SCAN_RESULT -> {
-                        scanResults.postValue(wifiManager.scanResults)
+            when (action) {
+                Constant.INTENT_FILER_CONNECTIVITYCHANGE -> {
+                    isConnectivityChanged.postValue(true)
+                    if (wifiManager.isWifiEnabled) {
+                        isWifiEnabled.postValue(true)
+                    } else {
+                        isWifiEnabled.postValue(false)
                     }
                 }
+                Constant.INTENT_FILER_SCAN_RESULT -> {
+                    scanResults.postValue(wifiManager.scanResults)
+                }
+            }
 
         }
 

@@ -1,18 +1,11 @@
 package com.example.speedtest_rework.ui.permissison
 
 import android.Manifest
-import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
-import androidx.fragment.app.Fragment
-import androidx.navigation.Navigation
-import androidx.navigation.fragment.NavHostFragment
-import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.fragment.BaseFragment
 import com.example.speedtest_rework.common.Constant
 import com.example.speedtest_rework.databinding.FragmentPermissionBinding
@@ -32,6 +25,7 @@ class FragmentPermission : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         initView()
     }
+
     private fun initView() {
         binding.btnAccept.setOnClickListener {
             try {
@@ -46,11 +40,13 @@ class FragmentPermission : BaseFragment() {
         ActivityCompat.requestPermissions(
             requireActivity(),
             arrayOf(
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+
+                Manifest.permission.ACCESS_FINE_LOCATION
             ),
             Constant.REQUEST_CODE_LOCATION_PERMISSION
         )
+
     }
 
 
