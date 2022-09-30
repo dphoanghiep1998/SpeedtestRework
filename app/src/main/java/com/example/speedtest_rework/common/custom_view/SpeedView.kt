@@ -2,6 +2,7 @@ package com.example.speedtest_rework.common.custom_view
 
 import android.app.Activity
 import android.content.Context
+import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.AttributeSet
 import android.view.LayoutInflater
@@ -11,9 +12,11 @@ import android.view.animation.Animation
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.navigation.Navigation
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
 import com.example.speedtest_rework.R
+import com.example.speedtest_rework.common.Constant
 import com.example.speedtest_rework.common.NetworkUtils
 import com.example.speedtest_rework.core.SpeedTest
 import com.example.speedtest_rework.core.serverSelector.TestPoint
@@ -26,18 +29,17 @@ class SpeedView(
     context: Context,
     attributeSet: AttributeSet,
 ) : ConstraintLayout(context, attributeSet) {
-    private lateinit var countDownTimer: CountDownTimer
+    private var countDownTimer: CountDownTimer? = null
     private var speedTest: SpeedTest? = null
     private var binding: LayoutSpeedviewBinding
     private var testModel: HistoryModel? = null
-    private var type = ""
+    private var type = "no_connection"
     private var testPoint: TestPoint? = null
     private var viewModel: SpeedTestViewModel? = null
 
     init {
         val inflater = LayoutInflater.from(context)
         binding = LayoutSpeedviewBinding.inflate(inflater, this)
-
         initView()
     }
 
@@ -61,20 +63,24 @@ class SpeedView(
         speedTest = SpeedTest()
         speedTest?.addTestPoint(testPoint)
     }
+    fun setData(type: String){
+        this.type = type
+    }
 
 
     private fun initView() {
         binding.btnStart.setOnClickListener {
-            if (!NetworkUtils.isNetworkConnected(context)) {
+            if (type == "no_connection") {
                 Toast.makeText(context, "No connectivity!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
+            viewModel?.setIsScanning(true)
             prepareViewSpeedTest()
         }
         binding.speedView.isWithPointer = false
     }
 
-    private fun prepareViewSpeedTest() {
+    fun prepareViewSpeedTest() {
         countDownTimer = object : CountDownTimer(4000, 1000) {
             override fun onTick(l: Long) {
                 if (l <= 1000) {
@@ -121,7 +127,7 @@ class SpeedView(
                 runSpeedTest()
             }
         }
-        countDownTimer.start()
+        countDownTimer?.start()
     }
 
     fun runSpeedTest() {
@@ -143,7 +149,7 @@ class SpeedView(
                         binding.speedView.speedTo(0f)
                         binding.speedView.stop()
                     }
-                    testModel?.download = roundOffDecimal(dl)!!
+                    testModel?.download = roundOffDecimal(dl)
 
                 }
 
@@ -152,7 +158,7 @@ class SpeedView(
             override fun onUploadUpdate(ul: Double, progress: Double) {
                 (context as Activity).runOnUiThread {
                     if (progress == 0.0) {
-                        (context as Activity).runOnUiThread { uploadView() }
+                        uploadView()
                     }
                     binding.speedView.speedTo(ul.toFloat())
                     binding.tvSpeedValue.text = format(ul.toFloat().toDouble())
@@ -163,7 +169,7 @@ class SpeedView(
                         binding.speedView.withTremble = false
                         binding.tvSpeedValue.text = 0.0.toString() + ""
                     }
-                    testModel?.upload = roundOffDecimal(ul)!!
+                    testModel?.upload = roundOffDecimal(ul)
 
                 }
             }
@@ -172,28 +178,28 @@ class SpeedView(
                 (context as Activity).runOnUiThread {
                     binding.tvPingCount.text = format(ping) + " ms"
                     binding.tvJitterCount.text = format(jitter) + " ms"
-                    testModel?.ping = roundOffDecimal(ping)!!
-                    testModel?.jitter = roundOffDecimal(jitter)!!
+                    testModel?.ping = roundOffDecimal(ping)
+                    testModel?.jitter = roundOffDecimal(jitter)
                 }
             }
 
             override fun onEnd() {
                 (context as Activity).runOnUiThread {
-
-
                     viewModel?.insertNewHistoryAction(testModel!!)
-//                    intent.putExtra("test_result", connectivityTestModel)
-//                    intent.putExtra("EXTRA_MESS_1", "from_scan_activity")
-                    resetView()
+                    viewModel?.setIsScanning(false)
+                    val bundle = Bundle()
+                    bundle.putParcelable(Constant.KEY_TEST_MODEL, testModel)
+                    bundle.putBoolean(Constant.KEY_FROM_SPEED_TEST_FRAGMENT, true)
+                    Navigation.findNavController(binding.root)
+                        .navigate(R.id.action_fragmentMain_to_fragmentResultDetail, bundle)
                 }
 
             }
 
             override fun onCriticalFailure(err: String?) {
-//                    listener.setIsScanning(false)
-                //                        startActivityForResult(intent, 1)
-                resetView()
-
+                (context as Activity).runOnUiThread {
+                    viewModel?.setIsScanning(false)
+                }
             }
         })
     }
@@ -259,6 +265,9 @@ class SpeedView(
         if (speedTest != null) {
             speedTest?.abort()
         }
+        if (countDownTimer != null) {
+            countDownTimer?.cancel()
+        }
         binding.speedView.setSpeedometerColor(ContextCompat.getColor(context, R.color.gray_400))
         binding.speedView.speedTo(0f)
         binding.tvSpeedValue.text = "0"
@@ -268,9 +277,6 @@ class SpeedView(
         binding.tvUploadValue.text = "0"
         binding.tvPingCount.text = "0"
         binding.tvJitterCount.text = "0"
-        if (countDownTimer != null) {
-            countDownTimer.cancel()
-        }
         binding.tvDownloadValue.setTextColor(ContextCompat.getColor(context, R.color.gray_400))
         binding.tvUploadValue.setTextColor(ContextCompat.getColor(context, R.color.gray_400))
         YoYo.with(Techniques.FadeOut).onStart {
@@ -288,11 +294,11 @@ class SpeedView(
         binding.btnStart.isEnabled = true
     }
 
-    private fun format(d: Double): String? {
+    private fun format(d: Double): String {
         return if (d < 200) String.format("%.2f", d) else "" + d.roundToInt()
     }
 
-    fun roundOffDecimal(number: Double): Double? {
+    fun roundOffDecimal(number: Double): Double {
         val number3digits: Double = (number * 1000.0).roundToInt() / 1000.0
         val number2digits: Double = (number3digits * 100.0).roundToInt() / 100.0
         return (number2digits * 10.0).roundToInt() / 10.0

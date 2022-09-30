@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.GravityCompat
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
@@ -20,9 +20,13 @@ import com.example.speedtest_rework.ui.main.result_history.FragmentResults
 import com.example.speedtest_rework.ui.main.speedtest.FragmentSpeedTest
 import com.example.speedtest_rework.ui.main.vpn.FragmentRoot
 import com.example.speedtest_rework.ui.viewpager.ViewPagerAdapter
+import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
 
 class FragmentMain : BaseFragment() {
     private lateinit var binding: FragmentMainBinding
+    private val viewModel: SpeedTestViewModel by activityViewModels()
+
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -30,6 +34,7 @@ class FragmentMain : BaseFragment() {
     ): View {
         binding = FragmentMainBinding.inflate(layoutInflater, container, false)
         initView()
+        observeIsScanning()
         return binding.root
     }
 
@@ -38,7 +43,13 @@ class FragmentMain : BaseFragment() {
         initViewPager()
         initBottomNavigation()
         initDrawerAction()
+        initButton()
+    }
 
+    private fun initButton() {
+        binding.imvStop.setOnClickListener{
+            viewModel.setIsScanning(false)
+        }
     }
 
     private fun initBottomNavigation() {
@@ -76,7 +87,6 @@ class FragmentMain : BaseFragment() {
             }
         }
         binding.imvBack.setOnClickListener { binding.drawerContainer.close() }
-
         binding.containerFeedback.setOnClickListener { openLink("http://www.google.com") }
         binding.containerPolicy.setOnClickListener { openLink("http://www.facebook.com") }
         binding.containerShare.setOnClickListener { this.shareApp() }
@@ -112,7 +122,7 @@ class FragmentMain : BaseFragment() {
     }
 
     private fun showMenu() {
-        if (binding.menu.visibility === View.VISIBLE) {
+        if (binding.menu.visibility == View.VISIBLE) {
             return
         }
         binding.tvTitle.text = getString(R.string.vpn_title)
@@ -148,5 +158,51 @@ class FragmentMain : BaseFragment() {
             e.printStackTrace()
         }
     }
+
+    private fun hideBottomTabWhenScan() {
+        binding.viewPager.isUserInputEnabled = false
+        YoYo.with(Techniques.SlideOutDown).onEnd {
+            binding.navBottom.visibility = View.GONE
+        }.playOn(binding.navBottom)
+    }
+
+    private fun showBottomTabAfterScan() {
+        binding.viewPager.isUserInputEnabled = true
+        YoYo.with(Techniques.SlideInUp).onStart {
+            binding.navBottom.visibility = View.VISIBLE
+
+        }.playOn(binding.navBottom)
+    }
+    private fun showStopBtn() {
+        YoYo.with(Techniques.FadeOut).duration(400).onEnd {
+            binding.imvVip.visibility = View.GONE
+        }.playOn(binding.imvVip)
+        YoYo.with(Techniques.FadeIn).duration(400).onEnd {
+            binding.imvStop.visibility = View.VISIBLE
+        }.playOn(binding.imvStop)
+    }
+
+    private fun showVipBtn() {
+        YoYo.with(Techniques.FadeOut).duration(400).onEnd {
+            binding.imvStop.visibility = View.GONE
+        }.playOn(binding.imvStop)
+        YoYo.with(Techniques.FadeIn).duration(400).onEnd {
+            binding.imvVip.visibility = View.VISIBLE
+        }.playOn(binding.imvVip)
+    }
+
+    private fun observeIsScanning() {
+        viewModel._isScanning.observe(viewLifecycleOwner) {
+            if (it) {
+                hideBottomTabWhenScan()
+                showStopBtn()
+            }else {
+                showBottomTabAfterScan()
+                showVipBtn()
+            }
+        }
+    }
+
+
 
 }

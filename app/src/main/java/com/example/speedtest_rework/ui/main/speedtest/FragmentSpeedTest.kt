@@ -1,6 +1,5 @@
 package com.example.speedtest_rework.ui.main.speedtest
 
-import android.os.Build
 import android.os.Bundle
 import android.transition.AutoTransition
 import android.transition.TransitionManager
@@ -10,8 +9,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.NavHostFragment
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.fragment.BaseFragment
+import com.example.speedtest_rework.common.Constant
 import com.example.speedtest_rework.common.NetworkUtils
 import com.example.speedtest_rework.core.getIP.AddressInfo
 import com.example.speedtest_rework.core.getIP.CurrentNetworkInfo
@@ -19,8 +20,8 @@ import com.example.speedtest_rework.core.serverSelector.TestPoint
 import com.example.speedtest_rework.data.model.HistoryModel
 import com.example.speedtest_rework.databinding.FragmentSpeedTestBinding
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
+import kotlinx.coroutines.isActive
 import java.util.*
-import kotlin.math.roundToInt
 
 
 class FragmentSpeedTest : BaseFragment() {
@@ -39,19 +40,20 @@ class FragmentSpeedTest : BaseFragment() {
         observeIsLoading()
         observeConnectivityChanged()
         observerMultiTaskDone()
-
+        observeIsScanning()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        observeBackStackArg()
         initView()
         initData()
     }
 
+
     private fun initView() {
         initExpandView()
-        initSpeedView()
     }
 
     private fun initData() {
@@ -81,15 +83,14 @@ class FragmentSpeedTest : BaseFragment() {
         }
     }
 
-    private fun initSpeedView() {
-
-    }
-
 
     private fun loadServerAndNetWorkInfo() {
-        viewModel.networkException.value
-
         try {
+            if (viewModel.isError.value == true) {
+                binding.clSpeedview.setData(testPoint!!, "no_connection")
+                binding.clSpeedview.resetView()
+                return
+            }
             if (NetworkUtils.isWifiConnected(requireContext())) {
                 val testModel = HistoryModel(
                     -1,
@@ -99,7 +100,7 @@ class FragmentSpeedTest : BaseFragment() {
                     viewModel.currentNetworkInfo.selfIsp,
                     0.0, 0.0, "wifi", 0.0, Date(), 0.0, 0.0
                 )
-                binding.clSpeedview.setData(testPoint!!, "wifi", testModel,viewModel)
+                binding.clSpeedview.setData(testPoint!!, "wifi", testModel, viewModel)
 
             } else if (NetworkUtils.isMobileConnected(requireContext())) {
                 val testModel = HistoryModel(
@@ -110,7 +111,7 @@ class FragmentSpeedTest : BaseFragment() {
                     viewModel.currentNetworkInfo.selfIsp,
                     0.0, 0.0, "mobile", 0.0, Date(), 0.0, 0.0
                 )
-                binding.clSpeedview.setData(testPoint!!, "mobile",testModel,viewModel)
+                binding.clSpeedview.setData(testPoint!!, "mobile", testModel, viewModel)
 
             } else {
                 binding.clSpeedview.setData(testPoint!!, "no_connection")
@@ -135,7 +136,6 @@ class FragmentSpeedTest : BaseFragment() {
     private fun createTestPoint(addressInfo: List<AddressInfo>) {
         if (addressInfo.isNotEmpty()) {
             val server = addressInfo[0]
-            Log.d("TAG", "createTestPoint: " + server.host)
             testPoint = TestPoint(
                 server.name,
                 "http://" + server.host,
@@ -187,29 +187,40 @@ class FragmentSpeedTest : BaseFragment() {
             loadServer()
         } else if (NetworkUtils.isMobileConnected(requireContext())) {
             val info = NetworkUtils.getInforMobileConnected(requireContext())
-            val name = if (info != null) info?.typeName + " - " + info?.subtypeName else "Mobile"
+            val name = if (info != null) info.typeName + " - " + info.subtypeName else "Mobile"
             binding.tvWifiName.text = name
             loadServer()
         } else {
             binding.tvWifiName.text = getString(R.string.no_connection)
             binding.tvIspName.text = getString(R.string.no_connection_isp)
+            if (viewModel._isScanning.value == true) {
+                viewModel.setIsScanning(false)
+                binding.clSpeedview.setData("no_connection")
+            }
         }
+    }
+
+
+    private fun observeBackStackArg() {
+        val navHostFragment = activity?.supportFragmentManager?.findFragmentById(
+            R.id.nav_host_fragment
+        ) as NavHostFragment
+        val navController = navHostFragment.navController
+        navController.currentBackStackEntry?.savedStateHandle?.getLiveData<Boolean>(Constant.KEY_SCAN_AGAIN)
+            ?.observe(viewLifecycleOwner) {
+                if (it) {
+                    viewModel.setIsScanning(true)
+                    binding.clSpeedview.prepareViewSpeedTest()
+                }
+            }
     }
 
     private fun observeIsScanning() {
         viewModel._isScanning.observe(viewLifecycleOwner) {
-
+            if (!it) {
+                binding.clSpeedview.resetView()
+            }
         }
-    }
-
-
-    private fun format(d: Double): String? {
-        val l: Locale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            resources.configuration.locales[0]
-        } else {
-            resources.configuration.locale
-        }
-        return if (d < 200) String.format(l, "%.2f", d) else "" + d.roundToInt()
     }
 
 

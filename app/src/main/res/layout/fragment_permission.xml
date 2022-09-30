@@ -131,7 +131,7 @@
         android:layout_marginTop="@dimen/_16sdp"
         android:gravity="center"
         />
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_accept"
         android:paddingHorizontal="@dimen/_20sdp"
         android:layout_marginTop="@dimen/_15sdp"

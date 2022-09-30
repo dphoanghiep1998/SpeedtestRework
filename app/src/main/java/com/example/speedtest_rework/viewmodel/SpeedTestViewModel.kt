@@ -19,11 +19,9 @@ class SpeedTestViewModel @Inject constructor(private val appRepository: AppRepos
     BaseViewModel() {
 
 
-
     var isMultiTaskDone: MutableLiveData<Boolean> = MutableLiveData()
     var addressInfoList: MutableList<AddressInfo> = mutableListOf()
     var currentNetworkInfo: CurrentNetworkInfo = CurrentNetworkInfo()
-    var isError: MutableLiveData<Boolean> = MutableLiveData()
 
 
     private var isScanning = MutableLiveData<Boolean>()
@@ -61,11 +59,9 @@ class SpeedTestViewModel @Inject constructor(private val appRepository: AppRepos
         MediatorLiveData<List<ScanResult>>()
     val _scanResults: LiveData<List<ScanResult>>
         get() = scanResults
-
     fun addScanResultsSource(data: LiveData<List<ScanResult>>) {
         scanResults.addSource(data, scanResults::setValue)
     }
-
     fun removeScanResultsSource(data: LiveData<List<ScanResult>>) {
         scanResults.removeSource(data)
     }
@@ -79,7 +75,7 @@ class SpeedTestViewModel @Inject constructor(private val appRepository: AppRepos
         isWifiEnabled.addSource(data, isWifiEnabled::setValue)
     }
 
-    fun removeIsWifiEnabledSource(data: LiveData<List<ScanResult>>) {
+    fun removeIsWifiEnabledSource(data: LiveData<Boolean>) {
         isWifiEnabled.removeSource(data)
     }
 
@@ -99,13 +95,13 @@ class SpeedTestViewModel @Inject constructor(private val appRepository: AppRepos
         viewModelScope.launch { appRepository.deleteAllHistory() }
     }
 
-    suspend fun getServerList() {
+    private suspend fun getServerList() {
         val list = appRepository.getAddressInfo()
         addressInfoList = list.toMutableList()
 
     }
 
-    suspend fun getCurrentNetworkInfo() {
+    private suspend fun getCurrentNetworkInfo() {
         val cNetInfo = appRepository.getCurrentNetworkInfo()
         currentNetworkInfo = cNetInfo
 
@@ -113,6 +109,7 @@ class SpeedTestViewModel @Inject constructor(private val appRepository: AppRepos
 
     fun doMultiTask() {
         showLoading(true)
+        isError.value = false
         parentJob = viewModelScope.launch(handler) {
             getServerList()
             getCurrentNetworkInfo()

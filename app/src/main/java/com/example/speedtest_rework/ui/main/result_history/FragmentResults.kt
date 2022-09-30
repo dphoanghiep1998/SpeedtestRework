@@ -5,16 +5,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.speedtest.adapter.HistoryAdapter
+import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.dialog.ConfirmDialog
 import com.example.speedtest_rework.base.fragment.BaseFragment
+import com.example.speedtest_rework.common.Constant
 import com.example.speedtest_rework.data.model.HistoryModel
 import com.example.speedtest_rework.databinding.FragmentResultsBinding
 import com.example.speedtest_rework.ui.main.result_history.adapter.ResultTouchHelper
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
 
-class FragmentResults: BaseFragment(), ResultTouchHelper, ConfirmDialog.ConfirmCallback {
+class FragmentResults : BaseFragment(), ResultTouchHelper, ConfirmDialog.ConfirmCallback {
     private lateinit var binding: FragmentResultsBinding
     private val viewModel: SpeedTestViewModel by activityViewModels()
     private var adapter: HistoryAdapter = HistoryAdapter(this)
@@ -46,6 +49,7 @@ class FragmentResults: BaseFragment(), ResultTouchHelper, ConfirmDialog.ConfirmC
             )
             customDialog.show()
         }
+
     }
 
 
@@ -58,7 +62,6 @@ class FragmentResults: BaseFragment(), ResultTouchHelper, ConfirmDialog.ConfirmC
     }
 
 
-
     override fun negativeAction() {
     }
 
@@ -68,6 +71,8 @@ class FragmentResults: BaseFragment(), ResultTouchHelper, ConfirmDialog.ConfirmC
     }
 
     override fun onClickResultTest(historyModel: HistoryModel?) {
-        TODO("Not yet implemented")
+        val bundle = Bundle()
+        bundle.putParcelable(Constant.KEY_TEST_MODEL, historyModel)
+        findNavController().navigate(R.id.action_fragmentMain_to_fragmentResultDetail, bundle)
     }
 }

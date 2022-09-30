@@ -30,17 +30,17 @@ class HistoryAdapter(resultTouchHelper: ResultTouchHelper) :
     override fun onBindViewHolder(holder: ConnectivityTestViewHolder, position: Int) {
         val model: HistoryModel = mList!![position]
         if (model != null) {
-            if (model.network.equals("wifi")) {
+            if (model.network == "wifi") {
                 val source: Int =
                     if (model.download >= -60) R.drawable.ic_signal_good else if (model.download < -60 && model.download >= -90) R.drawable.ic_signal_normal else R.drawable.ic_signal_low
                 holder.connectionType.setImageResource(source)
             } else {
                 holder.connectionType.setImageResource(R.drawable.ic_mobiledata)
             }
-            holder.date.setText(DateTimeUtils.getDateConverted(model.time))
-            holder.uploadRate.setText(model.upload.toString())
-            holder.downloadRate.setText(model.download.toString())
-            holder.itemView.setOnClickListener { view: View? ->
+            holder.date.text = DateTimeUtils.getDateConverted(model.time)
+            holder.uploadRate.text = model.upload.toString()
+            holder.downloadRate.text = model.download.toString()
+            holder.itemView.setOnClickListener {
                 resultTouchHelper.onClickResultTest(
                     model
                 )
@@ -56,11 +56,9 @@ class HistoryAdapter(resultTouchHelper: ResultTouchHelper) :
 
     inner class ConnectivityTestViewHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView) {
-        var ssid: TextView? = null
         var date: TextView
         var downloadRate: TextView
         var uploadRate: TextView
-        var pingRate: TextView? = null
         var connectionType: ImageView
 
         init {

@@ -45,4 +45,6 @@
     <string name="external_ip">External IP</string>
     <string name="signal_status">Signal Status</string>
     <string name="neko">Neko</string>
+    <string name="result_detail">RESULT</string>
+    <string name="test">test</string>
 </resources>

@@ -6,17 +6,19 @@
     app:startDestination="@id/fragmentSplash">
 
     <fragment
+        tools:layout="@layout/fragment_permission"
         android:id="@+id/fragmentPermission"
         android:name="com.example.speedtest_rework.ui.permissison.FragmentPermission"
-        android:label="FragmentPermission" >
+        android:label="FragmentPermission">
         <action
             android:id="@+id/action_fragmentPermission_to_fragmentMain"
             app:destination="@id/fragmentMain" />
     </fragment>
     <fragment
+        tools:layout="@layout/fragment_splash"
         android:id="@+id/fragmentSplash"
         android:name="com.example.speedtest_rework.ui.splash.FragmentSplash"
-        android:label="FragmentSplash" >
+        android:label="FragmentSplash">
         <action
             android:id="@+id/action_fragmentSplash_to_fragmentPermission"
             app:destination="@id/fragmentPermission" />
@@ -27,5 +29,16 @@
     <fragment
         android:id="@+id/fragmentMain"
         android:name="com.example.speedtest_rework.ui.main.FragmentMain"
-        android:label="FragmentMain" />
+        android:label="FragmentMain"
+        tools:layout="@layout/fragment_main">
+        <action
+            android:id="@+id/action_fragmentMain_to_fragmentResultDetail"
+            app:destination="@id/fragmentDetail" />
+    </fragment>
+
+    <fragment
+        tools:layout="@layout/fragment_detail_result"
+        android:id="@+id/fragmentDetail"
+        android:name="com.example.speedtest_rework.ui.result_detail.FragmentResultDetail"
+        android:label="FragmentDetailResult"></fragment>
 </navigation>

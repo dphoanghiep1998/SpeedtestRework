@@ -12,6 +12,8 @@ import kotlinx.coroutines.Job
 import kotlin.math.log
 
 open class BaseViewModel : ViewModel() {
+
+    val isError = MutableLiveData(false)
     var baseNetworkException = MutableLiveData<Event<BaseNetworkException>>()
         protected set
 
@@ -64,6 +66,7 @@ open class BaseViewModel : ViewModel() {
         onNavigateToPage.postValue(Event(actionId))
     }
     protected open fun parseErrorCallApi(e: Throwable) {
+        isError.value = true
         when (e) {
             is BaseNetworkException -> {
                 baseNetworkException.postValue(Event(e))

@@ -52,7 +52,7 @@ class MainActivity : BaseActivity() {
             ) != PackageManager.PERMISSION_GRANTED
             && ContextCompat.checkSelfPermission(
                 this,
-                Manifest.permission.ACCESS_FINE_LOCATION
+                Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             navHostFragment?.navController?.navigate(R.id.action_fragmentSplash_to_fragmentPermission)
@@ -75,6 +75,7 @@ class MainActivity : BaseActivity() {
     private fun unregisterConnectivityListener() {
         viewModel.removeIsConnectivityChangedSource(connectivityListener.isConnectivityChanged)
         viewModel.removeScanResultsSource(connectivityListener.scanResults)
+        viewModel.removeIsWifiEnabledSource(connectivityListener.isWifiEnabled)
         unregisterReceiver(connectivityListener)
     }
 
@@ -88,8 +89,6 @@ class MainActivity : BaseActivity() {
             if (grantResults.size > 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                 navHostFragment?.navController?.navigate(R.id.action_fragmentPermission_to_fragmentMain)
                 viewModel.setIsPermissionGranted(true)
-
-
             }
         }
     }

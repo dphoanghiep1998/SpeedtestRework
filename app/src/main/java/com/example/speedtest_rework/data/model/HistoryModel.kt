@@ -1,8 +1,11 @@
 package com.example.speedtest_rework.data.model
 
+import android.os.Parcelable
 import com.example.speedtest_rework.data.database.entities.HistoryEntity
+import kotlinx.android.parcel.Parcelize
 import java.util.*
 
+@Parcelize
 class HistoryModel(
      val id: Int = -1,
      var name_network: String,
@@ -17,7 +20,7 @@ class HistoryModel(
      var upload: Double,
      var download: Double,
 
-    ) {
+    ) : Parcelable {
     companion object {
         val NETWORK_MOBILE: String = "NETWORK_MOBILE"
         val NETWORK_UNKNOWN: String = "NETWORK_UNKNOWN"
