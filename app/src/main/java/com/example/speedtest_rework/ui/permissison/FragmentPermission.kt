@@ -26,7 +26,6 @@ class FragmentPermission : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        handleLocationService()
         initView()
     }
 
@@ -41,6 +40,7 @@ class FragmentPermission : BaseFragment() {
     }
 
     private fun requestLocationPermission() {
+        handleLocationService()
         ActivityCompat.requestPermissions(
             requireActivity(),
             arrayOf(
