@@ -15,7 +15,7 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.speedtest.adapter.WifiChannelAdapter
+import com.example.speedtest_rework.ui.main.analyzer.adapter.WifiChannelAdapter
 import com.example.speedtest_rework.base.fragment.BaseFragment
 import com.example.speedtest_rework.common.NetworkUtils
 import com.example.speedtest_rework.databinding.FragmentAnalyzerBinding

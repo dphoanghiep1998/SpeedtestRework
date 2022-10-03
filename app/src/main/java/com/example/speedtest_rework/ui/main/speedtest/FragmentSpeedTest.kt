@@ -1,15 +1,19 @@
 package com.example.speedtest_rework.ui.main.speedtest
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkCapabilities
+import android.net.NetworkRequest
 import android.os.Bundle
-import android.transition.AutoTransition
-import android.transition.TransitionManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.NavHostFragment
+import com.daimajia.androidanimations.library.Techniques
+import com.daimajia.androidanimations.library.YoYo
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.fragment.BaseFragment
 import com.example.speedtest_rework.common.Constant
@@ -20,7 +24,6 @@ import com.example.speedtest_rework.core.serverSelector.TestPoint
 import com.example.speedtest_rework.data.model.HistoryModel
 import com.example.speedtest_rework.databinding.FragmentSpeedTestBinding
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
-import kotlinx.coroutines.isActive
 import java.util.*
 
 
@@ -65,20 +68,22 @@ class FragmentSpeedTest : BaseFragment() {
     }
 
     private fun initExpandView() {
-        binding.containerExpandView.setOnClickListener { view ->
-            TransitionManager.beginDelayedTransition(
-                view as ViewGroup,
-                AutoTransition()
-            )
-            val layoutParams = view.getLayoutParams()
+        binding.containerExpandView.setOnClickListener {
+            val layoutParams = it.layoutParams
             if (!isExpanded) {
-                layoutParams.width = ConstraintLayout.LayoutParams.MATCH_PARENT
-                view.setLayoutParams(layoutParams)
-                isExpanded = true
+                YoYo.with(Techniques.SlideInLeft).duration(400L).onStart { _ ->
+                    layoutParams.width = ConstraintLayout.LayoutParams.MATCH_PARENT
+                    it.layoutParams = layoutParams
+                    isExpanded = true
+                }.playOn(binding.containerConfig2)
+
             } else {
-                layoutParams.width = ConstraintLayout.LayoutParams.WRAP_CONTENT
-                view.setLayoutParams(layoutParams)
-                isExpanded = false
+                YoYo.with(Techniques.SlideInRight).duration(400L).onStart { _ ->
+                    layoutParams.width = ConstraintLayout.LayoutParams.WRAP_CONTENT
+                    it.layoutParams = layoutParams
+                    isExpanded = false
+                }.playOn(binding.containerConfig2)
+
             }
         }
     }
@@ -86,9 +91,13 @@ class FragmentSpeedTest : BaseFragment() {
 
     private fun loadServerAndNetWorkInfo() {
         try {
+
             if (viewModel.isError.value == true) {
                 binding.clSpeedview.setData(testPoint!!, "no_connection")
-                binding.clSpeedview.resetView()
+                if(viewModel._isScanning.value == true){
+                    binding.clSpeedview.resetView()
+
+                }
                 return
             }
             if (NetworkUtils.isWifiConnected(requireContext())) {
@@ -186,6 +195,7 @@ class FragmentSpeedTest : BaseFragment() {
             binding.tvWifiName.text = NetworkUtils.getNameWifi(requireContext())
             loadServer()
         } else if (NetworkUtils.isMobileConnected(requireContext())) {
+
             val info = NetworkUtils.getInforMobileConnected(requireContext())
             val name = if (info != null) info.typeName + " - " + info.subtypeName else "Mobile"
             binding.tvWifiName.text = name
@@ -193,9 +203,9 @@ class FragmentSpeedTest : BaseFragment() {
         } else {
             binding.tvWifiName.text = getString(R.string.no_connection)
             binding.tvIspName.text = getString(R.string.no_connection_isp)
+            binding.clSpeedview.setData("no_connection")
             if (viewModel._isScanning.value == true) {
                 viewModel.setIsScanning(false)
-                binding.clSpeedview.setData("no_connection")
             }
         }
     }
@@ -221,6 +231,28 @@ class FragmentSpeedTest : BaseFragment() {
                 binding.clSpeedview.resetView()
             }
         }
+    }
+
+    private fun registerNetworkCallback() {
+        val networkRequest: NetworkRequest = NetworkRequest.Builder()
+            .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+            .addTransportType(NetworkCapabilities.TRANSPORT_ETHERNET)
+            .build()
+        val connectivityManager: ConnectivityManager =
+            requireActivity().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        connectivityManager.registerNetworkCallback(networkRequest,
+            object : ConnectivityManager.NetworkCallback() {
+                override fun onAvailable(network: Network) {
+                    super.onAvailable(network)
+                    viewModel.setIsConnectionReady(true)
+                }
+
+                override fun onLost(network: Network) {
+                    super.onLost(network)
+                }
+            })
+
+
     }
 
 

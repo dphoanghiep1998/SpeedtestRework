@@ -20,9 +20,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class NetworkModule {
-    val CONNECT_TIMEOUT = "CONNECT_TIMEOUT"
-    val READ_TIMEOUT = "READ_TIMEOUT"
-    val WRITE_TIMEOUT = "WRITE_TIMEOUT"
 
     //    @Provides
 //    fun provideCustomerAPI(@Named("MainSite") retrofit: Retrofit): CustomerAPI {

@@ -5,3 +5,4 @@
     <solid android:color="@color/progress_bar" />
     <corners  android:radius="10dp"/>
 </shape>
+

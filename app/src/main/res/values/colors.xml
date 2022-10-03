@@ -45,4 +45,6 @@
     <color name="gray_800">#151529</color>
     <color name="gray_100">#F7F7FC</color>
     <color name="gray_900">#07070F</color>
+
+    <color name="selected">#2196F3</color>
 </resources>

@@ -1,8 +1,7 @@
 package com.example.speedtest_rework.data.repositories
 
+import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.Observer
 import com.example.speedtest_rework.core.getIP.CurrentNetworkInfo
 import com.example.speedtest_rework.data.model.HistoryModel
 import com.example.speedtest_rework.data.services.AddressInfoRemoteService
@@ -40,6 +39,7 @@ class AppRepository @Inject constructor(
     suspend fun getAddressInfo() = withContext(dispatcher) {
         when (val result = addressInfoRemoteService.getAddressInfoList()) {
             is NetworkResult.Error -> {
+                Log.d("TAG", "getAddressInfo: "  +result.exception)
                 throw result.exception
             }
             is NetworkResult.Success -> {

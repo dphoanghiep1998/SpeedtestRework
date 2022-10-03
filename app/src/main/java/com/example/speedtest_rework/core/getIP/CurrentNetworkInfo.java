@@ -1,11 +1,10 @@
 package com.example.speedtest_rework.core.getIP;
 
-import com.example.speedtest_rework.network.NetworkResult;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.URL;
+
+import javax.net.ssl.HttpsURLConnection;
 
 public class CurrentNetworkInfo {
     private double selfLat = 0.0;
@@ -58,8 +57,8 @@ public class CurrentNetworkInfo {
 
     public CurrentNetworkInfo getCurrentNetWorkInfo() {
         try {
-            URL url = new URL("https://www.speedtest.net/speedtest-config.php");
-            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            URL url = new URL("https://speedtest.net/speedtest-config.php");
+            HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
             urlConnection.setConnectTimeout(5000);
             urlConnection.setReadTimeout(5000);
             int code = urlConnection.getResponseCode();

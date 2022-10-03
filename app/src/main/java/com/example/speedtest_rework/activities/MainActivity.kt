@@ -1,8 +1,10 @@
 package com.example.speedtest_rework.activities
 
 import android.Manifest
+
 import android.content.IntentFilter
 import android.content.pm.PackageManager
+
 import android.os.Bundle
 
 import androidx.activity.viewModels

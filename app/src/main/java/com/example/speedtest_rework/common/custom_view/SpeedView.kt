@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AlphaAnimation
@@ -17,7 +18,6 @@ import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.common.Constant
-import com.example.speedtest_rework.common.NetworkUtils
 import com.example.speedtest_rework.core.SpeedTest
 import com.example.speedtest_rework.core.serverSelector.TestPoint
 import com.example.speedtest_rework.data.model.HistoryModel
@@ -70,6 +70,7 @@ class SpeedView(
 
     private fun initView() {
         binding.btnStart.setOnClickListener {
+            Log.d("TAG", "type: $type")
             if (type == "no_connection") {
                 Toast.makeText(context, "No connectivity!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener

@@ -19,7 +19,7 @@ class FragmentPermission : BaseFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentPermissionBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
@@ -32,7 +32,8 @@ class FragmentPermission : BaseFragment() {
     private fun initView() {
         binding.btnAccept.setOnClickListener {
             try {
-                requestLocationPermission()
+                handleLocationService()
+
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -40,7 +41,6 @@ class FragmentPermission : BaseFragment() {
     }
 
     private fun requestLocationPermission() {
-        handleLocationService()
         ActivityCompat.requestPermissions(
             requireActivity(),
             arrayOf(
@@ -52,9 +52,11 @@ class FragmentPermission : BaseFragment() {
 
     }
 
-    private fun handleLocationService(){
-        if (!NetworkUtils.canGetLocation(requireContext())){
-            startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+    private fun handleLocationService() {
+        if (!NetworkUtils.canGetLocation(requireContext())) {
+            startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+        } else {
+            requestLocationPermission()
         }
     }
 

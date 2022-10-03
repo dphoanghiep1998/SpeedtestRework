@@ -7,7 +7,7 @@ import retrofit2.http.Headers
 
 interface AddressInfoApi {
     @GET("/api/js/servers")
-    suspend fun getAdressInfoList(): Response<List<AddressInfo>>
+    suspend fun getAddressInfoList(): Response<List<AddressInfo>>
 
 
 }

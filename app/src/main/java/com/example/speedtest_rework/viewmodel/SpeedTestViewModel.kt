@@ -11,6 +11,8 @@ import com.example.speedtest_rework.core.getIP.CurrentNetworkInfo
 import com.example.speedtest_rework.data.model.HistoryModel
 import com.example.speedtest_rework.data.repositories.AppRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -30,6 +32,14 @@ class SpeedTestViewModel @Inject constructor(private val appRepository: AppRepos
 
     fun setIsScanning(status: Boolean) {
         isScanning.value = status
+    }
+
+    private var isConnectionReady = MutableLiveData<Boolean>()
+    val _isConnectionReady: LiveData<Boolean>
+        get() = isConnectionReady
+
+    fun setIsConnectionReady(status: Boolean) {
+        isConnectionReady.value = status
     }
 
 
@@ -59,9 +69,11 @@ class SpeedTestViewModel @Inject constructor(private val appRepository: AppRepos
         MediatorLiveData<List<ScanResult>>()
     val _scanResults: LiveData<List<ScanResult>>
         get() = scanResults
+
     fun addScanResultsSource(data: LiveData<List<ScanResult>>) {
         scanResults.addSource(data, scanResults::setValue)
     }
+
     fun removeScanResultsSource(data: LiveData<List<ScanResult>>) {
         scanResults.removeSource(data)
     }
@@ -94,25 +106,26 @@ class SpeedTestViewModel @Inject constructor(private val appRepository: AppRepos
     fun deleteAllHistoryAction() {
         viewModelScope.launch { appRepository.deleteAllHistory() }
     }
+//
+//    suspend fun getServerList() {
+//        val list = appRepository.getAddressInfo()
+//        addressInfoList = list.toMutableList()
+//    }
+//
+//    suspend fun getCurrentNetworkInfo() {
+//        val cNetInfo = appRepository.getCurrentNetworkInfo()
+//        currentNetworkInfo = cNetInfo
+//    }
 
-    private suspend fun getServerList() {
-        val list = appRepository.getAddressInfo()
-        addressInfoList = list.toMutableList()
-
-    }
-
-    private suspend fun getCurrentNetworkInfo() {
-        val cNetInfo = appRepository.getCurrentNetworkInfo()
-        currentNetworkInfo = cNetInfo
-
-    }
 
     fun doMultiTask() {
         showLoading(true)
-        isError.value = false
         parentJob = viewModelScope.launch(handler) {
-            getServerList()
-            getCurrentNetworkInfo()
+            val list = async { appRepository.getAddressInfo() }
+            val netInfo = async { appRepository.getCurrentNetworkInfo() }
+            val (dList,dNetWorkInfo) = awaitAll(list, netInfo)
+            addressInfoList= dList as MutableList<AddressInfo>
+            currentNetworkInfo = dNetWorkInfo as CurrentNetworkInfo
             isMultiTaskDone.postValue(true)
         }
         registerJobFinish()

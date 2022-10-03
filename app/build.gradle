@@ -104,5 +104,6 @@ dependencies {
     def ok_httpclient_version = '4.9.0'
     implementation "com.squareup.okhttp3:okhttp:$ok_httpclient_version"
     implementation "com.squareup.okhttp3:logging-interceptor:$ok_httpclient_version"
-
+//graphview
+    implementation 'com.jjoe64:graphview:4.2.2'
 }

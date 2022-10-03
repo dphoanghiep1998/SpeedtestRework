@@ -50,10 +50,10 @@
             android:layout_marginHorizontal="4dp"
             android:gravity="center"
             android:layout_gravity="center_vertical"
-            android:maxLines="1"
+            android:maxLines="2"
             android:text="Aug 18"
             android:textColor="@color/white"
-            android:textStyle="bold" />
+             />
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="0dp"

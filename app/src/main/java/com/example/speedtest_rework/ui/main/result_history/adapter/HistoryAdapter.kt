@@ -1,4 +1,4 @@
-package com.example.speedtest.adapter
+package com.example.speedtest_rework.ui.main.result_history.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +10,6 @@ import com.example.speedtest_rework.R
 import com.example.speedtest_rework.common.DateTimeUtils
 
 import com.example.speedtest_rework.data.model.HistoryModel
-import com.example.speedtest_rework.ui.main.result_history.adapter.ResultTouchHelper
 
 class HistoryAdapter(resultTouchHelper: ResultTouchHelper) :
     RecyclerView.Adapter<HistoryAdapter.ConnectivityTestViewHolder>() {
@@ -28,8 +27,9 @@ class HistoryAdapter(resultTouchHelper: ResultTouchHelper) :
     }
 
     override fun onBindViewHolder(holder: ConnectivityTestViewHolder, position: Int) {
-        val model: HistoryModel = mList!![position]
-        if (model != null) {
+
+        mList?.let {
+            val model: HistoryModel = it[position]
             if (model.network == "wifi") {
                 val source: Int =
                     if (model.download >= -60) R.drawable.ic_signal_good else if (model.download < -60 && model.download >= -90) R.drawable.ic_signal_normal else R.drawable.ic_signal_low
@@ -37,7 +37,7 @@ class HistoryAdapter(resultTouchHelper: ResultTouchHelper) :
             } else {
                 holder.connectionType.setImageResource(R.drawable.ic_mobiledata)
             }
-            holder.date.text = DateTimeUtils.getDateConverted(model.time)
+            holder.date.text = DateTimeUtils.getDateConvertedToResult(model.time)
             holder.uploadRate.text = model.upload.toString()
             holder.downloadRate.text = model.download.toString()
             holder.itemView.setOnClickListener {
@@ -46,6 +46,7 @@ class HistoryAdapter(resultTouchHelper: ResultTouchHelper) :
                 )
             }
         }
+
     }
 
     override fun getItemCount(): Int {
