@@ -1,15 +1,12 @@
 package com.example.speedtest_rework.base.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-
 import com.example.speedtest_rework.common.Event
 import com.example.speedtest_rework.network.BaseNetworkException
 import com.example.speedtest_rework.network.NetworkErrorException
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Job
-import kotlin.math.log
 
 open class BaseViewModel : ViewModel() {
 

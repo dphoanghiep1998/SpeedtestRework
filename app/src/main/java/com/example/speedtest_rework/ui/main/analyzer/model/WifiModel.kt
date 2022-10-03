@@ -7,6 +7,9 @@ class WifiModel(
     val wifi_frequency: Int,
     val wifi_channel: Int,
     val isWifi_isConnected: Boolean,
+    val wifi_bssid: String,
+    val rRange: Int,
+    val lRange: Int
 ) {
 
 }

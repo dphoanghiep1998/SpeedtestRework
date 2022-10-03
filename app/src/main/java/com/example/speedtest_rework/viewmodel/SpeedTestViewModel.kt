@@ -120,6 +120,7 @@ class SpeedTestViewModel @Inject constructor(private val appRepository: AppRepos
 
     fun doMultiTask() {
         showLoading(true)
+        isError.value = false
         parentJob = viewModelScope.launch(handler) {
             val list = async { appRepository.getAddressInfo() }
             val netInfo = async { appRepository.getCurrentNetworkInfo() }

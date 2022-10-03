@@ -91,7 +91,6 @@ class FragmentSpeedTest : BaseFragment() {
 
     private fun loadServerAndNetWorkInfo() {
         try {
-
             if (viewModel.isError.value == true) {
                 binding.clSpeedview.setData(testPoint!!, "no_connection")
                 if(viewModel._isScanning.value == true){

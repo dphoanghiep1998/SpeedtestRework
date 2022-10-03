@@ -9,3 +9,4 @@ pluginManagement {
 rootProject.name = "SpeedTest_Rework"
 include ':app'
 include ':speedviewlib'
+include ':wifiAnalyzer'

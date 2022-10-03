@@ -15,11 +15,11 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.speedtest_rework.ui.main.analyzer.adapter.WifiChannelAdapter
 import com.example.speedtest_rework.base.fragment.BaseFragment
 import com.example.speedtest_rework.common.NetworkUtils
 import com.example.speedtest_rework.databinding.FragmentAnalyzerBinding
 import com.example.speedtest_rework.ui.main.analyzer.adapter.ItemTouchHelper
+import com.example.speedtest_rework.ui.main.analyzer.adapter.WifiChannelAdapter
 import com.example.speedtest_rework.ui.main.analyzer.model.WifiModel
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
 
@@ -158,9 +158,9 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper {
                                     secure,
                                     level,
                                     frequency,
-                                    result.BSSID,
                                     channel,
                                     true,
+                                    result.BSSID,
                                     rRange,
                                     lRange
                                 )
@@ -174,9 +174,9 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper {
                                 secure,
                                 level,
                                 frequency,
-                                result.BSSID,
                                 channel,
                                 false,
+                                result.BSSID,
                                 rRange,
                                 lRange
                             )
@@ -195,6 +195,7 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper {
 
     override fun onClickItemWifi(wifi: WifiModel?) {
     }
+
     private fun setDataChart(wifiList: List<WifiModel>) {}
 
 }
