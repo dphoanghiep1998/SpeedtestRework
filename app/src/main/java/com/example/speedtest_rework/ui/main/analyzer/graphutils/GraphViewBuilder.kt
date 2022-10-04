@@ -45,6 +45,7 @@ internal fun Viewport.initialize(maximumY: Int): Viewport {
 internal fun GridLabelRenderer.colors(): GridLabelRenderer {
     val color =  Color.WHITE
     this.gridColor = Color.GRAY
+    this.gridStyle = GridLabelRenderer.GridStyle.HORIZONTAL
     this.verticalLabelsColor = color
     this.verticalAxisTitleColor = color
     this.horizontalLabelsColor = color

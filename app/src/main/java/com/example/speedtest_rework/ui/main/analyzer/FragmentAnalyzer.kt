@@ -199,7 +199,6 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper {
             cache.add(it.first,it.second)
             val transformer = Transformer(cache)
             val wifiData = transformer.transformToWiFiData()
-            Log.d("TAG", "observeScanResults: ")
             val linearLayout: LinearLayout = binding.graphNavigation
             val channelGraphNavigation = ChannelGraphNavigation(linearLayout,requireActivity().applicationContext)
             channelGraphAdapter = ChannelGraphAdapter(requireContext(),channelGraphNavigation)

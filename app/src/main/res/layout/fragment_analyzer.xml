@@ -5,8 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/contraint_analyzer"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/gray_700">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:id="@+id/graphNavigation"
@@ -26,6 +25,7 @@
 
         <ViewFlipper
             android:id="@+id/graph"
+            android:paddingHorizontal="@dimen/_10sdp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical" />

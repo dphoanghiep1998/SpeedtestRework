@@ -47,7 +47,7 @@ internal fun makeGraphView(
 ): GraphView {
     return GraphViewBuilder(wiFiChannelPair.numX(), graphMaximumY, true)
         .setLabelFormatter(ChannelAxisLabel(wiFiBand, wiFiChannelPair))
-        .setVerticalTitle("Signal Strength (dbm")
+        .setVerticalTitle("Signal Strength (dbm)")
         .setHorizontalTitle("Wi-Fi Channels")
         .build(context)
 }

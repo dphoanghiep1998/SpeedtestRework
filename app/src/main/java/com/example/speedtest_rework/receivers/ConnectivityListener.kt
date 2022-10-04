@@ -35,9 +35,7 @@ class ConnectivityListener constructor(
                     }
                 }
                 Constant.INTENT_FILER_SCAN_RESULT -> {
-
                     dataCache.postValue(Pair(wifiManager.scanResults,wifiManager.connectionInfo))
-
                 }
             }
         }
