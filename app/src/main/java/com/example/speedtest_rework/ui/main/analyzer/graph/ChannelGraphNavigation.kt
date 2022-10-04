@@ -18,6 +18,7 @@
 package com.example.speedtest_rework.ui.main.analyzer.graph
 
 import android.content.Context
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
@@ -39,27 +40,12 @@ class ChannelGraphNavigation(private val view: View, private val mainContext: Co
     internal fun update() {
         val wiFiBand = WiFiBand.values()[0]
         val navigationLines = navigationLines(wiFiBand)
-        view.visibility = visibility(navigationLines)
         navigationLines.entries.forEach { entry ->
             view.findViewById<LinearLayout>(entry.key).visibility = visibility(entry.value)
-            buttons(entry.value, wiFiBand)
+
         }
     }
 
-    private fun buttons(navigationSets: NavigationSets, wiFiBand: WiFiBand) {
-        navigationSets.forEach { entry ->
-            with(view.findViewById<Button>(entry.key)) {
-                val value = entry.value
-                val color = mainContext.resources.getColor( R.color.selected )
-                val textValue =
-                    """<strong>${value.first.channel} &#8722 ${value.second.channel}</strong>""".parseAsHtml()
-                        .toString()
-                setBackgroundColor(color)
-                text = textValue
-                setOnClickListener { onClickListener(wiFiBand, value) }
-            }
-        }
-    }
 
     private fun visibility(map: Map<Int, Any>) =
         if (map.isEmpty()) {
@@ -69,9 +55,7 @@ class ChannelGraphNavigation(private val view: View, private val mainContext: Co
         }
 
     internal fun onClickListener(wiFiBand: WiFiBand, wiFiChannelPair: WiFiChannelPair) {
-//        val mainContext = MainContext.INSTANCE
-//        mainContext.configuration.wiFiChannelPair(wiFiBand, wiFiChannelPair)
-//        mainContext.scannerService.update()
+
     }
 
     private fun navigationLines(wiFiBand: WiFiBand): NavigationLines =

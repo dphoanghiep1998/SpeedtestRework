@@ -15,12 +15,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package com.vrem.wifianalyzer.wifi.graphutils
+package com.example.speedtest_rework.ui.main.analyzer.graphutils
 
+import com.example.speedtest_rework.ui.main.analyzer.model.WiFiData
 import com.example.speedtest_rework.ui.main.analyzer.model.WiFiDetail
 import com.jjoe64.graphview.GraphView
 
 interface GraphViewNotifier {
     fun graphView(): GraphView
-    fun update(wiFiData: WiFiDetail)
+    fun update(wiFiData: WiFiData)
 }

@@ -16,20 +16,36 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-package com.example.speedtest_rework.ui.main.analyzer.graphutils
+package com.example.speedtest_rework.ui.main.analyzer.model
 
-import com.jjoe64.graphview.series.DataPoint
+import com.example.speedtest_rework.common.EMPTY
 
-class GraphDataPoint(x: Double, y: Double) : DataPoint(x, y) {
 
-    constructor(x: Int, y: Int) : this(x.toDouble(), y.toDouble())
+data class WiFiConnection(val wiFiIdentifier: WiFiIdentifier = WiFiIdentifier.EMPTY,
+                          val ipAddress: String = String.EMPTY,
+                          val linkSpeed: Int = LINK_SPEED_INVALID) :
+        Comparable<WiFiConnection> {
+
+    val connected: Boolean
+        get() = EMPTY != this
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
-        other as DataPoint
-        return x == other.x && y == other.y
+
+        other as WiFiConnection
+
+        return wiFiIdentifier == other.wiFiIdentifier
     }
 
-    override fun hashCode(): Int = 31 * x.hashCode() + y.hashCode()
+    override fun hashCode(): Int = wiFiIdentifier.hashCode()
+
+    override fun compareTo(other: WiFiConnection): Int = wiFiIdentifier.compareTo(other.wiFiIdentifier)
+
+    companion object {
+        const val LINK_SPEED_INVALID = -1
+
+        val EMPTY = WiFiConnection()
+    }
 }
+

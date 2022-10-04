@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package com.vrem.wifianalyzer.wifi.graphutils
+package com.example.speedtest_rework.ui.main.analyzer.graphutils
 
 const val AXIS_TEXT_SIZE_ADJUSTMENT = 0.90f
 const val TEXT_SIZE_ADJUSTMENT = 0.80f

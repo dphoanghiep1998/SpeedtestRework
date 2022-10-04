@@ -12,6 +12,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,17 +21,22 @@ import com.example.speedtest_rework.common.NetworkUtils
 import com.example.speedtest_rework.databinding.FragmentAnalyzerBinding
 import com.example.speedtest_rework.ui.main.analyzer.adapter.ItemTouchHelper
 import com.example.speedtest_rework.ui.main.analyzer.adapter.WifiChannelAdapter
+import com.example.speedtest_rework.ui.main.analyzer.graph.ChannelGraphAdapter
+import com.example.speedtest_rework.ui.main.analyzer.graph.ChannelGraphNavigation
+import com.example.speedtest_rework.ui.main.analyzer.model.Transformer
 import com.example.speedtest_rework.ui.main.analyzer.model.WifiModel
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
+import com.vrem.wifianalyzer.wifi.scanner.Cache
 
 
 class FragmentAnalyzer : BaseFragment(), ItemTouchHelper {
     private lateinit var binding: FragmentAnalyzerBinding
     private val viewModel: SpeedTestViewModel by activityViewModels()
-    private var adapter: WifiChannelAdapter = WifiChannelAdapter(this)
+    private lateinit var adapter: WifiChannelAdapter
     private var mList = mutableListOf<WifiModel>()
     private var mainWifi: WifiManager? = null
     private var duplicated = false
+    lateinit var channelGraphAdapter: ChannelGraphAdapter
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -41,8 +47,10 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper {
     ): View {
 
         binding = FragmentAnalyzerBinding.inflate(inflater, container, false)
+        adapter = WifiChannelAdapter(requireContext(),this)
         initView()
         observeScanResults()
+
         mainWifi?.startScan()
         return binding.root
     }
@@ -115,10 +123,10 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper {
     }
 
     private fun observeScanResults() {
-        viewModel._scanResults.observe(viewLifecycleOwner) {
-            Log.d("TAG", "observeScanResults: $it")
+        mList = mutableListOf()
+        viewModel.mDataCache.observe(viewLifecycleOwner) {
             if (it != null) {
-                for (result in it) {
+                for (result in it.first) {
                     val level = result.level
                     val frequency = result.frequency
                     var channelWidth = 0
@@ -187,6 +195,18 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper {
                 adapter.setData(mList)
                 hideLoadingMain()
             }
+            val cache = Cache()
+            cache.add(it.first,it.second)
+            val transformer = Transformer(cache)
+            val wifiData = transformer.transformToWiFiData()
+            Log.d("TAG", "observeScanResults: ")
+            val linearLayout: LinearLayout = binding.graphNavigation
+            val channelGraphNavigation = ChannelGraphNavigation(linearLayout,requireActivity().applicationContext)
+            channelGraphAdapter = ChannelGraphAdapter(requireContext(),channelGraphNavigation)
+            channelGraphAdapter.update(wifiData)
+            binding.graph.addView(channelGraphAdapter.graphViews())
+
+            hideLoadingMain()
         }
 
 

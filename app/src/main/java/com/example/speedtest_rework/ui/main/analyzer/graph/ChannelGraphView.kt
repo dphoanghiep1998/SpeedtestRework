@@ -18,12 +18,14 @@
 package com.example.speedtest_rework.ui.main.analyzer.graph
 
 import android.content.Context
+import android.view.View
 import com.example.speedtest_rework.common.annotation.OpenClass
 import com.example.speedtest_rework.ui.main.analyzer.band.WiFiBand
 import com.example.speedtest_rework.ui.main.analyzer.band.WiFiChannelPair
 import com.example.speedtest_rework.ui.main.analyzer.band.WiFiChannels
+import com.example.speedtest_rework.ui.main.analyzer.graphutils.*
+import com.example.speedtest_rework.ui.main.analyzer.model.WiFiData
 import com.jjoe64.graphview.GraphView
-import com.vrem.wifianalyzer.wifi.graphutils.*
 
 internal fun WiFiChannelPair.numX(): Int {
     val channelFirst = this.first.channel - WiFiChannels.CHANNEL_OFFSET
@@ -45,8 +47,8 @@ internal fun makeGraphView(
 ): GraphView {
     return GraphViewBuilder(wiFiChannelPair.numX(), graphMaximumY, true)
         .setLabelFormatter(ChannelAxisLabel(wiFiBand, wiFiChannelPair))
-        .setVerticalTitle("dbm")
-        .setHorizontalTitle("Channel id")
+        .setVerticalTitle("Signal Strength (dbm")
+        .setHorizontalTitle("Wi-Fi Channels")
         .build(context)
 }
 
@@ -85,19 +87,18 @@ internal class ChannelGraphView(
     private var graphViewWrapper: GraphViewWrapper = makeGraphViewWrapper(context,wiFiBand, wiFiChannelPair)
 ) : GraphViewNotifier {
 
-//    override fun update(wiFiData: WiFiData) {
-//        val predicate = predicate(MainContext.INSTANCE.settings)
-//        val wiFiDetails = wiFiData.wiFiDetails(predicate, MainContext.INSTANCE.settings.sortBy())
-//        val newSeries = dataManager.newSeries(wiFiDetails, wiFiChannelPair)
-//        dataManager.addSeriesData(
-//            graphViewWrapper,
-//            newSeries,
-//            MainContext.INSTANCE.settings.graphMaximumY()
-//        )
-//        graphViewWrapper.removeSeries(newSeries)
-//        graphViewWrapper.updateLegend(MainContext.INSTANCE.settings.channelGraphLegend())
-//        graphViewWrapper.visibility(if (selected()) View.VISIBLE else View.GONE)
-//    }
+    override fun update(wiFiData: WiFiData) {
+        val wiFiDetails = wiFiData.wiFiDetails()
+        val newSeries = dataManager.newSeries(wiFiDetails, wiFiChannelPair)
+        dataManager.addSeriesData(
+            graphViewWrapper,
+            newSeries,
+            -20
+        )
+        graphViewWrapper.removeSeries(newSeries)
+        graphViewWrapper.updateLegend(GraphLegend.HIDE)
+        graphViewWrapper.visibility(if (selected()) View.VISIBLE else View.GONE)
+    }
 
     fun selected(): Boolean = wiFiChannelPair.selected(wiFiBand)
 
@@ -105,5 +106,6 @@ internal class ChannelGraphView(
     override fun graphView(): GraphView {
         return graphViewWrapper.graphView
     }
+
 
 }

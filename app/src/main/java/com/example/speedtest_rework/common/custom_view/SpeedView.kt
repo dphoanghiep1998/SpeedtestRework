@@ -2,11 +2,14 @@ package com.example.speedtest_rework.common.custom_view
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.Color
+import android.graphics.ColorFilter
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
@@ -14,6 +17,11 @@ import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.navigation.Navigation
+import com.airbnb.lottie.LottieAnimationView
+import com.airbnb.lottie.LottieProperty
+import com.airbnb.lottie.SimpleColorFilter
+import com.airbnb.lottie.model.KeyPath
+import com.airbnb.lottie.value.LottieValueCallback
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
 import com.example.speedtest_rework.R
@@ -24,6 +32,7 @@ import com.example.speedtest_rework.data.model.HistoryModel
 import com.example.speedtest_rework.databinding.LayoutSpeedviewBinding
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
 import kotlin.math.roundToInt
+
 
 class SpeedView(
     context: Context,
@@ -63,20 +72,56 @@ class SpeedView(
         speedTest = SpeedTest()
         speedTest?.addTestPoint(testPoint)
     }
-    fun setData(type: String){
+
+    fun setData(type: String) {
         this.type = type
     }
 
 
     private fun initView() {
+        binding.btnStart.setOnTouchListener(object : OnTouchListener {
+            override fun onTouch(p0: View?, p1: MotionEvent?): Boolean {
+                when (p1?.action) {
+                    MotionEvent.ACTION_DOWN -> {
+                        val filter = SimpleColorFilter(Color.WHITE)
+                        val callback: LottieValueCallback<ColorFilter> = LottieValueCallback(filter)
+                        binding.btnStart.addValueCallback(
+                            KeyPath("**"),
+                            LottieProperty.COLOR_FILTER,
+                            callback
+                        )
+
+                    }
+                    MotionEvent.ACTION_UP -> {
+                        binding.btnStart.addValueCallback(
+                            KeyPath("**"), LottieProperty.COLOR_FILTER
+                        ) { null }
+
+                        if (type == "no_connection") {
+                            Toast.makeText(context, "No connectivity!", Toast.LENGTH_SHORT).show()
+                            return true
+                        }
+                        viewModel?.setIsScanning(true)
+                        prepareViewSpeedTest()
+                    }
+                    MotionEvent.ACTION_CANCEL ->{
+                        binding.btnStart.addValueCallback(
+                            KeyPath("**"), LottieProperty.COLOR_FILTER
+                        ) { null }
+                    }
+                    MotionEvent.ACTION_OUTSIDE -> {
+                        binding.btnStart.addValueCallback(
+                            KeyPath("**"), LottieProperty.COLOR_FILTER
+                        ) { null }
+                    }
+                }
+                return true
+            }
+
+        })
         binding.btnStart.setOnClickListener {
             Log.d("TAG", "type: $type")
-            if (type == "no_connection") {
-                Toast.makeText(context, "No connectivity!", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-            viewModel?.setIsScanning(true)
-            prepareViewSpeedTest()
+
         }
         binding.speedView.isWithPointer = false
     }

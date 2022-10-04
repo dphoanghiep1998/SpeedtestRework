@@ -72,13 +72,14 @@ class FragmentSpeedTest : BaseFragment() {
             val layoutParams = it.layoutParams
             if (!isExpanded) {
                 YoYo.with(Techniques.SlideInLeft).duration(400L).onStart { _ ->
+
                     layoutParams.width = ConstraintLayout.LayoutParams.MATCH_PARENT
                     it.layoutParams = layoutParams
                     isExpanded = true
                 }.playOn(binding.containerConfig2)
 
             } else {
-                YoYo.with(Techniques.SlideInRight).duration(400L).onStart { _ ->
+                YoYo.with(Techniques.SlideInRight).duration(400L).onEnd { _ ->
                     layoutParams.width = ConstraintLayout.LayoutParams.WRAP_CONTENT
                     it.layoutParams = layoutParams
                     isExpanded = false

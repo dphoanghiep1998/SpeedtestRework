@@ -303,6 +303,7 @@
         app:layout_constraintTop_toBottomOf="@id/topView">
 
         <com.airbnb.lottie.LottieAnimationView
+
             android:id="@+id/btn_start"
             android:layout_width="@dimen/_200sdp"
             android:layout_height="@dimen/_200sdp"
@@ -368,6 +369,7 @@
             app:sv_indicatorColor="#ddd"
             app:sv_indicatorWidth="10dp"
             app:sv_markStyle="ROUND"
+            app:sv_marksNumber="4"
             app:sv_speedTextColor="@android:color/transparent"
             app:sv_speedometerColor="@color/background_ads_start"
             app:sv_speedometerWidth="18dp"

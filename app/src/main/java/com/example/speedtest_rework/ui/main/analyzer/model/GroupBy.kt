@@ -15,19 +15,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package com.example.speedtest_rework.ui.main.analyzer.graphutils
+package com.example.speedtest_rework.ui.main.analyzer.model
 
-import com.example.speedtest_rework.ui.main.analyzer.model.WiFiData
-import com.jjoe64.graphview.GraphView
+typealias GroupByKey<T> = (T) -> String
 
-interface UpdateNotifier {
-    fun update(wiFiData: WiFiData)
-}
+internal val groupByChannel: GroupByKey<WiFiDetail> = { it.wiFiSignal.primaryFrequency.toString() }
 
-open class GraphAdapter(private val graphViewNotifiers: GraphViewNotifier) : UpdateNotifier {
-    fun graphViews(): GraphView = graphViewNotifiers.graphView()
+internal val groupBySSID: GroupByKey<WiFiDetail> = { it.wiFiIdentifier.ssid }
 
-    override fun update(wiFiData: WiFiData) = graphViewNotifiers.update(wiFiData)
 
+enum class GroupBy(val sort: Comparator<WiFiDetail>, val group: GroupByKey<WiFiDetail>) {
+    NONE(sortByDefault(), groupBySSID),
+    SSID(sortBySSID(), groupBySSID),
+    CHANNEL(sortByChannel(), groupByChannel);
+
+    val none: Boolean
+        get() = NONE == this
 
 }

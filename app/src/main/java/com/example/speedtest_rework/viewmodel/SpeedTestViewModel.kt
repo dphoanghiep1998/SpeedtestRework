@@ -1,6 +1,7 @@
 package com.example.speedtest_rework.viewmodel
 
 import android.net.wifi.ScanResult
+import android.net.wifi.WifiInfo
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
@@ -64,18 +65,17 @@ class SpeedTestViewModel @Inject constructor(private val appRepository: AppRepos
         isConnectivityChanged.removeSource(data)
     }
 
-    // ssot scanResults add/remove
-    private var scanResults: MediatorLiveData<List<ScanResult>> =
-        MediatorLiveData<List<ScanResult>>()
-    val _scanResults: LiveData<List<ScanResult>>
-        get() = scanResults
 
-    fun addScanResultsSource(data: LiveData<List<ScanResult>>) {
-        scanResults.addSource(data, scanResults::setValue)
+    private var dataCache:MediatorLiveData<Pair<List<ScanResult>,WifiInfo>> = MediatorLiveData()
+    val mDataCache:LiveData<Pair<List<ScanResult>,WifiInfo>>
+        get() = dataCache
+
+    fun addDataCacheSource(data: LiveData<Pair<List<ScanResult>,WifiInfo>>) {
+        dataCache.addSource(data, dataCache::setValue)
     }
 
-    fun removeScanResultsSource(data: LiveData<List<ScanResult>>) {
-        scanResults.removeSource(data)
+    fun removeDataCacheSource(data: LiveData<Pair<List<ScanResult>,WifiInfo>>) {
+        dataCache.removeSource(data)
     }
 
     private var isWifiEnabled: MediatorLiveData<Boolean> =

@@ -118,12 +118,12 @@ public class TitleLineGraphSeries<E extends DataPointInterface> extends BaseSeri
      */
     protected void init() {
         mStyles = new Styles();
-        mPaint = new Paint();
+        mPaint = new Paint(1);
         mPaint.setStrokeCap(Paint.Cap.ROUND);
         mPaint.setStyle(Paint.Style.STROKE);
-        mPaintBackground = new Paint();
+        mPaintBackground = new Paint(1);
 
-        mSelectionPaint = new Paint();
+        mSelectionPaint = new Paint(1);
         mSelectionPaint.setColor(Color.argb(80, 0, 0, 0));
         mSelectionPaint.setStyle(Paint.Style.FILL);
 
@@ -132,7 +132,7 @@ public class TitleLineGraphSeries<E extends DataPointInterface> extends BaseSeri
 
         mAnimationInterpolator = new AccelerateInterpolator(2f);
 
-        paintTitle = new TextPaint();
+        paintTitle = new TextPaint(1);
         paintTitle.setTextAlign(Paint.Align.CENTER);
     }
 

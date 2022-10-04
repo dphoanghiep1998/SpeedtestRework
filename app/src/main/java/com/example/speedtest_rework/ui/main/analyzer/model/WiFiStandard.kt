@@ -35,7 +35,7 @@ enum class WiFiStandard(val wiFiStandardId: WiFiStandardId) {
     AC(ac),
     AX(ax);
 
-    companion object {
+    companion   object {
         fun findOne(wiFiStandardId: WiFiStandardId): WiFiStandard =
             values().firstOrNull { it.wiFiStandardId == wiFiStandardId } ?: UNKNOWN
     }

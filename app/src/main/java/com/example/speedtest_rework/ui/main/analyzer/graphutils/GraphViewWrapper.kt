@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package com.vrem.wifianalyzer.wifi.graphutils
+package com.example.speedtest_rework.ui.main.analyzer.graphutils
 
 import android.content.Context
 import android.graphics.Color
@@ -33,10 +33,11 @@ const val SIZE_MAX = 4096
 @OpenClass
 class GraphViewWrapper(
     val context: Context,
-        val graphView: GraphView,
-        var graphLegend: GraphLegend,
-        private val seriesCache: SeriesCache = SeriesCache(),
-        private val seriesOptions: SeriesOptions = SeriesOptions(context)) {
+    val graphView: GraphView,
+    var graphLegend: GraphLegend,
+    private val seriesCache: SeriesCache = SeriesCache(),
+    private val seriesOptions: SeriesOptions = SeriesOptions(context)
+) {
 
     fun removeSeries(newSeries: Set<WiFiDetail>): Unit =
             seriesCache.remove(differenceSeries(newSeries)).forEach {
@@ -106,11 +107,11 @@ class GraphViewWrapper(
         legendRenderer.resetStyles()
         legendRenderer.width = 0
         legendRenderer.textSize = graphView.titleTextSize
-        legendRenderer.textColor =Color.BLACK
+        legendRenderer.textColor =Color.WHITE
         graphLegend.display(legendRenderer)
     }
 
-    fun calculateGraphType(): Int =TYPE1
+    fun calculateGraphType(): Int = TYPE1
 
 
     fun setHorizontalLabelsVisible(horizontalLabelsVisible: Boolean) {

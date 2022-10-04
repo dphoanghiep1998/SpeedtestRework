@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package com.vrem.wifianalyzer.wifi.graphutils
+package com.example.speedtest_rework.ui.main.analyzer.graphutils
 
 import android.content.Context
 import android.graphics.Color
@@ -43,7 +43,7 @@ internal fun Viewport.initialize(maximumY: Int): Viewport {
 }
 
 internal fun GridLabelRenderer.colors(): GridLabelRenderer {
-    val color =  Color.BLACK
+    val color =  Color.WHITE
     this.gridColor = Color.GRAY
     this.verticalLabelsColor = color
     this.verticalAxisTitleColor = color

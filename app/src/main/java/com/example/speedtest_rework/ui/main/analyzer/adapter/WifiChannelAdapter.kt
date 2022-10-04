@@ -1,5 +1,6 @@
 package com.example.speedtest_rework.ui.main.analyzer.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.ui.main.analyzer.model.WifiModel
 
-class WifiChannelAdapter(helper: ItemTouchHelper) :
+class WifiChannelAdapter(val context: Context, helper: ItemTouchHelper) :
     RecyclerView.Adapter<WifiChannelAdapter.WifiChannelViewHolder>() {
     private var mList: List<WifiModel>? = null
     private val helper: ItemTouchHelper
@@ -29,7 +30,7 @@ class WifiChannelAdapter(helper: ItemTouchHelper) :
         if (wifiModel != null) {
             val level: Int = wifiModel.wifi_level
             val source: Int =
-                if (level >= -60) R.drawable.ic_signal_good else if (level < -60 && level >= -90) R.drawable.ic_signal_normal else R.drawable.ic_signal_low
+                if (level >= -60) R.drawable.ic_signal_good_wifi else if (level < -60 && level >= -90) R.drawable.ic_signal_normal_wifi else R.drawable.ic_signal_low_wifi
             holder.imvWifi.setImageResource(source)
             holder.tvFrequency.text = wifiModel.wifi_frequency.toString() + " MHz"
             holder.tvStrength.text = wifiModel.wifi_level.toString() + " dBm"
@@ -39,7 +40,7 @@ class WifiChannelAdapter(helper: ItemTouchHelper) :
                 holder.tvInternalIp.visibility = View.GONE
                 holder.tvFrequency.visibility = View.GONE
                 holder.tvConnected.visibility = View.VISIBLE
-                holder.tvConnected.text = "Đã kết nối"
+                holder.tvConnected.text = context.getString(R.string.connected)
             } else {
                 holder.itemView.background =
                     holder.itemView.resources.getDrawable(R.drawable.infor_container)

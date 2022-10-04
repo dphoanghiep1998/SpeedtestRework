@@ -20,9 +20,9 @@ package com.example.speedtest_rework.ui.main.analyzer.graph
 import com.example.speedtest_rework.common.annotation.OpenClass
 import com.example.speedtest_rework.ui.main.analyzer.band.WiFiChannelPair
 import com.example.speedtest_rework.ui.main.analyzer.model.WiFiDetail
-import com.vrem.wifianalyzer.wifi.graphutils.GraphDataPoint
-import com.vrem.wifianalyzer.wifi.graphutils.GraphViewWrapper
-import com.vrem.wifianalyzer.wifi.graphutils.MIN_Y
+import com.example.speedtest_rework.ui.main.analyzer.graphutils.GraphDataPoint
+import com.example.speedtest_rework.ui.main.analyzer.graphutils.GraphViewWrapper
+import com.example.speedtest_rework.ui.main.analyzer.graphutils.MIN_Y
 
 internal fun WiFiChannelPair.inRange(wiFiDetail: WiFiDetail): Boolean =
         wiFiDetail.wiFiSignal.centerFrequency in first.frequency..second.frequency
