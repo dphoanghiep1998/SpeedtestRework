@@ -21,20 +21,27 @@ import com.example.speedtest_rework.common.EMPTY
 
 
 data class WiFiDetail(
-        val wiFiIdentifier: WiFiIdentifier = WiFiIdentifier.EMPTY,
-        val capabilities: String = String.EMPTY,
-        val wiFiSignal: WiFiSignal = WiFiSignal.EMPTY,
-        val children: List<WiFiDetail> = listOf()) : Comparable<WiFiDetail> {
+    val wiFiIdentifier: WiFiIdentifier = WiFiIdentifier.EMPTY,
+    val capabilities: String = String.EMPTY,
+    val wiFiSignal: WiFiSignal = WiFiSignal.EMPTY,
+    val children: List<WiFiDetail> = listOf()
+) : Comparable<WiFiDetail> {
 
     constructor(wiFiDetail: WiFiDetail) :
             this(wiFiDetail.wiFiIdentifier, wiFiDetail.capabilities, wiFiDetail.wiFiSignal)
 
     constructor(wiFiDetail: WiFiDetail, children: List<WiFiDetail>) :
-            this(wiFiDetail.wiFiIdentifier, wiFiDetail.capabilities, wiFiDetail.wiFiSignal, children)
+            this(
+                wiFiDetail.wiFiIdentifier,
+                wiFiDetail.capabilities,
+                wiFiDetail.wiFiSignal,
+                children
+            )
 
     val security: Security
         get() = Security.findOne(capabilities)
-
+    var selected: Boolean = false
+    var released: Boolean = true
     val securities: Set<Security>
         get() = Security.findAll(capabilities)
 

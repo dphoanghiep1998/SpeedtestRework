@@ -106,16 +106,6 @@ class SpeedTestViewModel @Inject constructor(private val appRepository: AppRepos
     fun deleteAllHistoryAction() {
         viewModelScope.launch { appRepository.deleteAllHistory() }
     }
-//
-//    suspend fun getServerList() {
-//        val list = appRepository.getAddressInfo()
-//        addressInfoList = list.toMutableList()
-//    }
-//
-//    suspend fun getCurrentNetworkInfo() {
-//        val cNetInfo = appRepository.getCurrentNetworkInfo()
-//        currentNetworkInfo = cNetInfo
-//    }
 
 
     fun doMultiTask() {

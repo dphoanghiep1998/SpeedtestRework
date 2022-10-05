@@ -95,7 +95,7 @@ internal class ChannelGraphView(
             newSeries,
             -20
         )
-        graphViewWrapper.removeSeries(newSeries)
+//        graphViewWrapper.removeSeries(newSeries)
         graphViewWrapper.updateLegend(GraphLegend.HIDE)
         graphViewWrapper.visibility(if (selected()) View.VISIBLE else View.GONE)
     }

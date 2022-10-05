@@ -1,5 +1,6 @@
 package com.example.speedtest_rework.common.custom_view
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.graphics.Color
@@ -7,7 +8,6 @@ import android.graphics.ColorFilter
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.AttributeSet
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -17,7 +17,6 @@ import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.navigation.Navigation
-import com.airbnb.lottie.LottieAnimationView
 import com.airbnb.lottie.LottieProperty
 import com.airbnb.lottie.SimpleColorFilter
 import com.airbnb.lottie.model.KeyPath
@@ -31,6 +30,7 @@ import com.example.speedtest_rework.core.serverSelector.TestPoint
 import com.example.speedtest_rework.data.model.HistoryModel
 import com.example.speedtest_rework.databinding.LayoutSpeedviewBinding
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
+import com.github.anastr.speedviewlib.components.indicators.ImageIndicator
 import kotlin.math.roundToInt
 
 
@@ -77,7 +77,7 @@ class SpeedView(
         this.type = type
     }
 
-
+    @SuppressLint("ClickableViewAccessibility")
     private fun initView() {
         binding.btnStart.setOnTouchListener(object : OnTouchListener {
             override fun onTouch(p0: View?, p1: MotionEvent?): Boolean {
@@ -104,7 +104,7 @@ class SpeedView(
                         viewModel?.setIsScanning(true)
                         prepareViewSpeedTest()
                     }
-                    MotionEvent.ACTION_CANCEL ->{
+                    MotionEvent.ACTION_CANCEL -> {
                         binding.btnStart.addValueCallback(
                             KeyPath("**"), LottieProperty.COLOR_FILTER
                         ) { null }
@@ -119,10 +119,6 @@ class SpeedView(
             }
 
         })
-        binding.btnStart.setOnClickListener {
-            Log.d("TAG", "type: $type")
-
-        }
         binding.speedView.isWithPointer = false
     }
 

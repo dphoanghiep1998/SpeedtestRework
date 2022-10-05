@@ -18,6 +18,7 @@
 package com.example.speedtest_rework.ui.main.analyzer.graphutils
 
 import android.content.Context
+import android.graphics.Color
 import com.example.speedtest_rework.common.annotation.OpenClass
 import com.example.speedtest_rework.ui.main.analyzer.graph.TitleLineGraphSeries
 import com.jjoe64.graphview.series.BaseSeries
@@ -25,13 +26,21 @@ import com.jjoe64.graphview.series.LineGraphSeries
 
 private fun BaseSeries<GraphDataPoint>.removeSeriesColor(graphColors: GraphColors) = graphColors.addColor(this.color.toLong())
 
-private fun BaseSeries<GraphDataPoint>.highlightConnected(connected: Boolean) {
-    val thickness = if (connected) THICKNESS_CONNECTED else THICKNESS_REGULAR
+private fun BaseSeries<GraphDataPoint>.highlightSelected(selected: Boolean) {
+    val thickness = if (selected) THICKNESS_CONNECTED else THICKNESS_REGULAR
     when (this) {
         is LineGraphSeries<GraphDataPoint> -> this.setThickness(thickness)
         is TitleLineGraphSeries<GraphDataPoint> -> {
-            this.thickness = thickness
-            this.setTextBold(connected)
+            if(selected){
+                this.thickness = thickness
+                this.setTextBold(true)
+                this.color = Color.GREEN
+            }else{
+                this.setTextBold(false)
+                this.thickness = thickness
+                this.color = Color.GRAY
+            }
+
         }
     }
 }
@@ -55,7 +64,7 @@ private fun BaseSeries<GraphDataPoint>.drawBackground(drawBackground: Boolean) {
 @OpenClass
 class SeriesOptions(val context: Context,private val graphColors: GraphColors = GraphColors(context)) {
 
-    fun highlightConnected(series: BaseSeries<GraphDataPoint>, connected: Boolean) = series.highlightConnected(connected)
+    fun highlightSelected(series: BaseSeries<GraphDataPoint>, selected: Boolean) = series.highlightSelected(selected)
 
     fun setSeriesColor(series: BaseSeries<GraphDataPoint>) = series.seriesColor(graphColors)
 

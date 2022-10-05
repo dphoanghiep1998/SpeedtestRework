@@ -3,12 +3,10 @@ package com.example.speedtest_rework.ui.main.analyzer
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.net.wifi.ScanResult
 import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,14 +15,14 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.speedtest_rework.base.fragment.BaseFragment
-import com.example.speedtest_rework.common.NetworkUtils
 import com.example.speedtest_rework.databinding.FragmentAnalyzerBinding
 import com.example.speedtest_rework.ui.main.analyzer.adapter.ItemTouchHelper
 import com.example.speedtest_rework.ui.main.analyzer.adapter.WifiChannelAdapter
 import com.example.speedtest_rework.ui.main.analyzer.graph.ChannelGraphAdapter
 import com.example.speedtest_rework.ui.main.analyzer.graph.ChannelGraphNavigation
 import com.example.speedtest_rework.ui.main.analyzer.model.Transformer
-import com.example.speedtest_rework.ui.main.analyzer.model.WifiModel
+import com.example.speedtest_rework.ui.main.analyzer.model.WiFiData
+import com.example.speedtest_rework.ui.main.analyzer.model.WiFiDetail
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
 import com.vrem.wifianalyzer.wifi.scanner.Cache
 
@@ -33,10 +31,9 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper {
     private lateinit var binding: FragmentAnalyzerBinding
     private val viewModel: SpeedTestViewModel by activityViewModels()
     private lateinit var adapter: WifiChannelAdapter
-    private var mList = mutableListOf<WifiModel>()
     private var mainWifi: WifiManager? = null
-    private var duplicated = false
-    lateinit var channelGraphAdapter: ChannelGraphAdapter
+    private lateinit var channelGraphAdapter: ChannelGraphAdapter
+    private lateinit var wiFiData: WiFiData
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -47,12 +44,17 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper {
     ): View {
 
         binding = FragmentAnalyzerBinding.inflate(inflater, container, false)
-        adapter = WifiChannelAdapter(requireContext(),this)
+        adapter = WifiChannelAdapter(requireContext(), this)
         initView()
-        observeScanResults()
-
         mainWifi?.startScan()
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        observeScanResults()
+        observePermissionChange()
+        observeWifiEnabled()
     }
 
 
@@ -61,6 +63,26 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper {
         linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
         binding.rcvWifi.layoutManager = linearLayoutManager
         binding.rcvWifi.adapter = adapter
+    }
+
+    private fun observePermissionChange() {
+        viewModel._isPermissionGranted.observe(viewLifecycleOwner) { _isPermissionGranted ->
+            if (_isPermissionGranted) {
+                hideRequestPermissionLayout()
+            } else {
+                showRequestPermissionLayout()
+            }
+        }
+    }
+
+    private fun observeWifiEnabled() {
+        viewModel._isWifiEnabled.observe(viewLifecycleOwner) { isWifiEnabled ->
+            if (isWifiEnabled) {
+                hideRequestWifiEnable()
+            } else {
+                showRequestWifiEnable()
+            }
+        }
     }
 
     fun initView() {
@@ -82,20 +104,8 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper {
                 Intent(Settings.ACTION_WIFI_SETTINGS)
             startActivity(intent)
         }
-        viewModel._isPermissionGranted.observe(viewLifecycleOwner) { _isPermissionGranted ->
-            if (_isPermissionGranted) {
-                hideRequestPermissionLayout()
-            } else {
-                showRequestPermissionLayout()
-            }
-        }
-        viewModel._isWifiEnabled.observe(viewLifecycleOwner) { isWifiEnabled ->
-            if (isWifiEnabled) {
-                hideRequestWifiEnable()
-            } else {
-                showRequestWifiEnable()
-            }
-        }
+
+
     }
 
     private fun showLoadingMain() {
@@ -123,98 +133,46 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper {
     }
 
     private fun observeScanResults() {
-        mList = mutableListOf()
         viewModel.mDataCache.observe(viewLifecycleOwner) {
-            if (it != null) {
-                for (result in it.first) {
-                    val level = result.level
-                    val frequency = result.frequency
-                    var channelWidth = 0
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        channelWidth = result.channelWidth
-                    }
-                    val channel: Int = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                        ScanResult.convertFrequencyMhzToChannelIfSupported(result.frequency)
-                    } else {
-                        NetworkUtils.convertFreqtoChannel(result.frequency)
-                    }
-                    val rRange: Int =
-                        NetworkUtils.getRangeWifi(channel, channelWidth)[0]
-                    val lRange: Int =
-                        NetworkUtils.getRangeWifi(channel, channelWidth)[1]
-                    val name = result.SSID.ifEmpty { "wifi" }
-                    var secure = ""
-                    if (result.capabilities.contains("WPA2")) {
-                        secure += "WPA2 "
-                    }
-                    if (result.capabilities.contains("WPA")) {
-                        secure = "WPA "
-                    }
-                    if (result.capabilities.contains("WPS")) {
-                        secure = "WPS "
-                    }
-                    if (NetworkUtils.getNameWifi(context) != null && NetworkUtils.getNameWifi(
-                            context
-                        ) == result.SSID
-                    ) {
-                        if (!duplicated) {
-                            Log.d("TAG", "onReceive: $result")
-                            mList.add(
-                                0,
-                                WifiModel(
-                                    name,
-                                    secure,
-                                    level,
-                                    frequency,
-                                    channel,
-                                    true,
-                                    result.BSSID,
-                                    rRange,
-                                    lRange
-                                )
-                            )
-                            duplicated = true
-                        }
-                    } else {
-                        mList.add(
-                            WifiModel(
-                                name,
-                                secure,
-                                level,
-                                frequency,
-                                channel,
-                                false,
-                                result.BSSID,
-                                rRange,
-                                lRange
-                            )
-                        )
-
-                    }
-                }
-                adapter.setData(mList)
-                hideLoadingMain()
-            }
+            binding.graph.removeAllViews()
             val cache = Cache()
-            cache.add(it.first,it.second)
+            cache.add(it.first, it.second)
             val transformer = Transformer(cache)
-            val wifiData = transformer.transformToWiFiData()
+            wiFiData = transformer.transformToWiFiData()
+            adapter.setData(wiFiData)
             val linearLayout: LinearLayout = binding.graphNavigation
-            val channelGraphNavigation = ChannelGraphNavigation(linearLayout,requireActivity().applicationContext)
-            channelGraphAdapter = ChannelGraphAdapter(requireContext(),channelGraphNavigation)
-            channelGraphAdapter.update(wifiData)
+            val channelGraphNavigation =
+                ChannelGraphNavigation(linearLayout, requireActivity().applicationContext)
+            channelGraphAdapter = ChannelGraphAdapter(requireContext(), channelGraphNavigation)
+            channelGraphAdapter.update(wiFiData)
             binding.graph.addView(channelGraphAdapter.graphViews())
-
             hideLoadingMain()
         }
 
 
     }
 
+    override fun onClickItemWifi(wiFiDetail: WiFiDetail?, released: Boolean) {
+        if (released) {
+            wiFiData.wiFiDetails.map {
+                it.released = true
+                it
+            }
 
-    override fun onClickItemWifi(wifi: WifiModel?) {
+        } else {
+            wiFiData.wiFiDetails.map {
+                it.selected = false
+                it.released = false
+                it
+            }.find {
+                it == wiFiDetail
+            }?.selected = true
+        }
+        binding.graph.removeAllViews()
+        channelGraphAdapter.update(wiFiData)
+        binding.graph.addView(channelGraphAdapter.graphViews())
+
+
     }
-
-    private fun setDataChart(wifiList: List<WifiModel>) {}
 
 }

@@ -31,7 +31,7 @@ private const val MAX_RSSI = -55
 private const val QUOTE = "\""
 
 fun calculateDistance(frequency: Int, level: Int): Double =
-        10.0.pow((DISTANCE_MHZ_M - 20 * log10(frequency.toDouble()) + abs(level)) / 20.0)
+    10.0.pow((DISTANCE_MHZ_M - 20 * log10(frequency.toDouble()) + abs(level)) / 20.0)
 
 fun calculateSignalLevel(rssi: Int, numLevels: Int): Int = when {
     rssi <= MIN_RSSI -> 0
@@ -52,3 +52,18 @@ fun convertIpAddress(ipAddress: Int): String {
         String.EMPTY
     }
 }
+
+fun getSecure(capabilities: String): String {
+    var secure = ""
+    if (capabilities.contains("WPA2")) {
+        secure += "WPA2 "
+    }
+    if (capabilities.contains("WPA")) {
+        secure += "WPA "
+    }
+    if (capabilities.contains("WPS")) {
+        secure += "WPS "
+    }
+    return secure
+}
+
