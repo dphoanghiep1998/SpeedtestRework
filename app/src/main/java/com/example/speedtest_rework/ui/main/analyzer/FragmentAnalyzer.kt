@@ -153,6 +153,11 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper {
     }
 
     override fun onClickItemWifi(wiFiDetail: WiFiDetail?, released: Boolean) {
+        wiFiDetail?.wiFiSignal?.centerFrequency?.let {
+            if (it > 2700) {
+                return
+            }
+        }
         if (released) {
             wiFiData.wiFiDetails.map {
                 it.released = true

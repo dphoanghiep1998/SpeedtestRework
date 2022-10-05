@@ -22,13 +22,17 @@ typealias Available = () -> Boolean
 internal val availableGHZ2: Available = { true }
 
 
+
 enum class WiFiBand( val wiFiChannels: WiFiChannels, val available: Available) {
     GHZ2( WiFiChannelsGHZ2(), availableGHZ2);
 
+
     val ghz2: Boolean get() = GHZ2 == this
 
+
     companion object {
-        fun find(frequency: Int): WiFiBand = GHZ2
+        fun find(frequency: Int): WiFiBand = values().find { it.wiFiChannels.inRange(frequency) }
+            ?: GHZ2
     }
 
 }
