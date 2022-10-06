@@ -84,7 +84,6 @@ public abstract class SpeedtestWorker extends Thread {
                 }
                 double progress = (t + bonusT) / (double) (config.getTime_dl_max() * 1000);
                 speed = (speed * 8 * config.getOverheadCompensationFactor()) / (config.getUseMebibits() ? 1048576.0 : 1000000.0);
-                Log.d("TAG", "dlTest: " + speed);
 
                 dl = speed;
                 if (progress >= 1) {
@@ -97,6 +96,7 @@ public abstract class SpeedtestWorker extends Thread {
         }
         if (stopASAP) return;
         onDownloadUpdate(dl, 1);
+
     }
 
     private boolean ulCalled = false;

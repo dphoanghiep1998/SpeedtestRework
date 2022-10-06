@@ -8,6 +8,7 @@ import android.graphics.ColorFilter
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -30,7 +31,7 @@ import com.example.speedtest_rework.core.serverSelector.TestPoint
 import com.example.speedtest_rework.data.model.HistoryModel
 import com.example.speedtest_rework.databinding.LayoutSpeedviewBinding
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
-import com.github.anastr.speedviewlib.components.indicators.ImageIndicator
+import kotlinx.coroutines.delay
 import kotlin.math.roundToInt
 
 
@@ -102,6 +103,8 @@ class SpeedView(
                             return true
                         }
                         viewModel?.setIsScanning(true)
+//                        binding.speedView.withTremble = false
+//                        binding.speedView.speedTo(100f)
                         prepareViewSpeedTest()
                     }
                     MotionEvent.ACTION_CANCEL -> {
@@ -120,15 +123,25 @@ class SpeedView(
 
         })
         binding.speedView.isWithPointer = false
+        binding.speedView.textSize = 40f
+        binding.speedView.withTremble = false
     }
 
     fun prepareViewSpeedTest() {
         countDownTimer = object : CountDownTimer(4000, 1000) {
             override fun onTick(l: Long) {
                 if (l <= 1000) {
-                    YoYo.with(Techniques.FadeIn).onStart {
-                        binding.speedView.visibility = View.VISIBLE
-                    }.playOn(binding.speedView)
+                    val animation = ArcAnimation(binding.speedView)
+                    animation.duration = 1000
+                    animation.setAnimationListener(object : Animation.AnimationListener {
+                        override fun onAnimationStart(animation: Animation) {
+                            binding.speedView.visibility = View.VISIBLE
+                        }
+
+                        override fun onAnimationEnd(animation: Animation) {}
+                        override fun onAnimationRepeat(animation: Animation) {}
+                    })
+                    binding.speedView.startAnimation(animation)
                     YoYo.with(Techniques.FadeIn).onStart {
                         binding.containerSpeed.visibility = View.VISIBLE
                     }.playOn(binding.containerSpeed)
@@ -188,8 +201,7 @@ class SpeedView(
                             binding.tvDownloadValue.text = format(dl)
                             binding.tvSpeedValue.text = 0.0.toString() + ""
                         }
-                        binding.speedView.speedTo(0f)
-                        binding.speedView.stop()
+                        binding.speedView.speedTo(0f, 500L)
                     }
                     testModel?.download = roundOffDecimal(dl)
 
@@ -207,7 +219,7 @@ class SpeedView(
                     if (progress >= 1) {
                         binding.tvUploadValue.clearAnimation()
                         binding.tvUploadValue.text = format(ul)
-                        binding.speedView.speedTo(0f)
+                        binding.speedView.speedTo(0f, 500L)
                         binding.speedView.withTremble = false
                         binding.tvSpeedValue.text = 0.0.toString() + ""
                     }
@@ -252,14 +264,7 @@ class SpeedView(
         anim.duration = 100
         anim.startOffset = 50
         anim.repeatCount = Animation.INFINITE
-        binding.speedView.indicatorLightColor =
-            ContextCompat.getColor(context, R.color.gradient_green_start)
-        binding.speedView.setSpeedometerColor(
-            ContextCompat.getColor(
-                context,
-                R.color.gradient_green_start
-            )
-        )
+
         binding.tvDownloadValue.setTextColor(
             ContextCompat.getColor(
                 context,
@@ -301,6 +306,8 @@ class SpeedView(
                 R.color.gradient_orange_start
             )
         )
+        binding.speedView.setState("upload")
+
     }
 
     fun resetView() {
@@ -310,7 +317,20 @@ class SpeedView(
         if (countDownTimer != null) {
             countDownTimer?.cancel()
         }
-        binding.speedView.setSpeedometerColor(ContextCompat.getColor(context, R.color.gray_400))
+        binding.iconSpeedValue.setImageDrawable(
+            ContextCompat.getDrawable(
+                context,
+                R.drawable.ic_download
+            )
+        )
+        binding.speedView.setSpeedometerColor(
+            ContextCompat.getColor(
+                context,
+                R.color.gradient_green_start
+            )
+        )
+        Log.d("TAG", "resetView: ")
+        binding.speedView.setState("download")
         binding.speedView.speedTo(0f)
         binding.tvSpeedValue.text = "0"
         binding.tvDownloadValue.clearAnimation()

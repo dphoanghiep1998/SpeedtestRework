@@ -79,7 +79,7 @@ class FragmentSpeedTest : BaseFragment() {
                 }.playOn(binding.containerConfig2)
 
             } else {
-                YoYo.with(Techniques.SlideInRight).duration(400L).onEnd { _ ->
+                YoYo.with(Techniques.SlideInRight).duration(400L).onStart { _ ->
                     layoutParams.width = ConstraintLayout.LayoutParams.WRAP_CONTENT
                     it.layoutParams = layoutParams
                     isExpanded = false
@@ -94,7 +94,7 @@ class FragmentSpeedTest : BaseFragment() {
         try {
             if (viewModel.isError.value == true) {
                 binding.clSpeedview.setData(testPoint!!, "no_connection")
-                if(viewModel._isScanning.value == true){
+                if (viewModel._isScanning.value == true) {
                     binding.clSpeedview.resetView()
 
                 }

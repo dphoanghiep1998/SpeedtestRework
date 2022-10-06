@@ -29,11 +29,13 @@ class KiteIndicator(context: Context) : Indicator<KiteIndicator>(context) {
 
     override fun updateIndicator() {
         indicatorPath.reset()
-        indicatorPath.moveTo(getCenterX(), speedometer!!.padding.toFloat())
-        bottomY = getViewSize() * .5f + speedometer!!.padding
-        indicatorPath.lineTo(getCenterX() - width, bottomY)
-        indicatorPath.lineTo(getCenterX(), bottomY + width)
-        indicatorPath.lineTo(getCenterX() + width, bottomY)
+        indicatorPath.moveTo(getCenterX() - 2f, getViewSize() * 0.25f)
+        indicatorPath.lineTo(getCenterX() + 2f, getViewSize() * 0.25f)
+        indicatorPath.lineTo(getCenterX() + width / 2, getViewSize()/2)
+        indicatorPath.lineTo(getCenterX() - width / 2, getViewSize()/2)
+
+
+
 
         indicatorPaint.color = color
     }

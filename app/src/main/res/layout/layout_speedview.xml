@@ -293,8 +293,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/testBackground"
-        android:layout_width="@dimen/_200sdp"
-        android:layout_height="@dimen/_200sdp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -305,7 +305,7 @@
         <com.airbnb.lottie.LottieAnimationView
 
             android:id="@+id/btn_start"
-            android:layout_width="@dimen/_200sdp"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/_200sdp"
             android:scrollbarFadeDuration="200"
             android:visibility="visible"
@@ -357,21 +357,18 @@
 
         <com.github.anastr.speedviewlib.PointerSpeedometer
             android:id="@+id/speedView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/_200sdp"
+            android:layout_height="@dimen/_200sdp"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:sv_backgroundCircleColor="@android:color/transparent"
-            app:sv_indicator="NormalSmallIndicator"
-            app:sv_indicatorColor="#ddd"
-            app:sv_indicatorWidth="10dp"
+            app:sv_indicator="KiteIndicator"
             app:sv_markStyle="ROUND"
-            app:sv_marksNumber="4"
+            app:sv_marksNumber="0"
             app:sv_speedTextColor="@android:color/transparent"
-            app:sv_speedometerColor="@color/background_ads_start"
             app:sv_speedometerWidth="18dp"
             app:sv_tickPadding="@dimen/_8sdp"
             app:sv_unit="" />
