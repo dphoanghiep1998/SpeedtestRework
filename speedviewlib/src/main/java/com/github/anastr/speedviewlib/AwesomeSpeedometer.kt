@@ -145,7 +145,7 @@ open class AwesomeSpeedometer @JvmOverloads constructor(
 
         drawCustomMarks(c)
         drawMarks(c)
-        drawTicks(c)
+        drawTicks(c,0f)
     }
 
     protected fun drawCustomMarks(c: Canvas) {

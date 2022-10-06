@@ -340,7 +340,6 @@ abstract class Speedometer @JvmOverloads constructor(
     }
 
 
-
     private fun init() {
         indicatorLightPaint.style = Paint.Style.STROKE
         markPaint.style = Paint.Style.STROKE
@@ -587,7 +586,7 @@ abstract class Speedometer @JvmOverloads constructor(
         return (degree - startDegree) * (maxSpeed - minSpeed) / (endDegree - startDegree) + minSpeed
     }
 
-     fun getStartDegree(): Int {
+    fun getStartDegree(): Int {
         return startDegree
     }
 
@@ -748,10 +747,9 @@ abstract class Speedometer @JvmOverloads constructor(
      * Draw speed value at each tick point.
      * @param c Canvas to draw.
      */
-    protected fun drawTicks(c: Canvas) {
+    protected fun drawTicks(c: Canvas,currentPosistion:Float) {
         if (ticks.isEmpty())
             return
-
         textPaint.textAlign = Paint.Align.LEFT
 
         val range = endDegree - startDegree
@@ -765,7 +763,12 @@ abstract class Speedometer @JvmOverloads constructor(
                     size * .5f,
                     initTickPadding + textPaint.textSize + padding.toFloat() + tickPadding.toFloat()
                 )
+            if(currentPosistion > d){
+                textPaint.color = 0xFFFFFFFF.toInt()
+            }else{
+                textPaint.color = 0xFFA0A3BD.toInt()
 
+            }
             var tick: CharSequence? = null
             if (onPrintTickLabel != null)
                 tick = onPrintTickLabel!!.invoke(index, getSpeedAtDegree(d))

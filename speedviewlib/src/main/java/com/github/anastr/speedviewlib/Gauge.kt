@@ -341,7 +341,7 @@ abstract class Gauge constructor(
     }
 
     private fun init() {
-        textPaint.color = 0xFF000000.toInt()
+        textPaint.color = 0xFFA0A3BD.toInt()
         textPaint.textSize = dpTOpx(10f)
         textPaint.textAlign = Paint.Align.CENTER
         speedTextPaint.color = 0xFF000000.toInt()

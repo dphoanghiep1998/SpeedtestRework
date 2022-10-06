@@ -203,7 +203,7 @@ open class PointerSpeedometer @JvmOverloads constructor(
         circlePaint.color = c
         canvas.drawCircle(size * .5f, size * .5f, centerCircleRadius, circlePaint)
         drawIndicator(canvas)
-
+        drawTicks(canvas,getStartDegree() + position)
     }
 
     override fun updateBackgroundBitmap() {
@@ -213,7 +213,7 @@ open class PointerSpeedometer @JvmOverloads constructor(
         drawMarks(c)
 
         if (tickNumber > 0)
-            drawTicks(c)
+            drawTicks(c,0f)
         else
             drawDefMinMaxSpeedPosition(c)
     }

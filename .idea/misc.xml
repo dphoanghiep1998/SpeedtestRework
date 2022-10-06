@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../layout/custom_preview.xml" value="0.1" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedtestRework/app/src/main/res/drawable/button_background_start.xml" value="0.19" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedtestRework/app/src/main/res/drawable/button_negative_dialog_box.xml" value="0.19" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedtestRework/app/src/main/res/drawable/custom_progress_bg.xml" value="0.1945" />
@@ -46,6 +47,7 @@
         <entry key="app/src/main/res/layout/fragment_vpn.xml" value="0.24427083333333333" />
         <entry key="app/src/main/res/layout/item_result.xml" value="0.18697916666666667" />
         <entry key="app/src/main/res/layout/item_vpn.xml" value="0.24427083333333333" />
+        <entry key="app/src/main/res/layout/layout_speedview.xml" value="0.21145833333333333" />
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.3145833333333333" />
       </map>
     </option>

@@ -208,7 +208,7 @@ open class RaySpeedometer @JvmOverloads constructor(
         drawMarks(c)
 
         if (tickNumber > 0)
-            drawTicks(c)
+            drawTicks(c,0f)
         else
             drawDefMinMaxSpeedPosition(c)
     }

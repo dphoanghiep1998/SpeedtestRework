@@ -359,7 +359,7 @@
             android:id="@+id/speedView"
             android:layout_width="@dimen/_200sdp"
             android:layout_height="@dimen/_200sdp"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -367,10 +367,11 @@
             app:sv_backgroundCircleColor="@android:color/transparent"
             app:sv_indicator="KiteIndicator"
             app:sv_markStyle="ROUND"
+            app:sv_tickNumber="6"
+            app:sv_tickRotation="false"
             app:sv_marksNumber="0"
             app:sv_speedTextColor="@android:color/transparent"
             app:sv_speedometerWidth="18dp"
-            app:sv_tickPadding="@dimen/_8sdp"
             app:sv_unit="" />
 
 

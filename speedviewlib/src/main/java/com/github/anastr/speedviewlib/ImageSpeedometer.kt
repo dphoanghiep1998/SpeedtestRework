@@ -61,7 +61,7 @@ open class ImageSpeedometer @JvmOverloads constructor(
             imageSpeedometer!!.draw(c)
         }
         drawMarks(c)
-        drawTicks(c)
+        drawTicks(c,0f)
     }
 
     fun getImageSpeedometer(): Drawable? {
