@@ -1,8 +1,8 @@
 package com.example.speedtest_rework.ui.result_detail
 
 import android.animation.ValueAnimator
-import android.graphics.PorterDuff
 import android.graphics.drawable.ClipDrawable
+import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.LayerDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -62,21 +62,16 @@ class FragmentResultDetail : BaseFragment(), ConfirmDialog.ConfirmCallback {
             if (testModel.download >= 40) getString(R.string.signal_strong) else if (testModel.download < 40 && testModel.download >= 20) getString(
                 R.string.signal_normal
             ) else getString(R.string.signal_weak)
-
+        binding.tvSignalStrength.text = status
         binding.pbSignal.isEnabled = false
-        binding.tvSignalStrength.setTextColor(
-            if (testModel.download >= 40) getColor(R.color.signal_good) else if (testModel.download < 40 && testModel.download >= 20) getColor(
-                R.color.signal_normal
-            ) else getColor(R.color.signal_poor)
-        )
+
+        setSignalTextColors(if (testModel.download >= 40) 0 else if (testModel.download < 40 && testModel.download >= 20) 1 else 2)
+
         setProgressBarColor(
             binding.pbSignal,
-            if (testModel.download >= 40) getColor(R.color.signal_good) else if (testModel.download < 40 && testModel.download >= 20) getColor(
-                R.color.signal_normal
-            ) else getColor(R.color.signal_poor)
+            if (testModel.download >= 40) 0 else if (testModel.download < 40 && testModel.download >= 20) 1 else 2
         )
         binding.tvTime.text = DateTimeUtils.getDateConvertedToResult(testModel.time)
-        binding.tvSignalStrength.text = status
         binding.tvDownloadValue.text = testModel.download.toString()
         binding.tvUploadValue.text = testModel.upload.toString()
         binding.tvPingCount.text = testModel.ping.toString() + " ms"
@@ -105,21 +100,61 @@ class FragmentResultDetail : BaseFragment(), ConfirmDialog.ConfirmCallback {
         } else {
             binding.btnScanAgain.visibility = View.VISIBLE
             binding.btnScanAgain.setOnClickListener {
-                findNavController().previousBackStackEntry?.savedStateHandle?.set(Constant.KEY_SCAN_AGAIN,true)
+                findNavController().previousBackStackEntry?.savedStateHandle?.set(
+                    Constant.KEY_SCAN_AGAIN,
+                    true
+                )
                 findNavController().popBackStack()
             }
         }
     }
 
 
-    private fun setProgressBarColor(progressBar: SeekBar, newColor: Int) {
-        val ld = progressBar.progressDrawable as LayerDrawable
-        val d1 = ld.findDrawableByLayerId(android.R.id.progress) as ClipDrawable
-        d1.setColorFilter(newColor, PorterDuff.Mode.SRC_IN)
-        val thumb = getDrawable(R.drawable.custom_thumb) as LayerDrawable
-        val bgThumb = thumb.findDrawableByLayerId(R.id.bg_thumb)
-        bgThumb.setColorFilter(newColor, PorterDuff.Mode.SRC_IN)
-        progressBar.thumb = thumb
+    private fun setProgressBarColor(progressBar: SeekBar, state: Int) {
+        when (state) {
+            0 -> {
+                progressBar.progressDrawable = getDrawable(R.drawable.seekbar_strong)
+                progressBar.thumb = getDrawable(R.drawable.custom_thumb_strong)
+
+            }
+            1 -> {
+                progressBar.progressDrawable = getDrawable(R.drawable.seekbar)
+                progressBar.thumb = getDrawable(R.drawable.custom_thumb)
+
+
+            }
+            2 -> {
+                progressBar.progressDrawable = getDrawable(R.drawable.seekbar_weak)
+                progressBar.thumb = getDrawable(R.drawable.custom_thumb_weak)
+
+            }
+        }
+    }
+
+    private fun setSignalTextColors(state: Int) {
+        when (state) {
+            0 -> {
+                binding.tvSignalStrength.setShader(
+                    getColor(R.color.wifi_strong_start),
+                    getColor(R.color.wifi_strong_end)
+                )
+            }
+            1 -> {
+                binding.tvSignalStrength.setShader(
+                    intArrayOf(
+                        getColor(R.color.wifi_normal_start),
+                        getColor(R.color.wifi_normal_center),
+                        getColor(R.color.wifi_normal_end)
+                    )
+                )
+            }
+            2 -> {
+                binding.tvSignalStrength.setShader(
+                    getColor(R.color.wifi_weak_start),
+                    getColor(R.color.wifi_weak_end)
+                )
+            }
+        }
     }
 
     override fun negativeAction() {

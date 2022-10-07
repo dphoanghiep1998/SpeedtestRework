@@ -112,10 +112,7 @@ open class PointerSpeedometer @JvmOverloads constructor(
         blurPaint.strokeCap = Paint.Cap.BUTT
         blurPaint.maskFilter = BlurMaskFilter(0.4f * speedometerWidth, BlurMaskFilter.Blur.NORMAL)
         blurPaint.strokeWidth = 1.3f * speedometerWidth
-        val sweepGradient = SweepGradient(width / 2f, width / 4f, downloadColorsList, null)
-        sweepGradient.setLocalMatrix(matrix)
-        blurPaint.shader = sweepGradient
-        speedometerPaint.shader = SweepGradient(width / 2f, width / 4f, downloadColorsList, null);
+
 
         circlePaint.color = 0xFFFFFFFF.toInt()
     }
@@ -227,6 +224,13 @@ open class PointerSpeedometer @JvmOverloads constructor(
             sweepGradient.setLocalMatrix(matrix)
             blurPaint.shader = sweepGradient
             speedometerPaint.shader = SweepGradient(width / 2f, width / 4f, uploadColorsList, null);
+        }else{
+            val matrix = Matrix()
+            matrix.setRotate(90f, speedometerRect.centerX(), speedometerRect.centerY())
+            val sweepGradient = SweepGradient(width / 2f, width / 4f, downloadColorsList, null)
+            sweepGradient.setLocalMatrix(matrix)
+            blurPaint.shader = sweepGradient
+            speedometerPaint.shader = SweepGradient(width / 2f, width / 4f, downloadColorsList, null);
         }
         invalidate()
     }

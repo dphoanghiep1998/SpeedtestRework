@@ -74,9 +74,7 @@
 
         <attr name="sv_startDegree" format="integer" />
         <attr name="sv_endDegree" format="integer" />
-
         <attr name="sv_indicatorWidth" format="dimension" />
-
         <attr name="sv_marksNumber" format="integer" />
         <attr name="sv_marksPadding" format="dimension" />
         <attr name="sv_markHeight" format="dimension" />

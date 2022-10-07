@@ -3,11 +3,13 @@ package com.example.speedtest_rework.ui.main
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.activityViewModels
+import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.widget.ViewPager2
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
@@ -21,6 +23,7 @@ import com.example.speedtest_rework.ui.main.speedtest.FragmentSpeedTest
 import com.example.speedtest_rework.ui.main.vpn.FragmentRoot
 import com.example.speedtest_rework.ui.viewpager.ViewPagerAdapter
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
+import kotlin.math.log
 
 class FragmentMain : BaseFragment() {
     private lateinit var binding: FragmentMainBinding
@@ -47,7 +50,7 @@ class FragmentMain : BaseFragment() {
     }
 
     private fun initButton() {
-        binding.imvStop.setOnClickListener{
+        binding.imvStop.setOnClickListener {
             viewModel.setIsScanning(false)
         }
     }
@@ -105,8 +108,22 @@ class FragmentMain : BaseFragment() {
             lifecycle
         )
         binding.viewPager.adapter = adapter
+
         binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageScrollStateChanged(state: Int) {
+                super.onPageScrollStateChanged(state)
+                // Called when the scroll state changes (scroll started - ended)
+                if (state == ViewPager.SCROLL_STATE_IDLE) {
+
+                    Log.d(
+                        "current pos_scrolled",
+                        "\n" + "\t\t" + "current pos SCROLLED FINISH = " + binding.viewPager.currentItem
+                    );
+                }
+            }
+
             override fun onPageSelected(position: Int) {
+                Log.d("TAG", "onPageSelected: $position ")
                 super.onPageSelected(position)
                 binding.navBottom.menu.getItem(position).isChecked = true
                 showMenu()
@@ -173,6 +190,7 @@ class FragmentMain : BaseFragment() {
 
         }.playOn(binding.navBottom)
     }
+
     private fun showStopBtn() {
         YoYo.with(Techniques.FadeOut).duration(400).onEnd {
             binding.imvVip.visibility = View.GONE
@@ -196,13 +214,12 @@ class FragmentMain : BaseFragment() {
             if (it) {
                 hideBottomTabWhenScan()
                 showStopBtn()
-            }else {
+            } else {
                 showBottomTabAfterScan()
                 showVipBtn()
             }
         }
     }
-
 
 
 }

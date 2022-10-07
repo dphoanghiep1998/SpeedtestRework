@@ -21,6 +21,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:src="@drawable/ic_close"
+            android:foreground="@drawable/ripple_effect_fg"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -113,7 +114,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
+        <com.example.speedtest_rework.common.custom_view.GradientText
             android:id="@+id/tv_signal_strength"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -450,6 +451,7 @@
         android:textSize="@dimen/_14sdp"
         android:textStyle="bold"
         android:background="@drawable/button_background_start"
+        android:foreground="@drawable/ripple_effect_fg"
         android:paddingHorizontal="80dp"/>
 
     <TextView
@@ -459,7 +461,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="16dp"
         android:text="@string/connection_name"
-        android:textColor="#ddd"
+        android:textColor="@color/gray_400"
         android:textSize="@dimen/_14sdp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btn_scan_again" />
@@ -469,7 +471,7 @@
         android:id="@+id/tv_connectName_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/white"
+        android:textColor="@color/gray_400"
         android:text="6,4m"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/tv_connectName"
@@ -483,7 +485,7 @@
         android:layout_height="wrap_content"
         android:text="@string/isp"
         android:textSize="@dimen/_14sdp"
-        android:textColor="#ddd"
+        android:textColor="@color/gray_400"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_connectName" />
     <TextView
@@ -492,7 +494,7 @@
         android:id="@+id/tv_isp_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/white"
+        android:textColor="@color/gray_400"
         android:text="Viettel"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/tv_isp"
@@ -506,7 +508,7 @@
         android:layout_height="wrap_content"
         android:text="@string/internal_ip"
         android:textSize="@dimen/_14sdp"
-        android:textColor="#ddd"
+        android:textColor="@color/gray_400"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_isp" />
     <TextView
@@ -515,7 +517,7 @@
         android:id="@+id/tv_internal_ip_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/white"
+        android:textColor="@color/gray_400"
         android:text="0.0.0.0"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/tv_internal_ip"
@@ -529,7 +531,7 @@
         android:layout_height="wrap_content"
         android:text="@string/external_ip"
         android:textSize="@dimen/_14sdp"
-        android:textColor="#ddd"
+        android:textColor="@color/gray_400"
 
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_internal_ip" />
@@ -539,7 +541,7 @@
         android:id="@+id/tv_external_ip_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/white"
+        android:textColor="@color/gray_400"
         android:text="0.0.0.0"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/tv_external_ip"

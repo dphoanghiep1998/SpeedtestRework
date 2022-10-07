@@ -191,6 +191,7 @@
                 android:id="@+id/container_rate"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
+                android:foreground="@drawable/ripple_effect_fg"
                 android:orientation="horizontal"
                 app:layout_constraintTop_toBottomOf="@+id/container_remove">
 
@@ -226,6 +227,7 @@
             <RelativeLayout
                 android:id="@+id/container_share"
                 android:layout_width="match_parent"
+                android:foreground="@drawable/ripple_effect_fg"
                 android:layout_height="80dp"
                 android:orientation="horizontal"
                 app:layout_constraintTop_toBottomOf="@+id/container_rate">
@@ -261,6 +263,7 @@
 
             <RelativeLayout
                 android:id="@+id/container_feedback"
+                android:foreground="@drawable/ripple_effect_fg"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:orientation="horizontal"
@@ -299,6 +302,7 @@
                 android:id="@+id/container_policy"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
+                android:foreground="@drawable/ripple_effect_fg"
                 android:orientation="horizontal"
                 app:layout_constraintTop_toBottomOf="@+id/container_feedback">
 

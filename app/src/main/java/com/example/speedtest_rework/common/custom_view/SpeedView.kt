@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.graphics.ColorFilter
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.system.Os
 import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
@@ -94,10 +95,11 @@ class SpeedView(
 
                     }
                     MotionEvent.ACTION_UP -> {
+                        binding.btnStart.scaleX = 1.3f
+                        binding.btnStart.scaleY = 1.3f
                         binding.btnStart.addValueCallback(
                             KeyPath("**"), LottieProperty.COLOR_FILTER
                         ) { null }
-
                         if (type == "no_connection") {
                             Toast.makeText(context, "No connectivity!", Toast.LENGTH_SHORT).show()
                             return true
@@ -108,11 +110,15 @@ class SpeedView(
                         prepareViewSpeedTest()
                     }
                     MotionEvent.ACTION_CANCEL -> {
+                        binding.btnStart.scaleX = 1.3f
+                        binding.btnStart.scaleY = 1.3f
                         binding.btnStart.addValueCallback(
                             KeyPath("**"), LottieProperty.COLOR_FILTER
                         ) { null }
                     }
                     MotionEvent.ACTION_OUTSIDE -> {
+                        binding.btnStart.scaleX = 1.3f
+                        binding.btnStart.scaleY = 1.3f
                         binding.btnStart.addValueCallback(
                             KeyPath("**"), LottieProperty.COLOR_FILTER
                         ) { null }
@@ -170,8 +176,7 @@ class SpeedView(
                     }.playOn(binding.loading)
                 } else if (l <= 4000) {
                     binding.btnStart.isEnabled = false
-                    YoYo.with(Techniques.FadeOut).playOn(binding.btnStart)
-                    YoYo.with(Techniques.SlideOutLeft).playOn(binding.tvGo)
+                    YoYo.with(Techniques.FadeOut).playOn(binding.btnStartContainer)
                     YoYo.with(Techniques.SlideInRight).onStart {
                         binding.tvConnecting.visibility = View.VISIBLE
                     }.playOn(binding.tvConnecting)
@@ -224,7 +229,6 @@ class SpeedView(
                         binding.tvSpeedValue.text = 0.0.toString() + ""
                     }
                     testModel?.upload = roundOffDecimal(ul)
-
                 }
             }
 
@@ -266,6 +270,13 @@ class SpeedView(
         anim.repeatCount = Animation.INFINITE
 
         binding.tvDownloadValue.setTextColor(
+            ContextCompat.getColor(
+                context,
+                R.color.gradient_green_start
+            )
+        )
+        binding.speedView.setState("download")
+        binding.speedView.setSpeedometerColor(
             ContextCompat.getColor(
                 context,
                 R.color.gradient_green_start
@@ -323,16 +334,10 @@ class SpeedView(
                 R.drawable.ic_download
             )
         )
-        binding.speedView.setSpeedometerColor(
-            ContextCompat.getColor(
-                context,
-                R.color.gradient_green_start
-            )
-        )
-        Log.d("TAG", "resetView: ")
+
         binding.speedView.setState("download")
         binding.speedView.speedTo(0f)
-        binding.tvSpeedValue.text = "0"
+        binding.tvSpeedValue.text = "0.00"
         binding.tvDownloadValue.clearAnimation()
         binding.tvUploadValue.clearAnimation()
         binding.tvDownloadValue.text = "0"
@@ -344,10 +349,10 @@ class SpeedView(
         YoYo.with(Techniques.FadeOut).onStart {
             binding.topView.visibility = View.GONE
         }.playOn(binding.topView)
-        YoYo.with(Techniques.FadeIn).playOn(binding.btnStart)
-        YoYo.with(Techniques.FadeIn).playOn(binding.tvGo)
-        binding.tvGo.visibility = View.VISIBLE
-        binding.btnStart.visibility = View.VISIBLE
+        YoYo.with(Techniques.FadeIn).playOn(binding.btnStartContainer)
+//        YoYo.with(Techniques.FadeIn).playOn(binding.tvGo)
+//        binding.tvGo.visibility = View.VISIBLE
+        binding.btnStartContainer.visibility = View.VISIBLE
         binding.loading.visibility = View.GONE
         binding.tvConnecting.visibility = View.GONE
         binding.speedView.visibility = View.GONE

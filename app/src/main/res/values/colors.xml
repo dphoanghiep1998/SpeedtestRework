@@ -11,6 +11,7 @@
     <color name="bottom_nav_checked_end">#36E7E7</color>
     <color name="bottom_nav_unChecked">#4E4B66</color>
     <color name="background_main">#1A1B2F</color>
+    <color name="transparent">#00FFFFFF</color>
     <color name="background_ads_start">#FF80F0FF</color>
     <color name="background_ads_stop">#FF80F0FF</color>
     <color name="background_ads_center">#FF168FEF</color>
@@ -21,7 +22,18 @@
     <color name="text_accent">#00BCD4</color>
     <color name="text_color_medium">#ff0</color>
     <color name="progress_bar">#615D5D</color>
-    <color name="second_progressbar">#FBBD00</color>
+    <!--   color wifi normal-->
+    <color name="wifi_normal_start">#FF9A02</color>
+    <color name="wifi_normal_center">#FFC122</color>
+    <color name="wifi_normal_end">#FFC602</color>
+    <!--   color wifi strong-->
+    <color name="wifi_strong_start">#01EC51</color>
+    <color name="wifi_strong_end">#36E7E7</color>
+    <!--   color wifi weak-->
+    <color name="wifi_weak_start">#E73636</color>
+    <color name="wifi_weak_end">#EC3901</color>
+
+
     <color name="signal_poor">#F44336</color>
     <color name="signal_normal">#FFEB3B</color>
     <color name="signal_good">#15CD1C</color>

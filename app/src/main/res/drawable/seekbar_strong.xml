@@ -7,9 +7,8 @@
         <clip>
             <shape>
                 <gradient
-                    android:centerColor="@color/wifi_normal_center"
-                    android:endColor="@color/wifi_normal_end"
-                    android:startColor="@color/wifi_normal_start" />
+                    android:endColor="@color/wifi_strong_end"
+                    android:startColor="@color/wifi_strong_start" />
                 <corners android:radius="10dp" />
             </shape>
         </clip>

@@ -3,6 +3,6 @@
     <item
         android:width="30dp"
         android:height="30dp"
-        android:drawable="@drawable/ic_signal_normal_wifi"
+        android:drawable="@drawable/ic_signal_low_wifi"
         android:gravity="center" />
 </layer-list>

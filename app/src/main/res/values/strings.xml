@@ -9,7 +9,7 @@
     <string name="policy">Policy</string>
     <string name="go">GO</string>
     <string name="connecting">CONNECTING...</string>
-    <string name="download">Download</string>
+    <string name="download">DOWNLOAD</string>
     <string name="Mbps">Mpbs</string>
     <string name="title_vip">Get A Premium Version</string>
     <string name="access_point">Access Point</string>
@@ -21,10 +21,10 @@
     <string name="wifi_analyzer_title">WIFI ANALYZER</string>
     <string name="vpn_title">VPN</string>
     <string name="results_title"> RESULTS</string>
-    <string name="upload">Upload</string>
-    <string name="signal_weak">Weak</string>
-    <string name="signal_normal">Normal</string>
-    <string name="signal_strong">Good</string>
+    <string name="upload">UPLOAD</string>
+    <string name="signal_weak">WEAK</string>
+    <string name="signal_normal">NORMAL</string>
+    <string name="signal_strong">STRONG</string>
     <string name="require_permission">"You need to grant location access for the app to use full features "</string>
     <string name="permission_text">"Access to Location permission "</string>
     <string name="des_permission">We need you, our respectable customers, please happy with 2 touch to permission grandted.  \n Love you</string>
@@ -38,7 +38,7 @@
     <string name="location_permission">Location permission</string>
     <string name="Loading">Loading</string>
     <string name="open_wifi_setting">OPEN WIFI SETTING</string>
-    <string name="scan_again">SCAN AGAIN</string>
+    <string name="scan_again">TEST AGAIN</string>
     <string name="connection_name">SSID</string>
     <string name="isp">ISP</string>
     <string name="internal_ip">Internal IP</string>
