@@ -9,7 +9,7 @@
     android:id="@+id/tv_title"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:text="DELETE RESULT"
+    android:text="@string/delete_title"
     android:textColor="@color/white"
     android:textSize="24sp"
     android:layout_gravity="center"
@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="10dp"
-        android:text="This result will be deleted from your history"
+        android:text="@string/delete_content"
         android:textColor="@android:color/white"
         android:textSize="16dp" />
 
@@ -39,7 +39,6 @@
             android:layout_height="40dp"
             android:background="@drawable/button_background_start"
             android:clickable="true"
-            android:text="Yes"
             android:textColor="@color/black"
             android:textStyle="bold"
             android:layout_marginEnd="50dp"/>
@@ -52,8 +51,6 @@
             android:textColor="@color/white"
             android:background="@drawable/button_negative_dialog_box"
             android:clickable="true"
-            android:text="No"
-
             android:textStyle="bold" />
     </LinearLayout>
 

@@ -128,11 +128,11 @@ class FragmentMain : BaseFragment() {
                 binding.navBottom.menu.getItem(position).isChecked = true
                 showMenu()
                 when (position) {
-                    0 -> binding.tvTitle.text = getString(R.string.speedtest_title)
+                    0 -> binding.tvTitle.text = getString(R.string.speed_test_title)
                     1 -> binding.tvTitle.text = getString(R.string.wifi_analyzer_title)
                     2 -> binding.tvTitle.text = getString(R.string.vpn_title)
                     3 -> binding.tvTitle.text = getString(R.string.results_title)
-                    else -> binding.tvTitle.text = getString(R.string.speedtest_title)
+                    else -> binding.tvTitle.text = getString(R.string.speed_test_title)
                 }
             }
         })

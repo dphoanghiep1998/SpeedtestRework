@@ -7,6 +7,8 @@ import android.graphics.Color
 import android.graphics.ColorFilter
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.os.Handler
+import android.os.Looper
 import android.system.Os
 import android.util.AttributeSet
 import android.util.Log
@@ -105,8 +107,6 @@ class SpeedView(
                             return true
                         }
                         viewModel?.setIsScanning(true)
-//                        binding.speedView.withTremble = false
-//                        binding.speedView.speedTo(100f)
                         prepareViewSpeedTest()
                     }
                     MotionEvent.ACTION_CANCEL -> {
@@ -148,6 +148,7 @@ class SpeedView(
                         override fun onAnimationRepeat(animation: Animation) {}
                     })
                     binding.speedView.startAnimation(animation)
+//                    binding.speedView.showArc()
                     YoYo.with(Techniques.FadeIn).onStart {
                         binding.containerSpeed.visibility = View.VISIBLE
                     }.playOn(binding.containerSpeed)
@@ -202,13 +203,15 @@ class SpeedView(
                     binding.speedView.speedTo(dl.toFloat())
                     if (progress >= 1) {
                         (context as Activity).runOnUiThread {
-                            binding.tvDownloadValue.clearAnimation()
+                            binding.placeholderDownload.clearAnimation()
+                            binding.placeholderDownload.visibility = GONE
+                            binding.tvDownloadValue.visibility = VISIBLE
                             binding.tvDownloadValue.text = format(dl)
-                            binding.tvSpeedValue.text = 0.0.toString() + ""
+                            binding.tvSpeedValue.text = context.getString(R.string.zero_value)
+                            testModel?.download = roundOffDecimal(dl)
                         }
                         binding.speedView.speedTo(0f, 500L)
                     }
-                    testModel?.download = roundOffDecimal(dl)
 
                 }
 
@@ -222,13 +225,15 @@ class SpeedView(
                     binding.speedView.speedTo(ul.toFloat())
                     binding.tvSpeedValue.text = format(ul.toFloat().toDouble())
                     if (progress >= 1) {
-                        binding.tvUploadValue.clearAnimation()
+                        binding.placeholderUpload.visibility = GONE
+                        binding.placeholderUpload.clearAnimation()
                         binding.tvUploadValue.text = format(ul)
                         binding.speedView.speedTo(0f, 500L)
                         binding.speedView.withTremble = false
-                        binding.tvSpeedValue.text = 0.0.toString() + ""
+                        binding.tvSpeedValue.text = context.getString(R.string.zero_value)
+                        testModel?.upload = roundOffDecimal(ul)
+
                     }
-                    testModel?.upload = roundOffDecimal(ul)
                 }
             }
 
@@ -245,14 +250,17 @@ class SpeedView(
                 (context as Activity).runOnUiThread {
                     viewModel?.insertNewHistoryAction(testModel!!)
                     viewModel?.setIsScanning(false)
-                    val bundle = Bundle()
-                    bundle.putParcelable(Constant.KEY_TEST_MODEL, testModel)
-                    bundle.putBoolean(Constant.KEY_FROM_SPEED_TEST_FRAGMENT, true)
-                    Navigation.findNavController(binding.root)
-                        .navigate(R.id.action_fragmentMain_to_fragmentResultDetail, bundle)
+                    binding.speedView.stop()
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        val bundle = Bundle()
+                        bundle.putParcelable(Constant.KEY_TEST_MODEL, testModel)
+                        bundle.putBoolean(Constant.KEY_FROM_SPEED_TEST_FRAGMENT, true)
+                        Navigation.findNavController(binding.root)
+                            .navigate(R.id.action_fragmentMain_to_fragmentResultDetail, bundle)
+                    }, 600L)
                 }
-
             }
+
 
             override fun onCriticalFailure(err: String?) {
                 (context as Activity).runOnUiThread {
@@ -268,13 +276,6 @@ class SpeedView(
         anim.duration = 100
         anim.startOffset = 50
         anim.repeatCount = Animation.INFINITE
-
-        binding.tvDownloadValue.setTextColor(
-            ContextCompat.getColor(
-                context,
-                R.color.gradient_green_start
-            )
-        )
         binding.speedView.setState("download")
         binding.speedView.setSpeedometerColor(
             ContextCompat.getColor(
@@ -288,7 +289,7 @@ class SpeedView(
                 R.drawable.ic_download
             )
         )
-        binding.tvDownloadValue.startAnimation(anim)
+        binding.placeholderDownload.startAnimation(anim)
     }
 
     private fun uploadView() {
@@ -304,13 +305,7 @@ class SpeedView(
         )
         binding.speedView.indicatorLightColor =
             ContextCompat.getColor(context, R.color.gradient_orange_start)
-        binding.tvUploadValue.setTextColor(
-            ContextCompat.getColor(
-                context,
-                R.color.gradient_orange_start
-            )
-        )
-        binding.tvUploadValue.startAnimation(anim)
+        binding.placeholderUpload.startAnimation(anim)
         binding.speedView.setSpeedometerColor(
             ContextCompat.getColor(
                 context,
@@ -334,24 +329,21 @@ class SpeedView(
                 R.drawable.ic_download
             )
         )
-
+        binding.placeholderDownload.visibility = VISIBLE
+        binding.placeholderUpload.visibility = VISIBLE
         binding.speedView.setState("download")
         binding.speedView.speedTo(0f)
-        binding.tvSpeedValue.text = "0.00"
+        binding.tvSpeedValue.text = context.getString(R.string.zero_value_dec)
         binding.tvDownloadValue.clearAnimation()
         binding.tvUploadValue.clearAnimation()
-        binding.tvDownloadValue.text = "0"
-        binding.tvUploadValue.text = "0"
-        binding.tvPingCount.text = "0"
-        binding.tvJitterCount.text = "0"
-        binding.tvDownloadValue.setTextColor(ContextCompat.getColor(context, R.color.gray_400))
-        binding.tvUploadValue.setTextColor(ContextCompat.getColor(context, R.color.gray_400))
+        binding.tvDownloadValue.visibility = GONE
+        binding.tvUploadValue.visibility = GONE
+        binding.tvPingCount.text = context.getString(R.string.zero_value)
+        binding.tvJitterCount.text = context.getString(R.string.zero_value)
         YoYo.with(Techniques.FadeOut).onStart {
             binding.topView.visibility = View.GONE
         }.playOn(binding.topView)
         YoYo.with(Techniques.FadeIn).playOn(binding.btnStartContainer)
-//        YoYo.with(Techniques.FadeIn).playOn(binding.tvGo)
-//        binding.tvGo.visibility = View.VISIBLE
         binding.btnStartContainer.visibility = View.VISIBLE
         binding.loading.visibility = View.GONE
         binding.tvConnecting.visibility = View.GONE
@@ -371,5 +363,12 @@ class SpeedView(
         return (number2digits * 10.0).roundToInt() / 10.0
     }
 
+    fun convertMbpsToMbs(value: Double): Double {
+        return value * .125
+    }
+
+    fun convertMbpsToKbs(value: Double): Double {
+        return value * 125
+    }
 
 }

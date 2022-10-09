@@ -27,7 +27,7 @@ import com.jjoe64.graphview.series.LineGraphSeries
 private fun BaseSeries<GraphDataPoint>.removeSeriesColor(graphColors: GraphColors) = graphColors.addColor(this.color.toLong())
 
 private fun BaseSeries<GraphDataPoint>.highlightSelected(selected: Boolean) {
-    val thickness = if (selected) THICKNESS_CONNECTED else THICKNESS_REGULAR
+    val thickness =  THICKNESS_REGULAR
     when (this) {
         is LineGraphSeries<GraphDataPoint> -> this.setThickness(thickness)
         is TitleLineGraphSeries<GraphDataPoint> -> {

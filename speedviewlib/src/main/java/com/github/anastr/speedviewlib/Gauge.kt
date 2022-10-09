@@ -28,9 +28,9 @@ typealias SpeedTextListener = (speed: Float) -> CharSequence
  */
 @Suppress("MemberVisibilityCanBePrivate")
 abstract class Gauge constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0,
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0,
 ) : View(context, attrs, defStyleAttr), Observer {
 
     private val speedUnitTextBitmapPaint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -98,7 +98,7 @@ abstract class Gauge constructor(
      * @see currentSpeed
      */
     var speed = minSpeed
-        private set
+         set
 
     /**
      * What speed is right now in **Integer**.
@@ -142,6 +142,7 @@ abstract class Gauge constructor(
             field = trembleDegree
             checkTrembleData()
         }
+
     /**
      * Tremble animation duration in millisecond.
      * Default : 1000 millisecond.
@@ -157,17 +158,20 @@ abstract class Gauge constructor(
     private var trembleAnimator: ValueAnimator? = null
     private var realSpeedAnimator: ValueAnimator? = null
     private var canceled = false
+
     /**
      * Register a callback to be invoked when speed value changed (in integer).
      * maybe null.
      */
     var onSpeedChangeListener: OnSpeedChangeListener? = null
+
     /**
      * Register a callback to be invoked when
      * [section](https://github.com/anastr/SpeedView/wiki/Usage#control-division-of-the-speedometer) changed.
      * maybe null.
      */
     var onSectionChangeListener: OnSectionChangeListener? = null
+
     /** This animatorListener to call [tremble] method when animator done  */
     private val animatorListener = object : AnimatorListenerAdapter() {
         override fun onAnimationEnd(animation: Animator) {
@@ -182,12 +186,14 @@ abstract class Gauge constructor(
 
     var padding = 0
         private set
+
     /**
      * View width without padding.
      * @return View width without padding.
      */
     var widthPa = 0
         private set
+
     /**
      * View height without padding.
      * @return View height without padding.
@@ -196,8 +202,9 @@ abstract class Gauge constructor(
         private set
 
     private val _sections = mutableListOf<Section>()
+
     /** All sections. */
-    val sections : List<Section> get() = _sections
+    val sections: List<Section> get() = _sections
     var currentSection: Section? = null
         private set
 
@@ -227,6 +234,7 @@ abstract class Gauge constructor(
      * @return Canvas translate dx.
      */
     protected var translatedDx = 0f
+
     /**
      * @return Canvas translate dy.
      */
@@ -370,18 +378,23 @@ abstract class Gauge constructor(
         textPaint.color = a.getColor(R.styleable.Gauge_sv_textColor, textPaint.color)
         textPaint.textSize = a.getDimension(R.styleable.Gauge_sv_textSize, textPaint.textSize)
         speedTextPaint.color = a.getColor(R.styleable.Gauge_sv_speedTextColor, speedTextPaint.color)
-        speedTextPaint.textSize = a.getDimension(R.styleable.Gauge_sv_speedTextSize, speedTextPaint.textSize)
+        speedTextPaint.textSize =
+            a.getDimension(R.styleable.Gauge_sv_speedTextSize, speedTextPaint.textSize)
         unitTextPaint.color = a.getColor(R.styleable.Gauge_sv_unitTextColor, unitTextPaint.color)
-        unitTextPaint.textSize = a.getDimension(R.styleable.Gauge_sv_unitTextSize, unitTextPaint.textSize)
+        unitTextPaint.textSize =
+            a.getDimension(R.styleable.Gauge_sv_unitTextSize, unitTextPaint.textSize)
         val unit = a.getString(R.styleable.Gauge_sv_unit)
         this.unit = unit ?: this.unit
         trembleDegree = a.getFloat(R.styleable.Gauge_sv_trembleDegree, trembleDegree)
         trembleDuration = a.getInt(R.styleable.Gauge_sv_trembleDuration, trembleDuration)
-        speedometerTextRightToLeft = a.getBoolean(R.styleable.Gauge_sv_textRightToLeft, speedometerTextRightToLeft)
+        speedometerTextRightToLeft =
+            a.getBoolean(R.styleable.Gauge_sv_textRightToLeft, speedometerTextRightToLeft)
         accelerate = a.getFloat(R.styleable.Gauge_sv_accelerate, accelerate)
         decelerate = a.getFloat(R.styleable.Gauge_sv_decelerate, decelerate)
-        unitUnderSpeedText = a.getBoolean(R.styleable.Gauge_sv_unitUnderSpeedText, unitUnderSpeedText)
-        unitSpeedInterval = a.getDimension(R.styleable.Gauge_sv_unitSpeedInterval, unitSpeedInterval)
+        unitUnderSpeedText =
+            a.getBoolean(R.styleable.Gauge_sv_unitUnderSpeedText, unitUnderSpeedText)
+        unitSpeedInterval =
+            a.getDimension(R.styleable.Gauge_sv_unitSpeedInterval, unitSpeedInterval)
         speedTextPadding = a.getDimension(R.styleable.Gauge_sv_speedTextPadding, speedTextPadding)
         val speedTypefacePath = a.getString(R.styleable.Gauge_sv_speedTextTypeface)
         if (speedTypefacePath != null && !isInEditMode)
@@ -427,13 +440,17 @@ abstract class Gauge constructor(
     internal fun checkSection(section: Section) {
         val i = _sections.indexOf(section)
         require(section.startOffset < section.endOffset) { "endOffset must be bigger than startOffset" }
-        _sections.getOrNull(i-1)?.let {
-            require(it.endOffset <= section.startOffset
-                    && it.endOffset < section.endOffset) { "Section at index ($i) is conflicted with previous section" }
+        _sections.getOrNull(i - 1)?.let {
+            require(
+                it.endOffset <= section.startOffset
+                        && it.endOffset < section.endOffset
+            ) { "Section at index ($i) is conflicted with previous section" }
         }
-        _sections.getOrNull(i+1)?.let {
-            require(it.startOffset >= section.endOffset
-                    && it.startOffset > section.startOffset) { "Section at index ($i) is conflicted with next section" }
+        _sections.getOrNull(i + 1)?.let {
+            require(
+                it.startOffset >= section.endOffset
+                        && it.startOffset > section.startOffset
+            ) { "Section at index ($i) is conflicted with next section" }
         }
     }
 
@@ -492,19 +509,22 @@ abstract class Gauge constructor(
      * @return The width of speed-unit text at runtime.
      */
     private fun getSpeedUnitTextWidth(): Float =
-            if (unitUnderSpeedText)
-                max(speedTextPaint.measureText(getSpeedText().toString()), unitTextPaint.measureText(unit))
-            else
-                speedTextPaint.measureText(getSpeedText().toString()) + unitTextPaint.measureText(unit) + unitSpeedInterval
+        if (unitUnderSpeedText)
+            max(
+                speedTextPaint.measureText(getSpeedText().toString()),
+                unitTextPaint.measureText(unit)
+            )
+        else
+            speedTextPaint.measureText(getSpeedText().toString()) + unitTextPaint.measureText(unit) + unitSpeedInterval
 
     /**
      * @return The height of speed-unit text at runtime.
      */
     private fun getSpeedUnitTextHeight(): Float =
-            if (unitUnderSpeedText)
-                speedTextPaint.textSize + unitTextPaint.textSize + unitSpeedInterval
-            else
-                max(speedTextPaint.textSize, unitTextPaint.textSize)
+        if (unitUnderSpeedText)
+            speedTextPaint.textSize + unitTextPaint.textSize + unitSpeedInterval
+        else
+            max(speedTextPaint.textSize, unitTextPaint.textSize)
 
     /**
      * Get current speed as string to **Draw**.
@@ -520,7 +540,22 @@ abstract class Gauge constructor(
     /**
      * @return Offset speed, between [0,1].
      */
-    fun getOffsetSpeed(): Float = (currentSpeed - minSpeed) / (maxSpeed - minSpeed)
+    fun getOffsetSpeed(): Float {
+        val a = (currentSpeed - minSpeed) / (maxSpeed - minSpeed)
+        return when {
+            a <= 0f -> a
+            currentSpeed <= 5f -> (currentSpeed * 12.5f / 5 - minSpeed) / (maxSpeed - minSpeed)
+            currentSpeed <= 10f -> (currentSpeed * 25 / 10 - minSpeed) / (maxSpeed - minSpeed)
+            currentSpeed <= 15f -> (currentSpeed * 37.5f / 15 - minSpeed) / (maxSpeed - minSpeed)
+            currentSpeed <= 20f -> (currentSpeed * 50 / 20 - minSpeed) / (maxSpeed - minSpeed)
+            currentSpeed <= 30f -> (50f + 12.5f / 10 * (currentSpeed - 20) - minSpeed) / (maxSpeed - minSpeed)
+            currentSpeed <= 50f -> (62.5f + 12.5f / 20 * (currentSpeed - 30) - minSpeed) / (maxSpeed - minSpeed)
+            currentSpeed <= 75f -> (75f + 12.5f / 25 * (currentSpeed - 50) - minSpeed) / (maxSpeed - minSpeed)
+            a <= 1f -> a
+            else -> a
+        }
+    }
+
 
     /**
      * Change all text color without **speed, unit text**.
@@ -674,8 +709,12 @@ abstract class Gauge constructor(
     protected fun drawSpeedUnitText(canvas: Canvas) {
         val r = getSpeedUnitTextBounds()
         updateSpeedUnitTextBitmap(getSpeedText().toString())
-        canvas.drawBitmap(speedUnitTextBitmap, r.left - speedUnitTextBitmap.width * .5f + r.width() * .5f
-                , r.top - speedUnitTextBitmap.height * .5f + r.height() * .5f, speedUnitTextBitmapPaint)
+        canvas.drawBitmap(
+            speedUnitTextBitmap,
+            r.left - speedUnitTextBitmap.width * .5f + r.width() * .5f,
+            r.top - speedUnitTextBitmap.height * .5f + r.height() * .5f,
+            speedUnitTextBitmapPaint
+        )
     }
 
     /**
@@ -687,8 +726,18 @@ abstract class Gauge constructor(
         speedUnitTextBitmap.eraseColor(0)
 
         if (unitUnderSpeedText) {
-            speedUnitTextCanvas?.drawText(speedText, speedUnitTextBitmap.width * .5f, speedUnitTextBitmap.height * .5f - unitSpeedInterval * .5f, speedTextPaint)
-            speedUnitTextCanvas?.drawText(unit, speedUnitTextBitmap.width * .5f, speedUnitTextBitmap.height * .5f + unitTextPaint.textSize + unitSpeedInterval * .5f, unitTextPaint)
+            speedUnitTextCanvas?.drawText(
+                speedText,
+                speedUnitTextBitmap.width * .5f,
+                speedUnitTextBitmap.height * .5f - unitSpeedInterval * .5f,
+                speedTextPaint
+            )
+            speedUnitTextCanvas?.drawText(
+                unit,
+                speedUnitTextBitmap.width * .5f,
+                speedUnitTextBitmap.height * .5f + unitTextPaint.textSize + unitSpeedInterval * .5f,
+                unitTextPaint
+            )
         } else {
             val speedX: Float
             val unitX: Float
@@ -732,7 +781,7 @@ abstract class Gauge constructor(
     fun stop() {
         if (speedAnimator?.isRunning == false && realSpeedAnimator?.isRunning == false)
             return
-        speed = currentSpeed
+        speed = 0f
         cancelSpeedAnimator()
         tremble()
     }
@@ -765,7 +814,8 @@ abstract class Gauge constructor(
      */
     fun setSpeedAt(speed: Float) {
         var newSpeed = speed
-        newSpeed = if (newSpeed > maxSpeed) maxSpeed else if (newSpeed < minSpeed) minSpeed else newSpeed
+        newSpeed =
+            if (newSpeed > maxSpeed) maxSpeed else if (newSpeed < minSpeed) minSpeed else newSpeed
         isSpeedIncrease = newSpeed > currentSpeed
         this.speed = newSpeed
         this.currentSpeed = newSpeed
@@ -808,7 +858,8 @@ abstract class Gauge constructor(
     @JvmOverloads
     fun speedTo(speed: Float, moveDuration: Long = 500) {
         var newSpeed = speed
-        newSpeed = if (newSpeed > maxSpeed) maxSpeed else if (newSpeed < minSpeed) minSpeed else newSpeed
+        newSpeed =
+            if (newSpeed > maxSpeed) maxSpeed else if (newSpeed < minSpeed) minSpeed else newSpeed
         if (newSpeed == this.speed)
             return
         this.speed = newSpeed
@@ -874,7 +925,8 @@ abstract class Gauge constructor(
     fun realSpeedTo(speed: Float) {
         var newSpeed = speed
         val oldIsSpeedUp = this.speed > currentSpeed
-        newSpeed = if (newSpeed > maxSpeed) maxSpeed else if (newSpeed < minSpeed) minSpeed else newSpeed
+        newSpeed =
+            if (newSpeed > maxSpeed) maxSpeed else if (newSpeed < minSpeed) minSpeed else newSpeed
         if (newSpeed == this.speed)
             return
         this.speed = newSpeed
@@ -918,7 +970,8 @@ abstract class Gauge constructor(
         if (!withTremble)
             return
         val random = Random()
-        var mad = trembleDegree * random.nextFloat() * (if (random.nextBoolean()) -1 else 1).toFloat()
+        var mad =
+            trembleDegree * random.nextFloat() * (if (random.nextBoolean()) -1 else 1).toFloat()
         mad = when {
             speed + mad > maxSpeed -> maxSpeed - speed
             speed + mad < minSpeed -> minSpeed - speed
@@ -1105,7 +1158,8 @@ abstract class Gauge constructor(
     private fun findSection(): Section? {
         _sections.forEach {
             if ((maxSpeed - minSpeed) * it.startOffset + minSpeed <= currentSpeed
-                    && (maxSpeed - minSpeed) * it.endOffset + minSpeed >= currentSpeed)
+                && (maxSpeed - minSpeed) * it.endOffset + minSpeed >= currentSpeed
+            )
                 return it
         }
         return null
@@ -1131,19 +1185,23 @@ abstract class Gauge constructor(
     /**
      * Position of speed-unit text.
      */
-    enum class Position constructor(internal val x: Float, internal val y: Float
-                                    , internal val width: Float, internal val height: Float
-                                    , internal val paddingH: Int // horizontal padding
-                                    , internal val paddingV: Int // vertical padding
+    enum class Position constructor(
+        internal val x: Float,
+        internal val y: Float,
+        internal val width: Float,
+        internal val height: Float,
+        internal val paddingH: Int // horizontal padding
+        ,
+        internal val paddingV: Int // vertical padding
     ) {
-        TOP_LEFT     (0f, 0f, 0f, 0f, 1, 1),
-        TOP_CENTER   (.5f, 0f, .5f, 0f, 0, 1),
-        TOP_RIGHT    (1f, 0f, 1f, 0f, -1, 1),
-        LEFT         (0f, .5f, 0f, .5f, 1, 0),
-        CENTER       (.5f, .5f, .5f, .5f, 0, 0),
-        RIGHT        (1f, .5f, 1f, .5f, -1, 0),
-        BOTTOM_LEFT  (0f, 1f, 0f, 1f, 1, -1),
+        TOP_LEFT(0f, 0f, 0f, 0f, 1, 1),
+        TOP_CENTER(.5f, 0f, .5f, 0f, 0, 1),
+        TOP_RIGHT(1f, 0f, 1f, 0f, -1, 1),
+        LEFT(0f, .5f, 0f, .5f, 1, 0),
+        CENTER(.5f, .5f, .5f, .5f, 0, 0),
+        RIGHT(1f, .5f, 1f, .5f, -1, 0),
+        BOTTOM_LEFT(0f, 1f, 0f, 1f, 1, -1),
         BOTTOM_CENTER(.5f, 1f, .5f, 1f, 0, -1),
-        BOTTOM_RIGHT (1f, 1f, 1f, 1f, -1, -1)
+        BOTTOM_RIGHT(1f, 1f, 1f, 1f, -1, -1)
     }
 }

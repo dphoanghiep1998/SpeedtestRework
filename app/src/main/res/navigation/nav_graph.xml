@@ -6,25 +6,32 @@
     app:startDestination="@id/fragmentSplash">
 
     <fragment
-        tools:layout="@layout/fragment_permission"
         android:id="@+id/fragmentPermission"
         android:name="com.example.speedtest_rework.ui.permissison.FragmentPermission"
-        android:label="FragmentPermission">
+        android:label="FragmentPermission"
+        tools:layout="@layout/fragment_permission">
         <action
             android:id="@+id/action_fragmentPermission_to_fragmentMain"
-            app:destination="@id/fragmentMain" />
+            app:destination="@id/fragmentMain"
+            app:enterAnim="@anim/nav_default_enter_anim" />
     </fragment>
     <fragment
-        tools:layout="@layout/fragment_splash"
         android:id="@+id/fragmentSplash"
         android:name="com.example.speedtest_rework.ui.splash.FragmentSplash"
-        android:label="FragmentSplash">
+        android:label="FragmentSplash"
+        tools:layout="@layout/fragment_splash">
         <action
             android:id="@+id/action_fragmentSplash_to_fragmentPermission"
-            app:destination="@id/fragmentPermission" />
+            app:destination="@id/fragmentPermission"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_left"
+            app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_fragmentSplash_to_fragmentMain"
-            app:destination="@id/fragmentMain" />
+            app:destination="@id/fragmentMain"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_left"
+            app:popExitAnim="@anim/slide_out_left" />
     </fragment>
     <fragment
         android:id="@+id/fragmentMain"
@@ -33,12 +40,14 @@
         tools:layout="@layout/fragment_main">
         <action
             android:id="@+id/action_fragmentMain_to_fragmentResultDetail"
-            app:destination="@id/fragmentDetail" />
+            app:destination="@id/fragmentDetail"
+            app:enterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_left" />
     </fragment>
 
     <fragment
-        tools:layout="@layout/fragment_detail_result"
         android:id="@+id/fragmentDetail"
         android:name="com.example.speedtest_rework.ui.result_detail.FragmentResultDetail"
-        android:label="FragmentDetailResult"></fragment>
+        android:label="FragmentDetailResult"
+        tools:layout="@layout/fragment_detail_result" />
 </navigation>

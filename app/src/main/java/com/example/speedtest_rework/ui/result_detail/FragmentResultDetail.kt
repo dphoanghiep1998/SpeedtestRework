@@ -1,9 +1,6 @@
 package com.example.speedtest_rework.ui.result_detail
 
 import android.animation.ValueAnimator
-import android.graphics.drawable.ClipDrawable
-import android.graphics.drawable.GradientDrawable
-import android.graphics.drawable.LayerDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -87,10 +84,10 @@ class FragmentResultDetail : BaseFragment(), ConfirmDialog.ConfirmCallback {
             val customDialog = ConfirmDialog(
                 requireContext(),
                 this,
-                "DELETE RESULT",
-                "This result will be deleted from your history",
-                "YES",
-                "NO"
+                getString(R.string.delete_title),
+                getString(R.string.delete_content),
+                getString(R.string.YES),
+                getString(R.string.NO)
             )
             customDialog.show()
         }
@@ -158,7 +155,7 @@ class FragmentResultDetail : BaseFragment(), ConfirmDialog.ConfirmCallback {
     }
 
     override fun negativeAction() {
-        TODO("Not yet implemented")
+
     }
 
     override fun positiveAction() {

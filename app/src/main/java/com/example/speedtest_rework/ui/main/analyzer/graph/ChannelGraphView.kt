@@ -19,6 +19,7 @@ package com.example.speedtest_rework.ui.main.analyzer.graph
 
 import android.content.Context
 import android.view.View
+import com.example.speedtest_rework.R
 import com.example.speedtest_rework.common.annotation.OpenClass
 import com.example.speedtest_rework.ui.main.analyzer.band.WiFiBand
 import com.example.speedtest_rework.ui.main.analyzer.band.WiFiChannelPair
@@ -47,8 +48,8 @@ internal fun makeGraphView(
 ): GraphView {
     return GraphViewBuilder(wiFiChannelPair.numX(), graphMaximumY, true)
         .setLabelFormatter(ChannelAxisLabel(wiFiBand, wiFiChannelPair))
-        .setVerticalTitle("Signal Strength (dbm)")
-        .setHorizontalTitle("Wi-Fi Channels")
+        .setVerticalTitle(context.resources.getString(R.string.graph_y))
+        .setHorizontalTitle(context.resources.getString(R.string.graph_x))
         .build(context)
 }
 

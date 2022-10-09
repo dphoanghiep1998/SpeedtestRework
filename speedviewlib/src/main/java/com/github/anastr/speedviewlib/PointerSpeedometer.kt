@@ -1,8 +1,10 @@
 package com.github.anastr.speedviewlib
 
+import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
+import android.util.Log
 import com.github.anastr.speedviewlib.components.Style
 import com.github.anastr.speedviewlib.components.indicators.SpindleIndicator
 
@@ -30,6 +32,8 @@ open class PointerSpeedometer @JvmOverloads constructor(
     private var uploadColorsList = intArrayOf(0xFFFF981F.toInt(), 0xFFFF7F0A.toInt())
     private var state = "none"
     private var withPointer = true
+    private var initDone = false
+    private var rectF = RectF()
 
     /**
      * change the color of the center circle.
@@ -113,8 +117,18 @@ open class PointerSpeedometer @JvmOverloads constructor(
         blurPaint.maskFilter = BlurMaskFilter(0.4f * speedometerWidth, BlurMaskFilter.Blur.NORMAL)
         blurPaint.strokeWidth = 1.3f * speedometerWidth
 
-
         circlePaint.color = 0xFFFFFFFF.toInt()
+        speedometerPaint.strokeWidth = speedometerWidth
+        darkPaint.strokeWidth = speedometerWidth
+
+
+        rectF = RectF(
+            speedometerRect.left + 5f,
+            speedometerRect.top + 5f,
+            speedometerRect.right - 5f,
+            speedometerRect.bottom - 5f
+        )
+
     }
 
     private fun initAttributeSet(context: Context, attrs: AttributeSet?) {
@@ -151,23 +165,41 @@ open class PointerSpeedometer @JvmOverloads constructor(
         updateBackgroundBitmap()
     }
 
+    fun showArc() {
+        val offInt: ValueAnimator = ValueAnimator.ofInt(135, 405)
+        offInt.duration = 500
+        offInt.addUpdateListener {
+            Log.d("TAG", "showArc: "+ it.animatedValue)
+            setEndDegree(it.animatedValue as Int)
+            invalidate()
+            if(it.animatedValue == 405){
+                showTicks()
+            }
+        }
+        offInt.start()
+    }
+    fun showTicks(){
+
+    }
+
     private fun initDraw() {
-        speedometerPaint.strokeWidth = speedometerWidth
-        darkPaint.strokeWidth = speedometerWidth
+        if (initDone) return
+        Log.d("TAG", "initDraw: ")
+        speed = 0f
+        invalidate()
+        initDone = true
+
+
     }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         initDraw()
 
-        val rectF = RectF(
-            speedometerRect.left + 5f,
-            speedometerRect.top + 5f,
-            speedometerRect.right - 5f,
-            speedometerRect.bottom - 5f
-        )
+
         val position = getOffsetSpeed() * (getEndDegree() - getStartDegree())
 
+        Log.d("onDraw", "onDraw: $position")
 
         canvas.drawArc(
             speedometerRect,
@@ -200,7 +232,7 @@ open class PointerSpeedometer @JvmOverloads constructor(
         circlePaint.color = c
         canvas.drawCircle(size * .5f, size * .5f, centerCircleRadius, circlePaint)
         drawIndicator(canvas)
-        drawTicks(canvas,getStartDegree() + position)
+        drawTicks(canvas, getStartDegree() + position)
     }
 
     override fun updateBackgroundBitmap() {
@@ -210,7 +242,7 @@ open class PointerSpeedometer @JvmOverloads constructor(
         drawMarks(c)
 
         if (tickNumber > 0)
-            drawTicks(c,0f)
+            drawTicks(c, 0f)
         else
             drawDefMinMaxSpeedPosition(c)
     }
@@ -224,13 +256,14 @@ open class PointerSpeedometer @JvmOverloads constructor(
             sweepGradient.setLocalMatrix(matrix)
             blurPaint.shader = sweepGradient
             speedometerPaint.shader = SweepGradient(width / 2f, width / 4f, uploadColorsList, null);
-        }else{
+        } else {
             val matrix = Matrix()
             matrix.setRotate(90f, speedometerRect.centerX(), speedometerRect.centerY())
             val sweepGradient = SweepGradient(width / 2f, width / 4f, downloadColorsList, null)
             sweepGradient.setLocalMatrix(matrix)
             blurPaint.shader = sweepGradient
-            speedometerPaint.shader = SweepGradient(width / 2f, width / 4f, downloadColorsList, null);
+            speedometerPaint.shader =
+                SweepGradient(width / 2f, width / 4f, downloadColorsList, null);
         }
         invalidate()
     }

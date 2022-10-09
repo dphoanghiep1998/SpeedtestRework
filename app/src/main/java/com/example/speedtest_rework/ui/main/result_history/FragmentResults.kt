@@ -42,10 +42,10 @@ class FragmentResults : BaseFragment(), ResultTouchHelper, ConfirmDialog.Confirm
             val customDialog = ConfirmDialog(
                 requireActivity(),
                 this,
-                "DELETE ALL RESULTS ?",
-                "All results will be deleted",
-                "YES",
-                "NO"
+                getString(R.string.delete_all_title),
+                getString(R.string.delete_all_content),
+                getString(R.string.YES),
+                getString(R.string.NO)
             )
             customDialog.show()
         }

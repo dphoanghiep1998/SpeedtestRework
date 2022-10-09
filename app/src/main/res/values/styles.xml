@@ -5,6 +5,9 @@
         <item name="android:windowAnimationStyle">@style/WindowAnimationTransition</item>
         <item name="android:actionMenuTextColor">@color/selected</item>
     </style>
+    <style name="OverPassTextViewStyle" parent="android:Widget.TextView">
+        <item name="android:fontFamily">@font/app_font_black</item>
+    </style>
 
     <style name="ThemeDarkNoActionBar" parent="ThemeDark">
         <item name="windowActionBar">false</item>

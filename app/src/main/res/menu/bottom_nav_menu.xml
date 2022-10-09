@@ -3,7 +3,7 @@
     <item
         android:id="@+id/speedtest"
         android:icon="@drawable/ic_speed"
-        android:title="@string/speedtest" />
+        android:title="@string/speed" />
     <item
         android:id="@+id/analist"
         android:icon="@drawable/ic_wifi_analyzer"
@@ -15,5 +15,5 @@
     <item
         android:id="@+id/history"
         android:icon="@drawable/ic_result"
-        android:title="@string/results" />
+        android:title="@string/result_bottom" />
 </menu>

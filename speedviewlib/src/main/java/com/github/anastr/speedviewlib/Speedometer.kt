@@ -5,6 +5,7 @@ import android.graphics.*
 import android.text.Layout
 import android.text.StaticLayout
 import android.util.AttributeSet
+import android.util.Log
 import com.github.anastr.speedviewlib.components.Style
 import com.github.anastr.speedviewlib.components.indicators.Indicator
 import com.github.anastr.speedviewlib.components.indicators.NoIndicator
@@ -187,7 +188,7 @@ abstract class Speedometer @JvmOverloads constructor(
      *
      * @throws IllegalArgumentException If one of [ticks] out of range `[0f, 1f]`.
      */
-    var ticks: List<Float> = emptyList()
+    var ticks: List<Float> = listOf(0f, .05f, .10f, .15f, .2f, .30f, .50f, .75f, 1f)
         set(ticks) {
             field = ticks
             checkTicks()
@@ -284,7 +285,7 @@ abstract class Speedometer @JvmOverloads constructor(
             val tickEach = if (tickNumber == 1) 0f else 1f / (tickNumber - 1).toFloat()
             for (i in 0 until tickNumber)
                 ticks.add(tickEach * i)
-            this.ticks = ticks
+//            this.ticks = ticks
         }
 
     /**
@@ -574,8 +575,24 @@ abstract class Speedometer @JvmOverloads constructor(
      * @param speed To know the degree at it.
      * @return Degree at that speed.
      */
+    //1 cung tron 270 do  voi gia tri tu 0->100 chia thanh 8 -> 1 khoang la 12.5, 0->12.5->25->37.5->50->62.5->75->87.5->100
+    //12.5 -> 5
+
+
     protected fun getDegreeAtSpeed(speed: Float): Float {
-        return (speed - minSpeed) * (endDegree - startDegree) / (maxSpeed - minSpeed) + startDegree
+        return when {
+            speed <= 0f -> 0f * (endDegree - startDegree) / (maxSpeed - minSpeed) + startDegree
+            speed <= 20f -> speed * 33.75f / 5 + startDegree
+            speed <= 30f -> (135f + 33.75f / 10 * (speed - 20)) + startDegree
+            speed <= 50f -> 168.75f + (speed - 30) * 33.75f / 20 + startDegree
+            speed <= 75f -> (202.5f + (speed - 50) * 33.75f / 25) + startDegree
+            speed <= 100f -> speed * (endDegree - startDegree) / (maxSpeed - minSpeed) + startDegree
+            else -> 100f * (endDegree - startDegree) / (maxSpeed - minSpeed) + startDegree
+        }
+    }
+
+    fun calDegree(speed: Float): Float {
+        return (speed - minSpeed) * (endDegree - startDegree) / (maxSpeed - minSpeed)
     }
 
     /**
@@ -747,14 +764,28 @@ abstract class Speedometer @JvmOverloads constructor(
      * Draw speed value at each tick point.
      * @param c Canvas to draw.
      */
-    protected fun drawTicks(c: Canvas,currentPosistion:Float) {
+    protected fun drawTicks(c: Canvas, currentPosition: Float) {
         if (ticks.isEmpty())
             return
         textPaint.textAlign = Paint.Align.LEFT
 
         val range = endDegree - startDegree
         ticks.forEachIndexed { index, t ->
-            val d = startDegree + range * t
+            var d = 0f
+            val z = startDegree + range * t
+            when (index) {
+//                0 5 10 15 20 30 50 75 100
+                0 -> d = startDegree + range * t
+                1 -> d = startDegree + range * (t + .075f)
+                2 -> d = startDegree + range * (t + .15f)
+                3 -> d = startDegree + range * (t + .225f)
+                4 -> d = startDegree + range * (t + .3f)
+                5 -> d = startDegree + range * (t + .325f)
+                6 -> d = startDegree + range * (t + .25f)
+                7 -> d = startDegree + range * (t + .125f)
+                8 -> d = startDegree + range * t
+            }
+
             c.save()
             c.rotate(d + 90f, size * .5f, size * .5f)
             if (!tickRotation)
@@ -763,9 +794,9 @@ abstract class Speedometer @JvmOverloads constructor(
                     size * .5f,
                     initTickPadding + textPaint.textSize + padding.toFloat() + tickPadding.toFloat()
                 )
-            if(currentPosistion > d){
+            if (currentPosition >= d) {
                 textPaint.color = 0xFFFFFFFF.toInt()
-            }else{
+            } else {
                 textPaint.color = 0xFFA0A3BD.toInt()
 
             }
@@ -774,7 +805,7 @@ abstract class Speedometer @JvmOverloads constructor(
                 tick = onPrintTickLabel!!.invoke(index, getSpeedAtDegree(d))
             // if (onPrintTickLabel is null or it returns null)
             if (tick == null)
-                tick = "%.0f".format(locale, getSpeedAtDegree(d))
+                tick = "%.0f".format(locale, getSpeedAtDegree(z))
 
             c.translate(0f, initTickPadding + padding.toFloat() + tickPadding.toFloat())
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
