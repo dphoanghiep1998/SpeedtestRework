@@ -179,7 +179,7 @@ class FragmentMain : BaseFragment() {
     private fun hideBottomTabWhenScan() {
         binding.viewPager.isUserInputEnabled = false
         YoYo.with(Techniques.SlideOutDown).onEnd {
-            binding.navBottom.visibility = View.GONE
+            binding.navBottom.visibility = View.INVISIBLE
         }.playOn(binding.navBottom)
     }
 

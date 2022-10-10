@@ -4,5 +4,7 @@ import androidx.annotation.StringRes
 import com.example.speedtest_rework.R
 
 enum class UnitType(@StringRes val unit: Int) {
-    MBBPS(R.string.Mbps)
+    MBPS(R.string.Mbps),
+    MBS(R.string.Mbs),
+    KBS(R.string.Kbs)
 }

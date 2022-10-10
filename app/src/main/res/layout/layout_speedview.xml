@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="gone"
+        android:visibility="invisible"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -312,7 +312,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:clipChildren="false"
+        android:layout_marginBottom="@dimen/_60sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -364,9 +364,7 @@
             android:layout_height="wrap_content"
             app:colorFirst="@color/gradient_green_start"
             app:colorSecond="@color/gradient_green_end"
-
             android:text="@string/connecting"
-            android:textColor="@color/white"
             android:textSize="@dimen/_16sdp"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -427,7 +425,7 @@
                 android:src="@drawable/ic_download" />
 
             <TextView
-                android:id="@+id/tv_mbps"
+                android:id="@+id/tv_currency"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingStart="@dimen/_4sdp"

@@ -188,6 +188,15 @@ abstract class Speedometer @JvmOverloads constructor(
      *
      * @throws IllegalArgumentException If one of [ticks] out of range `[0f, 1f]`.
      */
+
+//    var a = listOf(0f, 1 / 30f, 1 / 15f, 0.1f, 2 / 15f, 0.2f, 1 / 3f, 2 / 3f, 1f) 15k
+//    var a = listOf(0f, .05f, .1f, .15f, .2f, .3f, .5f, .8f, 1f)  10k
+//    var a = listOf(0f, .02f, .04f, .06f, .1f, .2f, .4f, .6f, 1f) 5k
+//    var a = listOf(0f,.02f,.04f,.06f,.1f,.2f,.3f,.6f,1f) 50
+//    var a = listOf(0f, .1f, .2f, .3f, .4f, .5f, .6f, .8f) 10
+//    var a = listOf(0f, .01f, .02f, .05f, .1f, .2f, .3f, .6f, 1f) 500
+//    var a = listOf(0f, .005f, .01f, .05f, .1f, .25f, .5f, .75f, 1f) 1000
+    //100 default
     var ticks: List<Float> = listOf(0f, .05f, .10f, .15f, .2f, .30f, .50f, .75f, 1f)
         set(ticks) {
             field = ticks
@@ -586,7 +595,7 @@ abstract class Speedometer @JvmOverloads constructor(
             speed <= 30f -> (135f + 33.75f / 10 * (speed - 20)) + startDegree
             speed <= 50f -> 168.75f + (speed - 30) * 33.75f / 20 + startDegree
             speed <= 75f -> (202.5f + (speed - 50) * 33.75f / 25) + startDegree
-            speed <= 100f -> speed * (endDegree - startDegree) / (maxSpeed - minSpeed) + startDegree
+            speed <= 100f -> (236.25f + (speed - 75) * 33.75f / 25) + startDegree
             else -> 100f * (endDegree - startDegree) / (maxSpeed - minSpeed) + startDegree
         }
     }
@@ -775,15 +784,15 @@ abstract class Speedometer @JvmOverloads constructor(
             val z = startDegree + range * t
             when (index) {
 //                0 5 10 15 20 30 50 75 100
-                0 -> d = startDegree + range * t
-                1 -> d = startDegree + range * (t + .075f)
-                2 -> d = startDegree + range * (t + .15f)
-                3 -> d = startDegree + range * (t + .225f)
-                4 -> d = startDegree + range * (t + .3f)
-                5 -> d = startDegree + range * (t + .325f)
-                6 -> d = startDegree + range * (t + .25f)
-                7 -> d = startDegree + range * (t + .125f)
-                8 -> d = startDegree + range * t
+                0 -> d = startDegree + range * 0f
+                1 -> d = startDegree + range * .125f
+                2 -> d = startDegree + range * .25f
+                3 -> d = startDegree + range * .375f
+                4 -> d = startDegree + range * .5f
+                5 -> d = startDegree + range * .625f
+                6 -> d = startDegree + range * .75f
+                7 -> d = startDegree + range * .875f
+                8 -> d = startDegree + range * 1f
             }
 
             c.save()

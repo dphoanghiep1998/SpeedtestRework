@@ -18,7 +18,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/container_expand_view"
         android:layout_width="wrap_content"
-        android:layout_height="80dp"
+        android:layout_height="@dimen/_90sdp"
         android:layout_marginTop="@dimen/_20sdp"
         android:layout_marginEnd="32dp"
         android:background="@drawable/background_gradient_config"
@@ -147,10 +147,12 @@
                     android:id="@+id/tv_mbps_type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingBottom="0dp"
+                    android:paddingTop="10dp"
                     android:text="Mbps"
                     android:textColor="@color/white"
                     android:textSize="16dp"
-                    app:layout_constraintBottom_toTopOf="@id/tv_mbps_value"
+                    app:layout_constraintBottom_toTopOf="@id/small_value"
                     app:layout_constraintEnd_toStartOf="@id/tv_mbps_type"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -159,6 +161,7 @@
                     android:id="@+id/tv_mbs_type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
                     android:text="MB/s"
                     android:textColor="@color/white"
                     android:textSize="16dp"
@@ -170,8 +173,9 @@
                     android:id="@+id/tv_kbs_type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Kb/s"
+                    android:text="kB/s"
                     android:textColor="@color/white"
+                    android:paddingTop="10dp"
                     android:textSize="16dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/tv_mbs_type"
@@ -180,25 +184,27 @@
                     />
 
                 <TextView
-                    android:id="@+id/tv_mbps_value"
+                    android:id="@+id/small_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="100"
                     android:textColor="@color/white"
+                    android:paddingTop="10dp"
                     android:textSize="16dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@id/tv_mbps_type"
                     app:layout_constraintStart_toStartOf="@id/tv_mbps_type"
                     app:layout_constraintTop_toBottomOf="@id/tv_mbps_type"
+                    app:layout_constraintBottom_toBottomOf="parent"
 
                     />
 
                 <TextView
-                    android:id="@+id/tv_mbs_value"
+                    android:id="@+id/medium_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="500"
                     android:textColor="@color/white"
+                    android:paddingTop="10dp"
                     android:textSize="16dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@id/tv_mbs_type"
@@ -208,12 +214,13 @@
                     />
 
                 <TextView
-                    android:id="@+id/tv_kbs_value"
+                    android:id="@+id/highest_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="1000"
                     android:textColor="@color/white"
                     android:textSize="16dp"
+                    android:paddingTop="10dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@id/tv_kbs_type"
                     app:layout_constraintStart_toStartOf="@id/tv_kbs_type"

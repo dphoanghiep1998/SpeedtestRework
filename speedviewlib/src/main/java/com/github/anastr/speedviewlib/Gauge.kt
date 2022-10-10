@@ -544,14 +544,11 @@ abstract class Gauge constructor(
         val a = (currentSpeed - minSpeed) / (maxSpeed - minSpeed)
         return when {
             a <= 0f -> a
-            currentSpeed <= 5f -> (currentSpeed * 12.5f / 5 - minSpeed) / (maxSpeed - minSpeed)
-            currentSpeed <= 10f -> (currentSpeed * 25 / 10 - minSpeed) / (maxSpeed - minSpeed)
-            currentSpeed <= 15f -> (currentSpeed * 37.5f / 15 - minSpeed) / (maxSpeed - minSpeed)
             currentSpeed <= 20f -> (currentSpeed * 50 / 20 - minSpeed) / (maxSpeed - minSpeed)
             currentSpeed <= 30f -> (50f + 12.5f / 10 * (currentSpeed - 20) - minSpeed) / (maxSpeed - minSpeed)
             currentSpeed <= 50f -> (62.5f + 12.5f / 20 * (currentSpeed - 30) - minSpeed) / (maxSpeed - minSpeed)
             currentSpeed <= 75f -> (75f + 12.5f / 25 * (currentSpeed - 50) - minSpeed) / (maxSpeed - minSpeed)
-            a <= 1f -> a
+            currentSpeed <= 100f -> (87.5f + 12.5f / 25 * (currentSpeed - 75) - minSpeed) / (maxSpeed - minSpeed)
             else -> a
         }
     }

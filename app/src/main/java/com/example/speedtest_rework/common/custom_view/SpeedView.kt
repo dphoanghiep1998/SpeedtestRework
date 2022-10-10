@@ -9,9 +9,7 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Looper
-import android.system.Os
 import android.util.AttributeSet
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -34,7 +32,7 @@ import com.example.speedtest_rework.core.serverSelector.TestPoint
 import com.example.speedtest_rework.data.model.HistoryModel
 import com.example.speedtest_rework.databinding.LayoutSpeedviewBinding
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
-import kotlinx.coroutines.delay
+import kotlin.math.max
 import kotlin.math.roundToInt
 
 
@@ -46,7 +44,8 @@ class SpeedView(
     private var speedTest: SpeedTest? = null
     private var binding: LayoutSpeedviewBinding
     private var testModel: HistoryModel? = null
-    private var type = "no_connection"
+    private var type = ConnectionType.UNKNOWN
+    private var unitType = UnitType.MBPS
     private var testPoint: TestPoint? = null
     private var viewModel: SpeedTestViewModel? = null
 
@@ -58,7 +57,7 @@ class SpeedView(
 
     fun setData(
         testPoint: TestPoint,
-        type: String,
+        type: ConnectionType,
         testModel: HistoryModel,
         viewModel: SpeedTestViewModel
     ) {
@@ -70,15 +69,23 @@ class SpeedView(
         speedTest?.addTestPoint(testPoint)
     }
 
-    fun setData(testPoint: TestPoint, type: String) {
+    fun setData(testPoint: TestPoint, type: ConnectionType) {
         this.testPoint = testPoint
         this.type = type
         speedTest = SpeedTest()
         speedTest?.addTestPoint(testPoint)
     }
 
-    fun setData(type: String) {
+    fun setData(type: ConnectionType) {
         this.type = type
+    }
+
+    fun setData(type: UnitType) {
+        unitType = type
+    }
+
+    fun setData(maxValue: Float) {
+        binding.speedView.maxSpeed = maxValue
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -102,7 +109,7 @@ class SpeedView(
                         binding.btnStart.addValueCallback(
                             KeyPath("**"), LottieProperty.COLOR_FILTER
                         ) { null }
-                        if (type == "no_connection") {
+                        if (type == ConnectionType.UNKNOWN) {
                             Toast.makeText(context, "No connectivity!", Toast.LENGTH_SHORT).show()
                             return true
                         }
@@ -133,7 +140,14 @@ class SpeedView(
         binding.speedView.withTremble = false
     }
 
+    private fun changeUnitType() {
+        binding.tvDownloadCurrency.text = context.getString(unitType.unit)
+        binding.tvUploadCurrency.text = context.getString(unitType.unit)
+        binding.tvCurrency.text = context.getString(unitType.unit)
+    }
+
     fun prepareViewSpeedTest() {
+        changeUnitType()
         countDownTimer = object : CountDownTimer(4000, 1000) {
             override fun onTick(l: Long) {
                 if (l <= 1000) {
@@ -156,7 +170,7 @@ class SpeedView(
                         binding.tvSpeedValue.visibility = View.VISIBLE
                     }.playOn(binding.tvSpeedValue)
                 } else if (l <= 2000) {
-                    if (type == "no_connection") {
+                    if (type == ConnectionType.UNKNOWN) {
                         Toast.makeText(context, "No connection", Toast.LENGTH_SHORT).show()
                         resetView()
                         return
@@ -199,16 +213,16 @@ class SpeedView(
                     (context as Activity).runOnUiThread { downloadView() }
                 }
                 (context as Activity).runOnUiThread {
-                    binding.tvSpeedValue.text = format(dl.toFloat().toDouble())
-                    binding.speedView.speedTo(dl.toFloat())
+                    binding.tvSpeedValue.text = format(convert(dl))
+                    binding.speedView.speedTo(convert(dl).toFloat())
                     if (progress >= 1) {
                         (context as Activity).runOnUiThread {
                             binding.placeholderDownload.clearAnimation()
                             binding.placeholderDownload.visibility = GONE
                             binding.tvDownloadValue.visibility = VISIBLE
-                            binding.tvDownloadValue.text = format(dl)
+                            binding.tvDownloadValue.text = format(convert(dl))
                             binding.tvSpeedValue.text = context.getString(R.string.zero_value)
-                            testModel?.download = roundOffDecimal(dl)
+                            testModel?.download = roundOffDecimal(convert(dl))
                         }
                         binding.speedView.speedTo(0f, 500L)
                     }
@@ -223,15 +237,15 @@ class SpeedView(
                         uploadView()
                     }
                     binding.speedView.speedTo(ul.toFloat())
-                    binding.tvSpeedValue.text = format(ul.toFloat().toDouble())
+                    binding.tvSpeedValue.text = format(convert(ul))
                     if (progress >= 1) {
                         binding.placeholderUpload.visibility = GONE
                         binding.placeholderUpload.clearAnimation()
-                        binding.tvUploadValue.text = format(ul)
+                        binding.tvUploadValue.text = format(convert(ul))
                         binding.speedView.speedTo(0f, 500L)
                         binding.speedView.withTremble = false
                         binding.tvSpeedValue.text = context.getString(R.string.zero_value)
-                        testModel?.upload = roundOffDecimal(ul)
+                        testModel?.upload = roundOffDecimal(convert(ul))
 
                     }
                 }
@@ -331,17 +345,17 @@ class SpeedView(
         )
         binding.placeholderDownload.visibility = VISIBLE
         binding.placeholderUpload.visibility = VISIBLE
+        binding.placeholderUpload.clearAnimation()
+        binding.placeholderDownload.clearAnimation()
         binding.speedView.setState("download")
-        binding.speedView.speedTo(0f)
+        binding.speedView.stop()
         binding.tvSpeedValue.text = context.getString(R.string.zero_value_dec)
-        binding.tvDownloadValue.clearAnimation()
-        binding.tvUploadValue.clearAnimation()
         binding.tvDownloadValue.visibility = GONE
         binding.tvUploadValue.visibility = GONE
         binding.tvPingCount.text = context.getString(R.string.zero_value)
         binding.tvJitterCount.text = context.getString(R.string.zero_value)
         YoYo.with(Techniques.FadeOut).onStart {
-            binding.topView.visibility = View.GONE
+            binding.topView.visibility = View.INVISIBLE
         }.playOn(binding.topView)
         YoYo.with(Techniques.FadeIn).playOn(binding.btnStartContainer)
         binding.btnStartContainer.visibility = View.VISIBLE
@@ -369,6 +383,16 @@ class SpeedView(
 
     fun convertMbpsToKbs(value: Double): Double {
         return value * 125
+    }
+
+    fun convert(value: Double): Double {
+        if (unitType == UnitType.MBS) {
+            return convertMbpsToMbs(value)
+        }
+        if (unitType == UnitType.KBS) {
+            return convertMbpsToKbs(value)
+        }
+        return value
     }
 
 }

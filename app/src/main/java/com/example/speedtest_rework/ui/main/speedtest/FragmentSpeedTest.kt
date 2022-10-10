@@ -1,10 +1,5 @@
 package com.example.speedtest_rework.ui.main.speedtest
 
-import android.content.Context
-import android.net.ConnectivityManager
-import android.net.Network
-import android.net.NetworkCapabilities
-import android.net.NetworkRequest
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +13,8 @@ import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.fragment.BaseFragment
 import com.example.speedtest_rework.common.Constant
 import com.example.speedtest_rework.common.NetworkUtils
+import com.example.speedtest_rework.common.custom_view.ConnectionType
+import com.example.speedtest_rework.common.custom_view.UnitType
 import com.example.speedtest_rework.core.getIP.AddressInfo
 import com.example.speedtest_rework.core.getIP.CurrentNetworkInfo
 import com.example.speedtest_rework.core.serverSelector.TestPoint
@@ -33,6 +30,7 @@ class FragmentSpeedTest : BaseFragment() {
     private val viewModel: SpeedTestViewModel by activityViewModels()
     private var testPoint: TestPoint? = null
     private var isExpanded: Boolean = false
+    private var maxValue: Float = 100f
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -68,35 +66,124 @@ class FragmentSpeedTest : BaseFragment() {
     }
 
     private fun initExpandView() {
-        binding.containerExpandView.setOnClickListener {
-            val layoutParams = it.layoutParams
+        binding.containerConfig.setOnClickListener {
+            val layoutParams = binding.containerExpandView.layoutParams
             if (!isExpanded) {
                 YoYo.with(Techniques.SlideInLeft).duration(400L).onStart { _ ->
 
                     layoutParams.width = ConstraintLayout.LayoutParams.MATCH_PARENT
-                    it.layoutParams = layoutParams
+                    binding.containerExpandView.layoutParams = layoutParams
                     isExpanded = true
                 }.playOn(binding.containerConfig2)
 
             } else {
                 YoYo.with(Techniques.SlideInRight).duration(400L).onStart { _ ->
                     layoutParams.width = ConstraintLayout.LayoutParams.WRAP_CONTENT
-                    it.layoutParams = layoutParams
+                    binding.containerExpandView.layoutParams = layoutParams
                     isExpanded = false
                 }.playOn(binding.containerConfig2)
 
             }
         }
+
+        //init
+        selectView(binding.tvMbpsType)
+        selectView(binding.smallValue)
+
+        val groupUnit = listOf(binding.tvMbpsType, binding.tvMbsType, binding.tvKbsType)
+        val groupValue = listOf(binding.smallValue, binding.mediumValue, binding.highestValue)
+
+        //select unit type and max value speed view
+        groupUnit.forEachIndexed { index, item ->
+            item.setOnClickListener {
+                //highlight text type
+                selectView(it)
+                //highlight text value index 0
+                selectView(groupValue[0])
+                //change text value to type of unitText
+                valueWhenUnitSelected(UnitType.values()[index])
+                //change unitType
+                setUnitType(UnitType.values()[index])
+                //setMaxvalue index 0
+                setMaxValue(groupValue[0].text.toString())
+                //unselect other value
+                groupValue.filter { fItem ->
+                    fItem != groupValue[0]
+                }.forEach { it1 ->
+                    unSelectView(it1)
+                }
+                //unselect other type
+                groupUnit.filter { fItem ->
+                    fItem != item
+                }.forEach { it1 ->
+                    unSelectView(it1)
+                }
+            }
+        }
+        groupValue.forEachIndexed { index, item ->
+            item.setOnClickListener {
+                selectViewValue(it)
+                setMaxValue(groupValue[index].text.toString())
+                groupValue.filter { fItem ->
+                    fItem != item
+                }.forEach { it1 ->
+                    unSelectView(it1)
+                }
+            }
+        }
+
     }
 
+    private fun valueWhenUnitSelected(unit: UnitType) {
+        when (unit) {
+            UnitType.MBPS -> {
+                binding.smallValue.text = getString(R.string.val_100)
+                binding.mediumValue.text = getString(R.string.val_500)
+                binding.highestValue.text = getString(R.string.val_1000)
+
+            }
+
+            UnitType.MBS -> {
+                binding.smallValue.text = getString(R.string.val_10)
+                binding.mediumValue.text = getString(R.string.val_50)
+                binding.highestValue.text = getString(R.string.val_100)
+            }
+            UnitType.KBS -> {
+                binding.smallValue.text = getString(R.string.val_5000)
+                binding.mediumValue.text = getString(R.string.val_10000)
+                binding.highestValue.text = getString(R.string.val_15000)
+            }
+        }
+    }
+
+    private fun setMaxValue(text: String) {
+        maxValue = text.toFloat()
+        binding.clSpeedview.setData(maxValue)
+    }
+
+    private fun setUnitType(unitType: UnitType) {
+        binding.clSpeedview.setData(unitType)
+    }
+
+    private fun selectView(view: View) {
+        view.setBackgroundResource(R.drawable.background_selected_unit)
+    }
+
+    private fun selectViewValue(view: View) {
+        view.setBackgroundResource(R.drawable.background_selected_unit)
+
+    }
+
+    private fun unSelectView(view: View) {
+        view.setBackgroundResource(0)
+    }
 
     private fun loadServerAndNetWorkInfo() {
         try {
             if (viewModel.isError.value == true) {
-                binding.clSpeedview.setData(testPoint!!, "no_connection")
+                binding.clSpeedview.setData(testPoint!!, ConnectionType.UNKNOWN)
                 if (viewModel._isScanning.value == true) {
                     binding.clSpeedview.resetView()
-
                 }
                 return
             }
@@ -109,7 +196,7 @@ class FragmentSpeedTest : BaseFragment() {
                     viewModel.currentNetworkInfo.selfIsp,
                     0.0, 0.0, "wifi", 0.0, Date(), 0.0, 0.0
                 )
-                binding.clSpeedview.setData(testPoint!!, "wifi", testModel, viewModel)
+                binding.clSpeedview.setData(testPoint!!, ConnectionType.WIFI, testModel, viewModel)
 
             } else if (NetworkUtils.isMobileConnected(requireContext())) {
                 val testModel = HistoryModel(
@@ -120,14 +207,20 @@ class FragmentSpeedTest : BaseFragment() {
                     viewModel.currentNetworkInfo.selfIsp,
                     0.0, 0.0, "mobile", 0.0, Date(), 0.0, 0.0
                 )
-                binding.clSpeedview.setData(testPoint!!, "mobile", testModel, viewModel)
+                binding.clSpeedview.setData(
+                    testPoint!!,
+                    ConnectionType.MOBILE,
+                    testModel,
+                    viewModel
+                )
 
             } else {
-                binding.clSpeedview.setData(testPoint!!, "no_connection")
+                binding.clSpeedview.setData(ConnectionType.UNKNOWN)
 
             }
 
         } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
@@ -203,7 +296,7 @@ class FragmentSpeedTest : BaseFragment() {
         } else {
             binding.tvWifiName.text = getString(R.string.no_connection)
             binding.tvIspName.text = getString(R.string.no_connection_isp)
-            binding.clSpeedview.setData("no_connection")
+            binding.clSpeedview.setData(ConnectionType.UNKNOWN)
             if (viewModel._isScanning.value == true) {
                 viewModel.setIsScanning(false)
             }
@@ -231,28 +324,6 @@ class FragmentSpeedTest : BaseFragment() {
                 binding.clSpeedview.resetView()
             }
         }
-    }
-
-    private fun registerNetworkCallback() {
-        val networkRequest: NetworkRequest = NetworkRequest.Builder()
-            .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
-            .addTransportType(NetworkCapabilities.TRANSPORT_ETHERNET)
-            .build()
-        val connectivityManager: ConnectivityManager =
-            requireActivity().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        connectivityManager.registerNetworkCallback(networkRequest,
-            object : ConnectivityManager.NetworkCallback() {
-                override fun onAvailable(network: Network) {
-                    super.onAvailable(network)
-                    viewModel.setIsConnectionReady(true)
-                }
-
-                override fun onLost(network: Network) {
-                    super.onLost(network)
-                }
-            })
-
-
     }
 
 

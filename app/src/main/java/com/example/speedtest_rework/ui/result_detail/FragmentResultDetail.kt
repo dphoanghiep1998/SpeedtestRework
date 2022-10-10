@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.speedtest_rework.R
@@ -22,6 +23,8 @@ class FragmentResultDetail : BaseFragment(), ConfirmDialog.ConfirmCallback {
     private lateinit var testModel: HistoryModel
     private var fromSpeedTestFragment: Boolean? = false
     private val viewModel: SpeedTestViewModel by activityViewModels()
+
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -29,6 +32,7 @@ class FragmentResultDetail : BaseFragment(), ConfirmDialog.ConfirmCallback {
     ): View {
         binding = FragmentDetailResultBinding.inflate(inflater, container, false)
         getDataFromBundle()
+        changeBackPressCallBack()
         initView()
         return binding.root
     }
@@ -106,6 +110,15 @@ class FragmentResultDetail : BaseFragment(), ConfirmDialog.ConfirmCallback {
         }
     }
 
+    private fun changeBackPressCallBack() {
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    findNavController().popBackStack()
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+    }
 
     private fun setProgressBarColor(progressBar: SeekBar, state: Int) {
         when (state) {

@@ -122,13 +122,6 @@ open class PointerSpeedometer @JvmOverloads constructor(
         darkPaint.strokeWidth = speedometerWidth
 
 
-        rectF = RectF(
-            speedometerRect.left + 5f,
-            speedometerRect.top + 5f,
-            speedometerRect.right - 5f,
-            speedometerRect.bottom - 5f
-        )
-
     }
 
     private fun initAttributeSet(context: Context, attrs: AttributeSet?) {
@@ -169,16 +162,17 @@ open class PointerSpeedometer @JvmOverloads constructor(
         val offInt: ValueAnimator = ValueAnimator.ofInt(135, 405)
         offInt.duration = 500
         offInt.addUpdateListener {
-            Log.d("TAG", "showArc: "+ it.animatedValue)
+            Log.d("TAG", "showArc: " + it.animatedValue)
             setEndDegree(it.animatedValue as Int)
             invalidate()
-            if(it.animatedValue == 405){
+            if (it.animatedValue == 405) {
                 showTicks()
             }
         }
         offInt.start()
     }
-    fun showTicks(){
+
+    fun showTicks() {
 
     }
 
@@ -196,7 +190,12 @@ open class PointerSpeedometer @JvmOverloads constructor(
         super.onDraw(canvas)
         initDraw()
 
-
+        rectF = RectF(
+            speedometerRect.left + 5f,
+            speedometerRect.top + 5f,
+            speedometerRect.right - 5f,
+            speedometerRect.bottom - 5f
+        )
         val position = getOffsetSpeed() * (getEndDegree() - getStartDegree())
 
         Log.d("onDraw", "onDraw: $position")

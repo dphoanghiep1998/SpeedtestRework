@@ -1,6 +1,7 @@
 package com.example.speedtest_rework.ui.main.result_history
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,11 +23,18 @@ class FragmentResults : BaseFragment(), ResultTouchHelper, ConfirmDialog.Confirm
     private val viewModel: SpeedTestViewModel by activityViewModels()
     private var adapter: HistoryAdapter = HistoryAdapter(this)
 
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Log.d("TAG", "onCreate: ")
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        Log.d("TAG", "onCreateView: ")
         binding = FragmentResultsBinding.inflate(inflater, container, false)
         rcvInit()
         return binding.root
