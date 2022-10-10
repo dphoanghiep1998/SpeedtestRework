@@ -98,7 +98,7 @@ abstract class Gauge constructor(
      * @see currentSpeed
      */
     var speed = minSpeed
-         set
+        set
 
     /**
      * What speed is right now in **Integer**.
@@ -540,15 +540,89 @@ abstract class Gauge constructor(
     /**
      * @return Offset speed, between [0,1].
      */
+    //    var a = listOf(0f, 1 / 30f, 1 / 15f, 0.1f, 2 / 15f, 0.2f, 1 / 3f, 2 / 3f, 1f) 15k
+//    var a = listOf(0f, .05f, .1f, .15f, .2f, .3f, .5f, .8f, 1f)  10k
+//    var a = listOf(0f, .02f, .04f, .06f, .1f, .2f, .4f, .6f, 1f) 5k
+//    var a = listOf(0f,.02f,.04f,.06f,.1f,.2f,.3f,.6f,1f) 50
+//    var a = listOf(0f, .1f, .2f, .3f, .4f, .5f, .6f, .8f) 10
+//    var a = listOf(0f, .01f, .02f, .05f, .1f, .2f, .3f, .6f, 1f) 500
+//    var a = listOf(0f, .005f, .01f, .05f, .1f, .25f, .5f, .75f, 1f) 1000
+//    var a = listOf(0f, .05f, .15f, .2f, .3f, .5f, .75f, 1f) 100
     fun getOffsetSpeed(): Float {
+        return countOffsetSpeed()
+    }
+
+    fun countOffsetSpeed(): Float {
         val a = (currentSpeed - minSpeed) / (maxSpeed - minSpeed)
-        return when {
-            a <= 0f -> a
-            currentSpeed <= 20f -> (currentSpeed * 50 / 20 - minSpeed) / (maxSpeed - minSpeed)
-            currentSpeed <= 30f -> (50f + 12.5f / 10 * (currentSpeed - 20) - minSpeed) / (maxSpeed - minSpeed)
-            currentSpeed <= 50f -> (62.5f + 12.5f / 20 * (currentSpeed - 30) - minSpeed) / (maxSpeed - minSpeed)
-            currentSpeed <= 75f -> (75f + 12.5f / 25 * (currentSpeed - 50) - minSpeed) / (maxSpeed - minSpeed)
-            currentSpeed <= 100f -> (87.5f + 12.5f / 25 * (currentSpeed - 75) - minSpeed) / (maxSpeed - minSpeed)
+        return when (maxSpeed) {
+            100f -> return when {
+                a <= 0f -> a
+                currentSpeed <= 20f -> (currentSpeed * 50 / 20 - minSpeed) / (maxSpeed - minSpeed)
+                currentSpeed <= 30f -> (50f + 12.5f / 10 * (currentSpeed - 20) - minSpeed) / (maxSpeed - minSpeed)
+                currentSpeed <= 50f -> (62.5f + 12.5f / 20 * (currentSpeed - 30) - minSpeed) / (maxSpeed - minSpeed)
+                currentSpeed <= 75f -> (75f + 12.5f / 25 * (currentSpeed - 50) - minSpeed) / (maxSpeed - minSpeed)
+                currentSpeed <= 100f -> (87.5f + 12.5f / 25 * (currentSpeed - 75) - minSpeed) / (maxSpeed - minSpeed)
+                else -> a
+            }
+            10f -> return when {
+                currentSpeed <= 6f -> (currentSpeed * 1.25f - minSpeed) / (maxSpeed - minSpeed)
+                currentSpeed <= 10f -> (7.5f + 1.25f / 4 * (currentSpeed - 6) - minSpeed) / (maxSpeed - minSpeed)
+                else -> a
+            }
+            1000f -> return when {
+                a <= 0f -> a
+                currentSpeed <= 10f -> (currentSpeed * 125f / 5 - minSpeed) / (maxSpeed - minSpeed)
+                currentSpeed <= 50f -> (250f + 125f / 40 * (currentSpeed - 10) - minSpeed) / (maxSpeed - minSpeed)
+                currentSpeed <= 100f -> (375f + 125f / 50 * (currentSpeed - 50) - minSpeed) / (maxSpeed - minSpeed)
+                currentSpeed <= 250f -> (500f + 125f / 150 * (currentSpeed - 100) - minSpeed) / (maxSpeed - minSpeed)
+                currentSpeed <= 1000f -> (625f + 125f / 750 * (currentSpeed - 250) - minSpeed) / (maxSpeed - minSpeed)
+                else -> a
+            }
+            500f -> return when {
+                a <= 0f -> a
+                currentSpeed <= 10f -> (currentSpeed * 125f / 10 - minSpeed) / (maxSpeed - minSpeed)
+                currentSpeed <= 25f -> (125f + 62.5f / 15 * (currentSpeed - 10) - minSpeed) / (maxSpeed - minSpeed)
+                currentSpeed <= 50f -> (62.5f * 3 + 62.5f / 25 * (currentSpeed - 25) - minSpeed) / (maxSpeed - minSpeed)
+                currentSpeed <= 150f -> (62.5f * 4 + 62.5f / 100 * (currentSpeed - 50) - minSpeed) / (maxSpeed - minSpeed)
+                currentSpeed <= 300f -> (62.5f * 6 + 62.5f / 150 * (currentSpeed - 150) - minSpeed) / (maxSpeed - minSpeed)
+                currentSpeed <= 500f -> (62.5f * 7 + 62.5f / 200 * (currentSpeed - 300) - minSpeed) / (maxSpeed - minSpeed)
+                else -> a
+            }
+            50f -> return when {
+                a <= 0f -> a
+                currentSpeed <= 3f -> (currentSpeed * 6.25f - minSpeed) / (maxSpeed - minSpeed)
+                currentSpeed <= 5f -> (6.25f * 3 + 6.25f / 2 * (currentSpeed - 3) - minSpeed) / (maxSpeed - minSpeed)
+                currentSpeed <= 15f -> (6.25f * 4 + 6.25f / 10 * (currentSpeed - 5) - minSpeed) / (maxSpeed - minSpeed)
+                currentSpeed <= 30f -> (6.25f * 6 + 6.25f / 15 * (currentSpeed - 15) - minSpeed) / (maxSpeed - minSpeed)
+                currentSpeed <= 50f -> (6.25f * 7 + 6.25f / 20 * (currentSpeed - 30) - minSpeed) / (maxSpeed - minSpeed)
+                else -> a
+            }
+            5000f -> return when {
+                a <= 0f -> a
+                currentSpeed <= 300f -> (currentSpeed * 625f / 300 - minSpeed) / (maxSpeed - minSpeed)
+                currentSpeed <= 500f -> (625f * 3 + 625f / 200 * (currentSpeed - 300) - minSpeed) / (maxSpeed - minSpeed)
+                currentSpeed <= 1000f -> (625f * 4 + 625f / 500 * (currentSpeed - 500) - minSpeed) / (maxSpeed - minSpeed)
+                currentSpeed <= 3000f -> (625f * 5 + 625f / 2000 * (currentSpeed - 1000) - minSpeed) / (maxSpeed - minSpeed)
+                currentSpeed <= 5000f -> (625f * 7 + 625f / 2000 * (currentSpeed - 3000) - minSpeed) / (maxSpeed - minSpeed)
+                else -> a
+            }
+            10000f -> return when {
+                a <= 0f -> a
+                currentSpeed <= 2000f -> (currentSpeed * 1250f / 500 - minSpeed) / (maxSpeed - minSpeed)
+                currentSpeed <= 3000f -> (5000f + 1250f / 1000 * (currentSpeed - 2000) - minSpeed) / (maxSpeed - minSpeed)
+                currentSpeed <= 5000f -> (6250f + 1250f / 2000 * (currentSpeed - 3000) - minSpeed) / (maxSpeed - minSpeed)
+                currentSpeed <= 8000f -> (7500f + 1250f / 3000 * (currentSpeed - 5000) - minSpeed) / (maxSpeed - minSpeed)
+                currentSpeed <= 10000f -> (8750f + 1250f / 2000 * (currentSpeed - 8000) - minSpeed) / (maxSpeed - minSpeed)
+                else -> a
+            }
+            15000f -> return when {
+                a <= 0f -> a
+                currentSpeed <= 2000f -> (currentSpeed * 1875f / 500 - minSpeed) / (maxSpeed - minSpeed)
+                currentSpeed <= 3000f -> (1875f * 4 + 1875f / 1000 * (currentSpeed - 2000) - minSpeed) / (maxSpeed - minSpeed)
+                currentSpeed <= 5000f -> (1875f * 5 + 1875f / 2000 * (currentSpeed - 3000) - minSpeed) / (maxSpeed - minSpeed)
+                currentSpeed <= 15000f -> (1875f * 6 + 1875f / 10000 * (currentSpeed - 5000) - minSpeed) / (maxSpeed - minSpeed)
+                else -> a
+            }
             else -> a
         }
     }
@@ -1071,7 +1145,7 @@ abstract class Gauge constructor(
         cancelSpeedAnimator()
         _minSpeed = minSpeed
         _maxSpeed = maxSpeed
-        checkSectionChange()
+//        checkSectionChange()
         invalidateGauge()
         if (attachedToWindow)
             setSpeedAt(speed)

@@ -198,7 +198,6 @@ open class PointerSpeedometer @JvmOverloads constructor(
         )
         val position = getOffsetSpeed() * (getEndDegree() - getStartDegree())
 
-        Log.d("onDraw", "onDraw: $position")
 
         canvas.drawArc(
             speedometerRect,

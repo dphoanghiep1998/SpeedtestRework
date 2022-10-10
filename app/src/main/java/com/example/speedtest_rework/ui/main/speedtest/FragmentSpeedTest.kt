@@ -69,7 +69,7 @@ class FragmentSpeedTest : BaseFragment() {
         binding.containerConfig.setOnClickListener {
             val layoutParams = binding.containerExpandView.layoutParams
             if (!isExpanded) {
-                YoYo.with(Techniques.SlideInLeft).duration(400L).onStart { _ ->
+                YoYo.with(Techniques.SlideInLeft).duration(400L).onStart {
 
                     layoutParams.width = ConstraintLayout.LayoutParams.MATCH_PARENT
                     binding.containerExpandView.layoutParams = layoutParams
@@ -77,7 +77,7 @@ class FragmentSpeedTest : BaseFragment() {
                 }.playOn(binding.containerConfig2)
 
             } else {
-                YoYo.with(Techniques.SlideInRight).duration(400L).onStart { _ ->
+                YoYo.with(Techniques.SlideInRight).duration(400L).onStart {
                     layoutParams.width = ConstraintLayout.LayoutParams.WRAP_CONTENT
                     binding.containerExpandView.layoutParams = layoutParams
                     isExpanded = false
@@ -86,12 +86,15 @@ class FragmentSpeedTest : BaseFragment() {
             }
         }
 
-        //init
-        selectView(binding.tvMbpsType)
-        selectView(binding.smallValue)
+
 
         val groupUnit = listOf(binding.tvMbpsType, binding.tvMbsType, binding.tvKbsType)
         val groupValue = listOf(binding.smallValue, binding.mediumValue, binding.highestValue)
+        //init
+        selectView(binding.tvMbpsType)
+        selectView(binding.smallValue)
+        setUnitType(UnitType.values()[0])
+        setMaxValue(groupValue[0].text.toString())
 
         //select unit type and max value speed view
         groupUnit.forEachIndexed { index, item ->

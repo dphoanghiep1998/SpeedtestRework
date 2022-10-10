@@ -85,7 +85,42 @@ class SpeedView(
     }
 
     fun setData(maxValue: Float) {
+        //    var a = listOf(0f, 1 / 30f, 1 / 15f, 0.1f, 2 / 15f, 0.2f, 1 / 3f, 2 / 3f, 1f) 15k
+//    var a = listOf(0f, .05f, .1f, .15f, .2f, .3f, .5f, .8f, 1f)  10k
+//    var a = listOf(0f, .02f, .04f, .06f, .1f, .2f, .4f, .6f, 1f) 5k
+//    var a = listOf(0f,.02f,.04f,.06f,.1f,.2f,.3f,.6f,1f) 50
+//    var a = listOf(0f, .1f, .2f, .3f, .4f, .5f, .6f, .8f) 10
+//    var a = listOf(0f, .01f, .02f, .05f, .1f, .2f, .3f, .6f, 1f) 500
+//    var a = listOf(0f, .005f, .01f, .05f, .1f, .25f, .5f, .75f, 1f) 1000
+//    var a = listOf(0f, .05f, .15f, .2f, .3f, .5f, .75f, 1f) 100
         binding.speedView.maxSpeed = maxValue
+        when (maxValue) {
+            100f -> {
+                binding.speedView.ticks = listOf(0f, .05f, .1f, .15f, .2f, .3f, .5f, .75f, 1f)
+            }
+            500f -> {
+                binding.speedView.ticks = listOf(0f, .01f, .02f, .05f, .1f, .2f, .3f, .6f, 1f)
+            }
+            1000f -> {
+                binding.speedView.ticks = listOf(0f, .005f, .01f, .05f, .1f, .25f, .5f, .75f, 1f)
+            }
+            5000f -> {
+                binding.speedView.ticks = listOf(0f, .02f, .04f, .06f, .1f, .2f, .4f, .6f, 1f)
+            }
+            10000f -> {
+                binding.speedView.ticks = listOf(0f, .05f, .1f, .15f, .2f, .3f, .5f, .8f, 1f)
+            }
+            15000f -> {
+                binding.speedView.ticks =
+                    listOf(0f, 1 / 30f, 1 / 15f, 0.1f, 2 / 15f, 0.2f, 1 / 3f, 2 / 3f, 1f)
+            }
+            50f -> {
+                binding.speedView.ticks = listOf(0f, .02f, .04f, .06f, .1f, .2f, .3f, .6f, 1f)
+            }
+            10f -> {
+                binding.speedView.ticks = listOf(0f, .1f, .2f, .3f, .4f, .5f, .6f, .8f, 1f)
+            }
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -236,7 +271,7 @@ class SpeedView(
                     if (progress == 0.0) {
                         uploadView()
                     }
-                    binding.speedView.speedTo(ul.toFloat())
+                    binding.speedView.speedTo(convert(ul).toFloat())
                     binding.tvSpeedValue.text = format(convert(ul))
                     if (progress >= 1) {
                         binding.placeholderUpload.visibility = GONE
@@ -377,11 +412,11 @@ class SpeedView(
         return (number2digits * 10.0).roundToInt() / 10.0
     }
 
-    fun convertMbpsToMbs(value: Double): Double {
+    private fun convertMbpsToMbs(value: Double): Double {
         return value * .125
     }
 
-    fun convertMbpsToKbs(value: Double): Double {
+    private fun convertMbpsToKbs(value: Double): Double {
         return value * 125
     }
 
