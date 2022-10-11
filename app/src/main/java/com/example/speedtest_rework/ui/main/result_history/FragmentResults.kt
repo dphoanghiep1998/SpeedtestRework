@@ -24,18 +24,13 @@ class FragmentResults : BaseFragment(), ResultTouchHelper, ConfirmDialog.Confirm
     private var adapter: HistoryAdapter = HistoryAdapter(this)
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Log.d("TAG", "onCreate: ")
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        Log.d("TAG", "onCreateView: ")
         binding = FragmentResultsBinding.inflate(inflater, container, false)
+        observeUnitType()
         rcvInit()
         return binding.root
     }
@@ -58,6 +53,14 @@ class FragmentResults : BaseFragment(), ResultTouchHelper, ConfirmDialog.Confirm
             customDialog.show()
         }
 
+    }
+
+    private fun observeUnitType() {
+        viewModel.unitType.observe(viewLifecycleOwner) {
+            adapter.setData(it)
+            binding.tvDownloadCurrency.text = getString(it.unit)
+            binding.tvUploadCurrency.text = getString(it.unit)
+        }
     }
 
 

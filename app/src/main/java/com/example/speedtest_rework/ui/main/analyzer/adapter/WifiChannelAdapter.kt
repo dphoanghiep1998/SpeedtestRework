@@ -13,6 +13,7 @@ import com.example.speedtest_rework.ui.main.analyzer.model.WiFiConnection
 import com.example.speedtest_rework.ui.main.analyzer.model.WiFiData
 import com.example.speedtest_rework.ui.main.analyzer.model.WiFiDetail
 import com.example.speedtest_rework.ui.main.analyzer.model.getSecure
+import java.util.*
 
 class WifiChannelAdapter(val context: Context, helper: ItemTouchHelper) :
     RecyclerView.Adapter<WifiChannelAdapter.WifiChannelViewHolder>() {
@@ -22,8 +23,20 @@ class WifiChannelAdapter(val context: Context, helper: ItemTouchHelper) :
 
 
     fun setData(wifiData: WiFiData) {
-        this.wifiData = wifiData
+        this.wifiData = reIndex0(wifiData)
         notifyDataSetChanged()
+    }
+
+    private fun reIndex0(wifiData: WiFiData): WiFiData {
+        var mList = wifiData.wiFiDetails
+        mList.forEachIndexed { index, item ->
+            if (item.wiFiIdentifier.ssidRaw == wifiData.wiFiConnection.wiFiIdentifier.ssidRaw) {
+                Collections.swap(mList, 0, index)
+                return@forEachIndexed
+            }
+        }
+        wifiData.wiFiDetails = mList
+        return wifiData
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WifiChannelViewHolder {
@@ -41,10 +54,10 @@ class WifiChannelAdapter(val context: Context, helper: ItemTouchHelper) :
                 if (level >= -60) R.drawable.ic_signal_good_wifi else if (level < -60 && level >= -90) R.drawable.ic_signal_normal_wifi else R.drawable.ic_signal_low_wifi
             holder.itemView.background = if (position == clickedPosition) ContextCompat.getDrawable(
                 context,
-                R.drawable.infor_container_selected
+                R.drawable.infor_container_wifi_selected
             ) else ContextCompat.getDrawable(
                 context,
-                R.drawable.infor_container
+                R.drawable.infor_container_wifi
             )
             holder.imvWifi.setImageResource(source)
             holder.tvStrength.text = level.toString() + context.resources.getString(R.string.dbm)
@@ -65,7 +78,7 @@ class WifiChannelAdapter(val context: Context, helper: ItemTouchHelper) :
                 notifyDataSetChanged()
                 helper.onClickItemWifi(
                     wiFiDetail,
-                this.clickedPosition == -1
+                    this.clickedPosition == -1
                 )
             }
         }

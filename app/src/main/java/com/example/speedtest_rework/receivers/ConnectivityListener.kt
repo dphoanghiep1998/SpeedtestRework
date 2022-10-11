@@ -6,6 +6,7 @@ import android.content.Intent
 import android.net.wifi.ScanResult
 import android.net.wifi.WifiInfo
 import android.net.wifi.WifiManager
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.speedtest_rework.common.Constant
 
@@ -35,6 +36,7 @@ class ConnectivityListener constructor(
                     }
                 }
                 Constant.INTENT_FILER_SCAN_RESULT -> {
+                    Log.d("abc", "onReceive: " + wifiManager.scanResults)
                     dataCache.postValue(Pair(wifiManager.scanResults,wifiManager.connectionInfo))
                 }
             }

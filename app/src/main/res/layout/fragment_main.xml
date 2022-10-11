@@ -23,8 +23,8 @@
 
             <ImageView
                 android:id="@+id/menu"
-                android:layout_width="40dp"
-                android:layout_height="50dp"
+                android:layout_width="@dimen/_34sdp"
+                android:layout_height="@dimen/_34sdp"
                 android:background="@drawable/ripple_effect_fg"
                 android:paddingVertical="10dp"
                 android:paddingEnd="10dp"
@@ -108,12 +108,12 @@
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/nav_bottom"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="@dimen/_62sdp"
             android:animateLayoutChanges="true"
             android:background="@color/gray_900"
             android:elevation="8dp"
             android:foreground="@drawable/ripple_effect_fg"
-            android:paddingBottom="8dp"
+            android:paddingBottom="@dimen/_4sdp"
             app:itemBackground="@drawable/bottom_nav_tab_background"
             app:itemIconTint="@color/custom_color_bottom_nav"
             app:itemPaddingTop="18dp"

@@ -18,10 +18,9 @@
 package com.example.speedtest_rework.ui.main.analyzer.model
 
 import com.example.speedtest_rework.common.annotation.OpenClass
-import com.vrem.wifianalyzer.wifi.predicate.Predicate
 
 @OpenClass
-class WiFiData(val wiFiDetails: List<WiFiDetail>, val wiFiConnection: WiFiConnection) {
+class WiFiData(var wiFiDetails: List<WiFiDetail>, val wiFiConnection: WiFiConnection) {
 
     fun connection(): WiFiDetail =
             wiFiDetails

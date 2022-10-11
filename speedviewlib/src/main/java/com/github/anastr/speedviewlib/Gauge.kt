@@ -119,7 +119,7 @@ abstract class Gauge constructor(
      * @see speed
      */
     var currentSpeed = minSpeed
-        private set(value) {
+         set(value) {
             field = value
             checkSpeedIntChange()
             checkSectionChange()
@@ -184,7 +184,7 @@ abstract class Gauge constructor(
     protected var backgroundBitmap: Bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
     private val backgroundBitmapPaint = Paint(Paint.ANTI_ALIAS_FLAG)
 
-    var padding = 0
+    var padding = 10
         private set
 
     /**
@@ -557,7 +557,7 @@ abstract class Gauge constructor(
         return when (maxSpeed) {
             100f -> return when {
                 a <= 0f -> a
-                currentSpeed <= 20f -> (currentSpeed * 50 / 20 - minSpeed) / (maxSpeed - minSpeed)
+                currentSpeed <= 20f -> (currentSpeed * 12.5f / 5 - minSpeed) / (maxSpeed - minSpeed)
                 currentSpeed <= 30f -> (50f + 12.5f / 10 * (currentSpeed - 20) - minSpeed) / (maxSpeed - minSpeed)
                 currentSpeed <= 50f -> (62.5f + 12.5f / 20 * (currentSpeed - 30) - minSpeed) / (maxSpeed - minSpeed)
                 currentSpeed <= 75f -> (75f + 12.5f / 25 * (currentSpeed - 50) - minSpeed) / (maxSpeed - minSpeed)
@@ -565,8 +565,9 @@ abstract class Gauge constructor(
                 else -> a
             }
             10f -> return when {
+                a <= 0f -> a
                 currentSpeed <= 6f -> (currentSpeed * 1.25f - minSpeed) / (maxSpeed - minSpeed)
-                currentSpeed <= 10f -> (7.5f + 1.25f / 4 * (currentSpeed - 6) - minSpeed) / (maxSpeed - minSpeed)
+                currentSpeed <= 10f -> (7.5f + 1.25f / 2 * (currentSpeed - 6) - minSpeed) / (maxSpeed - minSpeed)
                 else -> a
             }
             1000f -> return when {
@@ -575,15 +576,15 @@ abstract class Gauge constructor(
                 currentSpeed <= 50f -> (250f + 125f / 40 * (currentSpeed - 10) - minSpeed) / (maxSpeed - minSpeed)
                 currentSpeed <= 100f -> (375f + 125f / 50 * (currentSpeed - 50) - minSpeed) / (maxSpeed - minSpeed)
                 currentSpeed <= 250f -> (500f + 125f / 150 * (currentSpeed - 100) - minSpeed) / (maxSpeed - minSpeed)
-                currentSpeed <= 1000f -> (625f + 125f / 750 * (currentSpeed - 250) - minSpeed) / (maxSpeed - minSpeed)
+                currentSpeed <= 1000f -> (625f + 125f / 250 * (currentSpeed - 250) - minSpeed) / (maxSpeed - minSpeed)
                 else -> a
             }
             500f -> return when {
                 a <= 0f -> a
-                currentSpeed <= 10f -> (currentSpeed * 125f / 10 - minSpeed) / (maxSpeed - minSpeed)
+                currentSpeed <= 10f -> (currentSpeed * 62.5f / 5 - minSpeed) / (maxSpeed - minSpeed)
                 currentSpeed <= 25f -> (125f + 62.5f / 15 * (currentSpeed - 10) - minSpeed) / (maxSpeed - minSpeed)
                 currentSpeed <= 50f -> (62.5f * 3 + 62.5f / 25 * (currentSpeed - 25) - minSpeed) / (maxSpeed - minSpeed)
-                currentSpeed <= 150f -> (62.5f * 4 + 62.5f / 100 * (currentSpeed - 50) - minSpeed) / (maxSpeed - minSpeed)
+                currentSpeed <= 150f -> (62.5f * 4 + 62.5f / 50 * (currentSpeed - 50) - minSpeed) / (maxSpeed - minSpeed)
                 currentSpeed <= 300f -> (62.5f * 6 + 62.5f / 150 * (currentSpeed - 150) - minSpeed) / (maxSpeed - minSpeed)
                 currentSpeed <= 500f -> (62.5f * 7 + 62.5f / 200 * (currentSpeed - 300) - minSpeed) / (maxSpeed - minSpeed)
                 else -> a
@@ -592,17 +593,17 @@ abstract class Gauge constructor(
                 a <= 0f -> a
                 currentSpeed <= 3f -> (currentSpeed * 6.25f - minSpeed) / (maxSpeed - minSpeed)
                 currentSpeed <= 5f -> (6.25f * 3 + 6.25f / 2 * (currentSpeed - 3) - minSpeed) / (maxSpeed - minSpeed)
-                currentSpeed <= 15f -> (6.25f * 4 + 6.25f / 10 * (currentSpeed - 5) - minSpeed) / (maxSpeed - minSpeed)
+                currentSpeed <= 15f -> (6.25f * 4 + 6.25f / 5 * (currentSpeed - 5) - minSpeed) / (maxSpeed - minSpeed)
                 currentSpeed <= 30f -> (6.25f * 6 + 6.25f / 15 * (currentSpeed - 15) - minSpeed) / (maxSpeed - minSpeed)
                 currentSpeed <= 50f -> (6.25f * 7 + 6.25f / 20 * (currentSpeed - 30) - minSpeed) / (maxSpeed - minSpeed)
                 else -> a
             }
             5000f -> return when {
                 a <= 0f -> a
-                currentSpeed <= 300f -> (currentSpeed * 625f / 300 - minSpeed) / (maxSpeed - minSpeed)
+                currentSpeed <= 300f -> (currentSpeed * 625f / 100 - minSpeed) / (maxSpeed - minSpeed)
                 currentSpeed <= 500f -> (625f * 3 + 625f / 200 * (currentSpeed - 300) - minSpeed) / (maxSpeed - minSpeed)
                 currentSpeed <= 1000f -> (625f * 4 + 625f / 500 * (currentSpeed - 500) - minSpeed) / (maxSpeed - minSpeed)
-                currentSpeed <= 3000f -> (625f * 5 + 625f / 2000 * (currentSpeed - 1000) - minSpeed) / (maxSpeed - minSpeed)
+                currentSpeed <= 3000f -> (625f * 5 + 625f / 1000 * (currentSpeed - 1000) - minSpeed) / (maxSpeed - minSpeed)
                 currentSpeed <= 5000f -> (625f * 7 + 625f / 2000 * (currentSpeed - 3000) - minSpeed) / (maxSpeed - minSpeed)
                 else -> a
             }
@@ -620,7 +621,7 @@ abstract class Gauge constructor(
                 currentSpeed <= 2000f -> (currentSpeed * 1875f / 500 - minSpeed) / (maxSpeed - minSpeed)
                 currentSpeed <= 3000f -> (1875f * 4 + 1875f / 1000 * (currentSpeed - 2000) - minSpeed) / (maxSpeed - minSpeed)
                 currentSpeed <= 5000f -> (1875f * 5 + 1875f / 2000 * (currentSpeed - 3000) - minSpeed) / (maxSpeed - minSpeed)
-                currentSpeed <= 15000f -> (1875f * 6 + 1875f / 10000 * (currentSpeed - 5000) - minSpeed) / (maxSpeed - minSpeed)
+                currentSpeed <= 15000f -> (1875f * 6 + 1875f / 5000 * (currentSpeed - 5000) - minSpeed) / (maxSpeed - minSpeed)
                 else -> a
             }
             else -> a
@@ -852,7 +853,7 @@ abstract class Gauge constructor(
     fun stop() {
         if (speedAnimator?.isRunning == false && realSpeedAnimator?.isRunning == false)
             return
-        speed = 0f
+        currentSpeed = 0f
         cancelSpeedAnimator()
         tremble()
     }

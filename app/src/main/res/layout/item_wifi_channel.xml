@@ -2,8 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/_60sdp"
-    android:background="@drawable/infor_container"
+    android:layout_height="wrap_content"
+    android:background="@drawable/infor_container_wifi"
+    android:paddingVertical="@dimen/_6sdp"
     android:layout_marginHorizontal="@dimen/_10sdp"
     android:layout_marginVertical="4dp"
     android:paddingHorizontal="16dp">
@@ -35,8 +36,9 @@
             android:text="Neko"
             android:maxWidth="@dimen/_150sdp"
             android:ellipsize="end"
+            android:maxLines="1"
             android:textColor="@color/white"
-            android:textSize="20dp"
+            android:textSize="@dimen/_17sdp"
            />
 
         <TextView

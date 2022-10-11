@@ -8,6 +8,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.common.DateTimeUtils
+import com.example.speedtest_rework.common.custom_view.UnitType
+import com.example.speedtest_rework.common.format
 
 import com.example.speedtest_rework.data.model.HistoryModel
 
@@ -15,8 +17,14 @@ class HistoryAdapter(resultTouchHelper: ResultTouchHelper) :
     RecyclerView.Adapter<HistoryAdapter.ConnectivityTestViewHolder>() {
     private var mList: List<HistoryModel>? = null
     private val resultTouchHelper: ResultTouchHelper
+    private var unitType = UnitType.MBPS
     fun setData(mList: List<HistoryModel>?) {
         this.mList = mList
+        notifyDataSetChanged()
+    }
+
+    fun setData(unitType: UnitType) {
+        this.unitType = unitType
         notifyDataSetChanged()
     }
 
@@ -38,8 +46,8 @@ class HistoryAdapter(resultTouchHelper: ResultTouchHelper) :
                 holder.connectionType.setImageResource(R.drawable.ic_mobiledata)
             }
             holder.date.text = DateTimeUtils.getDateConvertedToResult(model.time)
-            holder.uploadRate.text = model.upload.toString()
-            holder.downloadRate.text = model.download.toString()
+            holder.uploadRate.text = format(convert(model.upload))
+            holder.downloadRate.text = format(convert(model.download))
             holder.itemView.setOnClickListener {
                 resultTouchHelper.onClickResultTest(
                     model
@@ -73,4 +81,23 @@ class HistoryAdapter(resultTouchHelper: ResultTouchHelper) :
     init {
         this.resultTouchHelper = resultTouchHelper
     }
+
+    private fun convertMbpsToMbs(value: Double): Double {
+        return value * .125
+    }
+
+    private fun convertMbpsToKbs(value: Double): Double {
+        return value * 125
+    }
+
+    private fun convert(value: Double): Double {
+        if (unitType == UnitType.MBS) {
+            return convertMbpsToMbs(value)
+        }
+        if (unitType == UnitType.KBS) {
+            return convertMbpsToKbs(value)
+        }
+        return value
+    }
+
 }

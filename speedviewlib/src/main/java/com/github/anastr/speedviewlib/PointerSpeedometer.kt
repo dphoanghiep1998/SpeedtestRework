@@ -165,25 +165,19 @@ open class PointerSpeedometer @JvmOverloads constructor(
             Log.d("TAG", "showArc: " + it.animatedValue)
             setEndDegree(it.animatedValue as Int)
             invalidate()
-            if (it.animatedValue == 405) {
-                showTicks()
-            }
         }
         offInt.start()
     }
 
-    fun showTicks() {
-
+    fun reset(){
+        currentSpeed = 0f
     }
 
     private fun initDraw() {
         if (initDone) return
         Log.d("TAG", "initDraw: ")
-        speed = 0f
         invalidate()
         initDone = true
-
-
     }
 
     override fun onDraw(canvas: Canvas) {

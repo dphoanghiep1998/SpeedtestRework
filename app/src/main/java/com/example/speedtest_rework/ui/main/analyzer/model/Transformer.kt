@@ -23,8 +23,6 @@ import com.example.speedtest_rework.common.EMPTY
 import com.example.speedtest_rework.common.annotation.OpenClass
 import com.example.speedtest_rework.common.buildMinVersionM
 import com.example.speedtest_rework.common.buildMinVersionR
-import com.vrem.wifianalyzer.wifi.scanner.Cache
-import com.vrem.wifianalyzer.wifi.scanner.CacheResult
 
 
 @OpenClass

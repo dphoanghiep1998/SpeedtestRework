@@ -27,11 +27,15 @@ import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.common.Constant
+import com.example.speedtest_rework.common.format
+import com.example.speedtest_rework.common.roundOffDecimal
 import com.example.speedtest_rework.core.SpeedTest
 import com.example.speedtest_rework.core.serverSelector.TestPoint
 import com.example.speedtest_rework.data.model.HistoryModel
 import com.example.speedtest_rework.databinding.LayoutSpeedviewBinding
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
+import java.math.RoundingMode
+import java.text.DecimalFormat
 import kotlin.math.max
 import kotlin.math.roundToInt
 
@@ -45,7 +49,6 @@ class SpeedView(
     private var binding: LayoutSpeedviewBinding
     private var testModel: HistoryModel? = null
     private var type = ConnectionType.UNKNOWN
-    private var unitType = UnitType.MBPS
     private var testPoint: TestPoint? = null
     private var viewModel: SpeedTestViewModel? = null
 
@@ -80,9 +83,6 @@ class SpeedView(
         this.type = type
     }
 
-    fun setData(type: UnitType) {
-        unitType = type
-    }
 
     fun setData(maxValue: Float) {
         //    var a = listOf(0f, 1 / 30f, 1 / 15f, 0.1f, 2 / 15f, 0.2f, 1 / 3f, 2 / 3f, 1f) 15k
@@ -136,7 +136,6 @@ class SpeedView(
                             LottieProperty.COLOR_FILTER,
                             callback
                         )
-
                     }
                     MotionEvent.ACTION_UP -> {
                         binding.btnStart.scaleX = 1.3f
@@ -176,9 +175,9 @@ class SpeedView(
     }
 
     private fun changeUnitType() {
-        binding.tvDownloadCurrency.text = context.getString(unitType.unit)
-        binding.tvUploadCurrency.text = context.getString(unitType.unit)
-        binding.tvCurrency.text = context.getString(unitType.unit)
+        binding.tvDownloadCurrency.text = context.getString(viewModel?.unitType?.value!!.unit)
+        binding.tvUploadCurrency.text = context.getString(viewModel?.unitType?.value!!.unit)
+        binding.tvCurrency.text = context.getString(viewModel?.unitType?.value!!.unit)
     }
 
     fun prepareViewSpeedTest() {
@@ -257,13 +256,11 @@ class SpeedView(
                             binding.tvDownloadValue.visibility = VISIBLE
                             binding.tvDownloadValue.text = format(convert(dl))
                             binding.tvSpeedValue.text = context.getString(R.string.zero_value)
-                            testModel?.download = roundOffDecimal(convert(dl))
+                            testModel?.download = roundOffDecimal(dl)
                         }
                         binding.speedView.speedTo(0f, 500L)
                     }
-
                 }
-
             }
 
             override fun onUploadUpdate(ul: Double, progress: Double) {
@@ -280,7 +277,7 @@ class SpeedView(
                         binding.speedView.speedTo(0f, 500L)
                         binding.speedView.withTremble = false
                         binding.tvSpeedValue.text = context.getString(R.string.zero_value)
-                        testModel?.upload = roundOffDecimal(convert(ul))
+                        testModel?.upload = roundOffDecimal(ul)
 
                     }
                 }
@@ -378,19 +375,19 @@ class SpeedView(
                 R.drawable.ic_download
             )
         )
+        binding.speedView.stop()
         binding.placeholderDownload.visibility = VISIBLE
         binding.placeholderUpload.visibility = VISIBLE
         binding.placeholderUpload.clearAnimation()
         binding.placeholderDownload.clearAnimation()
         binding.speedView.setState("download")
-        binding.speedView.stop()
         binding.tvSpeedValue.text = context.getString(R.string.zero_value_dec)
         binding.tvDownloadValue.visibility = GONE
         binding.tvUploadValue.visibility = GONE
         binding.tvPingCount.text = context.getString(R.string.zero_value)
         binding.tvJitterCount.text = context.getString(R.string.zero_value)
         YoYo.with(Techniques.FadeOut).onStart {
-            binding.topView.visibility = View.INVISIBLE
+            binding.topView.visibility = View.GONE
         }.playOn(binding.topView)
         YoYo.with(Techniques.FadeIn).playOn(binding.btnStartContainer)
         binding.btnStartContainer.visibility = View.VISIBLE
@@ -402,15 +399,7 @@ class SpeedView(
         binding.btnStart.isEnabled = true
     }
 
-    private fun format(d: Double): String {
-        return if (d < 200) String.format("%.2f", d) else "" + d.roundToInt()
-    }
 
-    fun roundOffDecimal(number: Double): Double {
-        val number3digits: Double = (number * 1000.0).roundToInt() / 1000.0
-        val number2digits: Double = (number3digits * 100.0).roundToInt() / 100.0
-        return (number2digits * 10.0).roundToInt() / 10.0
-    }
 
     private fun convertMbpsToMbs(value: Double): Double {
         return value * .125
@@ -420,11 +409,11 @@ class SpeedView(
         return value * 125
     }
 
-    fun convert(value: Double): Double {
-        if (unitType == UnitType.MBS) {
+    private fun convert(value: Double): Double {
+        if (viewModel?.unitType?.value == UnitType.MBS) {
             return convertMbpsToMbs(value)
         }
-        if (unitType == UnitType.KBS) {
+        if (viewModel?.unitType?.value == UnitType.KBS) {
             return convertMbpsToKbs(value)
         }
         return value

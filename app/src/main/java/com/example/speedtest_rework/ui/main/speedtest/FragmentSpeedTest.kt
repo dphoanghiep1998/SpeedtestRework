@@ -70,7 +70,7 @@ class FragmentSpeedTest : BaseFragment() {
             val layoutParams = binding.containerExpandView.layoutParams
             if (!isExpanded) {
                 YoYo.with(Techniques.SlideInLeft).duration(400L).onStart {
-
+                    binding.containerExpandView.setBackgroundResource(R.drawable.background_gradient_config)
                     layoutParams.width = ConstraintLayout.LayoutParams.MATCH_PARENT
                     binding.containerExpandView.layoutParams = layoutParams
                     isExpanded = true
@@ -79,13 +79,14 @@ class FragmentSpeedTest : BaseFragment() {
             } else {
                 YoYo.with(Techniques.SlideInRight).duration(400L).onStart {
                     layoutParams.width = ConstraintLayout.LayoutParams.WRAP_CONTENT
+                    binding.containerExpandView.setBackgroundResource(R.drawable.background_gradient_config_sizing)
+
                     binding.containerExpandView.layoutParams = layoutParams
                     isExpanded = false
                 }.playOn(binding.containerConfig2)
 
             }
         }
-
 
 
         val groupUnit = listOf(binding.tvMbpsType, binding.tvMbsType, binding.tvKbsType)
@@ -165,7 +166,7 @@ class FragmentSpeedTest : BaseFragment() {
     }
 
     private fun setUnitType(unitType: UnitType) {
-        binding.clSpeedview.setData(unitType)
+        viewModel.unitType.value = unitType
     }
 
     private fun selectView(view: View) {
@@ -255,6 +256,7 @@ class FragmentSpeedTest : BaseFragment() {
     private fun setIspName(network: CurrentNetworkInfo) {
         if (network.selfIsp != "") {
             binding.tvIspName.text = network.selfIsp
+            binding.tvIspNameHidden.text = network.selfIsp
         }
     }
 
@@ -295,6 +297,7 @@ class FragmentSpeedTest : BaseFragment() {
             val info = NetworkUtils.getInforMobileConnected(requireContext())
             val name = if (info != null) info.typeName + " - " + info.subtypeName else "Mobile"
             binding.tvWifiName.text = name
+            binding.tvWifiNameHidden.text = name
             loadServer()
         } else {
             binding.tvWifiName.text = getString(R.string.no_connection)
@@ -325,6 +328,20 @@ class FragmentSpeedTest : BaseFragment() {
         viewModel._isScanning.observe(viewLifecycleOwner) {
             if (!it) {
                 binding.clSpeedview.resetView()
+                YoYo.with(Techniques.SlideInLeft).duration(300L).onStart {
+                    YoYo.with(Techniques.FadeOut).duration(100L).onEnd {
+                        binding.inforHidden.visibility = View.GONE
+
+                    }.playOn(binding.inforHidden)
+                }
+                    .playOn(binding.containerExpandView)
+            } else {
+                YoYo.with(Techniques.SlideOutLeft).duration(300L).onEnd {
+                    YoYo.with(Techniques.FadeIn).duration(100L).onStart {
+                        binding.inforHidden.visibility = View.VISIBLE
+                    }.playOn(binding.inforHidden)
+                }
+                    .playOn(binding.containerExpandView)
             }
         }
     }

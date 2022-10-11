@@ -24,8 +24,8 @@ import com.example.speedtest_rework.common.annotation.OpenClass
 import com.example.speedtest_rework.common.buildMinVersionM
 import com.example.speedtest_rework.common.buildMinVersionR
 import com.example.speedtest_rework.ui.main.analyzer.model.*
-import com.vrem.wifianalyzer.wifi.scanner.Cache
-import com.vrem.wifianalyzer.wifi.scanner.CacheResult
+import com.example.speedtest_rework.ui.main.analyzer.model.Cache
+import com.example.speedtest_rework.ui.main.analyzer.model.CacheResult
 
 
 @OpenClass

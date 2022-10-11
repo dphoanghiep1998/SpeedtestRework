@@ -14,6 +14,8 @@ import com.example.speedtest_rework.base.dialog.ConfirmDialog
 import com.example.speedtest_rework.base.fragment.BaseFragment
 import com.example.speedtest_rework.common.Constant
 import com.example.speedtest_rework.common.DateTimeUtils
+import com.example.speedtest_rework.common.custom_view.UnitType
+import com.example.speedtest_rework.common.format
 import com.example.speedtest_rework.data.model.HistoryModel
 import com.example.speedtest_rework.databinding.FragmentDetailResultBinding
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
@@ -33,10 +35,17 @@ class FragmentResultDetail : BaseFragment(), ConfirmDialog.ConfirmCallback {
         binding = FragmentDetailResultBinding.inflate(inflater, container, false)
         getDataFromBundle()
         changeBackPressCallBack()
+        observeUnitType()
         initView()
         return binding.root
     }
 
+    private fun observeUnitType() {
+        viewModel.unitType.observe(viewLifecycleOwner) {
+            binding.tvDownloadCurrency.text = getString(it.unit)
+            binding.tvUploadCurrency.text = getString(it.unit)
+        }
+    }
 
     private fun getDataFromBundle() {
         val bundle: Bundle? = this.arguments
@@ -73,8 +82,8 @@ class FragmentResultDetail : BaseFragment(), ConfirmDialog.ConfirmCallback {
             if (testModel.download >= 40) 0 else if (testModel.download < 40 && testModel.download >= 20) 1 else 2
         )
         binding.tvTime.text = DateTimeUtils.getDateConvertedToResult(testModel.time)
-        binding.tvDownloadValue.text = testModel.download.toString()
-        binding.tvUploadValue.text = testModel.upload.toString()
+        binding.tvDownloadValue.text = format(convert(testModel.download))
+        binding.tvUploadValue.text = format(convert(testModel.upload))
         binding.tvPingCount.text = testModel.ping.toString() + " ms"
         binding.tvJitterCount.text = testModel.jitter.toString() + " ms"
         binding.tvLossCount.text = testModel.loss.toString() + " %"
@@ -168,12 +177,30 @@ class FragmentResultDetail : BaseFragment(), ConfirmDialog.ConfirmCallback {
     }
 
     override fun negativeAction() {
-
+        //Do nothing
     }
 
     override fun positiveAction() {
         viewModel.deleteHistoryAction(testModel)
         findNavController().popBackStack()
+    }
+
+    private fun convertMbpsToMbs(value: Double): Double {
+        return value * .125
+    }
+
+    private fun convertMbpsToKbs(value: Double): Double {
+        return value * 125
+    }
+
+    private fun convert(value: Double): Double {
+        if (viewModel?.unitType?.value == UnitType.MBS) {
+            return convertMbpsToMbs(value)
+        }
+        if (viewModel?.unitType?.value == UnitType.KBS) {
+            return convertMbpsToKbs(value)
+        }
+        return value
     }
 
 

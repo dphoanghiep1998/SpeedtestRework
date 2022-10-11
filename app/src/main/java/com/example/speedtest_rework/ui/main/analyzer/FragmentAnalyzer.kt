@@ -7,6 +7,7 @@ import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,7 +25,7 @@ import com.example.speedtest_rework.ui.main.analyzer.model.Transformer
 import com.example.speedtest_rework.ui.main.analyzer.model.WiFiData
 import com.example.speedtest_rework.ui.main.analyzer.model.WiFiDetail
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
-import com.vrem.wifianalyzer.wifi.scanner.Cache
+import com.example.speedtest_rework.ui.main.analyzer.model.Cache
 
 
 class FragmentAnalyzer : BaseFragment(), ItemTouchHelper {
@@ -55,6 +56,11 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper {
         observeScanResults()
         observePermissionChange()
         observeWifiEnabled()
+    }
+
+    override fun onResume() {
+        Log.d("TAG", "onResume: ")
+        super.onResume()
     }
 
 
@@ -134,6 +140,7 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper {
 
     private fun observeScanResults() {
         viewModel.mDataCache.observe(viewLifecycleOwner) {
+            if (it.first.isEmpty()) return@observe
             binding.graph.removeAllViews()
             val cache = Cache()
             cache.add(it.first, it.second)

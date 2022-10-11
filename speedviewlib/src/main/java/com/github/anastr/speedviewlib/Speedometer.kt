@@ -5,7 +5,6 @@ import android.graphics.*
 import android.text.Layout
 import android.text.StaticLayout
 import android.util.AttributeSet
-import android.util.Log
 import com.github.anastr.speedviewlib.components.Style
 import com.github.anastr.speedviewlib.components.indicators.Indicator
 import com.github.anastr.speedviewlib.components.indicators.NoIndicator
@@ -197,7 +196,7 @@ abstract class Speedometer @JvmOverloads constructor(
 //    var a = listOf(0f, .01f, .02f, .05f, .1f, .2f, .3f, .6f, 1f) 500
 //    var a = listOf(0f, .005f, .01f, .05f, .1f, .25f, .5f, .75f, 1f) 1000
     //100 default
-    var ticks: List<Float> =listOf(0f, .1f, .2f, .3f, .4f, .5f, .6f, .8f,1f)
+    var ticks: List<Float> = listOf(0f, .1f, .2f, .3f, .4f, .5f, .6f, .8f, 1f)
         set(ticks) {
             field = ticks
             checkTicks()
@@ -216,7 +215,7 @@ abstract class Speedometer @JvmOverloads constructor(
     /**
      * Tick label's padding in pixel.
      */
-    var tickPadding = (speedometerWidth + dpTOpx(3f))
+    var tickPadding = (speedometerWidth + dpTOpx(8f))
         set(tickPadding) {
             field = tickPadding
             invalidateGauge()
@@ -595,7 +594,7 @@ abstract class Speedometer @JvmOverloads constructor(
     fun calDegree(speed: Float): Float {
         return when (maxSpeed) {
             100f -> return when {
-                speed <= 0f -> 0f+ startDegree
+                speed <= 0f -> 0f + startDegree
                 speed <= 20f -> speed * 33.75f / 5 + startDegree
                 speed <= 30f -> (135f + 33.75f / 10 * (speed - 20)) + startDegree
                 speed <= 50f -> 168.75f + (speed - 30) * 33.75f / 20 + startDegree
@@ -604,22 +603,22 @@ abstract class Speedometer @JvmOverloads constructor(
                 else -> 100f * (endDegree - startDegree) / (maxSpeed - minSpeed) + startDegree
             }
             10f -> return when {
-                speed <= 0f -> 0f+ startDegree
+                speed <= 0f -> 0f + startDegree
                 speed <= 6f -> (speed * 33.75f) + startDegree
-                speed <= 10f -> (33.75f * 6 + 33.75f / 4 * (speed - 6)) + startDegree
+                speed <= 10f -> (33.75f * 6 + 33.75f / 2 * (speed - 6)) + startDegree
                 else -> 10f * (endDegree - startDegree) / (maxSpeed - minSpeed) + startDegree
             }
             1000f -> return when {
-                speed <= 0f -> 0f+ startDegree
-                speed <= 10f -> (speed * 33.75f / 10 - minSpeed) + startDegree
+                speed <= 0f -> 0f + startDegree
+                speed <= 10f -> (speed * 33.75f / 5 - minSpeed) + startDegree
                 speed <= 50f -> (33.75f * 2 + 33.75f / 40 * (speed - 10)) + startDegree
                 speed <= 100f -> (33.75f * 3 + 33.75f / 50 * (speed - 50)) + startDegree
                 speed <= 250f -> (33.75f * 4 + 33.75f / 150 * (speed - 100)) + startDegree
-                speed <= 1000f -> (33.75f * 5 + 33.75f / 750 * (speed - 250)) + startDegree
+                speed <= 1000f -> (33.75f * 5 + 33.75f / 250 * (speed - 250)) + startDegree
                 else -> 1000f * (endDegree - startDegree) / (maxSpeed - minSpeed) + startDegree
             }
             500f -> return when {
-                speed <= 0f -> 0f+ startDegree
+                speed <= 0f -> 0f + startDegree
                 speed <= 10f -> (speed * 33.75f / 5) + startDegree
                 speed <= 25f -> (33.75f * 2 + 33.75f / 15 * (speed - 10)) + startDegree
                 speed <= 50f -> (33.75f * 3 + 33.75f / 25 * (speed - 25)) + startDegree
@@ -629,25 +628,25 @@ abstract class Speedometer @JvmOverloads constructor(
                 else -> 500f * (endDegree - startDegree) / (maxSpeed - minSpeed) + startDegree
             }
             50f -> return when {
-                speed <= 0f -> 0f+ startDegree
+                speed <= 0f -> 0f + startDegree
                 speed <= 3f -> (speed * 33.75f) + startDegree
                 speed <= 5f -> (33.75f * 3 + 33.75f / 2 * (speed - 3)) + startDegree
-                speed <= 15f -> (33.75f * 4 + 33.75f / 10 * (speed - 5)) + startDegree
+                speed <= 15f -> (33.75f * 4 + 33.75f / 5 * (speed - 5)) + startDegree
                 speed <= 30f -> (33.75f * 6 + 33.75f / 15 * (speed - 15)) + startDegree
                 speed <= 50f -> (33.75f * 7 + 33.75f / 20 * (speed - 30)) + startDegree
                 else -> 50f * (endDegree - startDegree) / (maxSpeed - minSpeed) + startDegree
             }
             5000f -> return when {
-                speed <= 0f -> 0f+ startDegree
-                speed <= 300f -> (speed * 33.75f / 300) + startDegree
+                speed <= 0f -> 0f + startDegree
+                speed <= 300f -> (speed * 33.75f / 100) + startDegree
                 speed <= 500f -> (33.75f * 3 + 33.75f / 200 * (speed - 300)) + startDegree
                 speed <= 1000f -> (33.75f * 4 + 33.75f / 500 * (speed - 500)) + startDegree
-                speed <= 3000f -> (33.75f * 5 + 33.75f / 2000 * (speed - 1000)) + startDegree
+                speed <= 3000f -> (33.75f * 5 + 33.75f / 1000 * (speed - 1000)) + startDegree
                 speed <= 5000f -> (33.75f * 7 + 33.75f / 2000 * (speed - 3000)) + startDegree
                 else -> 5000f * (endDegree - startDegree) / (maxSpeed - minSpeed) + startDegree
             }
             10000f -> return when {
-                speed <= 0f -> 0f+ startDegree
+                speed <= 0f -> 0f + startDegree
                 speed <= 2000f -> (speed * 33.75f / 500) + startDegree
                 speed <= 3000f -> (33.75f * 4 + 33.75f / 1000 * (speed - 2000)) + startDegree
                 speed <= 5000f -> (33.75f * 5 + 33.75f / 2000 * (speed - 3000)) + startDegree
@@ -656,11 +655,11 @@ abstract class Speedometer @JvmOverloads constructor(
                 else -> 10000f * (endDegree - startDegree) / (maxSpeed - minSpeed) + startDegree
             }
             15000f -> return when {
-                speed <= 0f -> 0f+ startDegree
+                speed <= 0f -> 0f + startDegree
                 speed <= 2000f -> (speed * 33.75f / 500) + startDegree
                 speed <= 3000f -> (33.75f * 4 + 33.75f / 1000 * (speed - 2000)) + startDegree
                 speed <= 5000f -> (33.75f * 5 + 33.75f / 2000 * (speed - 3000)) + startDegree
-                speed <= 15000f -> (33.75f * 6 + 33.75f / 10000 * (speed - 5000)) + startDegree
+                speed <= 15000f -> (33.75f * 6 + 33.75f / 5000 * (speed - 5000)) + startDegree
                 else -> 15000f * (endDegree - startDegree) / (maxSpeed - minSpeed) + startDegree
             }
             else -> 0f + startDegree
@@ -866,6 +865,9 @@ abstract class Speedometer @JvmOverloads constructor(
                     size * .5f,
                     initTickPadding + textPaint.textSize + padding.toFloat() + tickPadding.toFloat()
                 )
+            textPaint.textSize = dpTOpx(12f)
+            val bold: Typeface = Typeface.create("app_font_black", Typeface.BOLD)
+            textPaint.typeface = bold
             if (currentPosition >= d) {
                 textPaint.color = 0xFFFFFFFF.toInt()
             } else {
@@ -876,8 +878,16 @@ abstract class Speedometer @JvmOverloads constructor(
             if (onPrintTickLabel != null)
                 tick = onPrintTickLabel!!.invoke(index, getSpeedAtDegree(d))
             // if (onPrintTickLabel is null or it returns null)
-            if (tick == null)
+            if (tick == null) {
                 tick = "%.0f".format(locale, getSpeedAtDegree(z))
+                if (tick == "10000") {
+                    tick = "10k"
+                }
+                if (tick == "15000") {
+                    tick = "15k"
+                }
+            }
+
 
             c.translate(0f, initTickPadding + padding.toFloat() + tickPadding.toFloat())
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {

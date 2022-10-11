@@ -46,6 +46,7 @@ class MainActivity : BaseActivity() {
             supportFragmentManager.findFragmentById(binding.navHostFragment.id) as NavHostFragment
     }
 
+
     private fun handlePermissionFlow() {
 
         if (ContextCompat.checkSelfPermission(

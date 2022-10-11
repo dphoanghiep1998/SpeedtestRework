@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="invisible"
+        android:visibility="gone"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_16sdp"
             android:background="@drawable/infor_container"
-            android:padding="16dp"
+            android:padding="@dimen/_12sdp"
             app:layout_constraintBottom_toTopOf="@id/container_ping_loss_jitter"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -42,8 +42,8 @@
 
                     <ImageView
                         android:id="@+id/imv_downArrow"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="@dimen/_16sdp"
+                        android:layout_height="@dimen/_16sdp"
                         android:src="@drawable/ic_download" />
 
                     <TextView
@@ -51,10 +51,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_toEndOf="@id/imv_downArrow"
-                        android:paddingStart="8dp"
+                        android:paddingStart="@dimen/_6sdp"
                         android:text="@string/download"
                         android:textColor="#D7D7D7"
-                        android:textSize="18dp"
+                        android:textSize="@dimen/_16sdp"
                         android:textStyle="bold" />
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
@@ -62,7 +62,7 @@
                 <LinearLayout
                     android:gravity="center"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_30sdp">
+                    android:layout_height="@dimen/_32sdp">
 
                     <com.example.speedtest_rework.common.custom_view.GradientText
                         android:visibility="gone"
@@ -74,11 +74,11 @@
                         android:layout_gravity="bottom"
                         android:text="0"
                         android:textColor="@color/gray_400"
-                        android:textSize="@dimen/_25sdp"
+                        android:textSize="@dimen/_24sdp"
                         android:textStyle="bold" />
                     <ImageView
                         android:id="@+id/placeholder_download"
-                        android:layout_marginBottom="2dp"
+                        android:layout_marginBottom="@dimen/_2sdp"
                         android:layout_gravity="bottom"
                         android:src="@drawable/ic_line"
                         android:layout_width="@dimen/_25sdp"
@@ -92,7 +92,7 @@
                         android:paddingStart="@dimen/_4sdp"
                         android:text="@string/Mbps"
                         android:textColor="@color/gray_400"
-                        android:textSize="12dp" />
+                        android:textSize="@dimen/_10sdp" />
                 </LinearLayout>
 
 
@@ -144,7 +144,7 @@
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="wrap_content"
-                    android:layout_height="@dimen/_30sdp">
+                    android:layout_height="@dimen/_32sdp">
 
                     <com.example.speedtest_rework.common.custom_view.GradientText
                         android:visibility="gone"
@@ -155,7 +155,7 @@
                         android:text="0"
                         app:colorFirst="@color/gradient_orange_end"
                         app:colorSecond="@color/gradient_orange_start"
-                        android:textSize="@dimen/_25sdp"
+                        android:textSize="@dimen/_24sdp"
                         android:textStyle="bold" />
                     <ImageView
                         android:id="@+id/placeholder_upload"
@@ -312,7 +312,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="@dimen/_60sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -387,9 +386,10 @@
             app:sv_withTremble="false"
             app:sv_marksNumber="0"
             app:sv_speedTextColor="@android:color/transparent"
-            app:sv_speedometerWidth="18dp"
+            app:sv_speedometerWidth="@dimen/_17sdp"
             app:sv_tickNumber="11"
             app:sv_tickRotation="false"
+            app:sv_textColor="@color/white"
             app:sv_unit="" />
 
 
@@ -400,7 +400,7 @@
             android:layout_marginTop="-50dp"
             android:text="0.0"
             android:textColor="@color/white"
-            android:textSize="20dp"
+            android:textSize="@dimen/_18sdp"
             android:textStyle="bold"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="@id/speedView"
@@ -431,7 +431,7 @@
                 android:paddingStart="@dimen/_4sdp"
                 android:text="@string/Mbps"
                 android:textColor="@color/white"
-                android:textSize="20dp" />
+                android:textSize="@dimen/_17sdp" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

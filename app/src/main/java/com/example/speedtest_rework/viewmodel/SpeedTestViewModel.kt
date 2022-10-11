@@ -7,6 +7,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.speedtest_rework.base.viewmodel.BaseViewModel
+import com.example.speedtest_rework.common.custom_view.UnitType
 import com.example.speedtest_rework.core.getIP.AddressInfo
 import com.example.speedtest_rework.core.getIP.CurrentNetworkInfo
 import com.example.speedtest_rework.data.model.HistoryModel
@@ -21,6 +22,7 @@ import javax.inject.Inject
 class SpeedTestViewModel @Inject constructor(private val appRepository: AppRepository) :
     BaseViewModel() {
 
+    var unitType = MutableLiveData(UnitType.MBPS)
 
     var isMultiTaskDone: MutableLiveData<Boolean> = MutableLiveData()
     var addressInfoList: MutableList<AddressInfo> = mutableListOf()
@@ -33,14 +35,6 @@ class SpeedTestViewModel @Inject constructor(private val appRepository: AppRepos
 
     fun setIsScanning(status: Boolean) {
         isScanning.value = status
-    }
-
-    private var isConnectionReady = MutableLiveData<Boolean>()
-    val _isConnectionReady: LiveData<Boolean>
-        get() = isConnectionReady
-
-    fun setIsConnectionReady(status: Boolean) {
-        isConnectionReady.value = status
     }
 
 
@@ -66,15 +60,15 @@ class SpeedTestViewModel @Inject constructor(private val appRepository: AppRepos
     }
 
 
-    private var dataCache:MediatorLiveData<Pair<List<ScanResult>,WifiInfo>> = MediatorLiveData()
-    val mDataCache:LiveData<Pair<List<ScanResult>,WifiInfo>>
+    private var dataCache: MediatorLiveData<Pair<List<ScanResult>, WifiInfo>> = MediatorLiveData()
+    val mDataCache: LiveData<Pair<List<ScanResult>, WifiInfo>>
         get() = dataCache
 
-    fun addDataCacheSource(data: LiveData<Pair<List<ScanResult>,WifiInfo>>) {
+    fun addDataCacheSource(data: LiveData<Pair<List<ScanResult>, WifiInfo>>) {
         dataCache.addSource(data, dataCache::setValue)
     }
 
-    fun removeDataCacheSource(data: LiveData<Pair<List<ScanResult>,WifiInfo>>) {
+    fun removeDataCacheSource(data: LiveData<Pair<List<ScanResult>, WifiInfo>>) {
         dataCache.removeSource(data)
     }
 
@@ -114,8 +108,8 @@ class SpeedTestViewModel @Inject constructor(private val appRepository: AppRepos
         parentJob = viewModelScope.launch(handler) {
             val list = async { appRepository.getAddressInfo() }
             val netInfo = async { appRepository.getCurrentNetworkInfo() }
-            val (dList,dNetWorkInfo) = awaitAll(list, netInfo)
-            addressInfoList= dList as MutableList<AddressInfo>
+            val (dList, dNetWorkInfo) = awaitAll(list, netInfo)
+            addressInfoList = dList as MutableList<AddressInfo>
             currentNetworkInfo = dNetWorkInfo as CurrentNetworkInfo
             isMultiTaskDone.postValue(true)
         }
