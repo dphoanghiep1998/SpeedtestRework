@@ -23,8 +23,6 @@ public abstract class Downloader extends Thread{
     public void run(){
         try{
             String s=path;
-//            fileUrls.add(fileURL + "random4000x4000.jpg");
-//            fileUrls.add(fileURL + "random3000x3000.jpg");
             s+= "random4000x4000.jpg";
             long lastProgressEvent=System.currentTimeMillis();
             long ckBytes=ckSize*1048576, newRequestThreshold=ckBytes/4;

@@ -2,6 +2,7 @@ package com.example.speedtest_rework.ui.result_detail
 
 import android.animation.ValueAnimator
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +20,7 @@ import com.example.speedtest_rework.common.format
 import com.example.speedtest_rework.data.model.HistoryModel
 import com.example.speedtest_rework.databinding.FragmentDetailResultBinding
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
+import kotlin.math.log
 
 class FragmentResultDetail : BaseFragment(), ConfirmDialog.ConfirmCallback {
     private lateinit var binding: FragmentDetailResultBinding
@@ -56,8 +58,11 @@ class FragmentResultDetail : BaseFragment(), ConfirmDialog.ConfirmCallback {
     }
 
     private fun initView() {
-        binding.btnClose.setOnClickListener {
+        binding.btnBack.setOnClickListener {
             findNavController().popBackStack()
+        }
+        binding.btnShare.setOnClickListener{
+            Log.d("TAG", "initView: ")
         }
         val progress =
             if (testModel.download >= 40) 100 else if (testModel.download < 40 && testModel.download >= 20) 50 else 0
@@ -107,11 +112,22 @@ class FragmentResultDetail : BaseFragment(), ConfirmDialog.ConfirmCallback {
 
         if (fromSpeedTestFragment == null || fromSpeedTestFragment == false) {
             binding.btnScanAgain.visibility = View.GONE
+            binding.btnClose.visibility = View.GONE
         } else {
             binding.btnScanAgain.visibility = View.VISIBLE
+            binding.btnClose.visibility = View.VISIBLE
+
             binding.btnScanAgain.setOnClickListener {
                 findNavController().previousBackStackEntry?.savedStateHandle?.set(
                     Constant.KEY_SCAN_AGAIN,
+                    true
+                )
+                findNavController().popBackStack()
+            }
+
+            binding.btnClose.setOnClickListener {
+                findNavController().previousBackStackEntry?.savedStateHandle?.set(
+                    Constant.KEY_RESET,
                     true
                 )
                 findNavController().popBackStack()

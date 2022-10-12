@@ -5,9 +5,9 @@
     android:layout_height="match_parent">
 
     <androidx.core.widget.NestedScrollView
-
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:background="@color/background_main"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -22,19 +22,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_38sdp"
                 android:layout_marginTop="@dimen/_8sdp"
-                android:paddingHorizontal="@dimen/_6sdp"
                 android:theme="@style/ToolBarTheme"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
-                    android:id="@+id/btn_close"
-                    android:layout_width="@dimen/_30sdp"
-                    android:layout_height="@dimen/_30sdp"
+                    android:id="@+id/btn_back"
+                    android:layout_width="@dimen/_38sdp"
+                    android:layout_height="@dimen/_38sdp"
+                    android:padding="@dimen/_8sdp"
                     android:contentDescription="img"
                     android:foreground="@drawable/ripple_effect_corner_fg"
-                    android:src="@drawable/ic_close"
+                    android:src="@drawable/ic_back"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -42,7 +42,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/app_font_black"
                     android:text="@string/result_detail"
                     android:textColor="@color/white"
                     android:textFontWeight="800"
@@ -53,56 +52,62 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
-                    android:id="@+id/imv_vip"
-                    android:layout_width="@dimen/_25sdp"
-                    android:layout_height="@dimen/_25sdp"
-                    android:layout_marginRight="8dp"
-                    android:src="@drawable/ic_vip"
+                    android:id="@+id/btn_close"
+                    android:layout_width="@dimen/_38sdp"
+                    android:layout_height="@dimen/_38sdp"
+                   android:padding="@dimen/_8sdp"
+                    android:src="@drawable/ic_close"
+                    android:foreground="@drawable/ripple_effect_corner_fg"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/imv_share"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_goneMarginRight="0dp" />
 
-                <ImageView
 
-                    android:id="@+id/imv_share"
-                    android:layout_width="@dimen/_25sdp"
-                    android:layout_height="@dimen/_25sdp"
-                    android:src="@drawable/ic_share"
-                    android:visibility="visible"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/imv_vip" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <ImageView
                 android:id="@+id/imv_clock"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginTop="@dimen/_14sdp"
                 android:src="@drawable/ic_clock"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/toolbar" />
+                app:layout_constraintTop_toBottomOf="@id/toolbar"
+                app:tint="@color/gray_100" />
 
             <TextView
                 android:id="@+id/tv_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingStart="8dp"
+                android:textFontWeight="800"
                 android:text="@string/test"
                 android:textColor="@color/white"
-                android:textSize="16dp"
+                android:textSize="@dimen/_14sdp"
                 app:layout_constraintBottom_toBottomOf="@id/imv_clock"
                 app:layout_constraintStart_toEndOf="@+id/imv_clock"
                 app:layout_constraintTop_toTopOf="@+id/imv_clock" />
-
+            <ImageView
+                android:id="@+id/btn_share"
+                android:layout_width="@dimen/_30sdp"
+                android:layout_height="@dimen/_30sdp"
+                android:foreground="@drawable/ripple_effect_corner_fg"
+                android:padding="@dimen/_5sdp"
+                android:src="@drawable/ic_share"
+                android:layout_marginEnd="@dimen/_3sdp"
+                app:layout_constraintBottom_toBottomOf="@id/tv_time"
+                app:layout_constraintEnd_toStartOf="@+id/btn_delete"
+                app:layout_constraintTop_toTopOf="@id/tv_time" />
             <ImageView
                 android:id="@+id/btn_delete"
-                android:layout_width="@dimen/_40sdp"
-                android:layout_height="@dimen/_40sdp"
+                android:layout_width="@dimen/_30sdp"
+                android:layout_height="@dimen/_30sdp"
                 android:foreground="@drawable/ripple_effect_corner_fg"
-                android:padding="@dimen/_10sdp"
+                android:padding="@dimen/_5sdp"
                 android:src="@drawable/ic_delete"
+                android:layout_marginEnd="@dimen/_3sdp"
                 app:layout_constraintBottom_toBottomOf="@id/tv_time"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/tv_time" />
@@ -197,7 +202,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="@dimen/_8sdp"
                 android:background="@drawable/infor_container"
                 android:paddingVertical="@dimen/_8sdp"
 
@@ -372,17 +377,18 @@
 
                     <ImageView
                         android:id="@+id/imv_ping"
-                        android:layout_width="20dp"
-                        android:layout_height="16dp"
+                        android:layout_width="@dimen/_16sdp"
+                        android:layout_height="@dimen/_16sdp"
                         android:layout_gravity="center"
                         android:src="@drawable/ic_ping" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:paddingStart="@dimen/_2sdp"
                         android:layout_gravity="center"
                         android:text="@string/ping"
-                        android:textColor="#d7d7d7"
+                        android:textColor="@color/gray_400"
                         android:textSize="@dimen/_10sdp" />
 
                     <TextView
@@ -391,7 +397,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:paddingLeft="4dp"
-                        android:textColor="#D7D7D7"
+                        android:textColor="@color/gray_400"
                         android:textSize="@dimen/_10sdp" />
 
                 </LinearLayout>
@@ -406,8 +412,8 @@
 
                     <ImageView
                         android:id="@+id/imv_jitter"
-                        android:layout_width="20dp"
-                        android:layout_height="16dp"
+                        android:layout_width="@dimen/_16sdp"
+                        android:layout_height="@dimen/_16sdp"
                         android:layout_gravity="center"
                         android:src="@drawable/ic_jitter" />
 
@@ -415,8 +421,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:paddingStart="@dimen/_2sdp"
                         android:text="@string/jitter"
-                        android:textColor="#d7d7d7"
+                        android:textColor="@color/gray_400"
                         android:textSize="@dimen/_10sdp" />
 
                     <TextView
@@ -425,7 +432,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:paddingLeft="4dp"
-                        android:textColor="#D7D7D7"
+                        android:textColor="@color/gray_400"
                         android:textSize="@dimen/_10sdp" />
 
                 </LinearLayout>
@@ -439,8 +446,8 @@
 
                     <ImageView
                         android:id="@+id/imv_loss"
-                        android:layout_width="20dp"
-                        android:layout_height="16dp"
+                        android:layout_width="@dimen/_16sdp"
+                        android:layout_height="@dimen/_16sdp"
                         android:layout_gravity="center"
                         android:src="@drawable/ic_loss" />
 
@@ -448,8 +455,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:paddingStart="@dimen/_2sdp"
                         android:text="@string/loss"
-                        android:textColor="#d7d7d7"
+                        android:textColor="@color/gray_400"
                         android:textSize="@dimen/_10sdp" />
 
                     <TextView
@@ -458,7 +466,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:paddingLeft="4dp"
-                        android:textColor="#D7D7D7"
+                        android:textColor="@color/gray_400"
                         android:textSize="@dimen/_10sdp" />
 
                 </LinearLayout>
@@ -473,8 +481,10 @@
                 android:foreground="@drawable/ripple_effect_corner_fg"
                 android:paddingHorizontal="60dp"
                 android:text="@string/scan_again"
+                android:textColor="@color/gray_800"
                 android:textSize="@dimen/_14sdp"
                 android:textStyle="bold"
+                android:textAllCaps="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/container_ping_loss_jitter" />

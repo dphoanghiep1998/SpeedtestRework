@@ -38,6 +38,7 @@ class FragmentMain : BaseFragment() {
         binding = FragmentMainBinding.inflate(layoutInflater, container, false)
         initView()
         observeIsScanning()
+        observeHardReset()
         return binding.root
     }
 
@@ -51,7 +52,7 @@ class FragmentMain : BaseFragment() {
 
     private fun initButton() {
         binding.imvStop.setOnClickListener {
-            viewModel.setIsScanning(false)
+            viewModel.setHardReset(true)
         }
     }
 
@@ -179,7 +180,7 @@ class FragmentMain : BaseFragment() {
     private fun hideBottomTabWhenScan() {
         binding.viewPager.isUserInputEnabled = false
         YoYo.with(Techniques.SlideOutDown).onEnd {
-            binding.navBottom.visibility = View.GONE
+            binding.navBottom.visibility = View.INVISIBLE
         }.playOn(binding.navBottom)
     }
 
@@ -212,6 +213,18 @@ class FragmentMain : BaseFragment() {
     private fun observeIsScanning() {
         viewModel._isScanning.observe(viewLifecycleOwner) {
             if (it) {
+                hideBottomTabWhenScan()
+                showStopBtn()
+            } else {
+                showBottomTabAfterScan()
+                showVipBtn()
+            }
+        }
+    }
+
+    private fun observeHardReset() {
+        viewModel.isHardReset.observe(viewLifecycleOwner) {
+            if (!it) {
                 hideBottomTabWhenScan()
                 showStopBtn()
             } else {

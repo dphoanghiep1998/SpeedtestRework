@@ -42,6 +42,7 @@ class FragmentSpeedTest : BaseFragment() {
         observeConnectivityChanged()
         observerMultiTaskDone()
         observeIsScanning()
+        observeHardReset()
         return binding.root
     }
 
@@ -291,6 +292,7 @@ class FragmentSpeedTest : BaseFragment() {
     private fun onConnectivityChange() {
         if (NetworkUtils.isWifiConnected(requireContext())) {
             binding.tvWifiName.text = NetworkUtils.getNameWifi(requireContext())
+            binding.tvWifiNameHidden.text = NetworkUtils.getNameWifi(requireContext())
             loadServer()
         } else if (NetworkUtils.isMobileConnected(requireContext())) {
 
@@ -322,12 +324,20 @@ class FragmentSpeedTest : BaseFragment() {
                     binding.clSpeedview.prepareViewSpeedTest()
                 }
             }
+        navController.currentBackStackEntry?.savedStateHandle?.getLiveData<Boolean>(Constant.KEY_RESET)
+            ?.observe(viewLifecycleOwner) {
+                if (it) {
+                    binding.clSpeedview.resetView()
+                }
+            }
     }
+
 
     private fun observeIsScanning() {
         viewModel._isScanning.observe(viewLifecycleOwner) {
             if (!it) {
-                binding.clSpeedview.resetView()
+                binding.clSpeedview.onScanningDone()
+
                 YoYo.with(Techniques.SlideInLeft).duration(300L).onStart {
                     YoYo.with(Techniques.FadeOut).duration(100L).onEnd {
                         binding.inforHidden.visibility = View.GONE
@@ -339,6 +349,21 @@ class FragmentSpeedTest : BaseFragment() {
                 YoYo.with(Techniques.SlideOutLeft).duration(300L).onEnd {
                     YoYo.with(Techniques.FadeIn).duration(100L).onStart {
                         binding.inforHidden.visibility = View.VISIBLE
+                    }.playOn(binding.inforHidden)
+                }
+                    .playOn(binding.containerExpandView)
+            }
+        }
+    }
+
+    private fun observeHardReset() {
+        viewModel.isHardReset.observe(viewLifecycleOwner) {
+            if (it) {
+                binding.clSpeedview.resetView()
+                YoYo.with(Techniques.SlideInLeft).duration(300L).onStart {
+                    YoYo.with(Techniques.FadeOut).duration(100L).onEnd {
+                        binding.inforHidden.visibility = View.GONE
+
                     }.playOn(binding.inforHidden)
                 }
                     .playOn(binding.containerExpandView)

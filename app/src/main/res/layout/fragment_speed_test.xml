@@ -35,7 +35,7 @@
             app:layout_constraintBottom_toTopOf="@id/imv_global_isp_hidden"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/gray_400" />
+            app:tint="@color/gray_600" />
 
         <TextView
             android:id="@+id/tv_wifi_name_hidden"
@@ -60,7 +60,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@id/imv_wifi_hidden"
             app:layout_constraintTop_toBottomOf="@id/imv_wifi_hidden"
-            app:tint="@color/gray_400" />
+            app:tint="@color/gray_600" />
 
         <TextView
             android:id="@+id/tv_isp_name_hidden"
@@ -79,7 +79,6 @@
         android:id="@+id/container_expand_view"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/_90sdp"
-        android:layout_marginTop="@dimen/_20sdp"
         android:layout_marginEnd="32dp"
         android:background="@drawable/background_gradient_config_sizing"
         android:visibility="visible"

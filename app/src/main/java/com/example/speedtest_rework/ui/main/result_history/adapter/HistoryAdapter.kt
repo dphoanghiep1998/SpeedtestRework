@@ -40,7 +40,7 @@ class HistoryAdapter(resultTouchHelper: ResultTouchHelper) :
             val model: HistoryModel = it[position]
             if (model.network == "wifi") {
                 val source: Int =
-                    if (model.download >= -60) R.drawable.ic_signal_good else if (model.download < -60 && model.download >= -90) R.drawable.ic_signal_normal else R.drawable.ic_signal_low
+                    if (model.download >= 40) R.drawable.ic_signal_good else if (model.download < 40 && model.download >= 20) R.drawable.ic_signal_normal else R.drawable.ic_signal_low
                 holder.connectionType.setImageResource(source)
             } else {
                 holder.connectionType.setImageResource(R.drawable.ic_mobiledata)

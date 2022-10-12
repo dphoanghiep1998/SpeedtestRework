@@ -37,6 +37,11 @@ class SpeedTestViewModel @Inject constructor(private val appRepository: AppRepos
         isScanning.value = status
     }
 
+    var isHardReset = MutableLiveData<Boolean>()
+    fun setHardReset(status: Boolean) {
+        isHardReset.postValue(status)
+    }
+
 
     private var isPermissionGranted = MutableLiveData<Boolean>()
     val _isPermissionGranted: LiveData<Boolean>

@@ -10,6 +10,7 @@ object Constant {
     const val INTENT_FILER_CONNECTIVITYCHANGE = "android.net.conn.CONNECTIVITY_CHANGE"
     const val INTENT_FILER_SCAN_RESULT="android.net.wifi.SCAN_RESULTS"
     const val KEY_SCAN_AGAIN = "scan_again"
+    const val KEY_RESET = "reset"
     const val KEY_TEST_MODEL = "testModel"
     const val KEY_FROM_SPEED_TEST_FRAGMENT = "from_speedTest_fragment"
 

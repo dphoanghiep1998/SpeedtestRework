@@ -11,6 +11,7 @@
         android:id="@+id/topView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_8sdp"
         android:orientation="vertical"
         android:visibility="gone"
         app:layout_constraintTop_toTopOf="parent">
@@ -21,11 +22,12 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_16sdp"
             android:background="@drawable/infor_container"
-            android:padding="@dimen/_12sdp"
+            android:paddingVertical="@dimen/_12sdp"
             app:layout_constraintBottom_toTopOf="@id/container_ping_loss_jitter"
             app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
+                android:id="@+id/ct_download"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -53,36 +55,37 @@
                         android:layout_toEndOf="@id/imv_downArrow"
                         android:paddingStart="@dimen/_6sdp"
                         android:text="@string/download"
-                        android:textColor="#D7D7D7"
-                        android:textSize="@dimen/_16sdp"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_10sdp"
                         android:textStyle="bold" />
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
                 <LinearLayout
-                    android:gravity="center"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_32sdp">
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/_32sdp"
+                    android:gravity="center">
 
                     <com.example.speedtest_rework.common.custom_view.GradientText
-                        android:visibility="gone"
                         android:id="@+id/tv_download_value"
-                        app:colorFirst="@color/gradient_green_end"
-                        app:colorSecond="@color/gradient_green_start"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_gravity="bottom"
                         android:text="0"
                         android:textColor="@color/gray_400"
                         android:textSize="@dimen/_24sdp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:visibility="gone"
+                        app:colorFirst="@color/gradient_green_end"
+                        app:colorSecond="@color/gradient_green_start" />
+
                     <ImageView
                         android:id="@+id/placeholder_download"
-                        android:layout_marginBottom="@dimen/_2sdp"
-                        android:layout_gravity="bottom"
-                        android:src="@drawable/ic_line"
                         android:layout_width="@dimen/_25sdp"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_marginBottom="@dimen/_2sdp"
+                        android:src="@drawable/ic_line" />
 
                     <TextView
                         android:id="@+id/tv_download_currency"
@@ -109,6 +112,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <LinearLayout
+                android:id="@+id/ct_upload"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -125,8 +129,8 @@
 
                     <ImageView
                         android:id="@+id/imv_upArrow"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="@dimen/_16sdp"
+                        android:layout_height="@dimen/_16sdp"
                         android:src="@drawable/ic_upload" />
 
                     <TextView
@@ -136,8 +140,8 @@
                         android:layout_toEndOf="@id/imv_upArrow"
                         android:paddingStart="8dp"
                         android:text="@string/upload"
-                        android:textColor="#D7D7D7"
-                        android:textSize="18dp"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_10sdp"
                         android:textStyle="bold" />
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
@@ -147,32 +151,33 @@
                     android:layout_height="@dimen/_32sdp">
 
                     <com.example.speedtest_rework.common.custom_view.GradientText
-                        android:visibility="gone"
                         android:id="@+id/tv_upload_value"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_gravity="bottom"
                         android:text="0"
-                        app:colorFirst="@color/gradient_orange_end"
-                        app:colorSecond="@color/gradient_orange_start"
                         android:textSize="@dimen/_24sdp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:visibility="gone"
+                        app:colorFirst="@color/gradient_orange_end"
+                        app:colorSecond="@color/gradient_orange_start" />
+
                     <ImageView
                         android:id="@+id/placeholder_upload"
-                        android:layout_marginBottom="2dp"
-                        android:layout_gravity="bottom"
-                        android:src="@drawable/ic_line"
                         android:layout_width="@dimen/_25sdp"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_marginBottom="2dp"
+                        android:src="@drawable/ic_line" />
 
                     <TextView
-                        android:textAlignment="gravity"
                         android:id="@+id/tv_upload_currency"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom"
                         android:paddingStart="@dimen/_4sdp"
                         android:text="@string/Mbps"
+                        android:textAlignment="gravity"
                         android:textColor="@color/gray_400"
                         android:textSize="12dp" />
                 </androidx.appcompat.widget.LinearLayoutCompat>
@@ -361,11 +366,11 @@
             android:id="@+id/tv_connecting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:colorFirst="@color/gradient_green_start"
-            app:colorSecond="@color/gradient_green_end"
             android:text="@string/connecting"
             android:textSize="@dimen/_16sdp"
             android:visibility="gone"
+            app:colorFirst="@color/gradient_green_start"
+            app:colorSecond="@color/gradient_green_end"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -383,14 +388,14 @@
             app:sv_backgroundCircleColor="@android:color/transparent"
             app:sv_indicator="KiteIndicator"
             app:sv_markStyle="ROUND"
-            app:sv_withTremble="false"
             app:sv_marksNumber="0"
             app:sv_speedTextColor="@android:color/transparent"
             app:sv_speedometerWidth="@dimen/_17sdp"
+            app:sv_textColor="@color/white"
             app:sv_tickNumber="11"
             app:sv_tickRotation="false"
-            app:sv_textColor="@color/white"
-            app:sv_unit="" />
+            app:sv_unit=""
+            app:sv_withTremble="false" />
 
 
         <TextView

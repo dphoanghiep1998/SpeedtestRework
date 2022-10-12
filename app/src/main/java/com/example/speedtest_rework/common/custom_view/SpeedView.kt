@@ -9,6 +9,8 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Looper
+import android.transition.AutoTransition
+import android.transition.TransitionManager
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -34,10 +36,6 @@ import com.example.speedtest_rework.core.serverSelector.TestPoint
 import com.example.speedtest_rework.data.model.HistoryModel
 import com.example.speedtest_rework.databinding.LayoutSpeedviewBinding
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
-import java.math.RoundingMode
-import java.text.DecimalFormat
-import kotlin.math.max
-import kotlin.math.roundToInt
 
 
 class SpeedView(
@@ -181,54 +179,36 @@ class SpeedView(
     }
 
     fun prepareViewSpeedTest() {
+        binding.placeholderDownload.visibility = VISIBLE
+        binding.placeholderUpload.visibility = VISIBLE
+        binding.tvDownloadValue.visibility = GONE
+        binding.tvUploadValue.visibility = GONE
         changeUnitType()
         countDownTimer = object : CountDownTimer(4000, 1000) {
             override fun onTick(l: Long) {
                 if (l <= 1000) {
-                    val animation = ArcAnimation(binding.speedView)
-                    animation.duration = 1000
-                    animation.setAnimationListener(object : Animation.AnimationListener {
-                        override fun onAnimationStart(animation: Animation) {
-                            binding.speedView.visibility = View.VISIBLE
-                        }
-
-                        override fun onAnimationEnd(animation: Animation) {}
-                        override fun onAnimationRepeat(animation: Animation) {}
-                    })
-                    binding.speedView.startAnimation(animation)
+                    showSpeedView()
 //                    binding.speedView.showArc()
-                    YoYo.with(Techniques.FadeIn).onStart {
-                        binding.containerSpeed.visibility = View.VISIBLE
-                    }.playOn(binding.containerSpeed)
-                    YoYo.with(Techniques.FadeIn).onStart {
-                        binding.tvSpeedValue.visibility = View.VISIBLE
-                    }.playOn(binding.tvSpeedValue)
+                    showContainerSpeed()
+                    showTvSpeed()
                 } else if (l <= 2000) {
                     if (type == ConnectionType.UNKNOWN) {
                         Toast.makeText(context, "No connection", Toast.LENGTH_SHORT).show()
                         resetView()
                         return
                     } else {
-                        YoYo.with(Techniques.FadeOut).onEnd {
-                            binding.loading.visibility = View.GONE
-                        }.playOn(binding.loading)
-                        YoYo.with(Techniques.FadeOut).onEnd {
-                            binding.tvConnecting.visibility = View.GONE
-                        }.playOn(binding.tvConnecting)
-                        YoYo.with(Techniques.SlideInDown).onStart {
-                            binding.topView.visibility = View.VISIBLE
-                        }.playOn(binding.topView)
+                        hideLoading()
+                        hideTvConnecting()
+                        if (binding.topView.visibility != VISIBLE) {
+                            showTopView()
+                            TransitionManager.beginDelayedTransition(binding.testBackground, AutoTransition())
+                        }
                     }
                 } else if (l <= 3000) {
-                    YoYo.with(Techniques.FadeIn).onStart {
-                        binding.loading.visibility = View.VISIBLE
-                    }.playOn(binding.loading)
+                    showLoading()
                 } else if (l <= 4000) {
-                    binding.btnStart.isEnabled = false
-                    YoYo.with(Techniques.FadeOut).playOn(binding.btnStartContainer)
-                    YoYo.with(Techniques.SlideInRight).onStart {
-                        binding.tvConnecting.visibility = View.VISIBLE
-                    }.playOn(binding.tvConnecting)
+                    hideBtnStart()
+                    showTvConnecting()
                 }
             }
 
@@ -237,6 +217,92 @@ class SpeedView(
             }
         }
         countDownTimer?.start()
+    }
+
+    private fun showSpeedView() {
+        val animation = ArcAnimation(binding.speedView)
+        animation.duration = 1000
+        animation.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationStart(animation: Animation) {
+                binding.speedView.visibility = View.VISIBLE
+            }
+
+            override fun onAnimationEnd(animation: Animation) {}
+            override fun onAnimationRepeat(animation: Animation) {}
+        })
+        binding.speedView.startAnimation(animation)
+    }
+
+    private fun showContainerSpeed() {
+        YoYo.with(Techniques.FadeIn).onStart {
+            binding.containerSpeed.visibility = View.VISIBLE
+        }.playOn(binding.containerSpeed)
+    }
+
+    private fun hideContainerSpeed() {
+        binding.containerSpeed.visibility = View.GONE
+    }
+
+    private fun showTvSpeed() {
+        YoYo.with(Techniques.FadeIn).onStart {
+            binding.tvSpeedValue.visibility = View.VISIBLE
+        }.playOn(binding.tvSpeedValue)
+    }
+
+    private fun hideLoading() {
+        YoYo.with(Techniques.FadeOut).onEnd {
+            binding.loading.visibility = View.GONE
+        }.playOn(binding.loading)
+    }
+
+    private fun showLoading() {
+        YoYo.with(Techniques.FadeIn).onStart {
+            binding.loading.visibility = View.VISIBLE
+        }.playOn(binding.loading)
+    }
+
+    private fun hideBtnStart() {
+        binding.btnStart.isEnabled = false
+        YoYo.with(Techniques.FadeOut).onEnd {
+            binding.btnStartContainer.visibility = GONE
+        }.playOn(binding.btnStartContainer)
+    }
+
+    private fun showBtnStart() {
+        binding.btnStart.isEnabled = true
+        YoYo.with(Techniques.FadeIn).onStart {
+            binding.btnStartContainer.visibility = VISIBLE
+
+        }.playOn(binding.btnStartContainer)
+    }
+
+    private fun showTvConnecting() {
+        YoYo.with(Techniques.SlideInRight).onStart {
+            binding.tvConnecting.visibility = View.VISIBLE
+        }.playOn(binding.tvConnecting)
+    }
+
+    private fun hideTvConnecting() {
+        YoYo.with(Techniques.FadeOut).onEnd {
+            binding.tvConnecting.visibility = View.GONE
+        }.playOn(binding.tvConnecting)
+    }
+
+    private fun hideTopView() {
+//        TransitionManager.beginDelayedTransition(binding.topView, AutoTransition())
+//        binding.topView.visibility = GONE
+        YoYo.with(Techniques.SlideOutUp).onStart {
+            binding.topView.visibility = View.GONE
+        }.playOn(binding.topView)
+    }
+
+    private fun showTopView() {
+//        TransitionManager.beginDelayedTransition(binding.topView, AutoTransition())
+//        binding.topView.visibility = VISIBLE
+        YoYo.with(Techniques.SlideInDown).onStart {
+            binding.topView.visibility = View.VISIBLE
+        }.playOn(binding.topView)
+
     }
 
     fun runSpeedTest() {
@@ -274,6 +340,7 @@ class SpeedView(
                         binding.placeholderUpload.visibility = GONE
                         binding.placeholderUpload.clearAnimation()
                         binding.tvUploadValue.text = format(convert(ul))
+                        binding.tvUploadValue.visibility = View.VISIBLE
                         binding.speedView.speedTo(0f, 500L)
                         binding.speedView.withTremble = false
                         binding.tvSpeedValue.text = context.getString(R.string.zero_value)
@@ -362,6 +429,26 @@ class SpeedView(
 
     }
 
+    fun onScanningDone() {
+        binding.iconSpeedValue.setImageDrawable(
+            ContextCompat.getDrawable(
+                context,
+                R.drawable.ic_download
+            )
+        )
+        binding.speedView.stop()
+        binding.speedView.setState("download")
+        showBtnStart()
+        binding.placeholderUpload.clearAnimation()
+        binding.placeholderDownload.clearAnimation()
+        binding.btnStart.isEnabled = true
+        binding.tvSpeedValue.text = context.getString(R.string.zero_value_dec)
+        binding.tvSpeedValue.visibility = View.GONE
+        hideContainerSpeed()
+        binding.speedView.visibility = GONE
+
+    }
+
     fun resetView() {
         if (speedTest != null) {
             speedTest?.abort()
@@ -376,29 +463,29 @@ class SpeedView(
             )
         )
         binding.speedView.stop()
+        binding.speedView.setState("download")
+        hideTopView()
+
+        binding.tvDownloadValue.visibility = GONE
         binding.placeholderDownload.visibility = VISIBLE
+        binding.placeholderDownload.clearAnimation()
+
+        binding.tvUploadValue.visibility = GONE
         binding.placeholderUpload.visibility = VISIBLE
         binding.placeholderUpload.clearAnimation()
-        binding.placeholderDownload.clearAnimation()
-        binding.speedView.setState("download")
+
         binding.tvSpeedValue.text = context.getString(R.string.zero_value_dec)
-        binding.tvDownloadValue.visibility = GONE
-        binding.tvUploadValue.visibility = GONE
+        binding.tvSpeedValue.visibility = View.GONE
+
         binding.tvPingCount.text = context.getString(R.string.zero_value)
         binding.tvJitterCount.text = context.getString(R.string.zero_value)
-        YoYo.with(Techniques.FadeOut).onStart {
-            binding.topView.visibility = View.GONE
-        }.playOn(binding.topView)
-        YoYo.with(Techniques.FadeIn).playOn(binding.btnStartContainer)
-        binding.btnStartContainer.visibility = View.VISIBLE
-        binding.loading.visibility = View.GONE
-        binding.tvConnecting.visibility = View.GONE
-        binding.speedView.visibility = View.GONE
-        binding.tvSpeedValue.visibility = View.GONE
-        binding.containerSpeed.visibility = View.GONE
-        binding.btnStart.isEnabled = true
-    }
 
+        binding.loading.visibility = GONE
+        binding.tvConnecting.visibility = GONE
+        binding.containerSpeed.visibility = GONE
+        binding.speedView.visibility = GONE
+        showBtnStart()
+    }
 
 
     private fun convertMbpsToMbs(value: Double): Double {

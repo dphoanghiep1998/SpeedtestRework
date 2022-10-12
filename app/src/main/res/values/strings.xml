@@ -80,7 +80,7 @@
     <string name="signal_normal">NORMAL</string>
     <string name="signal_strong">STRONG</string>
     <string name="isp">ISP</string>
-    <string name="scan_again">TEST AGAIN</string>
+    <string name="scan_again">Test Again</string>
     <string name="connection_name">SSID</string>
     <string name="internal_ip">Internal IP</string>
     <string name="external_ip">External IP</string>

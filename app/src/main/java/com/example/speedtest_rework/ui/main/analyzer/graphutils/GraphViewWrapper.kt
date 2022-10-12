@@ -108,7 +108,7 @@ class GraphViewWrapper(
         val legendRenderer = graphView.legendRenderer
         legendRenderer.resetStyles()
         legendRenderer.width = 0
-        legendRenderer.textSize = graphView.titleTextSize
+            legendRenderer.textSize = graphView.titleTextSize
         legendRenderer.textColor = Color.WHITE
         graphLegend.display(legendRenderer)
     }
