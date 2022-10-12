@@ -44,6 +44,7 @@ kapt {
 
 dependencies {
     implementation project(path: ':speedviewlib')
+    implementation 'androidx.preference:preference-ktx:1.2.0'
     def room_version = "2.4.3"
     def lifecycle_version = "2.6.0-alpha01"
     def lottieVersion = "3.4.0"
