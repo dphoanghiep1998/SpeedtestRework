@@ -9,16 +9,16 @@
     <string name="Loading">Loading</string>
     <string name="YES">YES</string>
     <string name="NO">NO</string>
-    <string name="zero_value_dec">0.00</string>
-    <string name="zero_value">0</string>
-    <string name="val_100">100</string>
-    <string name="val_10">10</string>
-    <string name="val_50">50</string>
-    <string name="val_500">500</string>
-    <string name="val_1000">1000</string>
-    <string name="val_5000">5000</string>
-    <string name="val_10000">10000</string>
-    <string name="val_15000">15000</string>
+    <string name="zero_value_dec" translatable="false">0.00</string>
+    <string name="zero_value" translatable="false">0</string>
+    <string name="val_100" translatable="false">100</string>
+    <string name="val_10" translatable="false">10</string>
+    <string name="val_50" translatable="false">50</string>
+    <string name="val_500" translatable="false">500</string>
+    <string name="val_1000" translatable="false">1000</string>
+    <string name="val_5000" translatable="false">5000</string>
+    <string name="val_10000" translatable="false">10000</string>
+    <string name="val_15000" translatable="false">15000</string>
 
     <!--    Bottom Nav    -->
     <string name="speed">Speed</string>
@@ -26,7 +26,7 @@
     <string name="vpn">Vpn</string>
     <string name="result_bottom">Results</string>
     <!--    Unit    -->
-    <string name="Mbps" translatable="false">Mpbs</string>
+    <string name="Mbps" translatable="false">Mbps</string>
     <string name="Mbs" translatable="false">MB/s</string>
     <string name="Kbs" translatable="false">kB/s</string>
     <string name="ms" translatable="false">ms</string>
@@ -59,7 +59,7 @@
     <string name="open_setting">OPEN SETTING</string>
     <string name="no_permission">To use this feature, please accept location permission on your device</string>
     <string name="location_permission">Location permission</string>
-    <string name="wifi_standard_legacy">"Wi-Fi 802.11a/b/g"</string>
+    <string name="wifi_standard_legacy" translatable="false">"Wi-Fi 802.11a/b/g"</string>
     <string name="wifi_standard_n" translatable="false">"Wi-Fi 802.11n"</string>
     <string name="wifi_standard_ac" translatable="false">"Wi-Fi 802.11ac"</string>
     <string name="wifi_standard_ax" translatable="false">"Wi-Fi 802.11ax"</string>
@@ -96,6 +96,12 @@
     <string name="ping">Ping</string>
     <string name="jitter">Jitter</string>
     <string name="loss">Loss</string>
+
+    <!--    Share Preference-->
+    <string name="unit_preference" translatable="false">unit_preference</string>
+    <string name="unit_value_preference" translatable="false">unit_value_preference</string>
+    <string name="channel_id">1</string>
+    <string name="channel_name">channel_name</string>
 
 
 </resources>

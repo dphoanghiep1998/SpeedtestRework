@@ -35,6 +35,7 @@ import com.example.speedtest_rework.core.SpeedTest
 import com.example.speedtest_rework.core.serverSelector.TestPoint
 import com.example.speedtest_rework.data.model.HistoryModel
 import com.example.speedtest_rework.databinding.LayoutSpeedviewBinding
+import com.example.speedtest_rework.viewmodel.ScanStatus
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
 
 
@@ -136,8 +137,8 @@ class SpeedView(
                         )
                     }
                     MotionEvent.ACTION_UP -> {
-                        binding.btnStart.scaleX = 1.3f
-                        binding.btnStart.scaleY = 1.3f
+                        binding.btnStart.scaleX = 1.1f
+                        binding.btnStart.scaleY = 1.1f
                         binding.btnStart.addValueCallback(
                             KeyPath("**"), LottieProperty.COLOR_FILTER
                         ) { null }
@@ -145,19 +146,19 @@ class SpeedView(
                             Toast.makeText(context, "No connectivity!", Toast.LENGTH_SHORT).show()
                             return true
                         }
-                        viewModel?.setIsScanning(true)
+                        viewModel?.setScanStatus(ScanStatus.SCANNING)
                         prepareViewSpeedTest()
                     }
                     MotionEvent.ACTION_CANCEL -> {
-                        binding.btnStart.scaleX = 1.3f
-                        binding.btnStart.scaleY = 1.3f
+                        binding.btnStart.scaleX = 1.1f
+                        binding.btnStart.scaleY = 1.1f
                         binding.btnStart.addValueCallback(
                             KeyPath("**"), LottieProperty.COLOR_FILTER
                         ) { null }
                     }
                     MotionEvent.ACTION_OUTSIDE -> {
-                        binding.btnStart.scaleX = 1.3f
-                        binding.btnStart.scaleY = 1.3f
+                        binding.btnStart.scaleX = 1.1f
+                        binding.btnStart.scaleY = 1.1f
                         binding.btnStart.addValueCallback(
                             KeyPath("**"), LottieProperty.COLOR_FILTER
                         ) { null }
@@ -201,7 +202,10 @@ class SpeedView(
                         hideTvConnecting()
                         if (binding.topView.visibility != VISIBLE) {
                             showTopView()
-                            TransitionManager.beginDelayedTransition(binding.testBackground, AutoTransition())
+                            TransitionManager.beginDelayedTransition(
+                                binding.testBackground,
+                                AutoTransition()
+                            )
                         }
                     }
                 } else if (l <= 3000) {
@@ -362,7 +366,7 @@ class SpeedView(
             override fun onEnd() {
                 (context as Activity).runOnUiThread {
                     viewModel?.insertNewHistoryAction(testModel!!)
-                    viewModel?.setIsScanning(false)
+                    viewModel?.setScanStatus(ScanStatus.DONE)
                     binding.speedView.stop()
                     Handler(Looper.getMainLooper()).postDelayed({
                         val bundle = Bundle()
@@ -377,7 +381,7 @@ class SpeedView(
 
             override fun onCriticalFailure(err: String?) {
                 (context as Activity).runOnUiThread {
-                    viewModel?.setIsScanning(false)
+                    viewModel?.setScanStatus(ScanStatus.HARD_RESET)
                 }
             }
         })

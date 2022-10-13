@@ -7,9 +7,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.activityViewModels
-import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.widget.ViewPager2
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
@@ -17,13 +17,13 @@ import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.fragment.BaseFragment
 import com.example.speedtest_rework.common.Constant
 import com.example.speedtest_rework.databinding.FragmentMainBinding
+import com.example.speedtest_rework.services.AppForegroundService
 import com.example.speedtest_rework.ui.main.analyzer.FragmentAnalyzer
 import com.example.speedtest_rework.ui.main.result_history.FragmentResults
 import com.example.speedtest_rework.ui.main.speedtest.FragmentSpeedTest
-import com.example.speedtest_rework.ui.main.vpn.FragmentRoot
 import com.example.speedtest_rework.ui.viewpager.ViewPagerAdapter
+import com.example.speedtest_rework.viewmodel.ScanStatus
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
-import kotlin.math.log
 
 class FragmentMain : BaseFragment() {
     private lateinit var binding: FragmentMainBinding
@@ -36,6 +36,7 @@ class FragmentMain : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentMainBinding.inflate(layoutInflater, container, false)
+        changeBackPressCallBack()
         initView()
         observeIsScanning()
         observeHardReset()
@@ -52,7 +53,7 @@ class FragmentMain : BaseFragment() {
 
     private fun initButton() {
         binding.imvStop.setOnClickListener {
-            viewModel.setHardReset(true)
+            viewModel.setScanStatus(ScanStatus.HARD_RESET)
         }
     }
 
@@ -68,12 +69,8 @@ class FragmentMain : BaseFragment() {
                     binding.viewPager.currentItem = 1
                     return@setOnItemSelectedListener true
                 }
-                R.id.vpn -> {
-                    binding.viewPager.currentItem = 2
-                    return@setOnItemSelectedListener true
-                }
                 R.id.history -> {
-                    binding.viewPager.currentItem = 3
+                    binding.viewPager.currentItem = 2
                     return@setOnItemSelectedListener true
                 }
             }
@@ -90,18 +87,22 @@ class FragmentMain : BaseFragment() {
                 )
             }
         }
-        binding.imvBack.setOnClickListener { binding.drawerContainer.close() }
-        binding.containerFeedback.setOnClickListener { openLink("http://www.google.com") }
-        binding.containerPolicy.setOnClickListener { openLink("http://www.facebook.com") }
-        binding.containerShare.setOnClickListener { this.shareApp() }
-        binding.containerRate.setOnClickListener { this.rateApp() }
+        binding.containerFeedback.root.setOnClickListener { openLink("http://www.google.com") }
+        binding.containerPolicy.root.setOnClickListener { openLink("http://www.facebook.com") }
+        binding.containerShare.root.setOnClickListener { this.shareApp() }
+        binding.containerRate.root.setOnClickListener { this.rateApp() }
+
+        binding.containerTest.setOnClickListener {
+            val intent = Intent(requireContext(), AppForegroundService::class.java)
+            requireActivity().startService(intent)
+        }
     }
+
 
     private fun initViewPager() {
         val fragmentList = arrayListOf(
             FragmentSpeedTest(),
             FragmentAnalyzer(),
-            FragmentRoot(),
             FragmentResults()
         )
         val adapter = ViewPagerAdapter(
@@ -111,17 +112,6 @@ class FragmentMain : BaseFragment() {
         binding.viewPager.adapter = adapter
 
         binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageScrollStateChanged(state: Int) {
-                super.onPageScrollStateChanged(state)
-                // Called when the scroll state changes (scroll started - ended)
-                if (state == ViewPager.SCROLL_STATE_IDLE) {
-
-                    Log.d(
-                        "current pos_scrolled",
-                        "\n" + "\t\t" + "current pos SCROLLED FINISH = " + binding.viewPager.currentItem
-                    );
-                }
-            }
 
             override fun onPageSelected(position: Int) {
                 Log.d("TAG", "onPageSelected: $position ")
@@ -131,8 +121,7 @@ class FragmentMain : BaseFragment() {
                 when (position) {
                     0 -> binding.tvTitle.text = getString(R.string.speed_test_title)
                     1 -> binding.tvTitle.text = getString(R.string.wifi_analyzer_title)
-                    2 -> binding.tvTitle.text = getString(R.string.vpn_title)
-                    3 -> binding.tvTitle.text = getString(R.string.results_title)
+                    2 -> binding.tvTitle.text = getString(R.string.results_title)
                     else -> binding.tvTitle.text = getString(R.string.speed_test_title)
                 }
             }
@@ -211,8 +200,8 @@ class FragmentMain : BaseFragment() {
     }
 
     private fun observeIsScanning() {
-        viewModel._isScanning.observe(viewLifecycleOwner) {
-            if (it) {
+        viewModel.mScanStatus.observe(viewLifecycleOwner) {
+            if (it == ScanStatus.SCANNING) {
                 hideBottomTabWhenScan()
                 showStopBtn()
             } else {
@@ -223,8 +212,8 @@ class FragmentMain : BaseFragment() {
     }
 
     private fun observeHardReset() {
-        viewModel.isHardReset.observe(viewLifecycleOwner) {
-            if (!it) {
+        viewModel.mScanStatus.observe(viewLifecycleOwner) {
+            if (it == ScanStatus.SCANNING) {
                 hideBottomTabWhenScan()
                 showStopBtn()
             } else {
@@ -234,5 +223,17 @@ class FragmentMain : BaseFragment() {
         }
     }
 
-
+    private fun changeBackPressCallBack() {
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (binding.drawerContainer.isDrawerOpen(GravityCompat.START)) {
+                        binding.drawerContainer.close()
+                    } else {
+                        activity?.finish()
+                    }
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+    }
 }

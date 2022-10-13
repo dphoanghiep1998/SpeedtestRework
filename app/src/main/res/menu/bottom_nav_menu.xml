@@ -9,10 +9,6 @@
         android:icon="@drawable/ic_wifi_analyzer"
         android:title="@string/wifi_analyzer" />
     <item
-        android:id="@+id/vpn"
-        android:icon="@drawable/ic_vpn"
-        android:title="@string/vpn"/>
-    <item
         android:id="@+id/history"
         android:icon="@drawable/ic_result"
         android:title="@string/result_bottom" />

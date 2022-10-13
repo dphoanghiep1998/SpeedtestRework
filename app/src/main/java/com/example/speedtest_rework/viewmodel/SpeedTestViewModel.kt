@@ -18,29 +18,24 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+
 @HiltViewModel
 class SpeedTestViewModel @Inject constructor(private val appRepository: AppRepository) :
     BaseViewModel() {
 
     var unitType = MutableLiveData(UnitType.MBPS)
-
     var isMultiTaskDone: MutableLiveData<Boolean> = MutableLiveData()
     var addressInfoList: MutableList<AddressInfo> = mutableListOf()
     var currentNetworkInfo: CurrentNetworkInfo = CurrentNetworkInfo()
 
 
-    private var isScanning = MutableLiveData<Boolean>()
-    val _isScanning: LiveData<Boolean>
-        get() = isScanning
-
-    fun setIsScanning(status: Boolean) {
-        isScanning.value = status
+    private var scanStatus = MutableLiveData<ScanStatus>()
+    val mScanStatus:LiveData<ScanStatus>
+        get() = scanStatus
+    fun setScanStatus(status:ScanStatus){
+        scanStatus.value = status
     }
 
-    var isHardReset = MutableLiveData<Boolean>()
-    fun setHardReset(status: Boolean) {
-        isHardReset.postValue(status)
-    }
 
 
     private var isPermissionGranted = MutableLiveData<Boolean>()

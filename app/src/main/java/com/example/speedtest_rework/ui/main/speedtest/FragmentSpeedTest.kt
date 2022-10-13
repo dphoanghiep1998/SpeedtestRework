@@ -11,6 +11,7 @@ import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.fragment.BaseFragment
+import com.example.speedtest_rework.common.AppSharePreference
 import com.example.speedtest_rework.common.Constant
 import com.example.speedtest_rework.common.NetworkUtils
 import com.example.speedtest_rework.common.custom_view.ConnectionType
@@ -20,6 +21,8 @@ import com.example.speedtest_rework.core.getIP.CurrentNetworkInfo
 import com.example.speedtest_rework.core.serverSelector.TestPoint
 import com.example.speedtest_rework.data.model.HistoryModel
 import com.example.speedtest_rework.databinding.FragmentSpeedTestBinding
+import com.example.speedtest_rework.ui.main.FragmentMain
+import com.example.speedtest_rework.viewmodel.ScanStatus
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
 import java.util.*
 
@@ -41,8 +44,7 @@ class FragmentSpeedTest : BaseFragment() {
         observeIsLoading()
         observeConnectivityChanged()
         observerMultiTaskDone()
-        observeIsScanning()
-        observeHardReset()
+        observeScanStatus()
         return binding.root
     }
 
@@ -93,14 +95,29 @@ class FragmentSpeedTest : BaseFragment() {
         val groupUnit = listOf(binding.tvMbpsType, binding.tvMbsType, binding.tvKbsType)
         val groupValue = listOf(binding.smallValue, binding.mediumValue, binding.highestValue)
         //init
-        selectView(binding.tvMbpsType)
-        selectView(binding.smallValue)
-        setUnitType(UnitType.values()[0])
-        setMaxValue(groupValue[0].text.toString())
+        groupUnit.forEachIndexed { index, textView ->
+            if (textView.text == getUnitTypeFromPref()) {
+                selectView(textView)
+                setUnitType(UnitType.values()[index])
+                valueWhenUnitSelected(UnitType.values()[index])
+            } else {
+                unSelectView(textView)
+            }
+        }
+        groupValue.forEachIndexed { index, textView ->
+            if (textView.text == getUnitValueFromPref().toString()) {
+                selectView(textView)
+                setMaxValue(textView.text.toString())
+            } else {
+                unSelectView(textView)
+            }
+        }
+
 
         //select unit type and max value speed view
         groupUnit.forEachIndexed { index, item ->
             item.setOnClickListener {
+                saveUnitTypeToPref(item.text.toString())
                 //highlight text type
                 selectView(it)
                 //highlight text value index 0
@@ -129,6 +146,7 @@ class FragmentSpeedTest : BaseFragment() {
             item.setOnClickListener {
                 selectViewValue(it)
                 setMaxValue(groupValue[index].text.toString())
+                saveUnitValueToPref(item.text.toString())
                 groupValue.filter { fItem ->
                     fItem != item
                 }.forEach { it1 ->
@@ -137,6 +155,28 @@ class FragmentSpeedTest : BaseFragment() {
             }
         }
 
+    }
+
+    private fun getUnitTypeFromPref(): String {
+        return AppSharePreference.INSTANCE.getUnitType(
+            R.string.unit_preference,
+            getString(R.string.Mbps)
+        )
+    }
+
+    private fun saveUnitTypeToPref(value: String) {
+        AppSharePreference.INSTANCE.saveUnitType(R.string.unit_preference, value)
+    }
+
+    private fun getUnitValueFromPref(): String {
+        return AppSharePreference.INSTANCE.getUnitValue(
+            R.string.unit_value_preference,
+            getString(R.string.val_100)
+        )
+    }
+
+    private fun saveUnitValueToPref(value: String) {
+        AppSharePreference.INSTANCE.saveUnitValue(R.string.unit_value_preference, value)
     }
 
     private fun valueWhenUnitSelected(unit: UnitType) {
@@ -187,7 +227,7 @@ class FragmentSpeedTest : BaseFragment() {
         try {
             if (viewModel.isError.value == true) {
                 binding.clSpeedview.setData(testPoint!!, ConnectionType.UNKNOWN)
-                if (viewModel._isScanning.value == true) {
+                if (viewModel.mScanStatus.value == ScanStatus.SCANNING) {
                     binding.clSpeedview.resetView()
                 }
                 return
@@ -305,8 +345,8 @@ class FragmentSpeedTest : BaseFragment() {
             binding.tvWifiName.text = getString(R.string.no_connection)
             binding.tvIspName.text = getString(R.string.no_connection_isp)
             binding.clSpeedview.setData(ConnectionType.UNKNOWN)
-            if (viewModel._isScanning.value == true) {
-                viewModel.setIsScanning(false)
+            if (viewModel.mScanStatus.value == ScanStatus.SCANNING) {
+                viewModel.setScanStatus(ScanStatus.HARD_RESET)
             }
         }
     }
@@ -320,7 +360,7 @@ class FragmentSpeedTest : BaseFragment() {
         navController.currentBackStackEntry?.savedStateHandle?.getLiveData<Boolean>(Constant.KEY_SCAN_AGAIN)
             ?.observe(viewLifecycleOwner) {
                 if (it) {
-                    viewModel.setIsScanning(true)
+                    viewModel.setScanStatus(ScanStatus.SCANNING)
                     binding.clSpeedview.prepareViewSpeedTest()
                 }
             }
@@ -333,9 +373,9 @@ class FragmentSpeedTest : BaseFragment() {
     }
 
 
-    private fun observeIsScanning() {
-        viewModel._isScanning.observe(viewLifecycleOwner) {
-            if (!it) {
+    private fun observeScanStatus() {
+        viewModel.mScanStatus.observe(viewLifecycleOwner) {
+            if (it == ScanStatus.DONE) {
                 binding.clSpeedview.onScanningDone()
 
                 YoYo.with(Techniques.SlideInLeft).duration(300L).onStart {
@@ -345,20 +385,14 @@ class FragmentSpeedTest : BaseFragment() {
                     }.playOn(binding.inforHidden)
                 }
                     .playOn(binding.containerExpandView)
-            } else {
+            } else if (it == ScanStatus.SCANNING) {
                 YoYo.with(Techniques.SlideOutLeft).duration(300L).onEnd {
                     YoYo.with(Techniques.FadeIn).duration(100L).onStart {
                         binding.inforHidden.visibility = View.VISIBLE
                     }.playOn(binding.inforHidden)
                 }
                     .playOn(binding.containerExpandView)
-            }
-        }
-    }
-
-    private fun observeHardReset() {
-        viewModel.isHardReset.observe(viewLifecycleOwner) {
-            if (it) {
+            } else {
                 binding.clSpeedview.resetView()
                 YoYo.with(Techniques.SlideInLeft).duration(300L).onStart {
                     YoYo.with(Techniques.FadeOut).duration(100L).onEnd {
@@ -370,6 +404,4 @@ class FragmentSpeedTest : BaseFragment() {
             }
         }
     }
-
-
 }

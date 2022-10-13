@@ -4,11 +4,10 @@
         <layer-list>
             <item android:top="@dimen/_4sdp" android:left="@dimen/_4sdp" android:end="@dimen/_4sdp" android:bottom="@dimen/_4sdp">
                 <shape android:shape="oval" android:useLevel="false">
-                    <solid android:color="@color/gray_400" />
-                    <size android:width="@dimen/_80sdp" android:height="@dimen/_80sdp" />
+                    <solid android:color="@color/white" />
+                    <size android:width="@dimen/_20sdp" android:height="@dimen/_20sdp" />
                 </shape>
             </item>
-            <item android:width="@dimen/_30sdp" android:height="@dimen/_30sdp" android:drawable="@drawable/ic_powder_inactive" android:gravity="center" />
         </layer-list>
     </item>
 
@@ -17,11 +16,10 @@
             <item android:top="@dimen/_4sdp" android:left="@dimen/_4sdp" android:end="@dimen/_4sdp" android:bottom="@dimen/_4sdp">
 
             <shape android:shape="oval" android:useLevel="false">
-                    <solid android:color="@color/gray_100" />
-                    <size android:width="@dimen/_80sdp" android:height="@dimen/_80sdp" />
+                    <solid android:color="@color/gradient_green_start" />
+                    <size android:width="@dimen/_20sdp" android:height="@dimen/_20sdp" />
                 </shape>
             </item>
-            <item android:width="@dimen/_30sdp" android:height="@dimen/_30sdp" android:drawable="@drawable/ic_powder" android:gravity="center" />
         </layer-list>
 
     </item>
