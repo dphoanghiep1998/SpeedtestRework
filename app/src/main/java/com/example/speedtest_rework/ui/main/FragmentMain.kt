@@ -93,8 +93,7 @@ class FragmentMain : BaseFragment() {
         binding.containerRate.root.setOnClickListener { this.rateApp() }
 
         binding.containerTest.setOnClickListener {
-            val intent = Intent(requireContext(), AppForegroundService::class.java)
-            requireActivity().startService(intent)
+            AppForegroundService.startMy(requireContext())
         }
     }
 

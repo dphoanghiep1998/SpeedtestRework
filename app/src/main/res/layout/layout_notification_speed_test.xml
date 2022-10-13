@@ -1,31 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/gray_800"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
     android:paddingVertical="@dimen/_10sdp"
-    android:background="@color/gray_800">
+    android:weightSum="10">
 
-    <ImageView
-        android:id="@+id/imv_logo"
-        android:layout_width="@dimen/_30sdp"
-        android:layout_height="@dimen/_30sdp"
-        android:src="@drawable/ic_permission_logo"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/container_info"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/imv_logo"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:src="@drawable/ic_permission_logo" />
+    </LinearLayout>
+
 
     <LinearLayout
         android:id="@+id/container_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_weight="6"
         android:gravity="center"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/btn_speed_test"
-        app:layout_constraintStart_toEndOf="@id/imv_logo"
-        app:layout_constraintTop_toTopOf="parent">
+        android:orientation="horizontal">
 
         <ImageView
             android:layout_width="@dimen/_15sdp"
@@ -45,7 +49,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingStart="@dimen/_4sdp"
-            android:paddingEnd="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_25sdp"
             android:text="@string/Mbps"
             android:textColor="@color/white"
             android:textSize="@dimen/_8sdp" />
@@ -73,20 +77,25 @@
             android:textSize="@dimen/_8sdp" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/btn_speed_test"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/button_background_start"
-        android:fontFamily="@font/app_font_bold"
-        android:paddingHorizontal="@dimen/_10sdp"
-        android:paddingVertical="@dimen/_4sdp"
-        android:text="@string/speed_test_title"
-        android:textSize="@dimen/_10sdp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/container_info"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_weight="2"
+        android:gravity="center">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/btn_speed_test"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_background_start"
+            android:fontFamily="@font/app_font_bold"
+            android:paddingHorizontal="@dimen/_10sdp"
+            android:paddingVertical="@dimen/_4sdp"
+            android:textColor="@color/gray_800"
+            android:text="@string/speed_test_title"
+            android:textSize="@dimen/_5sdp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+
+</LinearLayout>
