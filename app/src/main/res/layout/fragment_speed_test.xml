@@ -1,329 +1,305 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/background_main">
+    xmlns:tools="http://schemas.android.com/tools">
 
-
-    <com.example.speedtest_rework.common.custom_view.SpeedView
-        android:id="@+id/cl_speedview"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/container_expand_view"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent"
+        android:background="@color/background_main">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/infor_hidden"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cl_speedview">
 
-        <ImageView
-            android:id="@+id/imv_wifi_hidden"
-            android:layout_width="@dimen/_25sdp"
-            android:layout_height="@dimen/_25sdp"
-            android:layout_marginStart="16dp"
-            android:layout_marginBottom="@dimen/_8sdp"
-            android:paddingEnd="4dp"
-            android:src="@drawable/ic_wifi"
-            app:layout_constraintBottom_toTopOf="@id/imv_global_isp_hidden"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/gray_600" />
-
-        <TextView
-            android:id="@+id/tv_wifi_name_hidden"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxWidth="120dp"
-            android:maxLines="1"
-            android:paddingStart="8dp"
-            android:text="@string/neko"
-            android:textColor="@color/gray_400"
-            android:textSize="18dp"
-            app:layout_constraintBottom_toBottomOf="@id/imv_wifi_hidden"
-            app:layout_constraintStart_toEndOf="@id/imv_wifi_hidden"
-            app:layout_constraintTop_toTopOf="@id/imv_wifi_hidden" />
-
-        <ImageView
-            android:id="@+id/imv_global_isp_hidden"
-            android:layout_width="@dimen/_25sdp"
-            android:layout_height="@dimen/_25sdp"
-            android:src="@drawable/ic_global_isp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@id/imv_wifi_hidden"
-            app:layout_constraintTop_toBottomOf="@id/imv_wifi_hidden"
-            app:tint="@color/gray_600" />
-
-        <TextView
-            android:id="@+id/tv_isp_name_hidden"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingStart="8dp"
-            android:text="FPT TELECOM"
-            android:textColor="@color/gray_400"
-            android:textSize="16dp"
-            app:layout_constraintBottom_toBottomOf="@id/imv_global_isp_hidden"
-            app:layout_constraintStart_toEndOf="@id/imv_global_isp_hidden"
-            app:layout_constraintTop_toTopOf="@id/imv_global_isp_hidden" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/container_expand_view"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/_90sdp"
-        android:layout_marginEnd="32dp"
-        android:background="@drawable/background_gradient_config_sizing"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cl_speedview"
-        app:layout_constraintWidth_percent="0.9">
+        <com.example.speedtest_rework.common.custom_view.SpeedView
+            android:id="@+id/cl_speedview"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/container_expand_view"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:id="@+id/infor_hidden"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cl_speedview">
+
+            <ImageView
+                android:id="@+id/imv_wifi_hidden"
+                android:layout_width="@dimen/_25sdp"
+                android:layout_height="@dimen/_25sdp"
+                android:layout_marginStart="16dp"
+                android:layout_marginBottom="@dimen/_8sdp"
+                android:paddingEnd="4dp"
+                android:src="@drawable/ic_wifi"
+                app:layout_constraintBottom_toTopOf="@id/imv_global_isp_hidden"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/gray_600" />
+
+            <TextView
+                android:id="@+id/tv_wifi_name_hidden"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:paddingStart="8dp"
+                android:text="@string/neko"
+                android:textColor="@color/gray_400"
+                android:textSize="@dimen/_15sdp"
+                app:layout_constraintBottom_toBottomOf="@id/imv_wifi_hidden"
+                app:layout_constraintStart_toEndOf="@id/imv_wifi_hidden"
+                app:layout_constraintTop_toTopOf="@id/imv_wifi_hidden" />
+
+            <ImageView
+                android:id="@+id/imv_global_isp_hidden"
+                android:layout_width="@dimen/_25sdp"
+                android:layout_height="@dimen/_25sdp"
+                android:src="@drawable/ic_global_isp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@id/imv_wifi_hidden"
+                app:layout_constraintTop_toBottomOf="@id/imv_wifi_hidden"
+                app:tint="@color/gray_600" />
+
+            <TextView
+                android:id="@+id/tv_isp_name_hidden"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="8dp"
+                android:text="FPT TELECOM"
+                android:textColor="@color/gray_400"
+                android:textSize="16dp"
+                app:layout_constraintBottom_toBottomOf="@id/imv_global_isp_hidden"
+                app:layout_constraintStart_toEndOf="@id/imv_global_isp_hidden"
+                app:layout_constraintTop_toTopOf="@id/imv_global_isp_hidden" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/container_expand_view"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_90sdp"
+            android:background="@drawable/background_gradient_config_sizing"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cl_speedview"
+            app:layout_constraintWidth_percent=".9">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/container_config"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:paddingEnd="16dp"
-                app:layout_constraintStart_toStartOf="parent">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/container_infor_wifi"
+                    android:id="@+id/container_config"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:visibility="visible"
+                    android:paddingEnd="@dimen/_8sdp"
                     app:layout_constraintStart_toStartOf="parent">
 
-                    <ImageView
-                        android:id="@+id/imv_wifi"
-                        android:layout_width="@dimen/_25sdp"
-                        android:layout_height="@dimen/_25sdp"
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/container_infor_wifi"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:visibility="visible"
+                        app:layout_constraintStart_toStartOf="parent">
+
+                        <ImageView
+                            android:id="@+id/imv_wifi"
+                            android:layout_width="@dimen/_25sdp"
+                            android:layout_height="@dimen/_25sdp"
+                            android:layout_marginStart="16dp"
+                            android:paddingEnd="4dp"
+                            android:src="@drawable/ic_wifi"
+                            app:layout_constraintBottom_toTopOf="@id/imv_global_isp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tv_wifi_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:maxWidth="120dp"
+                            android:maxLines="1"
+                            android:paddingStart="8dp"
+                            android:text="@string/neko"
+                            android:textColor="@color/gray_100"
+                            app:autoSizeMaxTextSize="@dimen/_16sdp"
+                            app:autoSizeMinTextSize="@dimen/_6sdp"
+                            app:autoSizeStepGranularity="1dp"
+                            app:layout_constraintBottom_toBottomOf="@id/imv_wifi"
+                            app:layout_constraintStart_toEndOf="@id/imv_wifi"
+                            app:layout_constraintTop_toTopOf="@id/imv_wifi" />
+
+                        <ImageView
+                            android:id="@+id/imv_global_isp"
+                            android:layout_width="@dimen/_25sdp"
+                            android:layout_height="@dimen/_25sdp"
+                            android:src="@drawable/ic_global_isp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="@id/imv_wifi"
+                            app:layout_constraintTop_toBottomOf="@id/imv_wifi" />
+
+                        <TextView
+                            android:id="@+id/tv_isp_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingStart="8dp"
+                            android:text="FPT TELECOM"
+                            android:textColor="@color/gray_100"
+                            app:autoSizeMaxTextSize="@dimen/_16sdp"
+                            app:autoSizeMinTextSize="@dimen/_6sdp"
+                            app:autoSizeStepGranularity="1dp"
+                            app:layout_constraintBottom_toBottomOf="@id/imv_global_isp"
+                            app:layout_constraintStart_toEndOf="@id/imv_global_isp"
+                            app:layout_constraintTop_toTopOf="@id/imv_global_isp" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <LinearLayout
+                        android:id="@+id/container_loading"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <ProgressBar
+                            android:id="@+id/loading_infor"
+                            android:layout_width="@dimen/_30sdp"
+                            android:layout_height="@dimen/_30sdp"
+                            android:indeterminateDrawable="@drawable/custom_circle_progress" />
+
+                        <TextView
+                            android:id="@+id/tv_loading"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/_4sdp"
+                            android:text="@string/Loading"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_16sdp" />
+                    </LinearLayout>
+
+                    <androidx.constraintlayout.widget.Barrier
+                        android:id="@+id/barrier"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:barrierDirection="end"
+                        app:constraint_referenced_ids="container_infor_wifi,container_loading" />
+
+                    <View
+                        android:id="@+id/view"
+                        android:layout_width="1dp"
+                        android:layout_height="@dimen/_36sdp"
                         android:layout_marginStart="16dp"
-                        android:paddingEnd="4dp"
-                        android:src="@drawable/ic_wifi"
-                        app:layout_constraintBottom_toTopOf="@id/imv_global_isp"
-                        app:layout_constraintStart_toStartOf="parent"
+                        android:background="@drawable/ic_line_vertical"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/barrier"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
-                        android:id="@+id/tv_wifi_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:maxWidth="120dp"
-                        android:maxLines="1"
-                        android:paddingStart="8dp"
-                        android:text="@string/neko"
-                        android:textColor="@color/gray_100"
-                        app:autoSizeMaxTextSize="@dimen/_16sdp"
-                        app:autoSizeMinTextSize="@dimen/_6sdp"
-                        app:autoSizeStepGranularity="1dp"
-                        app:layout_constraintBottom_toBottomOf="@id/imv_wifi"
-                        app:layout_constraintStart_toEndOf="@id/imv_wifi"
-                        app:layout_constraintTop_toTopOf="@id/imv_wifi" />
-
-                    <ImageView
-                        android:id="@+id/imv_global_isp"
-                        android:layout_width="@dimen/_25sdp"
-                        android:layout_height="@dimen/_25sdp"
-                        android:src="@drawable/ic_global_isp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="@id/imv_wifi"
-                        app:layout_constraintTop_toBottomOf="@id/imv_wifi" />
-
-                    <TextView
-                        android:id="@+id/tv_isp_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="8dp"
-                        android:text="FPT TELECOM"
-                        android:textColor="@color/gray_100"
-                        app:autoSizeMaxTextSize="@dimen/_16sdp"
-                        app:autoSizeMinTextSize="@dimen/_6sdp"
-                        app:autoSizeStepGranularity="1dp"
-                        app:layout_constraintBottom_toBottomOf="@id/imv_global_isp"
-                        app:layout_constraintStart_toEndOf="@id/imv_global_isp"
-                        app:layout_constraintTop_toTopOf="@id/imv_global_isp" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <LinearLayout
-                    android:id="@+id/container_loading"
-                    android:layout_width="match_parent"
+                    android:id="@+id/container_config_2"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:gravity="center"
+                    android:layout_marginStart="-8dp"
+                    android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:visibility="gone">
-
-                    <ProgressBar
-                        android:id="@+id/loading_infor"
-                        android:layout_width="@dimen/_30sdp"
-                        android:layout_height="@dimen/_30sdp"
-                        android:indeterminateDrawable="@drawable/custom_circle_progress" />
-
-                    <TextView
-                        android:id="@+id/tv_loading"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/_4sdp"
-                        android:text="@string/Loading"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/_16sdp" />
-                </LinearLayout>
-
-                <androidx.constraintlayout.widget.Barrier
-                    android:id="@+id/barrier"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:barrierDirection="end"
-                    app:constraint_referenced_ids="container_infor_wifi,container_loading" />
-
-                <View
-                    android:id="@+id/view"
-                    android:layout_width="2dp"
-                    android:layout_height="@dimen/_36sdp"
-                    android:layout_marginStart="16dp"
-                    android:background="@drawable/gradient_background"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/barrier"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/container_config_2"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/container_config">
-
-                <TextView
-                    android:id="@+id/tv_mbps_type"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="0dp"
-                    android:text="Mbps"
-                    android:textColor="@color/white"
-                    app:autoSizeMaxTextSize="@dimen/_16sdp"
-                    app:autoSizeMinTextSize="@dimen/_6sdp"
-                    app:autoSizeStepGranularity="1dp"
-                    app:layout_constraintBottom_toTopOf="@id/small_value"
-                    app:layout_constraintEnd_toStartOf="@id/tv_mbps_type"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tv_mbs_type"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:text="MB/s"
-                    android:textColor="@color/white"
-                    app:autoSizeMaxTextSize="@dimen/_16sdp"
-                    app:autoSizeMinTextSize="@dimen/_6sdp"
-                    app:autoSizeStepGranularity="1dp"
-                    app:layout_constraintEnd_toStartOf="@id/tv_kbs_type"
-                    app:layout_constraintStart_toEndOf="@+id/tv_mbps_type"
-                    app:layout_constraintTop_toTopOf="@+id/tv_mbps_type" />
-
-                <TextView
-                    android:id="@+id/tv_kbs_type"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:text="kB/s"
-                    android:textColor="@color/white"
-                    app:autoSizeMaxTextSize="@dimen/_16sdp"
-                    app:autoSizeMinTextSize="@dimen/_6sdp"
-                    app:autoSizeStepGranularity="1dp"
+                    android:weightSum="10"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/tv_mbs_type"
-                    app:layout_constraintTop_toTopOf="@+id/tv_mbps_type"
+                    app:layout_constraintStart_toEndOf="@+id/container_config">
 
-                    />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="9"
+                        android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/small_value"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:text="100"
-                    android:textColor="@color/white"
-                    app:autoSizeMaxTextSize="@dimen/_16sdp"
-                    app:autoSizeMinTextSize="@dimen/_6sdp"
-                    app:autoSizeStepGranularity="1dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@id/tv_mbps_type"
-                    app:layout_constraintStart_toStartOf="@id/tv_mbps_type"
-                    app:layout_constraintTop_toBottomOf="@id/tv_mbps_type"
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:weightSum="3">
 
-                    />
 
-                <TextView
-                    android:id="@+id/medium_value"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:text="500"
-                    android:textColor="@color/white"
-                    app:autoSizeMaxTextSize="@dimen/_16sdp"
-                    app:autoSizeMinTextSize="@dimen/_6sdp"
-                    app:autoSizeStepGranularity="1dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@id/tv_mbs_type"
-                    app:layout_constraintStart_toStartOf="@id/tv_mbs_type"
-                    app:layout_constraintTop_toBottomOf="@id/tv_mbs_type"
+                            <include
+                                android:id="@+id/tv_mbps_type"
+                                layout="@layout/item_expand_view"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                app:mTitle="@{@string/Mbps}" />
 
-                    />
+                            <include
+                                android:id="@+id/tv_mbs_type"
+                                layout="@layout/item_expand_view"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                app:mTitle="@{@string/Mbs}" />
 
-                <TextView
-                    android:id="@+id/highest_value"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:text="1000"
-                    android:textColor="@color/white"
-                    app:autoSizeMaxTextSize="@dimen/_16sdp"
-                    app:autoSizeMinTextSize="@dimen/_6sdp"
-                    app:autoSizeStepGranularity="1dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@id/tv_kbs_type"
-                    app:layout_constraintStart_toStartOf="@id/tv_kbs_type"
-                    app:layout_constraintTop_toBottomOf="@id/tv_kbs_type"
+                            <include
+                                android:id="@+id/tv_kbs_type"
+                                layout="@layout/item_expand_view"
+                                android:layout_width="match_parent"
 
-                    />
-                <androidx.constraintlayout.widget.Barrier
-                    android:id="@+id/barrier1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:barrierDirection="end"
-                    app:constraint_referenced_ids="highest_value,tv_kbs_type" />
-                <View
-                    android:layout_width="2dp"
-                    android:layout_height="@dimen/_35sdp"
-                    android:layout_marginStart="@dimen/_8sdp"
-                    android:layout_marginEnd="@dimen/_4sdp"
-                    android:background="@drawable/gradient_background"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/barrier1"
-                    app:layout_constraintTop_toTopOf="parent" />
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                app:mTitle="@{@string/Kbs}" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:weightSum="3">
+
+                            <include
+                                android:id="@+id/small_value"
+                                layout="@layout/item_expand_view"
+                                android:layout_width="match_parent"
+
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                app:mTitle="@{@string/val_10}" />
+
+                            <include
+                                android:id="@+id/medium_value"
+                                layout="@layout/item_expand_view"
+                                android:layout_width="match_parent"
+
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                app:mTitle="@{@string/val_50}" />
+
+                            <include
+                                android:id="@+id/highest_value"
+                                layout="@layout/item_expand_view"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                app:mTitle="@{@string/val_100}" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <View
+                        android:visibility="gone"
+                        android:id="@+id/line2"
+                        android:layout_width="1dp"
+                        android:layout_height="@dimen/_35sdp"
+                        android:layout_marginEnd="@dimen/_8sdp"
+                        android:layout_weight="0.1"
+                        android:background="@drawable/gradient_background"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
-
+</layout>

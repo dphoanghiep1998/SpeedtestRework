@@ -79,6 +79,13 @@ class FragmentMain : BaseFragment() {
     }
 
     private fun initDrawerAction() {
+        if (AppForegroundService.isServiceRunning(
+                requireContext(),
+                AppForegroundService::class.java
+            )
+        ) {
+            binding.containerSpeedMonitor.swSwitch.isChecked = true
+        }
         binding.menu.setOnClickListener {
             with(binding) {
                 drawerContainer.openDrawer(
@@ -92,9 +99,15 @@ class FragmentMain : BaseFragment() {
         binding.containerShare.root.setOnClickListener { this.shareApp() }
         binding.containerRate.root.setOnClickListener { this.rateApp() }
 
-        binding.containerTest.setOnClickListener {
-            AppForegroundService.startMy(requireContext())
+        binding.containerSpeedMonitor.swSwitch.setOnCheckedChangeListener { item, checked ->
+            if (checked) {
+                AppForegroundService.startService(requireContext())
+            } else {
+                AppForegroundService.killService(requireContext())
+            }
         }
+
+
     }
 
 
@@ -167,16 +180,15 @@ class FragmentMain : BaseFragment() {
 
     private fun hideBottomTabWhenScan() {
         binding.viewPager.isUserInputEnabled = false
-        YoYo.with(Techniques.SlideOutDown).onEnd {
+        YoYo.with(Techniques.SlideOutDown).duration(400L).onEnd {
             binding.navBottom.visibility = View.INVISIBLE
         }.playOn(binding.navBottom)
     }
 
     private fun showBottomTabAfterScan() {
         binding.viewPager.isUserInputEnabled = true
-        YoYo.with(Techniques.SlideInUp).onStart {
+        YoYo.with(Techniques.SlideInUp).duration(400L).onStart {
             binding.navBottom.visibility = View.VISIBLE
-
         }.playOn(binding.navBottom)
     }
 

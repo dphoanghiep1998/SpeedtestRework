@@ -2,7 +2,7 @@ package com.example.speedtest_rework.common
 
 object Constant {
     const val SERVER_ENDPOINT = ""
-    const val SERVER_LIST = "https://speedtest.net/"
+    const val SERVER_LIST = "http://speedtest.net/"
     const val REQUEST_CODE_LOCATION_PERMISSION = 100
     const val PERMISSION_LOCATION_COARSE = "android.permission.ACCESS_COARSE_LOCATION"
     const val PERMISSION_LOCATION = "android.permission.ACCESS_LOCATION"

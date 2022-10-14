@@ -1,5 +1,7 @@
 package com.example.speedtest_rework.common;
 
+import static com.example.speedtest_rework.common.BuildUtilsKt.buildMinVersionM;
+
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -98,7 +100,7 @@ public class NetworkUtils {
         int downloadSpeed = 0;
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(context.CONNECTIVITY_SERVICE);
         if (isWifiConnected(context)) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (buildMinVersionM()) {
                 NetworkCapabilities nc = cm.getNetworkCapabilities(cm.getActiveNetwork());
                 downloadSpeed = nc.getLinkDownstreamBandwidthKbps();
                 return downloadSpeed;

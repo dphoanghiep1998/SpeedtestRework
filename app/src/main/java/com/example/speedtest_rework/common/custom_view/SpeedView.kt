@@ -275,9 +275,8 @@ class SpeedView(
     private fun showBtnStart() {
         binding.btnStart.isEnabled = true
         YoYo.with(Techniques.FadeIn).onStart {
-            binding.btnStartContainer.visibility = VISIBLE
-
         }.playOn(binding.btnStartContainer)
+        binding.btnStartContainer.visibility = VISIBLE
     }
 
     private fun showTvConnecting() {
@@ -469,7 +468,8 @@ class SpeedView(
         binding.speedView.stop()
         binding.speedView.setState("download")
         hideTopView()
-
+        binding.containerSpeed.visibility = GONE
+        binding.speedView.visibility = GONE
         binding.tvDownloadValue.visibility = GONE
         binding.placeholderDownload.visibility = VISIBLE
         binding.placeholderDownload.clearAnimation()
@@ -486,8 +486,7 @@ class SpeedView(
 
         binding.loading.visibility = GONE
         binding.tvConnecting.visibility = GONE
-        binding.containerSpeed.visibility = GONE
-        binding.speedView.visibility = GONE
+
         showBtnStart()
     }
 

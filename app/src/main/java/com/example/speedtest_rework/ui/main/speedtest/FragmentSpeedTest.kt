@@ -76,6 +76,7 @@ class FragmentSpeedTest : BaseFragment() {
                     binding.containerExpandView.setBackgroundResource(R.drawable.background_gradient_config)
                     layoutParams.width = ConstraintLayout.LayoutParams.MATCH_PARENT
                     binding.containerExpandView.layoutParams = layoutParams
+                    binding.line2.visibility = View.VISIBLE
                     isExpanded = true
                 }.playOn(binding.containerConfig2)
 
@@ -83,7 +84,7 @@ class FragmentSpeedTest : BaseFragment() {
                 YoYo.with(Techniques.SlideInRight).duration(400L).onStart {
                     layoutParams.width = ConstraintLayout.LayoutParams.WRAP_CONTENT
                     binding.containerExpandView.setBackgroundResource(R.drawable.background_gradient_config_sizing)
-
+                    binding.line2.visibility = View.GONE
                     binding.containerExpandView.layoutParams = layoutParams
                     isExpanded = false
                 }.playOn(binding.containerConfig2)
@@ -91,69 +92,69 @@ class FragmentSpeedTest : BaseFragment() {
             }
         }
 
-
         val groupUnit = listOf(binding.tvMbpsType, binding.tvMbsType, binding.tvKbsType)
         val groupValue = listOf(binding.smallValue, binding.mediumValue, binding.highestValue)
         //init
         groupUnit.forEachIndexed { index, textView ->
-            if (textView.text == getUnitTypeFromPref()) {
-                selectView(textView)
+            if (textView.textValue.text == getUnitTypeFromPref()) {
+                selectView(textView.line)
                 setUnitType(UnitType.values()[index])
                 valueWhenUnitSelected(UnitType.values()[index])
             } else {
-                unSelectView(textView)
+                unSelectView(textView.line)
             }
         }
         groupValue.forEachIndexed { index, textView ->
-            if (textView.text == getUnitValueFromPref().toString()) {
-                selectView(textView)
-                setMaxValue(textView.text.toString())
+            if (textView.textValue.text == getUnitValueFromPref().toString()) {
+                selectView(textView.line)
+                setMaxValue(textView.textValue.toString())
             } else {
-                unSelectView(textView)
+                unSelectView(textView.line)
             }
         }
 
 
         //select unit type and max value speed view
         groupUnit.forEachIndexed { index, item ->
-            item.setOnClickListener {
-                saveUnitTypeToPref(item.text.toString())
+            item.root.setOnClickListener {
+                saveUnitTypeToPref(item.textValue.text.toString())
                 //highlight text type
-                selectView(it)
+                selectView(item.line)
                 //highlight text value index 0
-                selectView(groupValue[0])
+                selectView(groupValue[0].line)
                 //change text value to type of unitText
                 valueWhenUnitSelected(UnitType.values()[index])
                 //change unitType
                 setUnitType(UnitType.values()[index])
                 //setMaxvalue index 0
-                setMaxValue(groupValue[0].text.toString())
+                setMaxValue(groupValue[0].textValue.text.toString())
                 //unselect other value
                 groupValue.filter { fItem ->
                     fItem != groupValue[0]
                 }.forEach { it1 ->
-                    unSelectView(it1)
+                    unSelectView(it1.line)
                 }
                 //unselect other type
                 groupUnit.filter { fItem ->
                     fItem != item
                 }.forEach { it1 ->
-                    unSelectView(it1)
+                    unSelectView(it1.line)
                 }
             }
         }
         groupValue.forEachIndexed { index, item ->
-            item.setOnClickListener {
-                selectViewValue(it)
-                setMaxValue(groupValue[index].text.toString())
-                saveUnitValueToPref(item.text.toString())
+            item.root.setOnClickListener {
+                selectViewValue(item.line)
+                setMaxValue(groupValue[index].textValue.text.toString())
+                saveUnitValueToPref(item.textValue.text.toString())
                 groupValue.filter { fItem ->
                     fItem != item
                 }.forEach { it1 ->
-                    unSelectView(it1)
+                    unSelectView(it1.line)
                 }
             }
         }
+
 
     }
 
@@ -182,21 +183,21 @@ class FragmentSpeedTest : BaseFragment() {
     private fun valueWhenUnitSelected(unit: UnitType) {
         when (unit) {
             UnitType.MBPS -> {
-                binding.smallValue.text = getString(R.string.val_100)
-                binding.mediumValue.text = getString(R.string.val_500)
-                binding.highestValue.text = getString(R.string.val_1000)
+                binding.smallValue.textValue.text = getString(R.string.val_100)
+                binding.mediumValue.textValue.text = getString(R.string.val_500)
+                binding.highestValue.textValue.text = getString(R.string.val_1000)
 
             }
 
             UnitType.MBS -> {
-                binding.smallValue.text = getString(R.string.val_10)
-                binding.mediumValue.text = getString(R.string.val_50)
-                binding.highestValue.text = getString(R.string.val_100)
+                binding.smallValue.textValue.text = getString(R.string.val_10)
+                binding.mediumValue.textValue.text = getString(R.string.val_50)
+                binding.highestValue.textValue.text = getString(R.string.val_100)
             }
             UnitType.KBS -> {
-                binding.smallValue.text = getString(R.string.val_5000)
-                binding.mediumValue.text = getString(R.string.val_10000)
-                binding.highestValue.text = getString(R.string.val_15000)
+                binding.smallValue.textValue.text = getString(R.string.val_5000)
+                binding.mediumValue.textValue.text = getString(R.string.val_10000)
+                binding.highestValue.textValue.text = getString(R.string.val_15000)
             }
         }
     }

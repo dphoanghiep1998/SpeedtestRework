@@ -1,6 +1,9 @@
 package com.example.speedtest_rework.activities
 
 import android.Manifest
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
 
 import android.content.IntentFilter
 import android.content.pm.PackageManager
@@ -44,6 +47,18 @@ class MainActivity : BaseActivity() {
     private fun initNavController() {
         navHostFragment =
             supportFragmentManager.findFragmentById(binding.navHostFragment.id) as NavHostFragment
+    }
+
+    private fun initNotificationReceiver() {
+        val receiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent?) {
+                TODO("Not yet implemented")
+            }
+
+        }
+        val intent = IntentFilter()
+        intent.addAction(getString(R.string.action_do_speed_test))
+        intent.addAction(getString(R.string.action_show_data_usage))
     }
 
 

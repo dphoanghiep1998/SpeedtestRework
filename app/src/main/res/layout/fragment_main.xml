@@ -150,27 +150,28 @@
                 <include
                     android:id="@+id/container_speed_monitor"
                     layout="@layout/item_menu_switch"
-                    app:layout_constraintTop_toBottomOf="@+id/ic_logo_menu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    app:layout_constraintTop_toBottomOf="@+id/ic_logo_menu"
                     app:mSrc="@{@drawable/ic_speed_monitor}"
                     app:mTitle="@{`Speed Monitor`}" />
 
                 <include
                     android:id="@+id/container_data_usage"
                     layout="@layout/item_menu_switch"
-                    app:layout_constraintTop_toBottomOf="@+id/container_speed_monitor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@+id/container_speed_monitor"
                     app:mSrc="@{@drawable/ic_data_usage}"
                     app:mTitle="@{`Data usage`}" />
 
                 <include
                     android:id="@+id/container_language"
                     layout="@layout/item_menu"
-                    app:layout_constraintTop_toBottomOf="@+id/container_data_usage"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@+id/container_data_usage"
                     app:mSrc="@{@drawable/ic_language}"
                     app:mTitle="@{`Languages`}" />
 
@@ -187,72 +188,44 @@
                 <include
                     android:id="@+id/container_rate"
                     layout="@layout/item_menu"
-                    app:layout_constraintTop_toBottomOf="@+id/line"
-                    android:foreground="@drawable/ripple_effect_fg"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:foreground="@drawable/ripple_effect_fg"
+                    app:layout_constraintTop_toBottomOf="@+id/line"
                     app:mSrc="@{@drawable/ic_rate_app}"
                     app:mTitle="@{@string/rate_app}" />
 
                 <include
                     android:id="@+id/container_share"
                     layout="@layout/item_menu"
-                    app:layout_constraintTop_toBottomOf="@+id/container_rate"
-                    android:foreground="@drawable/ripple_effect_fg"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:foreground="@drawable/ripple_effect_fg"
+                    app:layout_constraintTop_toBottomOf="@+id/container_rate"
                     app:mSrc="@{@drawable/ic_share_menu}"
                     app:mTitle="@{@string/share_app}" />
 
                 <include
                     android:id="@+id/container_feedback"
                     layout="@layout/item_menu"
-                    app:layout_constraintTop_toBottomOf="@+id/container_share"
-                    android:foreground="@drawable/ripple_effect_fg"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:foreground="@drawable/ripple_effect_fg"
+                    app:layout_constraintTop_toBottomOf="@+id/container_share"
                     app:mSrc="@{@drawable/ic_feedback}"
                     app:mTitle="@{@string/feedback}" />
 
                 <include
                     android:id="@+id/container_policy"
                     layout="@layout/item_menu"
-                    app:layout_constraintTop_toBottomOf="@+id/container_feedback"
-                    android:foreground="@drawable/ripple_effect_fg"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:foreground="@drawable/ripple_effect_fg"
+                    app:layout_constraintTop_toBottomOf="@+id/container_feedback"
                     app:mSrc="@{@drawable/ic_policy}"
                     app:mTitle="@{@string/policy}" />
 
-                <RelativeLayout
-                    android:id="@+id/container_test"
-                    android:layout_width="match_parent"
-                    android:layout_height="80dp"
-                    android:foreground="@drawable/ripple_effect_fg"
-                    android:orientation="horizontal"
-                    app:layout_constraintTop_toBottomOf="@+id/container_policy">
 
-                    <ImageView
-                        android:id="@+id/imv_test"
-                        android:layout_width="@dimen/_25sdp"
-                        android:layout_height="@dimen/_25sdp"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="16dp"
-                        android:src="@drawable/ic_wifi" />
-
-                    <TextView
-                        android:id="@+id/tv_test"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginStart="16dp"
-                        android:layout_toRightOf="@+id/imv_test"
-                        android:text="@string/policy"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/_14sdp" />
-
-
-                </RelativeLayout>
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

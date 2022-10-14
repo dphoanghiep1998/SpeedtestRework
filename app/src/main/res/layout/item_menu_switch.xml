@@ -53,6 +53,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_speed_monitor" />
 
         <Switch
+            android:id="@+id/sw_switch"
             android:thumb="@drawable/custom_switch_thumb"
             android:track="@drawable/custom_track"
             android:layout_width="wrap_content"

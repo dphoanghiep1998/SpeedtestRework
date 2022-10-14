@@ -19,6 +19,7 @@
     <string name="val_5000" translatable="false">5000</string>
     <string name="val_10000" translatable="false">10000</string>
     <string name="val_15000" translatable="false">15000</string>
+    <string name="key_speed_test" translatable="false">speed_test</string>
 
     <!--    Bottom Nav    -->
     <string name="speed">Speed</string>
@@ -102,6 +103,8 @@
     <string name="unit_value_preference" translatable="false">unit_value_preference</string>
     <string name="channel_id">1</string>
     <string name="channel_name">channel_name</string>
+    <string name="action_do_speed_test">do speed test</string>
+    <string name="action_show_data_usage">show data usage</string>
 
 
 </resources>
