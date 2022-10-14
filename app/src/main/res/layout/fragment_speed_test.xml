@@ -229,16 +229,14 @@
                                 layout="@layout/item_expand_view"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                app:mTitle="@{@string/Mbps}" />
+                                android:layout_weight="1" />
 
                             <include
                                 android:id="@+id/tv_mbs_type"
                                 layout="@layout/item_expand_view"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                app:mTitle="@{@string/Mbs}" />
+                                android:layout_weight="1" />
 
                             <include
                                 android:id="@+id/tv_kbs_type"
@@ -246,8 +244,7 @@
                                 android:layout_width="match_parent"
 
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                app:mTitle="@{@string/Kbs}" />
+                                android:layout_weight="1" />
 
                         </LinearLayout>
 
@@ -263,8 +260,7 @@
                                 android:layout_width="match_parent"
 
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                app:mTitle="@{@string/val_10}" />
+                                android:layout_weight="1" />
 
                             <include
                                 android:id="@+id/medium_value"
@@ -272,27 +268,25 @@
                                 android:layout_width="match_parent"
 
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                app:mTitle="@{@string/val_50}" />
+                                android:layout_weight="1" />
 
                             <include
                                 android:id="@+id/highest_value"
                                 layout="@layout/item_expand_view"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                app:mTitle="@{@string/val_100}" />
+                                android:layout_weight="1" />
                         </LinearLayout>
                     </LinearLayout>
 
                     <View
-                        android:visibility="gone"
                         android:id="@+id/line2"
                         android:layout_width="1dp"
                         android:layout_height="@dimen/_35sdp"
                         android:layout_marginEnd="@dimen/_8sdp"
                         android:layout_weight="0.1"
                         android:background="@drawable/gradient_background"
+                        android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />

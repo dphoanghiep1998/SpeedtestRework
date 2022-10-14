@@ -2,12 +2,12 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <data>
+<!--    <data>-->
 
-        <variable
-            name="mTitle"
-            type="java.lang.String" />
-    </data>
+<!--        <variable-->
+<!--            name="mTitle"-->
+<!--            type="String" />-->
+<!--    </data>-->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,7 +25,7 @@
                 android:id="@+id/text_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{mTitle}"
+                android:text="@string/Mbs"
                 android:textColor="@color/white"
                 android:maxLines="1"
                 app:autoSizeMaxTextSize="@dimen/_16sdp"

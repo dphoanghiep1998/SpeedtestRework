@@ -1,6 +1,7 @@
 package com.example.speedtest_rework.ui.main.speedtest
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -95,7 +96,16 @@ class FragmentSpeedTest : BaseFragment() {
         val groupUnit = listOf(binding.tvMbpsType, binding.tvMbsType, binding.tvKbsType)
         val groupValue = listOf(binding.smallValue, binding.mediumValue, binding.highestValue)
         //init
+        binding.tvMbpsType.textValue.text = getString(R.string.Mbps)
+        binding.tvMbsType.textValue.text = getString(R.string.Mbs)
+        binding.tvKbsType.textValue.text = getString(R.string.Kbs)
+        binding.smallValue.textValue.text = getString(R.string.val_100)
+        binding.mediumValue.textValue.text = getString(R.string.val_500)
+        binding.highestValue.textValue.text = getString(R.string.val_1000)
+
+        //setUpFirstTime
         groupUnit.forEachIndexed { index, textView ->
+            Log.d("TAG", "initExpandView: "+textView.textValue.text)
             if (textView.textValue.text == getUnitTypeFromPref()) {
                 selectView(textView.line)
                 setUnitType(UnitType.values()[index])
@@ -104,16 +114,16 @@ class FragmentSpeedTest : BaseFragment() {
                 unSelectView(textView.line)
             }
         }
-        groupValue.forEachIndexed { index, textView ->
-            if (textView.textValue.text == getUnitValueFromPref().toString()) {
+        groupValue.forEachIndexed { _, textView ->
+            if (textView.textValue.text == getUnitValueFromPref()) {
+                Log.d("TAG", "initExpandView: "+textView.textValue.text)
+
                 selectView(textView.line)
-                setMaxValue(textView.textValue.toString())
+                setMaxValue(textView.textValue.text.toString())
             } else {
                 unSelectView(textView.line)
             }
         }
-
-
         //select unit type and max value speed view
         groupUnit.forEachIndexed { index, item ->
             item.root.setOnClickListener {

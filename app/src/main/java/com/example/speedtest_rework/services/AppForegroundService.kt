@@ -12,7 +12,6 @@ import androidx.core.app.NotificationCompat
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.activities.MainActivity
 import com.example.speedtest_rework.common.buildMinVersionO
-import com.example.speedtest_rework.common.format
 import java.math.RoundingMode
 
 class AppForegroundService : Service() {
@@ -26,6 +25,9 @@ class AppForegroundService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        when(intent?.action){
+            getString(R.string.action_do_speed_test) -> generateNotification()
+        }
         generateNotification()
         return START_NOT_STICKY
     }
@@ -45,8 +47,7 @@ class AppForegroundService : Service() {
         builder.setSmallIcon(R.drawable.ic_logo_menu)
             .setCustomContentView(remoteViews).setAutoCancel(false).setShowWhen(false)
             .setOnlyAlertOnce(true)
-
-        startForeground(123, builder.build())
+        startForeground(SERVICE_ID, builder.build())
         setDataSpeedMonitor(remoteViews, builder)
 
 
@@ -63,8 +64,6 @@ class AppForegroundService : Service() {
                 } else {
                     val rxByte: Long = TrafficStats.getTotalRxBytes()
                     val txByte: Long = TrafficStats.getTotalTxBytes()
-                    Log.d("TAG", ((rxByte - tempRx) / 1000f).toString())
-                    Log.d("TAG", ((txByte - tempTx) / 1000f).toString())
                     if (tempRx > 0 && tempTx > 0) {
                         remoteView.setTextViewText(
                             R.id.tv_download_value_notification,
@@ -78,14 +77,8 @@ class AppForegroundService : Service() {
                     tempRx = rxByte
                     tempTx = txByte
                 }
-
-
-
-                startForeground(123, builder.build())
-
-
+                startForeground(SERVICE_ID, builder.build())
             }
-
             override fun onFinish() {
             }
 
@@ -108,17 +101,33 @@ class AppForegroundService : Service() {
 
     private fun convert(value: Float, remoteView: RemoteViews): Double {
         if (value < 1000) {
-            val rounded = value.toBigDecimal().setScale(0, RoundingMode.UP).toDouble()
-            return rounded.toDouble()
-        } else if (value < 1000) {
+            remoteView.setTextViewText(
+                R.id.tv_download_currency_notification,
+                getString(R.string.Kbs)
+            )
+            remoteView.setTextViewText(
+                R.id.tv_upload_currency_notification,
+                getString(R.string.Kbs)
+            )
 
+            return value.toBigDecimal().setScale(1, RoundingMode.UP).toDouble()
+        } else {
+            remoteView.setTextViewText(
+                R.id.tv_download_currency_notification,
+                getString(R.string.Mbs)
+            )
+            remoteView.setTextViewText(
+                R.id.tv_upload_currency_notification,
+                getString(R.string.Mbs)
+            )
+            return (value / 1024).toBigDecimal().setScale(1, RoundingMode.UP).toDouble()
         }
-        val rounded = value.toBigDecimal().setScale(1, RoundingMode.UP).toDouble()
-        return rounded
+
     }
 
     companion object {
         private const val REQUEST_CODE = 123
+        private const val SERVICE_ID = 2022
         fun startService(context: Context) {
             val intent = Intent(context, AppForegroundService::class.java)
 
@@ -133,7 +142,6 @@ class AppForegroundService : Service() {
             val intent = Intent(context, AppForegroundService::class.java)
             context.stopService(intent)
         }
-
         fun isServiceRunning(context: Context, serviceClass: Class<*>): Boolean {
             val manager = context.getSystemService(ACTIVITY_SERVICE) as ActivityManager
             for (service in manager.getRunningServices(Int.MAX_VALUE)) {
