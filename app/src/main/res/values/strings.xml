@@ -29,6 +29,7 @@
     <!--    Unit    -->
     <string name="Mbps" translatable="false">Mbps</string>
     <string name="Mbs" translatable="false">MB/s</string>
+    <string name="Mb" translatable="false">MB</string>
     <string name="Kbs" translatable="false">kB/s</string>
     <string name="ms" translatable="false">ms</string>
     <string name="unitPercent" translatable="false">%</string>

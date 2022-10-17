@@ -1,13 +1,21 @@
 package com.example.speedtest_rework.ui.main
 
+import android.app.AppOpsManager
+import android.app.usage.UsageStatsManager
+import android.content.Context
 import android.content.Intent
+import android.content.pm.ApplicationInfo
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.widget.ViewPager2
@@ -18,6 +26,7 @@ import com.example.speedtest_rework.base.fragment.BaseFragment
 import com.example.speedtest_rework.common.Constant
 import com.example.speedtest_rework.databinding.FragmentMainBinding
 import com.example.speedtest_rework.services.AppForegroundService
+import com.example.speedtest_rework.services.ServiceType
 import com.example.speedtest_rework.ui.main.analyzer.FragmentAnalyzer
 import com.example.speedtest_rework.ui.main.result_history.FragmentResults
 import com.example.speedtest_rework.ui.main.speedtest.FragmentSpeedTest
@@ -101,12 +110,75 @@ class FragmentMain : BaseFragment() {
 
         binding.containerSpeedMonitor.swSwitch.setOnCheckedChangeListener { item, checked ->
             if (checked) {
-                AppForegroundService.startService(requireContext())
+                AppForegroundService.startService(requireContext(), ServiceType.SPEED_MONITOR)
             } else {
-                AppForegroundService.killService(requireContext())
+                AppForegroundService.stopService(requireContext(), ServiceType.SPEED_MONITOR)
+            }
+        }
+        binding.containerDataUsage.swSwitch.setOnCheckedChangeListener { item, checked ->
+            if (checked) {
+                when (checkAccessSettingPermission(requireContext())) {
+                    true -> {
+                        item.isChecked = true
+                        AppForegroundService.startService(
+                            requireContext(),
+                            ServiceType.DATA_USAGE
+                        )
+                    }
+                    else -> {
+                        item.isChecked = false
+                        requestAccessSettingPermission(requireContext())
+                    }
+                }
+
             }
         }
 
+
+    }
+
+    private fun checkAccessSettingPermission(context: Context): Boolean =
+        try {
+            val packageManager: PackageManager = context.packageManager
+            val applicationInfo: ApplicationInfo =
+                packageManager.getApplicationInfo(context.packageName, 0)
+            val appOpsManager: AppOpsManager =
+                context.getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
+            val mode: Int = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                appOpsManager.unsafeCheckOpNoThrow(
+                    "android:get_usage_stats",
+                    applicationInfo.uid,
+                    applicationInfo.packageName
+                )
+            } else {
+                appOpsManager.checkOpNoThrow(
+                    "android:get_usage_stats",
+                    applicationInfo.uid,
+                    applicationInfo.packageName
+                )
+            }
+            mode == AppOpsManager.MODE_ALLOWED
+        } catch (e: PackageManager.NameNotFoundException) {
+            false
+        }
+
+
+    private fun requestAccessSettingPermission(context: Context) {
+        try {
+
+//            )
+            val intent = Intent()
+            intent.action = Settings.ACTION_USAGE_ACCESS_SETTINGS
+            intent.data = Uri.parse("package:${context.packageName}")
+            context.startActivity(intent)
+        } catch (e: Exception) {
+//            val mUsageStatsManager =
+//                context.getSystemService(AppCompatActivity.USAGE_STATS_SERVICE) as UsageStatsManager
+            val intent = Intent()
+            intent.action = Settings.ACTION_USAGE_ACCESS_SETTINGS
+            context.startActivity(intent)
+
+        }
 
     }
 
