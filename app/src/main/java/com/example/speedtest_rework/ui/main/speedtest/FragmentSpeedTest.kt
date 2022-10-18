@@ -335,7 +335,7 @@ class FragmentSpeedTest : BaseFragment() {
 
 
     private fun observeConnectivityChanged() {
-        viewModel._isConnectivityChanged.observe(viewLifecycleOwner) {
+        viewModel.mConnectivityChanged.observe(viewLifecycleOwner) {
             onConnectivityChange()
         }
     }

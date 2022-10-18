@@ -6,6 +6,7 @@ import com.example.speedtest_rework.core.getIP.CurrentNetworkInfo
 import com.example.speedtest_rework.data.model.HistoryModel
 import com.example.speedtest_rework.data.services.AddressInfoRemoteService
 import com.example.speedtest_rework.data.services.HistoryLocalService
+import com.example.speedtest_rework.data.services.PrivilegedService
 import com.example.speedtest_rework.di.IoDispatcher
 import com.example.speedtest_rework.network.NetworkResult
 import kotlinx.coroutines.CoroutineDispatcher
@@ -16,6 +17,7 @@ import javax.inject.Inject
 class AppRepository @Inject constructor(
     private val addressInfoRemoteService: AddressInfoRemoteService,
     private val historyLocalService: HistoryLocalService,
+    private val privilegeService: PrivilegedService,
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) {
 

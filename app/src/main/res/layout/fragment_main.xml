@@ -148,6 +148,7 @@
 
 
                 <include
+                    android:visibility="gone"
                     android:id="@+id/container_speed_monitor"
                     layout="@layout/item_menu_switch"
                     android:layout_width="match_parent"
@@ -158,6 +159,7 @@
                     app:mTitle="@{`Speed Monitor`}" />
 
                 <include
+                    android:visibility="gone"
                     android:id="@+id/container_data_usage"
                     layout="@layout/item_menu_switch"
                     android:layout_width="match_parent"

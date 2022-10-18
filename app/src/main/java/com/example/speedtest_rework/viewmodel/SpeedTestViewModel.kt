@@ -39,7 +39,7 @@ class SpeedTestViewModel @Inject constructor(private val appRepository: AppRepos
 
 
     private var isPermissionGranted = MutableLiveData<Boolean>()
-    val _isPermissionGranted: LiveData<Boolean>
+    val mPermissionGranted: LiveData<Boolean>
         get() = isPermissionGranted
 
     fun setIsPermissionGranted(status: Boolean) {
@@ -48,7 +48,7 @@ class SpeedTestViewModel @Inject constructor(private val appRepository: AppRepos
 
     // ssot isConnectivityChanged add/remove
     private var isConnectivityChanged: MediatorLiveData<Boolean> = MediatorLiveData<Boolean>()
-    val _isConnectivityChanged: LiveData<Boolean>
+    val mConnectivityChanged: LiveData<Boolean>
         get() = isConnectivityChanged
 
     fun addIsConnectivityChangedSource(data: LiveData<Boolean>) {
@@ -74,7 +74,7 @@ class SpeedTestViewModel @Inject constructor(private val appRepository: AppRepos
 
     private var isWifiEnabled: MediatorLiveData<Boolean> =
         MediatorLiveData<Boolean>()
-    val _isWifiEnabled: LiveData<Boolean>
+    val mWifiEnabled: LiveData<Boolean>
         get() = isWifiEnabled
 
     fun addIsWifiEnabledSource(data: LiveData<Boolean>) {

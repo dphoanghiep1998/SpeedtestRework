@@ -83,7 +83,7 @@ class MainActivity : BaseActivity() {
         connectivityListener = ConnectivityListener(applicationContext)
         val filter = IntentFilter()
         filter.addAction(Constant.INTENT_FILER_SCAN_RESULT)
-        filter.addAction(Constant.INTENT_FILER_CONNECTIVITYCHANGE)
+        filter.addAction(Constant.INTENT_FILER_CONNECTIVITY_CHANGE)
         viewModel.addIsConnectivityChangedSource(connectivityListener.isConnectivityChanged)
         viewModel.addDataCacheSource(connectivityListener.dataCache)
         viewModel.addIsWifiEnabledSource(connectivityListener.isWifiEnabled)

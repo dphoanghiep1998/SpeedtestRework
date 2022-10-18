@@ -72,7 +72,7 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper {
     }
 
     private fun observePermissionChange() {
-        viewModel._isPermissionGranted.observe(viewLifecycleOwner) { _isPermissionGranted ->
+        viewModel.mPermissionGranted.observe(viewLifecycleOwner) { _isPermissionGranted ->
             if (_isPermissionGranted) {
                 hideRequestPermissionLayout()
             } else {
@@ -82,7 +82,7 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper {
     }
 
     private fun observeWifiEnabled() {
-        viewModel._isWifiEnabled.observe(viewLifecycleOwner) { isWifiEnabled ->
+        viewModel.mWifiEnabled.observe(viewLifecycleOwner) { isWifiEnabled ->
             if (isWifiEnabled) {
                 hideRequestWifiEnable()
             } else {
