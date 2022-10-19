@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:background="@drawable/background_item_result"
+        android:background="@color/background_main"
         android:foreground="@drawable/ripple_effect_fg"
         android:gravity="center"
         android:orientation="horizontal"
@@ -18,60 +18,52 @@
 
         <TextView
             android:id="@+id/tvDate"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
+            android:maxLines="1"
             android:text="60 ms"
             android:textColor="@color/white"
-            android:maxLines="1"
-            app:autoSizeStepGranularity="1dp"
-            app:autoSizeMaxTextSize="@dimen/_16sdp"
-            app:autoSizeMinTextSize="@dimen/_6sdp" />
+            android:textSize="@dimen/_12sdp" />
 
         <TextView
             android:id="@+id/tvMobileUsage"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
             android:maxLines="1"
             android:text="Aug 18"
             android:textColor="@color/white"
-            app:autoSizeMaxTextSize="@dimen/_16sdp"
-            app:autoSizeMinTextSize="@dimen/_6sdp"
-            app:autoSizeStepGranularity="1dp"
+            android:textSize="@dimen/_12sdp"
             app:autoSizeTextType="uniform" />
 
 
         <TextView
             android:id="@+id/tvWifiUsage"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:fontFamily="@font/app_font_black"
             android:gravity="center"
+            android:maxLines="1"
             android:text="30.04"
             android:textColor="@color/white"
-            android:maxLines="1"
-            app:autoSizeStepGranularity="1dp"
-            app:autoSizeMaxTextSize="@dimen/_16sdp"
-            app:autoSizeMinTextSize="@dimen/_6sdp" />
+            android:textSize="@dimen/_12sdp" />
 
 
         <TextView
             android:id="@+id/tvTotal"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:fontFamily="@font/app_font_black"
             android:gravity="center"
+            android:maxLines="1"
             android:text="32.67"
             android:textColor="@color/white"
-            android:maxLines="1"
-            app:autoSizeStepGranularity="1dp"
-            app:autoSizeMaxTextSize="@dimen/_16sdp"
-            app:autoSizeMinTextSize="@dimen/_6sdp" />
+            android:textSize="@dimen/_12sdp" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 </androidx.constraintlayout.widget.ConstraintLayout>

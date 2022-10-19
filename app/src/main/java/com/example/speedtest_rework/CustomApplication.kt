@@ -6,6 +6,7 @@ import android.app.NotificationManager
 import com.example.speedtest_rework.common.AppSharePreference
 import com.example.speedtest_rework.common.buildMinVersionM
 import com.example.speedtest_rework.common.buildMinVersionO
+import com.example.speedtest_rework.services.AppForegroundService
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
@@ -19,6 +20,7 @@ class CustomApplication() : Application() {
         super.onCreate()
         app = this
         AppSharePreference.getInstance(applicationContext)
+        AppForegroundService.getInstance()
         createChannelNotification()
     }
 

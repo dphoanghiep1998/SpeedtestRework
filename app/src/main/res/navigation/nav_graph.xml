@@ -43,6 +43,11 @@
             app:destination="@id/fragmentDetail"
             app:enterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_left" />
+        <action
+            android:id="@+id/action_fragmentMain_to_fragmentDataUsage"
+            app:destination="@id/fragmentDataUsage"
+            app:enterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_left" />
     </fragment>
 
     <fragment
@@ -50,4 +55,9 @@
         android:name="com.example.speedtest_rework.ui.result_detail.FragmentResultDetail"
         android:label="FragmentDetailResult"
         tools:layout="@layout/fragment_detail_result" />
+    <fragment
+        android:id="@+id/fragmentDataUsage"
+        android:name="com.example.speedtest_rework.ui.data_usage.FragmentDataUsage"
+        android:label="FragmentDataUsage"
+        tools:layout="@layout/fragment_data_usage" />
 </navigation>

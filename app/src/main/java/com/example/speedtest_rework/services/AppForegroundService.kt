@@ -1,7 +1,9 @@
 package com.example.speedtest_rework.services
 
 import android.annotation.SuppressLint
-import android.app.*
+import android.app.ActivityManager
+import android.app.PendingIntent
+import android.app.Service
 import android.app.usage.NetworkStats
 import android.app.usage.NetworkStatsManager
 import android.content.Context
@@ -15,25 +17,38 @@ import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.activities.MainActivity
+import com.example.speedtest_rework.common.AppSharePreference
+import com.example.speedtest_rework.common.buildMinVersionM
 import com.example.speedtest_rework.common.buildMinVersionO
 import java.math.RoundingMode
 import java.util.*
 
-enum class ServiceType() {
+enum class ServiceType {
     NONE,
     SPEED_MONITOR,
     DATA_USAGE,
-    BOTH
+    BOTH;
+
+    companion object {
+        fun toServiceType(enumString: String): ServiceType {
+            return try {
+                valueOf(enumString)
+            } catch (ex: Exception) {
+                NONE
+            }
+        }
+    }
+
 }
 
 class AppForegroundService : Service() {
     private var countDownTimer: CountDownTimer? = null
-    private var serviceType = ServiceType.NONE
-    private lateinit var remoteViews: RemoteViews
 
     override fun onCreate() {
-        remoteViews = RemoteViews(packageName, R.layout.layout_notification_speed_test)
         super.onCreate()
+        remoteViews = RemoteViews(packageName, R.layout.layout_notification_speed_test)
+        Log.d("TAG", "onCreate: ")
+
     }
 
     override fun onBind(p0: Intent?): IBinder? {
@@ -44,20 +59,22 @@ class AppForegroundService : Service() {
 //        when (intent?.action) {
 //            getString(R.string.action_do_speed_test) -> generateNotification()
 //        }
-        Log.d("TAG", "onStartCommand: ")
+
         generateNotification()
         return START_NOT_STICKY
     }
 
     private fun generateNotification() {
-        Log.d("TAG", "generateNotification: " + this.serviceType)
+
+
         when (serviceType) {
             ServiceType.SPEED_MONITOR -> {
                 remoteViews.setOnClickPendingIntent(
                     R.id.btn_speed_test_notification,
                     startPendingIntent(
                         getString(R.string.action_do_speed_test),
-                        getString(R.string.key_speed_test)
+                        getString(R.string.key_speed_test),
+                        REQUEST_CODE
                     )
                 )
                 remoteViews.setViewVisibility(R.id.tv_upload_value_notification, View.VISIBLE)
@@ -67,6 +84,14 @@ class AppForegroundService : Service() {
                 remoteViews.setViewVisibility(R.id.btn_speed_test_notification, View.VISIBLE)
             }
             ServiceType.DATA_USAGE -> {
+                remoteViews.setOnClickPendingIntent(
+                    R.id.container_data_usage,
+                    startPendingIntent(
+                        getString(R.string.action_show_data_usage),
+                        getString(R.string.key_data_usage),
+                        REQUEST_CODE_1
+                    )
+                )
                 remoteViews.setViewVisibility(R.id.tv_upload_value_notification, View.GONE)
                 remoteViews.setViewVisibility(R.id.tv_download_value_notification, View.GONE)
                 remoteViews.setViewVisibility(R.id.mobile_usage_value, View.VISIBLE)
@@ -74,6 +99,23 @@ class AppForegroundService : Service() {
                 remoteViews.setViewVisibility(R.id.btn_speed_test_notification, View.GONE)
             }
             ServiceType.BOTH -> {
+                remoteViews.setOnClickPendingIntent(
+                    R.id.container_speed_monitor,
+                    startPendingIntent(
+                        getString(R.string.action_do_speed_test),
+                        getString(R.string.key_speed_test),
+                        REQUEST_CODE
+                    )
+                )
+                remoteViews.setOnClickPendingIntent(
+                    R.id.container_data_usage,
+                    startPendingIntent(
+                        getString(R.string.action_show_data_usage),
+                        getString(R.string.key_data_usage),
+                        REQUEST_CODE_1
+                    )
+                )
+
                 remoteViews.setViewVisibility(R.id.tv_upload_value_notification, View.VISIBLE)
                 remoteViews.setViewVisibility(R.id.tv_download_value_notification, View.VISIBLE)
                 remoteViews.setViewVisibility(R.id.mobile_usage_value, View.VISIBLE)
@@ -120,11 +162,11 @@ class AppForegroundService : Service() {
                     if (tempRx > 0 && tempTx > 0) {
                         remoteViews.setTextViewText(
                             R.id.tv_download_value_notification,
-                            (convert((rxByte - tempRx) / 1024f, 0)).toString()
+                            (convert((rxByte - tempRx) / 1024f, 0))
                         )
                         remoteViews.setTextViewText(
                             R.id.tv_upload_value_notification,
-                            (convert((txByte - tempTx) / 1024f, 1)).toString()
+                            (convert((txByte - tempTx) / 1024f, 1))
                         )
                     }
                     tempRx = rxByte
@@ -181,13 +223,11 @@ class AppForegroundService : Service() {
     private fun getTodayWifiDataUsage(context: Context): NetworkStats.Bucket {
         val manager = getUsageStatsManager(context)
         val calendar = Calendar.getInstance()
-        Log.d("TAG", "getTodayWifiDataUsage: " + calendar.timeInMillis)
         calendar.set(Calendar.HOUR_OF_DAY, 0)
         calendar.set(Calendar.MINUTE, 0)
         calendar.set(Calendar.SECOND, 0)
         calendar.set(Calendar.MILLISECOND, 0)
-        Log.d("TAG", "getTodayWifiDataUsage: " + calendar.timeInMillis)
-        Log.d("TAG", "System.currentTimeMillis(): " + System.currentTimeMillis())
+
 
 
         return manager.querySummaryForDevice(
@@ -204,16 +244,24 @@ class AppForegroundService : Service() {
         return context.getSystemService(Context.NETWORK_STATS_SERVICE) as NetworkStatsManager
     }
 
-    private fun startPendingIntent(key: String, value: String): PendingIntent {
+    private fun startPendingIntent(key: String, value: String, requestCode: Int): PendingIntent {
         val speedIntent = Intent(this, MainActivity::class.java)
         speedIntent.putExtra(key, value)
-        speedIntent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
-        return PendingIntent.getActivity(
-            this,
-            REQUEST_CODE,
-            speedIntent,
-            PendingIntent.FLAG_IMMUTABLE
-        )
+        return if (buildMinVersionM()) {
+            PendingIntent.getActivity(
+                this,
+                requestCode,
+                speedIntent,
+                PendingIntent.FLAG_IMMUTABLE
+            )
+        } else {
+            PendingIntent.getActivity(
+                this,
+                requestCode,
+                speedIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT
+            )
+        }
     }
 
 
@@ -226,13 +274,13 @@ class AppForegroundService : Service() {
             } else {
                 "${
                     value.toBigDecimal().setScale(1, RoundingMode.UP)
-                } ${getString(R.string.Mbs)}"
+                } ${getString(R.string.Kbs)}"
             }
         } else {
             return if (type == 0) {
                 "${
                     (value / 1024).toBigDecimal().setScale(1, RoundingMode.UP)
-                } ${getString(R.string.Kbs)}"
+                } ${getString(R.string.Mbs)}"
             } else {
                 "${
                     (value / 1024).toBigDecimal().setScale(1, RoundingMode.UP)
@@ -244,11 +292,11 @@ class AppForegroundService : Service() {
 
     private fun convertData(value: Float): String {
         return when {
-            value <= 0 -> "0 MB"
+            value <= 0 -> "0.0 MB"
             value < 1024 -> "${round(value)} B"
-            value < 1024 * 1024 -> "${round(value) / 1024} KB"
-            value < 1024 * 1024 * 1024 -> "${round(value) / (1024 * 1024)} MB"
-            else -> "${round(value) / (1024 * 1024 * 1024)} GB"
+            value < 1024 * 1024 -> "${round(value / 1024)} KB"
+            value < 1024 * 1024 * 1024 -> "${round(value / (1024 * 1024))} MB"
+            else -> "${round(value / (1024 * 1024 * 1024))} GB"
         }
     }
 
@@ -266,25 +314,27 @@ class AppForegroundService : Service() {
     private fun hideViewDataUsage() {
         remoteViews.setViewVisibility(R.id.mobile_usage_value, View.GONE)
         remoteViews.setViewVisibility(R.id.wifi_usage_value, View.GONE)
+        remoteViews.setViewVisibility(R.id.btn_speed_test_notification, View.VISIBLE)
+
     }
 
     fun startService(context: Context, sType: ServiceType) {
         val intent = Intent(context, AppForegroundService::class.java)
-//        if (this.serviceType == ServiceType.NONE ) {
-//            this.serviceType = sType
-//        } else if (this.serviceType != sType && this.serviceType != ServiceType.NONE) {
-//            this.serviceType = ServiceType.BOTH
-//        }else{
-//            this.serviceType = sType
-//        }
-        this.serviceType = sType
-
-        Log.d("TAG", "startService: " + this.serviceType)
+        serviceType = if (serviceType == ServiceType.NONE) {
+            AppSharePreference.INSTANCE.saveServiceType(R.string.service_type_key, sType)
+            sType
+        } else if (serviceType != sType && serviceType != ServiceType.NONE) {
+            AppSharePreference.INSTANCE.saveServiceType(R.string.service_type_key, ServiceType.BOTH)
+            ServiceType.BOTH
+        } else {
+            AppSharePreference.INSTANCE.saveServiceType(R.string.service_type_key, sType)
+            sType
+        }
 
         if (buildMinVersionO()) {
-            context.startForegroundService(intent)
+            context.applicationContext.startForegroundService(intent)
         } else {
-            context.startService(intent)
+            context.applicationContext.startService(intent)
         }
     }
 
@@ -294,10 +344,18 @@ class AppForegroundService : Service() {
                 serviceType = when (sType) {
                     ServiceType.DATA_USAGE -> {
                         hideViewDataUsage()
+                        AppSharePreference.INSTANCE.saveServiceType(
+                            R.string.service_type_key,
+                            ServiceType.SPEED_MONITOR
+                        )
                         ServiceType.SPEED_MONITOR
                     }
                     else -> {
                         hideViewSpeedMonitor()
+                        AppSharePreference.INSTANCE.saveServiceType(
+                            R.string.service_type_key,
+                            ServiceType.DATA_USAGE
+                        )
                         ServiceType.DATA_USAGE
                     }
                 }
@@ -305,18 +363,22 @@ class AppForegroundService : Service() {
             }
             else -> {
                 serviceType = ServiceType.NONE
+                AppSharePreference.INSTANCE.saveServiceType(
+                    R.string.service_type_key,
+                    ServiceType.NONE
+                )
                 killService(context)
             }
         }
     }
 
 
-    fun killService(context: Context) {
+    private fun killService(context: Context) {
         val intent = Intent(context, AppForegroundService::class.java)
         context.stopService(intent)
     }
 
-    fun isServiceRunning(context: Context, serviceClass: Class<*>): Boolean {
+    private fun isServiceRunning(context: Context, serviceClass: Class<*>): Boolean {
         val manager = context.getSystemService(ACTIVITY_SERVICE) as ActivityManager
         for (service in manager.getRunningServices(Int.MAX_VALUE)) {
             if (serviceClass.name == service.service.className) {
@@ -326,18 +388,45 @@ class AppForegroundService : Service() {
         return false
     }
 
+    fun isServiceDataUsageRunning(context: Context, serviceClass: Class<*>): Boolean {
+        if (isServiceRunning(
+                context,
+                serviceClass
+            ) && (serviceType == ServiceType.DATA_USAGE || serviceType == ServiceType.BOTH)
+        ) {
+            return true
+        }
+        return false
+    }
+
+    fun isServiceSpeedMonitorRunning(context: Context, serviceClass: Class<*>): Boolean {
+        if (isServiceRunning(
+                context,
+                serviceClass
+            ) && (serviceType == ServiceType.SPEED_MONITOR || serviceType == ServiceType.BOTH)
+        ) {
+            return true
+        }
+        return false
+    }
+
 
     companion object {
-        private var INSTANCE: AppForegroundService? = null
+        private lateinit var INSTANCE: AppForegroundService
+        private lateinit var remoteViews: RemoteViews
         private const val REQUEST_CODE = 123
+        private const val REQUEST_CODE_1 = 1234
         private const val SERVICE_ID = 2022
+        var serviceType =
+            AppSharePreference.INSTANCE.getServiceType(R.string.service_type_key, ServiceType.NONE)
 
+
+        @JvmStatic
         fun getInstance(): AppForegroundService {
-            Log.d("TAG", "getInstance: "+ INSTANCE)
-            if (INSTANCE == null) {
+            if (!::INSTANCE.isInitialized) {
                 INSTANCE = AppForegroundService()
             }
-            return INSTANCE as AppForegroundService
+            return INSTANCE
         }
 
 

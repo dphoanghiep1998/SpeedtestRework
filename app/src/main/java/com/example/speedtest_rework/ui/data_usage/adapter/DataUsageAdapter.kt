@@ -1,6 +1,6 @@
 package com.example.speedtest_rework.ui.data_usage.adapter
 
-import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -9,7 +9,7 @@ import com.example.speedtest_rework.databinding.ItemDataUsageBinding
 import com.example.speedtest_rework.ui.data_usage.model.DataUsageModel
 import java.math.RoundingMode
 
-class DataUsageAdapter(private var data: List<DataUsageModel>, private var context: Context) :
+class DataUsageAdapter(private var data: List<DataUsageModel>) :
     RecyclerView.Adapter<DataUsageAdapter.DataUsageViewHolder>() {
 
     inner class DataUsageViewHolder(val binding: ItemDataUsageBinding) :
@@ -42,9 +42,9 @@ class DataUsageAdapter(private var data: List<DataUsageModel>, private var conte
         return when {
             value <= 0 -> "0 MB"
             value < 1024 -> "${round(value)} B"
-            value < 1024 * 1024 -> "${round(value) / 1024} KB"
-            value < 1024 * 1024 * 1024 -> "${round(value) / (1024 * 1024)} MB"
-            else -> "${round(value) / (1024 * 1024 * 1024)} GB"
+            value < 1024 * 1024 -> "${round(value / 1024)} KB"
+            value < 1024 * 1024 * 1024 -> "${round(value / (1024 * 1024))} MB"
+            else -> "${round(value / (1024 * 1024 * 1024))} GB"
         }
     }
 

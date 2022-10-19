@@ -20,6 +20,8 @@
     <string name="val_10000" translatable="false">10000</string>
     <string name="val_15000" translatable="false">15000</string>
     <string name="key_speed_test" translatable="false">speed_test</string>
+    <string name="key_data_usage" translatable="false">data_usage</string>
+
 
     <!--    Bottom Nav    -->
     <string name="speed">Speed</string>
@@ -110,6 +112,7 @@
     <string name="action_do_speed_test">do speed test</string>
     <string name="action_show_data_usage">show data usage</string>
     <string name="data_usage">DATA USAGE</string>
+    <string name="service_type_key">service_type_key</string>
 
 
 </resources>

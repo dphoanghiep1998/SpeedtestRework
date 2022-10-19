@@ -26,4 +26,6 @@ class DatabaseModule {
         return appDatabase.historyDao
     }
 
+
+
 }
