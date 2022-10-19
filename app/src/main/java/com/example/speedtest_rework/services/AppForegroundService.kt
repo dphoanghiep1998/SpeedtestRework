@@ -140,8 +140,13 @@ class AppForegroundService : Service() {
     private fun setDataUsageMonitor(remoteView: RemoteViews, builder: NotificationCompat.Builder) {
         val networkStats = getUsageStatsList(applicationContext)
         val bucket = NetworkStats.Bucket()
-        networkStats.getNextBucket(bucket)
-        Log.d("TAG", "setDataUsageMonitor: ${bucket.rxBytes}")
+        if(networkStats.hasNextBucket()){
+            networkStats.getNextBucket(bucket)
+            Log.d("TAG", "setDataUsageMonitor: ${bucket.rxBytes}")
+            Log.d("TAG", "setDataUsageMonitor: ${bucket.txBytes}")
+        }
+
+
         startForeground(SERVICE_ID, builder.build())
     }
 
@@ -152,7 +157,7 @@ class AppForegroundService : Service() {
         val endTime = calendar.timeInMillis
         calendar.add(Calendar.MONTH, -1)
         val startTime = calendar.timeInMillis
-        return nsm.queryDetails(0, "", startTime, endTime)
+        return nsm.queryDetails(0, null, startTime, endTime)
     }
 
     @SuppressLint("NewApi")
