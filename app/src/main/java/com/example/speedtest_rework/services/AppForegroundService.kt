@@ -47,7 +47,6 @@ class AppForegroundService : Service() {
     override fun onCreate() {
         super.onCreate()
         remoteViews = RemoteViews(packageName, R.layout.layout_notification_speed_test)
-        Log.d("TAG", "onCreate: ")
 
     }
 
@@ -56,9 +55,6 @@ class AppForegroundService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-//        when (intent?.action) {
-//            getString(R.string.action_do_speed_test) -> generateNotification()
-//        }
 
         generateNotification()
         return START_NOT_STICKY
