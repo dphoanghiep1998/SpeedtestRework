@@ -27,7 +27,7 @@ class ConnectivityListener constructor(
         val action: String? = intent?.action
         if (action != null) {
             when (action) {
-                Constant.INTENT_FILER_CONNECTIVITYCHANGE -> {
+                Constant.INTENT_FILER_CONNECTIVITY_CHANGE -> {
                     isConnectivityChanged.postValue(true)
                     if (wifiManager.isWifiEnabled) {
                         isWifiEnabled.postValue(true)

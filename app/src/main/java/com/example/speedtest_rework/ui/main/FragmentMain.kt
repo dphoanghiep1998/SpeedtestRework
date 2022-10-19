@@ -1,13 +1,11 @@
 package com.example.speedtest_rework.ui.main
 
 import android.app.AppOpsManager
-import android.app.usage.UsageStatsManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
@@ -15,7 +13,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.widget.ViewPager2
@@ -24,6 +21,8 @@ import com.daimajia.androidanimations.library.YoYo
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.fragment.BaseFragment
 import com.example.speedtest_rework.common.Constant
+import com.example.speedtest_rework.common.buildMinVersionM
+import com.example.speedtest_rework.common.buildMinVersionQ
 import com.example.speedtest_rework.databinding.FragmentMainBinding
 import com.example.speedtest_rework.services.AppForegroundService
 import com.example.speedtest_rework.services.ServiceType
@@ -38,7 +37,11 @@ class FragmentMain : BaseFragment() {
     private lateinit var binding: FragmentMainBinding
     private val viewModel: SpeedTestViewModel by activityViewModels()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        notificationHandleIntentFlow()
 
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -88,12 +91,19 @@ class FragmentMain : BaseFragment() {
     }
 
     private fun initDrawerAction() {
-        if (AppForegroundService.isServiceRunning(
+        if (AppForegroundService.getInstance().isServiceSpeedMonitorRunning(
                 requireContext(),
                 AppForegroundService::class.java
             )
         ) {
             binding.containerSpeedMonitor.swSwitch.isChecked = true
+        }
+        if (AppForegroundService.getInstance().isServiceDataUsageRunning(
+                requireContext(),
+                AppForegroundService::class.java
+            )
+        ) {
+            binding.containerDataUsage.swSwitch.isChecked = true
         }
         binding.menu.setOnClickListener {
             with(binding) {
@@ -107,30 +117,38 @@ class FragmentMain : BaseFragment() {
         binding.containerPolicy.root.setOnClickListener { openLink("http://www.facebook.com") }
         binding.containerShare.root.setOnClickListener { this.shareApp() }
         binding.containerRate.root.setOnClickListener { this.rateApp() }
-
-        binding.containerSpeedMonitor.swSwitch.setOnCheckedChangeListener { item, checked ->
-            if (checked) {
-                AppForegroundService.startService(requireContext(), ServiceType.SPEED_MONITOR)
-            } else {
-                AppForegroundService.stopService(requireContext(), ServiceType.SPEED_MONITOR)
-            }
-        }
-        binding.containerDataUsage.swSwitch.setOnCheckedChangeListener { item, checked ->
-            if (checked) {
-                when (checkAccessSettingPermission(requireContext())) {
-                    true -> {
-                        item.isChecked = true
-                        AppForegroundService.startService(
-                            requireContext(),
-                            ServiceType.DATA_USAGE
-                        )
-                    }
-                    else -> {
-                        item.isChecked = false
-                        requestAccessSettingPermission(requireContext())
-                    }
+        if (buildMinVersionM()) {
+            binding.containerDataUsage.root.visibility = View.VISIBLE
+            binding.containerSpeedMonitor.root.visibility = View.VISIBLE
+            binding.containerSpeedMonitor.swSwitch.setOnCheckedChangeListener { item, checked ->
+                if (checked) {
+                    AppForegroundService.getInstance()
+                        .startService(requireContext(), ServiceType.SPEED_MONITOR)
+                } else {
+                    AppForegroundService.getInstance()
+                        .stopService(requireContext(), ServiceType.SPEED_MONITOR)
                 }
+            }
 
+            binding.containerDataUsage.swSwitch.setOnCheckedChangeListener { item, checked ->
+                if (checked) {
+                    when (checkAccessSettingPermission(requireContext())) {
+                        true -> {
+                            item.isChecked = true
+                            AppForegroundService.getInstance().startService(
+                                requireContext(),
+                                ServiceType.DATA_USAGE
+                            )
+                        }
+                        else -> {
+                            item.isChecked = false
+                            requestAccessSettingPermission(requireContext())
+                        }
+                    }
+                } else {
+                    AppForegroundService.getInstance()
+                        .stopService(requireContext(), ServiceType.DATA_USAGE)
+                }
             }
         }
 
@@ -144,7 +162,7 @@ class FragmentMain : BaseFragment() {
                 packageManager.getApplicationInfo(context.packageName, 0)
             val appOpsManager: AppOpsManager =
                 context.getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
-            val mode: Int = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            val mode: Int = if (buildMinVersionQ()) {
                 appOpsManager.unsafeCheckOpNoThrow(
                     "android:get_usage_stats",
                     applicationInfo.uid,
@@ -165,20 +183,30 @@ class FragmentMain : BaseFragment() {
 
     private fun requestAccessSettingPermission(context: Context) {
         try {
-
-//            )
             val intent = Intent()
             intent.action = Settings.ACTION_USAGE_ACCESS_SETTINGS
             intent.data = Uri.parse("package:${context.packageName}")
             context.startActivity(intent)
         } catch (e: Exception) {
-//            val mUsageStatsManager =
-//                context.getSystemService(AppCompatActivity.USAGE_STATS_SERVICE) as UsageStatsManager
             val intent = Intent()
             intent.action = Settings.ACTION_USAGE_ACCESS_SETTINGS
             context.startActivity(intent)
 
         }
+
+    }
+    private fun notificationHandleIntentFlow() {
+
+        val actionDoSpeedTest = requireActivity().intent.extras?.getString(getString(R.string.action_show_data_usage))
+        if(actionDoSpeedTest != null){
+
+        }
+        val actionShowDataUsage = requireActivity().intent.extras?.getString(getString(R.string.action_show_data_usage))
+
+        if(actionShowDataUsage != null){
+            navigateToPage(R.id.action_fragmentMain_to_fragmentDataUsage)
+        }
+
 
     }
 
@@ -243,7 +271,7 @@ class FragmentMain : BaseFragment() {
         try {
             val shareIntent = Intent(Intent.ACTION_SEND)
             shareIntent.type = "text/plain"
-            shareIntent.putExtra(Intent.EXTRA_SUBJECT, Constant.INTENT_VALUE_SPEEDTEST)
+            shareIntent.putExtra(Intent.EXTRA_SUBJECT, Constant.INTENT_VALUE_SPEED_TEST)
             startActivity(Intent.createChooser(shareIntent, "Choose one"))
         } catch (e: Exception) {
             e.printStackTrace()

@@ -20,6 +20,8 @@
     <string name="val_10000" translatable="false">10000</string>
     <string name="val_15000" translatable="false">15000</string>
     <string name="key_speed_test" translatable="false">speed_test</string>
+    <string name="key_data_usage" translatable="false">data_usage</string>
+
 
     <!--    Bottom Nav    -->
     <string name="speed">Speed</string>
@@ -28,10 +30,13 @@
     <string name="result_bottom">Results</string>
     <!--    Unit    -->
     <string name="Mbps" translatable="false">Mbps</string>
+    <string name="Byte" translatable="false">B</string>
     <string name="Mbs" translatable="false">MB/s</string>
     <string name="Mb" translatable="false">MB</string>
     <string name="Kbs" translatable="false">kB/s</string>
+    <string name="Kb" translatable="false">KB</string>
     <string name="ms" translatable="false">ms</string>
+    <string name="Gb" translatable="false">GB</string>
     <string name="unitPercent" translatable="false">%</string>
     <string name="dbm" translatable="false">dBm</string>
     <!--    Drawer    -->
@@ -106,6 +111,8 @@
     <string name="channel_name">channel_name</string>
     <string name="action_do_speed_test">do speed test</string>
     <string name="action_show_data_usage">show data usage</string>
+    <string name="data_usage">DATA USAGE</string>
+    <string name="service_type_key">service_type_key</string>
 
 
 </resources>

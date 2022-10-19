@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_38sdp"
+        android:theme="@style/ToolBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/btn_back"
+            android:layout_width="@dimen/_38sdp"
+            android:layout_height="@dimen/_38sdp"
+            android:contentDescription="img"
+            android:foreground="@drawable/ripple_effect_corner_fg"
+            android:padding="@dimen/_8sdp"
+            android:src="@drawable/ic_back"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/data_usage"
+            android:textColor="@color/white"
+            android:textFontWeight="800"
+            android:textSize="@dimen/_18sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/container_header"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:background="@color/gray_900"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:weightSum="4"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="30 Days"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_14sdp" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_mobile_usage"
+                android:drawablePadding="@dimen/_2sdp"
+                android:text="Mobile"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_14sdp" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_wifi_usage"
+                android:drawablePadding="@dimen/_2sdp"
+                android:text="WiFi"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_14sdp" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Total"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_14sdp" />
+        </LinearLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcv_dataUsage"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/container_header"
+        tools:listitem="@layout/item_data_usage" />
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/container_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:background="@color/gray_900"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:weightSum="4"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Total"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_14sdp" />
+
+        <TextView
+            android:id="@+id/tvTotalMobile"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/zero_value_dec"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_14sdp" />
+
+        <TextView
+            android:id="@+id/tvTotalWifi"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/zero_value_dec"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_14sdp" />
+
+        <TextView
+            android:id="@+id/totalAll"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/zero_value_dec"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_14sdp" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+    <LinearLayout
+        android:id="@+id/container_loading"
+        android:gravity="center"
+        android:background="@color/background_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ProgressBar
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="@dimen/_50sdp" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,6 +3,7 @@ package com.example.speedtest_rework.common
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
+import com.example.speedtest_rework.services.ServiceType
 
 inline fun SharedPreferences.edit(func: SharedPreferences.Editor.() -> Unit) {
     val editor: SharedPreferences.Editor = edit()
@@ -37,6 +38,15 @@ class AppSharePreference(private val context: Context) {
 
     fun getUnitValue(key: Int, defaultValues: String): String {
         return getString(key, defaultValues)
+    }
+
+    fun saveServiceType(key: Int, values: ServiceType) {
+        return saveString(key, values.toString())
+    }
+
+
+    fun getServiceType(key: Int, defaultValues: ServiceType): ServiceType {
+        return ServiceType.toServiceType(getString(key, defaultValues.toString()))
     }
 
     private fun saveString(key: Int, values: String): Unit =

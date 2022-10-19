@@ -9,6 +9,7 @@ import android.content.IntentFilter
 import android.content.pm.PackageManager
 
 import android.os.Bundle
+import android.util.Log
 
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
@@ -45,21 +46,12 @@ class MainActivity : BaseActivity() {
     }
 
     private fun initNavController() {
+        Log.d("TAG", "initNavController: " + intent.data + intent.action)
         navHostFragment =
             supportFragmentManager.findFragmentById(binding.navHostFragment.id) as NavHostFragment
     }
 
-    private fun initNotificationReceiver() {
-        val receiver = object : BroadcastReceiver() {
-            override fun onReceive(context: Context?, intent: Intent?) {
-                TODO("Not yet implemented")
-            }
 
-        }
-        val intent = IntentFilter()
-        intent.addAction(getString(R.string.action_do_speed_test))
-        intent.addAction(getString(R.string.action_show_data_usage))
-    }
 
 
     private fun handlePermissionFlow() {
@@ -83,7 +75,7 @@ class MainActivity : BaseActivity() {
         connectivityListener = ConnectivityListener(applicationContext)
         val filter = IntentFilter()
         filter.addAction(Constant.INTENT_FILER_SCAN_RESULT)
-        filter.addAction(Constant.INTENT_FILER_CONNECTIVITYCHANGE)
+        filter.addAction(Constant.INTENT_FILER_CONNECTIVITY_CHANGE)
         viewModel.addIsConnectivityChangedSource(connectivityListener.isConnectivityChanged)
         viewModel.addDataCacheSource(connectivityListener.dataCache)
         viewModel.addIsWifiEnabledSource(connectivityListener.isWifiEnabled)

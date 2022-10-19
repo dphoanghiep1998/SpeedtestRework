@@ -2,6 +2,8 @@ package com.example.speedtest_rework.viewmodel
 
 import android.net.wifi.ScanResult
 import android.net.wifi.WifiInfo
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,6 +14,7 @@ import com.example.speedtest_rework.core.getIP.AddressInfo
 import com.example.speedtest_rework.core.getIP.CurrentNetworkInfo
 import com.example.speedtest_rework.data.model.HistoryModel
 import com.example.speedtest_rework.data.repositories.AppRepository
+import com.example.speedtest_rework.ui.data_usage.model.DataUsageModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -30,16 +33,25 @@ class SpeedTestViewModel @Inject constructor(private val appRepository: AppRepos
 
 
     private var scanStatus = MutableLiveData<ScanStatus>()
-    val mScanStatus:LiveData<ScanStatus>
+    val mScanStatus: LiveData<ScanStatus>
         get() = scanStatus
-    fun setScanStatus(status:ScanStatus){
+
+    fun setScanStatus(status: ScanStatus) {
         scanStatus.value = status
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
+    fun getListOfDataUsage(): LiveData<List<DataUsageModel>> {
+        val listDataUsage: MutableLiveData<List<DataUsageModel>> = MutableLiveData()
+        viewModelScope.launch {
+            listDataUsage.value = appRepository.getDataUsageList()
+        }
+        return listDataUsage
+    }
 
 
     private var isPermissionGranted = MutableLiveData<Boolean>()
-    val _isPermissionGranted: LiveData<Boolean>
+    val mPermissionGranted: LiveData<Boolean>
         get() = isPermissionGranted
 
     fun setIsPermissionGranted(status: Boolean) {
@@ -48,7 +60,7 @@ class SpeedTestViewModel @Inject constructor(private val appRepository: AppRepos
 
     // ssot isConnectivityChanged add/remove
     private var isConnectivityChanged: MediatorLiveData<Boolean> = MediatorLiveData<Boolean>()
-    val _isConnectivityChanged: LiveData<Boolean>
+    val mConnectivityChanged: LiveData<Boolean>
         get() = isConnectivityChanged
 
     fun addIsConnectivityChangedSource(data: LiveData<Boolean>) {
@@ -74,7 +86,7 @@ class SpeedTestViewModel @Inject constructor(private val appRepository: AppRepos
 
     private var isWifiEnabled: MediatorLiveData<Boolean> =
         MediatorLiveData<Boolean>()
-    val _isWifiEnabled: LiveData<Boolean>
+    val mWifiEnabled: LiveData<Boolean>
         get() = isWifiEnabled
 
     fun addIsWifiEnabledSource(data: LiveData<Boolean>) {

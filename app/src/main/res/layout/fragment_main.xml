@@ -139,8 +139,9 @@
 
                 <ImageView
                     android:id="@+id/ic_logo_menu"
+                    android:scaleType="fitCenter"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_100sdp"
+                    android:layout_height="@dimen/_150sdp"
                     android:src="@drawable/ic_logo_menu"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -148,6 +149,7 @@
 
 
                 <include
+                    android:visibility="gone"
                     android:id="@+id/container_speed_monitor"
                     layout="@layout/item_menu_switch"
                     android:layout_width="match_parent"
@@ -158,6 +160,7 @@
                     app:mTitle="@{`Speed Monitor`}" />
 
                 <include
+                    android:visibility="gone"
                     android:id="@+id/container_data_usage"
                     layout="@layout/item_menu_switch"
                     android:layout_width="match_parent"
@@ -179,7 +182,8 @@
                 <View
                     android:id="@+id/line"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
+                    android:layout_marginHorizontal="@dimen/_16sdp"
+                    android:layout_height="2px"
                     android:background="@color/gray_400"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
