@@ -113,6 +113,17 @@
     <string name="action_show_data_usage">show data usage</string>
     <string name="data_usage">DATA USAGE</string>
     <string name="service_type_key">service_type_key</string>
+    <string name="usage_permission">The data access service will be used to get the data consumption of all the apps in your device. You can always modify the authorization in the \"Settings\"  of the app</string>
+    <string name="permission_title">Allow access to use</string>
+    <string name="deny">Deny</string>
+    <string name="allow">Allow</string>
+    <string name="data_usage_access">Data usage access</string>
+    <string name="speed_test">SpeedTest</string>
+    <string name="not_allowed">Not Allowed</string>
+    <string name="thirty_day">30 Days</string>
+    <string name="seven_day">7 Days</string>
+    <string name="three_day">3 Days</string>
+    <string name="today">Today</string>
 
 
 </resources>

@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingVertical="@dimen/_16sdp"
     android:gravity="center_vertical"
     android:orientation="horizontal"
+    android:paddingVertical="@dimen/_16sdp"
     android:weightSum="10">
 
     <LinearLayout
@@ -13,7 +13,6 @@
         android:layout_height="wrap_content"
         android:layout_weight="2"
         android:gravity="center">
-
         <ImageView
             android:id="@+id/imv_logo"
             android:layout_width="@dimen/_25sdp"
@@ -26,26 +25,16 @@
         android:id="@+id/container_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="6"
         android:gravity="center|start"
         android:orientation="horizontal"
         android:paddingHorizontal="@dimen/_8sdp"
-        android:weightSum="2">
-
-        <LinearLayout
-            android:id="@+id/container_speed_monitor"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:weightSum="2">
+        android:weightSum="6">
 
             <TextView
                 android:id="@+id/tv_download_value_notification"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:autoSizeTextType="uniform"
-                android:drawableStart="@drawable/ic_download_notification"
                 android:drawablePadding="@dimen/_2sdp"
                 android:maxLines="1"
                 android:paddingStart="@dimen/_4sdp"
@@ -53,14 +42,14 @@
                 android:textColor="@color/gray_700"
                 app:autoSizeMaxTextSize="@dimen/_10sdp"
                 app:autoSizeMinTextSize="@dimen/_6sdp"
-                app:autoSizeStepGranularity="1dp" />
+                app:autoSizeStepGranularity="1dp"
+                app:drawableStart="@drawable/ic_download_notification" />
 
 
             <TextView
                 android:id="@+id/tv_upload_value_notification"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:autoSizeTextType="uniform"
                 android:drawableStart="@drawable/ic_upload_notification"
                 android:drawablePadding="@dimen/_2sdp"
@@ -72,14 +61,7 @@
                 app:autoSizeMinTextSize="@dimen/_6sdp"
                 app:autoSizeStepGranularity="1dp" />
 
-        </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/container_data_usage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:weightSum="2">
 
             <TextView
                 android:id="@+id/mobile_usage_value"
@@ -104,41 +86,32 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:autoSizeTextType="uniform"
-                android:drawableStart="@drawable/ic_wifi_usage_notification"
+                app:drawableStart="@drawable/ic_wifi_usage_notification"
                 android:drawablePadding="@dimen/_2sdp"
                 android:maxLines="1"
                 android:paddingStart="@dimen/_4sdp"
-                android:text="123"
+                android:text="@string/zero_value_dec"
                 android:textColor="@color/gray_700"
                 android:visibility="gone"
                 app:autoSizeMaxTextSize="@dimen/_10sdp"
                 app:autoSizeMinTextSize="@dimen/_6sdp"
                 app:autoSizeStepGranularity="1dp" />
 
-        </LinearLayout>
 
     </LinearLayout>
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/btn_speed_test_notification"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:gravity="center"
-        android:visibility="visible">
-
-        <TextView
-            android:id="@+id/btn_speed_test_notification"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_background_start"
-            android:fontFamily="@font/app_font_bold"
-            android:paddingHorizontal="@dimen/_16sdp"
-            android:paddingVertical="@dimen/_8sdp"
-            android:text="@string/speed_test_title"
-            android:textColor="@color/gray_800"
-            android:textSize="@dimen/_8sdp"
-            android:textStyle="bold" />
-    </LinearLayout>
+        android:background="@drawable/button_background_start"
+        android:fontFamily="@font/app_font_bold"
+        android:paddingHorizontal="@dimen/_16sdp"
+        android:paddingVertical="@dimen/_8sdp"
+        android:text="@string/speed_test_title"
+        android:textColor="@color/gray_800"
+        android:textSize="@dimen/_8sdp"
+        android:textStyle="bold" />
 
 
 </LinearLayout>

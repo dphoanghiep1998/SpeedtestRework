@@ -11,11 +11,8 @@ import com.example.speedtest_rework.databinding.DialogPermissionBinding
 
 class PermissionDialog(
     context: Context, private val callback: ConfirmCallback?,
-    private val title: String,
-    private val message: String?,
-    private val positiveButtonTitle: String?,
-    private val negativeButtonTitle: String?
-) : Dialog(context) {
+
+    ) : Dialog(context) {
     private lateinit var binding: DialogPermissionBinding
 
     interface ConfirmCallback {
@@ -38,23 +35,17 @@ class PermissionDialog(
         )
         window?.setBackgroundDrawableResource(R.color.transparent)
 
-        binding.tvTitle.text = title
-        message?.let {
-            binding.tvContent.text = it
-        }
-        binding.btnYes.setOnClickListener {
+        binding.btnAllow.setOnClickListener {
             callback?.positiveAction()
             dismiss()
         }
-        binding.btnNo.setOnClickListener {
+        binding.btnDeny.setOnClickListener {
             callback?.negativeAction()
             dismiss()
         }
-        positiveButtonTitle?.let {
-            binding.btnYes.text = it
-        }
-        negativeButtonTitle?.let {
-            binding.btnNo.text = it
+        binding.btnClose.setOnClickListener {
+            callback?.negativeAction()
+            dismiss()
         }
 
     }

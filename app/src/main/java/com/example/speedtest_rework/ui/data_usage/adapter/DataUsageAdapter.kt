@@ -11,6 +11,10 @@ import java.math.RoundingMode
 
 class DataUsageAdapter(private var data: List<DataUsageModel>) :
     RecyclerView.Adapter<DataUsageAdapter.DataUsageViewHolder>() {
+    fun setData(data: List<DataUsageModel>) {
+        this.data = data
+        notifyDataSetChanged()
+    }
 
     inner class DataUsageViewHolder(val binding: ItemDataUsageBinding) :
         RecyclerView.ViewHolder(binding.root) {

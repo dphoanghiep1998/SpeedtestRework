@@ -19,6 +19,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
 import com.example.speedtest_rework.R
+import com.example.speedtest_rework.base.dialog.PermissionDialog
 import com.example.speedtest_rework.base.fragment.BaseFragment
 import com.example.speedtest_rework.common.Constant
 import com.example.speedtest_rework.common.buildMinVersionM
@@ -33,7 +34,7 @@ import com.example.speedtest_rework.ui.viewpager.ViewPagerAdapter
 import com.example.speedtest_rework.viewmodel.ScanStatus
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
 
-class FragmentMain : BaseFragment() {
+class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback {
     private lateinit var binding: FragmentMainBinding
     private val viewModel: SpeedTestViewModel by activityViewModels()
 
@@ -42,6 +43,7 @@ class FragmentMain : BaseFragment() {
         notificationHandleIntentFlow()
 
     }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -97,6 +99,8 @@ class FragmentMain : BaseFragment() {
             )
         ) {
             binding.containerSpeedMonitor.swSwitch.isChecked = true
+            binding.containerSpeedMonitor.tvDes.visibility = View.VISIBLE
+
         }
         if (AppForegroundService.getInstance().isServiceDataUsageRunning(
                 requireContext(),
@@ -104,6 +108,8 @@ class FragmentMain : BaseFragment() {
             )
         ) {
             binding.containerDataUsage.swSwitch.isChecked = true
+            binding.containerDataUsage.tvDes.visibility = View.VISIBLE
+
         }
         binding.menu.setOnClickListener {
             with(binding) {
@@ -124,9 +130,12 @@ class FragmentMain : BaseFragment() {
                 if (checked) {
                     AppForegroundService.getInstance()
                         .startService(requireContext(), ServiceType.SPEED_MONITOR)
+                    binding.containerSpeedMonitor.tvDes.visibility = View.VISIBLE
                 } else {
                     AppForegroundService.getInstance()
                         .stopService(requireContext(), ServiceType.SPEED_MONITOR)
+                    binding.containerSpeedMonitor.tvDes.visibility = View.GONE
+
                 }
             }
 
@@ -139,15 +148,22 @@ class FragmentMain : BaseFragment() {
                                 requireContext(),
                                 ServiceType.DATA_USAGE
                             )
+                            binding.containerDataUsage.tvDes.visibility = View.VISIBLE
+
                         }
                         else -> {
                             item.isChecked = false
-                            requestAccessSettingPermission(requireContext())
+                            val permissionDialog = PermissionDialog(requireContext(), this)
+                            permissionDialog.window?.attributes?.windowAnimations =
+                                R.style.PermissionDialogAnimation
+                            permissionDialog.show()
                         }
                     }
                 } else {
                     AppForegroundService.getInstance()
                         .stopService(requireContext(), ServiceType.DATA_USAGE)
+                    binding.containerDataUsage.tvDes.visibility = View.GONE
+
                 }
             }
         }
@@ -195,15 +211,18 @@ class FragmentMain : BaseFragment() {
         }
 
     }
+
     private fun notificationHandleIntentFlow() {
 
-        val actionDoSpeedTest = requireActivity().intent.extras?.getString(getString(R.string.action_show_data_usage))
-        if(actionDoSpeedTest != null){
+        val actionDoSpeedTest =
+            requireActivity().intent.extras?.getString(getString(R.string.action_show_data_usage))
+        if (actionDoSpeedTest != null) {
 
         }
-        val actionShowDataUsage = requireActivity().intent.extras?.getString(getString(R.string.action_show_data_usage))
+        val actionShowDataUsage =
+            requireActivity().intent.extras?.getString(getString(R.string.action_show_data_usage))
 
-        if(actionShowDataUsage != null){
+        if (actionShowDataUsage != null) {
             navigateToPage(R.id.action_fragmentMain_to_fragmentDataUsage)
         }
 
@@ -346,5 +365,14 @@ class FragmentMain : BaseFragment() {
                 }
             }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+    }
+
+    override fun negativeAction() {
+        //do nothing
+    }
+
+    override fun positiveAction() {
+        requestAccessSettingPermission(requireContext())
+
     }
 }

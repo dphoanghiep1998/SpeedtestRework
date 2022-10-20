@@ -59,9 +59,12 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/tv_filter"
+                android:drawableStart="@drawable/ic_filter"
+                android:drawablePadding="@dimen/_2sdp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="30 Days"
+                android:text="@string/thirty_day"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_14sdp" />
         </androidx.appcompat.widget.LinearLayoutCompat>
@@ -179,6 +182,7 @@
             android:textSize="@dimen/_14sdp" />
     </androidx.appcompat.widget.LinearLayoutCompat>
     <LinearLayout
+        android:visibility="gone"
         android:id="@+id/container_loading"
         android:gravity="center"
         android:background="@color/background_main"

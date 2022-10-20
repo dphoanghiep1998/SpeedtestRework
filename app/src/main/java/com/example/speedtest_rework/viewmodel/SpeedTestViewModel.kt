@@ -30,6 +30,7 @@ class SpeedTestViewModel @Inject constructor(private val appRepository: AppRepos
     var isMultiTaskDone: MutableLiveData<Boolean> = MutableLiveData()
     var addressInfoList: MutableList<AddressInfo> = mutableListOf()
     var currentNetworkInfo: CurrentNetworkInfo = CurrentNetworkInfo()
+    private val listDataUsage: MutableLiveData<List<DataUsageModel>> = MutableLiveData()
 
 
     private var scanStatus = MutableLiveData<ScanStatus>()
@@ -40,9 +41,15 @@ class SpeedTestViewModel @Inject constructor(private val appRepository: AppRepos
         scanStatus.value = status
     }
 
+    fun reOrderListDataUsage(order: Order): List<DataUsageModel>? = when (order) {
+        Order.THIRTY_DAYS -> listDataUsage.let { it.value?.take(30) }
+        Order.SEVEN_DAYS -> listDataUsage.let { it.value?.take(7) }
+        Order.THREE_DAYS -> listDataUsage.let { it.value?.take(3) }
+        else -> listDataUsage.let { it.value?.take(1) }
+    }
+
     @RequiresApi(Build.VERSION_CODES.M)
     fun getListOfDataUsage(): LiveData<List<DataUsageModel>> {
-        val listDataUsage: MutableLiveData<List<DataUsageModel>> = MutableLiveData()
         viewModelScope.launch {
             listDataUsage.value = appRepository.getDataUsageList()
         }

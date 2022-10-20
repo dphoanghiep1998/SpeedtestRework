@@ -59,4 +59,6 @@
     <color name="gray_900">#07070F</color>
 
     <color name="selected">#2196F3</color>
+    <color name="gray_500">#6E7191</color>
+    <color name="gray_200">#EFF0F6</color>
 </resources>
