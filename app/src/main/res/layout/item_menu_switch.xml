@@ -14,23 +14,27 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:foreground="@drawable/ripple_effect_fg"
         android:paddingHorizontal="@dimen/_16sdp"
-        android:paddingVertical="@dimen/_12sdp"
+        android:paddingVertical="@dimen/_2sdp"
         app:layout_constraintTop_toBottomOf="@+id/ic_logo_menu">
 
         <ImageView
+            android:paddingVertical="@dimen/_10sdp"
+            android:layout_marginStart="@dimen/_minus10sdp"
             android:id="@+id/imv_speed_monitor"
-            android:layout_width="@dimen/_20sdp"
-            android:layout_height="@dimen/_20sdp"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp"
             android:src="@{mSrc}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:layout_marginStart="@dimen/_6sdp"
             android:id="@+id/tv_speed_monitor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -47,7 +51,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            android:text="Check it in notification bar"
+            android:text="@string/check_it_notification"
             android:textColor="@color/gray_400"
             android:textSize="@dimen/_10sdp"
             app:layout_constraintBottom_toBottomOf="parent"

@@ -34,7 +34,7 @@
         android:id="@+id/container_permission"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@id/tv_des_permission"
+        android:layout_marginTop="@dimen/_20sdp"
         app:layout_constraintTop_toBottomOf="@id/tvRequireText">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -82,7 +82,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_20sdp"
-            android:layout_marginTop="@dimen/_16sdp"
+            android:layout_marginTop="@dimen/_24sdp"
             app:layout_constraintTop_toBottomOf="@id/container_permission_1">
 
             <ImageView
@@ -117,16 +117,19 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <View
-                android:id="@+id/line"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="@dimen/_16sdp"
-                android:background="@color/border_color"
-                app:layout_constraintBottom_toBottomOf="parent" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:layout_marginBottom="@dimen/_2sdp"
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_marginHorizontal="@dimen/_16sdp"
+        android:layout_height="1dp"
+        android:background="@color/border_color"
+        app:layout_constraintBottom_toTopOf="@id/tv_des_permission" />
 
     <TextView
         android:id="@+id/tv_des_permission"
@@ -137,8 +140,9 @@
         android:text="@string/des_permission"
         android:textColor="@color/gray_100"
         android:textSize="@dimen/_12sdp"
-        app:layout_constraintBottom_toTopOf="@id/btn_accept"
-        app:layout_constraintTop_toBottomOf="@id/container_permission" />
+        app:layout_constraintTop_toBottomOf="@id/container_permission"
+        android:layout_marginTop="@dimen/_16sdp"
+        android:layout_marginBottom="@dimen/_16sdp"/>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_accept"
@@ -149,10 +153,10 @@
         android:text="Grant Permission &amp; Continue"
         android:textColor="@color/gray_900"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="@dimen/_20sdp"
+        app:layout_constraintTop_toBottomOf="@id/tv_des_permission"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_des_permission" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
