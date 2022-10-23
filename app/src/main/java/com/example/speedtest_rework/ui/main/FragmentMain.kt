@@ -15,6 +15,7 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
@@ -28,6 +29,7 @@ import com.example.speedtest_rework.databinding.FragmentMainBinding
 import com.example.speedtest_rework.services.AppForegroundService
 import com.example.speedtest_rework.services.ServiceType
 import com.example.speedtest_rework.ui.main.analyzer.FragmentAnalyzer
+import com.example.speedtest_rework.ui.main.languages.FragmentLanguage
 import com.example.speedtest_rework.ui.main.result_history.FragmentResults
 import com.example.speedtest_rework.ui.main.speedtest.FragmentSpeedTest
 import com.example.speedtest_rework.ui.viewpager.ViewPagerAdapter
@@ -37,6 +39,7 @@ import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
 class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback {
     private lateinit var binding: FragmentMainBinding
     private val viewModel: SpeedTestViewModel by activityViewModels()
+    private lateinit var languageDialog: FragmentLanguage
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +62,7 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback {
 
 
     private fun initView() {
+        initLanguageDialog()
         initViewPager()
         initBottomNavigation()
         initDrawerAction()
@@ -93,37 +97,37 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback {
     }
 
     private fun initDrawerAction() {
-        if (AppForegroundService.getInstance().isServiceSpeedMonitorRunning(
-                requireContext(),
-                AppForegroundService::class.java
-            )
-        ) {
-            binding.containerSpeedMonitor.swSwitch.isChecked = true
-            binding.containerSpeedMonitor.tvDes.visibility = View.VISIBLE
-
-        }
-        if (AppForegroundService.getInstance().isServiceDataUsageRunning(
-                requireContext(),
-                AppForegroundService::class.java
-            )
-        ) {
-            binding.containerDataUsage.swSwitch.isChecked = true
-            binding.containerDataUsage.tvDes.visibility = View.VISIBLE
-
-        }
-        binding.menu.setOnClickListener {
-            with(binding) {
-                drawerContainer.openDrawer(
-                    GravityCompat.START,
-                    true
-                )
-            }
-        }
         binding.containerFeedback.root.setOnClickListener { openLink("http://www.google.com") }
         binding.containerPolicy.root.setOnClickListener { openLink("http://www.facebook.com") }
         binding.containerShare.root.setOnClickListener { this.shareApp() }
         binding.containerRate.root.setOnClickListener { this.rateApp() }
         if (buildMinVersionM()) {
+            if (AppForegroundService.getInstance().isServiceSpeedMonitorRunning(
+                    requireContext(),
+                    AppForegroundService::class.java
+                )
+            ) {
+                binding.containerSpeedMonitor.swSwitch.isChecked = true
+                binding.containerSpeedMonitor.tvDes.visibility = View.VISIBLE
+
+            }
+            if (AppForegroundService.getInstance().isServiceDataUsageRunning(
+                    requireContext(),
+                    AppForegroundService::class.java
+                )
+            ) {
+                binding.containerDataUsage.swSwitch.isChecked = true
+                binding.containerDataUsage.tvDes.visibility = View.VISIBLE
+
+            }
+            binding.menu.setOnClickListener {
+                with(binding) {
+                    drawerContainer.openDrawer(
+                        GravityCompat.START,
+                        true
+                    )
+                }
+            }
             binding.containerDataUsage.root.visibility = View.VISIBLE
             binding.containerSpeedMonitor.root.visibility = View.VISIBLE
             binding.containerSpeedMonitor.swSwitch.setOnCheckedChangeListener { item, checked ->
@@ -167,8 +171,13 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback {
                 }
             }
         }
+        binding.containerLanguage.root.setOnClickListener {
+            findNavController().navigate(R.id.action_fragmentMain_to_languageFragment)
+        }
+    }
 
-
+    private fun initLanguageDialog() {
+        languageDialog = FragmentLanguage()
     }
 
     private fun checkAccessSettingPermission(context: Context): Boolean =

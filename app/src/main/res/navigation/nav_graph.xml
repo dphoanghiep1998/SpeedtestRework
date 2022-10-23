@@ -13,7 +13,8 @@
         <action
             android:id="@+id/action_fragmentPermission_to_fragmentMain"
             app:destination="@id/fragmentMain"
-            app:enterAnim="@anim/nav_default_enter_anim" />
+            app:enterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_left"/>
     </fragment>
     <fragment
         android:id="@+id/fragmentSplash"
@@ -48,6 +49,11 @@
             app:destination="@id/fragmentDataUsage"
             app:enterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_left" />
+        <action
+            android:id="@+id/action_fragmentMain_to_languageFragment"
+            app:destination="@id/languageFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_left"/>
     </fragment>
 
     <fragment
@@ -60,4 +66,9 @@
         android:name="com.example.speedtest_rework.ui.data_usage.FragmentDataUsage"
         android:label="FragmentDataUsage"
         tools:layout="@layout/fragment_data_usage" />
+    <fragment
+        android:id="@+id/languageFragment"
+        android:name="com.example.speedtest_rework.ui.main.languages.FragmentLanguage"
+        android:label="LanguageFragment"
+        tools:layout="@layout/fragment_language" />
 </navigation>

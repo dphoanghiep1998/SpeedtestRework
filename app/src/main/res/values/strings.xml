@@ -125,6 +125,8 @@
     <string name="three_day">3 Days</string>
     <string name="today">Today</string>
     <string name="check_it_notification">Check it in notification bar</string>
+    <string name="language_title">LANGUAGES</string>
+    <string name="key_language">KEY_LANGUAGE</string>
 
 
 </resources>

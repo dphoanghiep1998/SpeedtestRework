@@ -24,6 +24,14 @@ class AppSharePreference(private val context: Context) {
         }
     }
 
+    fun saveLanguage(key: Int, values: String) {
+        saveString(key, values)
+    }
+
+    fun getSavedLanguage(key: Int, defaultValues: String): String {
+        return getString(key, defaultValues)
+    }
+
     fun saveUnitType(key: Int, values: String) {
         saveString(key, values)
     }

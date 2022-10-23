@@ -20,11 +20,12 @@ package com.example.speedtest_rework.common
 import android.annotation.SuppressLint
 import java.util.*
 
-private object SyncAvoid {
+private object LocaleUtils {
     @SuppressLint("ConstantLocale")
     val defaultLocale: Locale = Locale.getDefault()
     val countryCodes: Set<String> = Locale.getISOCountries().toSet()
-    val availableLocales: List<Locale> = Locale.getAvailableLocales().filter { countryCodes.contains(it.country) }
+    val availableLocales: List<Locale> =
+        Locale.getAvailableLocales().filter { countryCodes.contains(it.country) }
 
     @SuppressLint("ConstantLocale")
     val countriesLocales: SortedMap<String, Locale> =
@@ -32,58 +33,41 @@ private object SyncAvoid {
             .associateBy { it.country.toCapitalize(Locale.getDefault()) }
             .toSortedMap()
     val supportedLocales: List<Locale> = setOf(
-        BULGARIAN,
-        Locale.SIMPLIFIED_CHINESE,
-        Locale.TRADITIONAL_CHINESE,
         Locale.ENGLISH,
-        Locale.FRENCH,
-        Locale.GERMAN,
-        Locale.ITALIAN,
         Locale.JAPANESE,
-        POLISH,
-        PORTUGUESE,
-        SPANISH,
-        RUSSIAN,
-        UKRAINIAN,
-        defaultLocale
+        Locale.KOREAN,
+        Locale.FRENCH,
+        Locale.ITALY,
+        Locale.GERMAN,
+        VIETNAM
     )
-            .toList()
+        .toList()
 }
 
-val BULGARIAN: Locale = Locale("bg")
-
-val POLISH: Locale = Locale("pl")
-
-val PORTUGUESE: Locale = Locale("pt")
-
-val SPANISH: Locale = Locale("es")
-
-val RUSSIAN: Locale = Locale("ru")
-
-val UKRAINIAN: Locale = Locale("uk")
+val VIETNAM = Locale("vi", "Việt Nam")
 
 private const val SEPARATOR: String = "_"
 
 fun findByCountryCode(countryCode: String): Locale =
-    SyncAvoid.availableLocales
+    LocaleUtils.availableLocales
         .find { countryCode.toCapitalize(Locale.getDefault()) == it.country }
-        ?: SyncAvoid.defaultLocale
+        ?: LocaleUtils.defaultLocale
 
-fun allCountries(): List<Locale> = SyncAvoid.countriesLocales.values.toList()
+fun allCountries(): List<Locale> = LocaleUtils.countriesLocales.values.toList()
 
 fun findByLanguageTag(languageTag: String): Locale {
     val languageTagPredicate: (Locale) -> Boolean = {
         val locale: Locale = fromLanguageTag(languageTag)
         it.language == locale.language && it.country == locale.country
     }
-    return SyncAvoid.supportedLocales.find(languageTagPredicate) ?: SyncAvoid.defaultLocale
+    return LocaleUtils.supportedLocales.find(languageTagPredicate) ?: LocaleUtils.defaultLocale
 }
 
-fun supportedLanguages(): List<Locale> = SyncAvoid.supportedLocales
+fun supportedLanguages(): List<Locale> = LocaleUtils.supportedLocales
 
-fun defaultCountryCode(): String = SyncAvoid.defaultLocale.country
+fun defaultCountryCode(): String = LocaleUtils.defaultLocale.country
 
-fun defaultLanguageTag(): String = toLanguageTag(SyncAvoid.defaultLocale)
+fun defaultLanguageTag(): String = toLanguageTag(LocaleUtils.defaultLocale)
 
 fun toLanguageTag(locale: Locale): String = locale.language + SEPARATOR + locale.country
 
@@ -92,6 +76,6 @@ private fun fromLanguageTag(languageTag: String): Locale {
     return when (codes.size) {
         1 -> Locale(codes[0])
         2 -> Locale(codes[0], codes[1].toCapitalize(Locale.getDefault()))
-        else -> SyncAvoid.defaultLocale
+        else -> LocaleUtils.defaultLocale
     }
 }
