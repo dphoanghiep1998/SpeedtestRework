@@ -73,8 +73,10 @@ class AppForegroundService : Service() {
                         REQUEST_CODE
                     )
                 )
-                remoteViews.setViewVisibility(R.id.container_speed_monitor, View.VISIBLE)
-                remoteViews.setViewVisibility(R.id.container_data_usage, View.GONE)
+                remoteViews.setViewVisibility(R.id.tv_upload_value_notification, View.VISIBLE)
+                remoteViews.setViewVisibility(R.id.tv_download_value_notification, View.VISIBLE)
+                remoteViews.setViewVisibility(R.id.mobile_usage_value, View.GONE)
+                remoteViews.setViewVisibility(R.id.wifi_usage_value, View.GONE)
                 remoteViews.setViewVisibility(R.id.btn_speed_test_notification, View.VISIBLE)
             }
             ServiceType.DATA_USAGE -> {
@@ -86,8 +88,10 @@ class AppForegroundService : Service() {
                         REQUEST_CODE_1
                     )
                 )
-                remoteViews.setViewVisibility(R.id.container_speed_monitor, View.GONE)
-                remoteViews.setViewVisibility(R.id.container_data_usage, View.VISIBLE)
+                remoteViews.setViewVisibility(R.id.tv_upload_value_notification, View.GONE)
+                remoteViews.setViewVisibility(R.id.tv_download_value_notification, View.GONE)
+                remoteViews.setViewVisibility(R.id.mobile_usage_value, View.VISIBLE)
+                remoteViews.setViewVisibility(R.id.wifi_usage_value, View.VISIBLE)
                 remoteViews.setViewVisibility(R.id.btn_speed_test_notification, View.GONE)
             }
             ServiceType.BOTH -> {
@@ -108,8 +112,10 @@ class AppForegroundService : Service() {
                     )
                 )
 
-                remoteViews.setViewVisibility(R.id.container_speed_monitor, View.VISIBLE)
-                remoteViews.setViewVisibility(R.id.container_data_usage, View.VISIBLE)
+                remoteViews.setViewVisibility(R.id.tv_upload_value_notification, View.VISIBLE)
+                remoteViews.setViewVisibility(R.id.tv_download_value_notification, View.VISIBLE)
+                remoteViews.setViewVisibility(R.id.mobile_usage_value, View.VISIBLE)
+                remoteViews.setViewVisibility(R.id.wifi_usage_value, View.VISIBLE)
                 remoteViews.setViewVisibility(R.id.btn_speed_test_notification, View.GONE)
             }
             else -> Unit
@@ -296,12 +302,14 @@ class AppForegroundService : Service() {
     }
 
     private fun hideViewSpeedMonitor() {
-        remoteViews.setViewVisibility(R.id.container_speed_monitor, View.GONE)
+        remoteViews.setViewVisibility(R.id.tv_upload_value_notification, View.GONE)
+        remoteViews.setViewVisibility(R.id.tv_download_value_notification, View.GONE)
         remoteViews.setViewVisibility(R.id.btn_speed_test_notification, View.GONE)
     }
 
     private fun hideViewDataUsage() {
-        remoteViews.setViewVisibility(R.id.container_data_usage, View.GONE)
+        remoteViews.setViewVisibility(R.id.mobile_usage_value, View.GONE)
+        remoteViews.setViewVisibility(R.id.wifi_usage_value, View.GONE)
         remoteViews.setViewVisibility(R.id.btn_speed_test_notification, View.VISIBLE)
 
     }

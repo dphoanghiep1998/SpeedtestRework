@@ -53,4 +53,5 @@ class FragmentLanguage : BaseFragment(), TouchLanguageListener {
         config.setLocale(locale)
         resources.updateConfiguration(config, resources.displayMetrics)
     }
+
 }
