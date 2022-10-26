@@ -1,9 +1,11 @@
 package com.github.anastr.speedviewlib.components.indicators
 
 import android.content.Context
-import android.graphics.BlurMaskFilter
-import android.graphics.Canvas
-import android.graphics.Path
+import android.graphics.*
+import android.opengl.ETC1.getHeight
+
+
+
 
 /**
  * this Library build By Anas Altair
@@ -24,15 +26,25 @@ class KiteIndicator(context: Context) : Indicator<KiteIndicator>(context) {
     }
 
     override fun draw(canvas: Canvas) {
+        indicatorPaint.shader = LinearGradient(
+
+            getCenterX() - (width-10) / 2,
+            getViewSize()  / 2+30,
+            getCenterX() - 10f,
+            getViewSize() * 0.25f,
+            0xFF1A1B2F.toInt(),
+            Color.WHITE,
+            Shader.TileMode.CLAMP
+        )
         canvas.drawPath(indicatorPath, indicatorPaint)
     }
 
     override fun updateIndicator() {
         indicatorPath.reset()
-        indicatorPath.moveTo(getCenterX() - 2f, getViewSize() * 0.25f)
-        indicatorPath.lineTo(getCenterX() + 2f, getViewSize() * 0.25f)
-        indicatorPath.lineTo(getCenterX() + width / 2, getViewSize()/2)
-        indicatorPath.lineTo(getCenterX() - width / 2, getViewSize()/2)
+        indicatorPath.moveTo(getCenterX() - 10f, getViewSize() * 0.25f)
+        indicatorPath.lineTo(getCenterX() + 10f, getViewSize() * 0.25f)
+        indicatorPath.lineTo(getCenterX() + (width + 10) / 2, getViewSize() / 2 +30)
+        indicatorPath.lineTo(getCenterX() - (width-10) / 2, getViewSize()  / 2+30)
 
 
 

@@ -17,11 +17,15 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.NavHostFragment
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.activity.BaseActivity
+import com.example.speedtest_rework.common.AppSharePreference
 import com.example.speedtest_rework.common.Constant
+import com.example.speedtest_rework.common.createContext
+import com.example.speedtest_rework.common.findByLanguageTag
 import com.example.speedtest_rework.databinding.ActivityMainBinding
 import com.example.speedtest_rework.receivers.ConnectivityListener
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.*
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity() {
@@ -40,18 +44,27 @@ class MainActivity : BaseActivity() {
         handlePermissionFlow()
     }
 
+    override fun attachBaseContext(newBase: Context) =
+        super.attachBaseContext(
+            newBase.createContext(
+                findByLanguageTag(
+                    AppSharePreference.INSTANCE.getSavedLanguage(
+                        R.string.key_language,
+                        Locale.getDefault().language
+                    )
+                )
+            )
+        )
+
     override fun onDestroy() {
         super.onDestroy()
         unregisterConnectivityListener()
     }
 
     private fun initNavController() {
-        Log.d("TAG", "initNavController: " + intent.data + intent.action)
         navHostFragment =
             supportFragmentManager.findFragmentById(binding.navHostFragment.id) as NavHostFragment
     }
-
-
 
 
     private fun handlePermissionFlow() {

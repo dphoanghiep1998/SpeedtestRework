@@ -69,6 +69,7 @@ internal fun GridLabelRenderer.verticalTitle(title: String): GridLabelRenderer {
     return this
 }
 
+
 internal fun GridLabelRenderer.labelFormat(labelFormatter: LabelFormatter?): GridLabelRenderer {
     labelFormatter?.let {
         this.labelFormatter = labelFormatter

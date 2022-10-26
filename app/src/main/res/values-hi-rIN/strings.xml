@@ -47,6 +47,9 @@
     <string name="share_app">ऐप शेयर करें</string>
     <string name="feedback">प्रतिपुष्टि</string>
     <string name="policy">नीति</string>
+    <string name="speed_monitor">स्पीड मॉनिटर</string>
+    <string name="data_usage_menu">डेटा उपयोग में लाया गया</string>
+    <string name="language">बोली</string>
 
     <string name="speed_test_title">गति परीक्षण</string>
     <string name="wifi_analyzer_title">वाईफ़ाई विश्लेषक</string>
@@ -81,7 +84,7 @@
     <string name="connected">जुड़े हुए</string>
 
 
-    <string name="type" translatable="false">Type</string>
+    <string name="type">टाइप</string>
     <string name="date">दिनांक</string>
     <string name="delete_all_title">सभी परिणाम हटाएं?</string>
     <string name="delete_all_content">सभी परिणाम हटा दिए जाएंगे</string>

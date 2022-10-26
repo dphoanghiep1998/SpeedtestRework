@@ -37,9 +37,19 @@
             android:text="@{mTitle}"
             android:textColor="@color/white"
             android:textSize="@dimen/_14sdp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/tv_des"
             app:layout_constraintStart_toEndOf="@+id/imv_speed_monitor"
             app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/tv_des"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:textColor="@color/gray_400"
+            android:textSize="@dimen/_10sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/tv_speed_monitor"
+            app:layout_constraintTop_toBottomOf="@+id/tv_speed_monitor" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

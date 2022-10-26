@@ -47,6 +47,9 @@
     <string name="share_app">Condividi app</string>
     <string name="feedback">Feedback</string>
     <string name="policy">Politica</string>
+    <string name="speed_monitor">Monitor di velocità</string>
+    <string name="data_usage_menu">Utilizzo dei dati</string>
+    <string name="language">Le lingue</string>
 
     <string name="speed_test_title">TEST DI VELOCITÀ</string>
     <string name="wifi_analyzer_title">ANALIZZATORE WIFI</string>
@@ -81,7 +84,7 @@
     <string name="connected">Collegato</string>
 
 
-    <string name="type" translatable="false">Type</string>
+    <string name="type">Tipo</string>
     <string name="date">Data</string>
     <string name="delete_all_title">CANCELLARE TUTTI I RISULTATI?</string>
     <string name="delete_all_content">Tutti i risultati verranno eliminati</string>
@@ -101,7 +104,7 @@
 
 
     <string name="require_permission">"È necessario concedere l\'accesso alla posizione affinché l\'app possa utilizzare tutte le funzionalità"</string>
-    <string name="permission_text">"Autorizzazione all\'accesso alla posizione"</string>
+    <string name="permission_text">"Autorizzazione di accesso alla posizione"</string>
     <string name="des_permission">Abbiamo bisogno di voi, i nostri rispettabili clienti, per favore felici con 2 tocchi al permesso concesso. \nTi amo</string>
     <string name="ping" translatable="false">Ping</string>
     <string name="jitter" translatable="false">Jitter</string>

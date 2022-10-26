@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
+import android.content.res.Configuration
+import android.content.res.Resources
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
@@ -22,9 +24,7 @@ import com.daimajia.androidanimations.library.YoYo
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.dialog.PermissionDialog
 import com.example.speedtest_rework.base.fragment.BaseFragment
-import com.example.speedtest_rework.common.Constant
-import com.example.speedtest_rework.common.buildMinVersionM
-import com.example.speedtest_rework.common.buildMinVersionQ
+import com.example.speedtest_rework.common.*
 import com.example.speedtest_rework.databinding.FragmentMainBinding
 import com.example.speedtest_rework.services.AppForegroundService
 import com.example.speedtest_rework.services.ServiceType
@@ -35,6 +35,7 @@ import com.example.speedtest_rework.ui.main.speedtest.FragmentSpeedTest
 import com.example.speedtest_rework.ui.viewpager.ViewPagerAdapter
 import com.example.speedtest_rework.viewmodel.ScanStatus
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
+import java.util.*
 
 class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback {
     private lateinit var binding: FragmentMainBinding
@@ -54,6 +55,7 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback {
     ): View {
         binding = FragmentMainBinding.inflate(layoutInflater, container, false)
         changeBackPressCallBack()
+        loadLanguage()
         initView()
         observeIsScanning()
         observeHardReset()
@@ -320,6 +322,7 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback {
         }.playOn(binding.navBottom)
     }
 
+
     private fun showStopBtn() {
         YoYo.with(Techniques.FadeOut).duration(400).onEnd {
             binding.imvVip.visibility = View.GONE
@@ -327,6 +330,21 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback {
         YoYo.with(Techniques.FadeIn).duration(400).onEnd {
             binding.imvStop.visibility = View.VISIBLE
         }.playOn(binding.imvStop)
+    }
+
+    private fun loadLanguage() {
+        val language = AppSharePreference.INSTANCE.getSavedLanguage(
+            R.string.key_language,
+            Locale.getDefault().language
+        )
+        val locale = findByLanguageTag(language)
+        Locale.setDefault(locale)
+        val resources: Resources = requireActivity().resources
+        val config: Configuration = resources.configuration
+        config.setLocale(locale)
+        resources.updateConfiguration(config, resources.displayMetrics)
+        binding.containerLanguage.tvDes.text = locale.displayLanguage
+        binding.containerLanguage.tvDes.visibility = View.VISIBLE
     }
 
     private fun showVipBtn() {
@@ -382,6 +400,6 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback {
 
     override fun positiveAction() {
         requestAccessSettingPermission(requireContext())
-
     }
+
 }

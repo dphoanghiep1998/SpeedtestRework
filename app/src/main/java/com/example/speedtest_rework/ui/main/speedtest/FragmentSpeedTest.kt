@@ -104,63 +104,73 @@ class FragmentSpeedTest : BaseFragment() {
         binding.highestValue.textValue.text = getString(R.string.val_1000)
 
         //setUpFirstTime
-        groupUnit.forEachIndexed { index, textView ->
-            Log.d("TAG", "initExpandView: "+textView.textValue.text)
-            if (textView.textValue.text == getUnitTypeFromPref()) {
-                selectView(textView.line)
-                setUnitType(UnitType.values()[index])
-                valueWhenUnitSelected(UnitType.values()[index])
-            } else {
-                unSelectView(textView.line)
-            }
-        }
-        groupValue.forEachIndexed { _, textView ->
-            if (textView.textValue.text == getUnitValueFromPref()) {
-                Log.d("TAG", "initExpandView: "+textView.textValue.text)
 
-                selectView(textView.line)
-                setMaxValue(textView.textValue.text.toString())
-            } else {
-                unSelectView(textView.line)
+        groupUnit.forEachIndexed { index, item ->
+            run {
+                if (item.textValue.text == getUnitTypeFromPref()) {
+                    selectView(item.line)
+                    setUnitType(UnitType.values()[index])
+                    valueWhenUnitSelected(UnitType.values()[index])
+                } else {
+                    unSelectView(item.line)
+                }
             }
+
+        }
+        groupValue.forEach { textView ->
+            run {
+                if (textView.textValue.text == getUnitValueFromPref()) {
+                    selectView(textView.line)
+                    setMaxValue(textView.textValue.text.toString())
+                } else {
+                    unSelectView(textView.line)
+                }
+            }
+
         }
         //select unit type and max value speed view
         groupUnit.forEachIndexed { index, item ->
-            item.root.setOnClickListener {
-                saveUnitTypeToPref(item.textValue.text.toString())
-                //highlight text type
-                selectView(item.line)
-                //highlight text value index 0
-                selectView(groupValue[0].line)
-                //change text value to type of unitText
-                valueWhenUnitSelected(UnitType.values()[index])
-                //change unitType
-                setUnitType(UnitType.values()[index])
-                //setMaxvalue index 0
-                setMaxValue(groupValue[0].textValue.text.toString())
-                //unselect other value
-                groupValue.filter { fItem ->
-                    fItem != groupValue[0]
-                }.forEach { it1 ->
-                    unSelectView(it1.line)
-                }
-                //unselect other type
-                groupUnit.filter { fItem ->
-                    fItem != item
-                }.forEach { it1 ->
-                    unSelectView(it1.line)
+            run {
+                item.root.setOnClickListener {
+                    saveUnitTypeToPref(item.textValue.text.toString())
+                    //highlight text type
+                    selectView(item.line)
+                    //highlight text value index 0
+                    selectView(groupValue[0].line)
+                    //change text value to type of unitText
+                    valueWhenUnitSelected(UnitType.values()[index])
+                    //change unitType
+                    setUnitType(UnitType.values()[index])
+                    //setMaxvalue index 0
+                    setMaxValue(groupValue[0].textValue.text.toString())
+                    saveUnitValueToPref(groupValue[0].textValue.text.toString())
+                    //unselect other value
+                    groupValue.filter { fItem ->
+                        fItem != groupValue[0]
+                    }.forEach { it1 ->
+                        unSelectView(it1.line)
+                    }
+                    //unselect other type
+                    groupUnit.filter { fItem ->
+                        fItem != item
+                    }.forEach { it1 ->
+                        unSelectView(it1.line)
+                    }
                 }
             }
+
         }
         groupValue.forEachIndexed { index, item ->
-            item.root.setOnClickListener {
-                selectViewValue(item.line)
-                setMaxValue(groupValue[index].textValue.text.toString())
-                saveUnitValueToPref(item.textValue.text.toString())
-                groupValue.filter { fItem ->
-                    fItem != item
-                }.forEach { it1 ->
-                    unSelectView(it1.line)
+            run {
+                item.root.setOnClickListener {
+                    selectViewValue(item.line)
+                    setMaxValue(groupValue[index].textValue.text.toString())
+                    saveUnitValueToPref(item.textValue.text.toString())
+                    groupValue.filter { fItem ->
+                        fItem != item
+                    }.forEach { it1 ->
+                        unSelectView(it1.line)
+                    }
                 }
             }
         }

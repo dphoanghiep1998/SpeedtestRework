@@ -167,7 +167,7 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toBottomOf="@+id/container_speed_monitor"
                     app:mSrc="@{@drawable/ic_data_usage}"
-                    app:mTitle="@{@string/data_usage}" />
+                    app:mTitle="@{@string/data_usage_menu}" />
 
                 <include
                     android:id="@+id/container_language"

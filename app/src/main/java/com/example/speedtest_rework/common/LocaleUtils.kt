@@ -18,7 +18,17 @@
 package com.example.speedtest_rework.common
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
+import android.content.res.Resources
+import androidx.core.app.ActivityCompat
+import androidx.preference.PreferenceManager
+import com.example.speedtest_rework.R
+import com.example.speedtest_rework.activities.MainActivity
 import java.util.*
+
 
 private object LocaleUtils {
     @SuppressLint("ConstantLocale")
@@ -42,6 +52,8 @@ private object LocaleUtils {
         VIETNAM
     )
         .toList()
+
+
 }
 
 val VIETNAM = Locale("vi", "Việt Nam")
@@ -58,7 +70,7 @@ fun allCountries(): List<Locale> = LocaleUtils.countriesLocales.values.toList()
 fun findByLanguageTag(languageTag: String): Locale {
     val languageTagPredicate: (Locale) -> Boolean = {
         val locale: Locale = fromLanguageTag(languageTag)
-        it.language == locale.language && it.country == locale.country
+        it.language == locale.language
     }
     return LocaleUtils.supportedLocales.find(languageTagPredicate) ?: LocaleUtils.defaultLocale
 }
@@ -79,3 +91,4 @@ private fun fromLanguageTag(languageTag: String): Locale {
         else -> LocaleUtils.defaultLocale
     }
 }
+

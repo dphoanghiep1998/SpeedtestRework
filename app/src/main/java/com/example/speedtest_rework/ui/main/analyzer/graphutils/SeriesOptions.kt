@@ -38,7 +38,7 @@ private fun BaseSeries<GraphDataPoint>.highlightSelected(selected: Boolean) {
             }else{
                 this.setTextBold(false)
                 this.thickness = thickness
-                this.color = Color.GRAY
+                this.color = Color.TRANSPARENT
             }
 
         }

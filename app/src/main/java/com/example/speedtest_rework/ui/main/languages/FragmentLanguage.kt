@@ -1,16 +1,20 @@
 package com.example.speedtest_rework.ui.main.languages
 
+import android.content.Intent
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.speedtest_rework.R
+import com.example.speedtest_rework.activities.MainActivity
 import com.example.speedtest_rework.base.fragment.BaseFragment
 import com.example.speedtest_rework.common.AppSharePreference
+import com.example.speedtest_rework.common.Constant
 import com.example.speedtest_rework.databinding.FragmentLanguageBinding
 import java.util.*
 
@@ -48,10 +52,13 @@ class FragmentLanguage : BaseFragment(), TouchLanguageListener {
     override fun onClickLanguage(locale: Locale) {
         AppSharePreference.INSTANCE.saveLanguage(R.string.key_language, locale.language)
         Locale.setDefault(locale)
-        val resources: Resources = requireActivity().resources
-        val config: Configuration = resources.configuration
+        val config: Configuration = requireActivity().resources.configuration
         config.setLocale(locale)
         resources.updateConfiguration(config, resources.displayMetrics)
+        val intent = Intent(requireActivity(),MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        ActivityCompat.finishAffinity(requireActivity())
+        startActivity(intent)
     }
 
 }

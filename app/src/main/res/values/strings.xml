@@ -45,7 +45,7 @@
     <string name="feedback">Feedback</string>
     <string name="policy">Policy</string>
     <string name="speed_monitor">Speed Monitor</string>
-    <string name="data_usage">Data Usage</string>
+    <string name="data_usage_menu">Data Usage</string>
     <string name="language">Languages</string>
     <!--    Title Fragment    -->
     <string name="speed_test_title">SPEED TEST</string>
@@ -65,7 +65,7 @@
     <string name="go">GO</string>
     <!--    Wifi Analyzer Fragment    -->
     <string name="graph_y">Signal Strength (dbm)</string>
-    <string name="graph_x">Wi-Fi Channels</string>
+    <string name="graph_x"> \n Wi-Fi Channels</string>
     <string name="open_setting">OPEN SETTING</string>
     <string name="no_permission">To use this feature, please accept location permission on your device</string>
     <string name="location_permission">Location permission</string>

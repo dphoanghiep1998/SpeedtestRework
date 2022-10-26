@@ -47,6 +47,9 @@
     <string name="share_app">Share app</string>
     <string name="feedback">Feedback</string>
     <string name="policy">Policy</string>
+    <string name="speed_monitor">Speed Monitor</string>
+    <string name="data_usage_menu">Data Usage</string>
+    <string name="language">Languages</string>
 
     <string name="speed_test_title">SPEED TEST</string>
     <string name="wifi_analyzer_title">WIFI ANALYZER</string>
@@ -81,7 +84,7 @@
     <string name="connected">Connected</string>
 
 
-    <string name="type" translatable="false">Type</string>
+    <string name="type">Type</string>
     <string name="date">Date</string>
     <string name="delete_all_title">DELETE ALL RESULTS ?</string>
     <string name="delete_all_content">All results will be deleted</string>

@@ -47,6 +47,9 @@
     <string name="share_app">アプリを共有</string>
     <string name="feedback">フィードバック</string>
     <string name="policy">ポリシー</string>
+    <string name="speed_monitor">スピードモニター</string>
+    <string name="data_usage_menu">データ使用量</string>
+    <string name="language">言語</string>
 
     <string name="speed_test_title">スピードテスト</string>
     <string name="wifi_analyzer_title">WiFi アナライザー</string>
@@ -81,7 +84,7 @@
     <string name="connected">接続済み</string>
 
 
-    <string name="type" translatable="false">Type</string>
+    <string name="type">タイプ</string>
     <string name="date">日にち</string>
     <string name="delete_all_title">すべての結果を削除しますか?</string>
     <string name="delete_all_content">すべての結果が削除されます</string>

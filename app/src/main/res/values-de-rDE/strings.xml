@@ -47,6 +47,9 @@
     <string name="share_app">Deel app</string>
     <string name="feedback">Feedback</string>
     <string name="policy">Beleid</string>
+    <string name="speed_monitor">Snelheidsmonitor</string>
+    <string name="data_usage_menu">Data gebruik</string>
+    <string name="language">Talen</string>
 
     <string name="speed_test_title">SNELHEIDSTEST</string>
     <string name="wifi_analyzer_title">WIFI ANALYSER</string>
@@ -81,7 +84,7 @@
     <string name="connected">Verbonden</string>
 
 
-    <string name="type" translatable="false">Type</string>
+    <string name="type">Type</string>
     <string name="date">Datum</string>
     <string name="delete_all_title">ALLE RESULTATEN VERWIJDEREN?</string>
     <string name="delete_all_content">Alle resultaten worden verwijderd</string>

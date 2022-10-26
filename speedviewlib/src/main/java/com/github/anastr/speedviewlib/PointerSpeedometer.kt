@@ -158,17 +158,6 @@ open class PointerSpeedometer @JvmOverloads constructor(
         updateBackgroundBitmap()
     }
 
-    fun showArc() {
-        val offInt: ValueAnimator = ValueAnimator.ofInt(135, 405)
-        offInt.duration = 500
-        offInt.addUpdateListener {
-            Log.d("TAG", "showArc: " + it.animatedValue)
-            setEndDegree(it.animatedValue as Int)
-            invalidate()
-        }
-        offInt.start()
-    }
-
     fun reset(){
         currentSpeed = 0f
     }
@@ -217,12 +206,12 @@ open class PointerSpeedometer @JvmOverloads constructor(
         )
 
 
-        val c = centerCircleColor
-        circlePaint.color =
-            Color.argb((Color.alpha(c) * .5f).toInt(), Color.red(c), Color.green(c), Color.blue(c))
-        canvas.drawCircle(size * .5f, size * .5f, centerCircleRadius + dpTOpx(4f), circlePaint)
-        circlePaint.color = c
-        canvas.drawCircle(size * .5f, size * .5f, centerCircleRadius, circlePaint)
+//        val c = centerCircleColor
+//        circlePaint.color =
+//            Color.argb((Color.alpha(c) * .5f).toInt(), Color.red(c), Color.green(c), Color.blue(c))
+//        canvas.drawCircle(size * .5f, size * .5f, centerCircleRadius + dpTOpx(4f), circlePaint)
+//        circlePaint.color = c
+//        canvas.drawCircle(size * .5f, size * .5f, centerCircleRadius, circlePaint)
         drawIndicator(canvas)
         drawTicks(canvas, getStartDegree() + position)
     }
