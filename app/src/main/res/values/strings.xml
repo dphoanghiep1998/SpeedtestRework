@@ -130,6 +130,13 @@
     <string name="check_it_notification">Check it in notification bar</string>
     <string name="language_title">LANGUAGES</string>
     <string name="key_language" translatable="false">KEY_LANGUAGE</string>
+    <string name="ENGLISH" translatable="false">English</string>
+    <string name="JAPANESE" translatable="false">日本</string>
+    <string name="KOREAN" translatable="false">"한국인 "</string>
+    <string name="FRENCH" translatable="false">Français</string>
+    <string name="ITALIA" translatable="false">Italia</string>
+    <string name="GERMAN" translatable="false">Deutsch</string>
+    <string name="VIETNAM" translatable="false">Tiếng Việt</string>
 
 
 </resources>

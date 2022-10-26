@@ -23,6 +23,8 @@ class AppSharePreference(private val context: Context) {
             return INSTANCE
         }
     }
+    fun registerOnSharedPreferenceChangeListener(onSharedPreferenceChangeListener: SharedPreferences.OnSharedPreferenceChangeListener): Unit =
+        sharedPreferences().registerOnSharedPreferenceChangeListener(onSharedPreferenceChangeListener)
 
     fun saveLanguage(key: Int, values: String) {
         saveString(key, values)

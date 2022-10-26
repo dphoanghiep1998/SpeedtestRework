@@ -18,15 +18,7 @@
 package com.example.speedtest_rework.common
 
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.content.Context
-import android.content.Intent
-import android.content.SharedPreferences
-import android.content.res.Resources
-import androidx.core.app.ActivityCompat
-import androidx.preference.PreferenceManager
 import com.example.speedtest_rework.R
-import com.example.speedtest_rework.activities.MainActivity
 import java.util.*
 
 
@@ -54,9 +46,20 @@ private object LocaleUtils {
         .toList()
 
 
+    val supportLanguages: List<Int> = setOf(
+        R.string.ENGLISH,
+        R.string.JAPANESE,
+        R.string.KOREAN,
+        R.string.FRENCH,
+        R.string.ITALIA,
+        R.string.GERMAN,
+        R.string.VIETNAM
+    ).toList()
 }
 
-val VIETNAM = Locale("vi", "Việt Nam")
+var VIETNAM = Locale("vi", "Việt Nam")
+
+
 
 private const val SEPARATOR: String = "_"
 
@@ -76,6 +79,7 @@ fun findByLanguageTag(languageTag: String): Locale {
 }
 
 fun supportedLanguages(): List<Locale> = LocaleUtils.supportedLocales
+fun supportDisplayLang():List<Int> = LocaleUtils.supportLanguages
 
 fun defaultCountryCode(): String = LocaleUtils.defaultLocale.country
 
@@ -91,4 +95,3 @@ private fun fromLanguageTag(languageTag: String): Locale {
         else -> LocaleUtils.defaultLocale
     }
 }
-

@@ -148,10 +148,10 @@
             android:textColor="@color/gray_900"
             android:textFontWeight="700"
             android:foreground="@drawable/ripple_effect_corner_fg"
-            android:textSize="@dimen/_16sdp"
+            android:textSize="@dimen/_14sdp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btn_allow"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -159,7 +159,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginEnd="@dimen/_20sdp"
             android:paddingVertical="@dimen/_8sdp"
             android:paddingHorizontal="@dimen/_16sdp"
             android:clickable="true"
@@ -167,7 +166,8 @@
             android:textColor="@color/gray_900"
             android:textFontWeight="700"
             android:foreground="@drawable/ripple_effect_corner_fg"
-            android:textSize="@dimen/_16sdp"
+            android:textSize="@dimen/_14sdp"
+            app:layout_constraintStart_toEndOf="@id/btn_deny"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

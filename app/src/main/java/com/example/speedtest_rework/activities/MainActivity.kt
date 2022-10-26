@@ -1,19 +1,14 @@
 package com.example.speedtest_rework.activities
 
 import android.Manifest
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-
 import android.content.IntentFilter
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
-
 import android.os.Bundle
-import android.util.Log
-
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
-
 import androidx.navigation.fragment.NavHostFragment
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.activity.BaseActivity
@@ -28,7 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
 @AndroidEntryPoint
-class MainActivity : BaseActivity() {
+class MainActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
     private lateinit var binding: ActivityMainBinding
     private var navHostFragment: NavHostFragment? = null
     val viewModel: SpeedTestViewModel by viewModels()
@@ -38,6 +33,8 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
+        initLocaleViewModel()
+        AppSharePreference.getInstance(this).registerOnSharedPreferenceChangeListener(this)
         setContentView(binding.root)
         registerConnectivityListener()
         initNavController()
@@ -61,11 +58,18 @@ class MainActivity : BaseActivity() {
         unregisterConnectivityListener()
     }
 
+
     private fun initNavController() {
         navHostFragment =
             supportFragmentManager.findFragmentById(binding.navHostFragment.id) as NavHostFragment
     }
 
+    private fun initLocaleViewModel() {
+        viewModel.currentLanguage = AppSharePreference.INSTANCE.getSavedLanguage(
+            R.string.key_language,
+            Locale.getDefault().language
+        )
+    }
 
     private fun handlePermissionFlow() {
 
@@ -113,6 +117,22 @@ class MainActivity : BaseActivity() {
                 navHostFragment?.navController?.navigate(R.id.action_fragmentPermission_to_fragmentMain)
                 viewModel.setIsPermissionGranted(true)
             }
+        }
+    }
+
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+        val settingLanguageLocale = viewModel.currentLanguage
+        val languageLocaleChanged = AppSharePreference.INSTANCE.getSavedLanguage(
+            R.string.key_language,
+            Locale.getDefault().language
+        ) != settingLanguageLocale
+        if (languageLocaleChanged) {
+            viewModel.currentLanguage = AppSharePreference.INSTANCE.getSavedLanguage(
+                R.string.key_language,
+                Locale.getDefault().language
+            )
+            finish()
+            startActivity(intent)
         }
     }
 

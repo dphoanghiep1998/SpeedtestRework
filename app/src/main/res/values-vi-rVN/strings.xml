@@ -121,7 +121,7 @@
     <string name="service_type_key" translatable="false">service_type_key</string>
     <string name="usage_permission">Dịch vụ truy cập dữ liệu sẽ được sử dụng để nhận mức tiêu thụ dữ liệu của tất cả các ứng dụng trong thiết bị của bạn. Bạn luôn có thể sửa đổi ủy quyền trong \"Cài đặt \" của ứng dụng</string>
     <string name="permission_title">Cho phép truy cập để sử dụng</string>
-    <string name="deny">Phủ nhận</string>
+    <string name="deny">Huỷ bỏ</string>
     <string name="allow">Cho phép</string>
     <string name="data_usage_access">Quyền truy cập sử dụng dữ liệu</string>
     <string name="speed_test" translatable="false">SpeedTest</string>

@@ -1,13 +1,15 @@
 package com.example.speedtest_rework.ui.main.languages
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.speedtest_rework.common.supportDisplayLang
 import com.example.speedtest_rework.common.supportedLanguages
 import com.example.speedtest_rework.databinding.ItemLanguageBinding
 
-class LanguageAdapter(private val listener: TouchLanguageListener) :
+class LanguageAdapter(private val context:Context, private val listener: TouchLanguageListener) :
     RecyclerView.Adapter<LanguageAdapter.LanguageViewHolder>() {
 
     private val mLanguageList = supportedLanguages()
@@ -41,7 +43,7 @@ class LanguageAdapter(private val listener: TouchLanguageListener) :
                 binding.imvChecked.visibility = View.GONE
             }
             with(mLanguageList[position]) {
-                binding.tvCountry.text = this.displayLanguage
+                binding.tvCountry.text = context.getString(supportDisplayLang()[position])
                 binding.root.setOnClickListener {
                     selectedLanguageIndex = adapterPosition
                     listener.onClickLanguage(this)
