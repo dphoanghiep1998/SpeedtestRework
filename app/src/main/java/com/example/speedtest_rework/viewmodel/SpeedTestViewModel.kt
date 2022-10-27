@@ -9,7 +9,6 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.speedtest_rework.base.viewmodel.BaseViewModel
-import com.example.speedtest_rework.common.AppSharePreference
 import com.example.speedtest_rework.common.custom_view.UnitType
 import com.example.speedtest_rework.core.getIP.AddressInfo
 import com.example.speedtest_rework.core.getIP.CurrentNetworkInfo

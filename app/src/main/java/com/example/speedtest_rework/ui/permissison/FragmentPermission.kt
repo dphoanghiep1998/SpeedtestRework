@@ -9,8 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import com.example.speedtest_rework.base.fragment.BaseFragment
-import com.example.speedtest_rework.common.Constant
-import com.example.speedtest_rework.common.NetworkUtils
+import com.example.speedtest_rework.common.utils.Constant
+import com.example.speedtest_rework.common.utils.NetworkUtils
 import com.example.speedtest_rework.databinding.FragmentPermissionBinding
 
 class FragmentPermission : BaseFragment() {

@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.Insets
 import android.os.Build
 import android.os.Bundle
-import android.text.Layout
 import android.util.DisplayMetrics
 import android.view.*
 import android.widget.LinearLayout
@@ -15,8 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.fragment.BaseFragment
-import com.example.speedtest_rework.common.buildMinVersionO
-import com.example.speedtest_rework.common.buildMinVersionR
+import com.example.speedtest_rework.common.utils.buildMinVersionR
 import com.example.speedtest_rework.databinding.FragmentDataUsageBinding
 import com.example.speedtest_rework.databinding.LayoutMenuFilterBinding
 import com.example.speedtest_rework.ui.data_usage.adapter.DataUsageAdapter

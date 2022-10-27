@@ -18,7 +18,7 @@
 package com.example.speedtest_rework.ui.main.analyzer.model
 
 
-import com.example.speedtest_rework.common.EMPTY
+import com.example.speedtest_rework.common.utils.EMPTY
 import java.net.InetAddress
 import java.nio.ByteOrder
 import kotlin.math.abs

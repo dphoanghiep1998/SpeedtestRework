@@ -1,7 +1,6 @@
 package com.example.speedtest_rework.ui.main.speedtest
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,17 +11,16 @@ import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.fragment.BaseFragment
-import com.example.speedtest_rework.common.AppSharePreference
-import com.example.speedtest_rework.common.Constant
-import com.example.speedtest_rework.common.NetworkUtils
 import com.example.speedtest_rework.common.custom_view.ConnectionType
 import com.example.speedtest_rework.common.custom_view.UnitType
+import com.example.speedtest_rework.common.utils.AppSharePreference.Companion.INSTANCE
+import com.example.speedtest_rework.common.utils.Constant
+import com.example.speedtest_rework.common.utils.NetworkUtils
 import com.example.speedtest_rework.core.getIP.AddressInfo
 import com.example.speedtest_rework.core.getIP.CurrentNetworkInfo
 import com.example.speedtest_rework.core.serverSelector.TestPoint
 import com.example.speedtest_rework.data.model.HistoryModel
 import com.example.speedtest_rework.databinding.FragmentSpeedTestBinding
-import com.example.speedtest_rework.ui.main.FragmentMain
 import com.example.speedtest_rework.viewmodel.ScanStatus
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
 import java.util.*
@@ -179,25 +177,25 @@ class FragmentSpeedTest : BaseFragment() {
     }
 
     private fun getUnitTypeFromPref(): String {
-        return AppSharePreference.INSTANCE.getUnitType(
+        return INSTANCE.getUnitType(
             R.string.unit_preference,
             getString(R.string.Mbps)
         )
     }
 
     private fun saveUnitTypeToPref(value: String) {
-        AppSharePreference.INSTANCE.saveUnitType(R.string.unit_preference, value)
+        INSTANCE.saveUnitType(R.string.unit_preference, value)
     }
 
     private fun getUnitValueFromPref(): String {
-        return AppSharePreference.INSTANCE.getUnitValue(
+        return INSTANCE.getUnitValue(
             R.string.unit_value_preference,
             getString(R.string.val_100)
         )
     }
 
     private fun saveUnitValueToPref(value: String) {
-        AppSharePreference.INSTANCE.saveUnitValue(R.string.unit_value_preference, value)
+        INSTANCE.saveUnitValue(R.string.unit_value_preference, value)
     }
 
     private fun valueWhenUnitSelected(unit: UnitType) {

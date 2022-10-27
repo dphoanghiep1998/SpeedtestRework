@@ -24,7 +24,8 @@ import com.daimajia.androidanimations.library.YoYo
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.dialog.PermissionDialog
 import com.example.speedtest_rework.base.fragment.BaseFragment
-import com.example.speedtest_rework.common.*
+import com.example.speedtest_rework.common.utils.*
+import com.example.speedtest_rework.common.utils.AppSharePreference.Companion.INSTANCE
 import com.example.speedtest_rework.databinding.FragmentMainBinding
 import com.example.speedtest_rework.services.AppForegroundService
 import com.example.speedtest_rework.services.ServiceType
@@ -333,7 +334,7 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback {
     }
 
     private fun loadLanguage() {
-        val language = AppSharePreference.INSTANCE.getSavedLanguage(
+        val language = INSTANCE.getSavedLanguage(
             R.string.key_language,
             Locale.getDefault().language
         )

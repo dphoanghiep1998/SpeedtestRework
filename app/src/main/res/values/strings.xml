@@ -1,10 +1,28 @@
 <resources>
 
     <!--     Common    -->
+    <array name="stringLan" translatable="false">
+        <item>English</item>
+        <item>Français</item>
+        <item>日本</item>
+        <item>Việt Nam</item>
+        <item>대한민국</item>
+        <item>Italia</item>
+        <item>Tugend</item>
+    </array>
+    <array name="valueLan" translatable="false">
+        <item>en</item>
+        <item>fr</item>
+        <item>ja</item>
+        <item>vi</item>
+        <item>ko</item>
+        <item>it</item>
+        <item>de</item>
+    </array>
+    <string name="app_name" translatable="false">NET Speed Test</string>
     <string name="download" translatable="false">DOWNLOAD</string>
     <string name="upload" translatable="false">UPLOAD</string>
     <string name="test">test</string>
-    <string name="app_name" translatable="false">SpeedTest_Rework</string>
     <string name="default_notify_title">Message</string>
     <string name="Loading">Loading</string>
     <string name="YES">YES</string>
@@ -137,6 +155,7 @@
     <string name="ITALIA" translatable="false">Italia</string>
     <string name="GERMAN" translatable="false">Deutsch</string>
     <string name="VIETNAM" translatable="false">Tiếng Việt</string>
+    <string name="no_list_found">No result found!</string>
 
 
 </resources>

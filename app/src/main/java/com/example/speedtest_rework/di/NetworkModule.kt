@@ -1,7 +1,7 @@
 package com.example.speedtest_rework.di
 
 
-import com.example.speedtest_rework.common.Constant
+import com.example.speedtest_rework.common.utils.Constant
 import com.example.speedtest_rework.data.apis.AddressInfoApi
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory

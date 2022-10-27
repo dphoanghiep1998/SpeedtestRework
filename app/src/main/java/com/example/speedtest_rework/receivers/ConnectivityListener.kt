@@ -8,7 +8,7 @@ import android.net.wifi.WifiInfo
 import android.net.wifi.WifiManager
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.example.speedtest_rework.common.Constant
+import com.example.speedtest_rework.common.utils.Constant
 
 
 class ConnectivityListener constructor(

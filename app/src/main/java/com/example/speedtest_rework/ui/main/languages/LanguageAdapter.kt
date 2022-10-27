@@ -5,11 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.speedtest_rework.common.supportDisplayLang
-import com.example.speedtest_rework.common.supportedLanguages
+import com.example.speedtest_rework.common.utils.supportDisplayLang
+import com.example.speedtest_rework.common.utils.supportedLanguages
 import com.example.speedtest_rework.databinding.ItemLanguageBinding
 
-class LanguageAdapter(private val context:Context, private val listener: TouchLanguageListener) :
+class LanguageAdapter(private val context: Context, private val listener: TouchLanguageListener) :
     RecyclerView.Adapter<LanguageAdapter.LanguageViewHolder>() {
 
     private val mLanguageList = supportedLanguages()
@@ -43,7 +43,8 @@ class LanguageAdapter(private val context:Context, private val listener: TouchLa
                 binding.imvChecked.visibility = View.GONE
             }
             with(mLanguageList[position]) {
-                binding.tvCountry.text = context.getString(supportDisplayLang()[position])
+                binding.tvCountry.text = context.getString(supportDisplayLang()[position].first)
+                binding.imvFlag.setImageDrawable(context.getDrawable(supportDisplayLang()[position].second))
                 binding.root.setOnClickListener {
                     selectedLanguageIndex = adapterPosition
                     listener.onClickLanguage(this)

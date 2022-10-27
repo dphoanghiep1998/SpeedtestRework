@@ -3,9 +3,8 @@ package com.example.speedtest_rework
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import com.example.speedtest_rework.common.AppSharePreference
-import com.example.speedtest_rework.common.buildMinVersionM
-import com.example.speedtest_rework.common.buildMinVersionO
+import com.example.speedtest_rework.common.utils.buildMinVersionO
+import com.example.speedtest_rework.common.utils.AppSharePreference
 import com.example.speedtest_rework.services.AppForegroundService
 import dagger.hilt.android.HiltAndroidApp
 

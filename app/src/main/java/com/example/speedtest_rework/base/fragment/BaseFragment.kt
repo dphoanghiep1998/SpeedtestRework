@@ -9,7 +9,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.activity.BaseActivity
 import com.example.speedtest_rework.base.viewmodel.BaseViewModel
-import com.example.speedtest_rework.common.EventObserver
+import com.example.speedtest_rework.common.utils.EventObserver
 
 
 open class BaseFragment : Fragment() {

@@ -18,7 +18,7 @@
 
 package com.example.speedtest_rework.ui.main.analyzer.model
 
-import com.example.speedtest_rework.common.EMPTY
+import com.example.speedtest_rework.common.utils.EMPTY
 
 
 data class WiFiConnection(val wiFiIdentifier: WiFiIdentifier = WiFiIdentifier.EMPTY,

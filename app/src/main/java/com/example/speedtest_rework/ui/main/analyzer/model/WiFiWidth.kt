@@ -18,7 +18,7 @@
 package com.example.speedtest_rework.ui.main.analyzer.model
 
 import android.net.wifi.ScanResult
-import com.example.speedtest_rework.common.buildMinVersionM
+import com.example.speedtest_rework.common.utils.buildMinVersionM
 import kotlin.math.abs
 
 typealias ChannelWidth = Int

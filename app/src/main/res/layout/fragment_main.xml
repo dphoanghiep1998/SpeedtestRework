@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/drawer_container"
@@ -27,6 +28,7 @@
                     android:layout_width="@dimen/_38sdp"
                     android:layout_height="@dimen/_38sdp"
                     android:background="@drawable/ripple_effect_fg"
+                    android:contentDescription="@string/test"
                     android:padding="@dimen/_8sdp"
                     android:scaleType="centerInside"
                     android:src="@drawable/ic_menu"
@@ -40,6 +42,8 @@
                     android:layout_height="50dp"
                     android:background="@drawable/mask"
                     android:clickable="true"
+                    android:contentDescription="@string/test"
+                    android:focusable="true"
                     android:paddingVertical="10dp"
                     android:paddingEnd="10dp"
                     android:scaleType="centerInside"
@@ -47,7 +51,8 @@
                     android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="RtlSymmetry" />
 
 
                 <TextView
@@ -69,6 +74,8 @@
                     android:layout_height="@dimen/_40sdp"
                     android:background="@drawable/ripple_effect_corner_fg"
                     android:clickable="true"
+                    android:contentDescription="@string/test"
+                    android:focusable="true"
                     android:padding="@dimen/_8sdp"
                     android:src="@drawable/ic_vip"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -80,6 +87,7 @@
                     android:layout_width="@dimen/_40sdp"
                     android:layout_height="@dimen/_40sdp"
                     android:background="@drawable/ripple_effect_corner_fg"
+                    android:contentDescription="@string/test"
                     android:padding="@dimen/_8sdp"
                     android:src="@drawable/ic_close"
                     android:visibility="gone"
@@ -132,107 +140,110 @@
             android:background="@color/gray_700"
             android:fitsSystemWindows="true">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/gray_700">
-
-                <ImageView
-                    android:id="@+id/ic_logo_menu"
-                    android:scaleType="fitCenter"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_150sdp"
-                    android:src="@drawable/ic_logo_menu"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-
-                <include
-                    android:visibility="gone"
-                    android:id="@+id/container_speed_monitor"
-                    layout="@layout/item_menu_switch"
+                android:layout_height="match_parent">
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_20sdp"
-                    app:layout_constraintTop_toBottomOf="@+id/ic_logo_menu"
-                    app:mSrc="@{@drawable/ic_speed_monitor}"
-                    app:mTitle="@{@string/speed_monitor}" />
+                    android:background="@color/gray_700">
 
-                <include
-                    android:visibility="gone"
-                    android:id="@+id/container_data_usage"
-                    layout="@layout/item_menu_switch"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@+id/container_speed_monitor"
-                    app:mSrc="@{@drawable/ic_data_usage}"
-                    app:mTitle="@{@string/data_usage_menu}" />
-
-                <include
-                    android:id="@+id/container_language"
-                    layout="@layout/item_menu"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@+id/container_data_usage"
-                    app:mSrc="@{@drawable/ic_language}"
-                    app:mTitle="@{@string/language}" />
+                    <ImageView
+                        android:id="@+id/ic_logo_menu"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_150sdp"
+                        android:contentDescription="@string/test"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_logo_menu"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
 
-                <View
-                    android:id="@+id/line"
-                    android:layout_width="match_parent"
-                    android:layout_marginHorizontal="@dimen/_16sdp"
-                    android:layout_height="2px"
-                    android:background="@color/gray_400"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/container_language" />
+                    <include
+                        android:id="@+id/container_speed_monitor"
+                        layout="@layout/item_menu_switch"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_20sdp"
+                        android:visibility="gone"
+                        app:layout_constraintTop_toBottomOf="@+id/ic_logo_menu"
+                        app:mSrc="@{@drawable/ic_speed_monitor}"
+                        app:mTitle="@{@string/speed_monitor}" />
 
-                <include
-                    android:id="@+id/container_rate"
-                    layout="@layout/item_menu"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:foreground="@drawable/ripple_effect_fg"
-                    app:layout_constraintTop_toBottomOf="@+id/line"
-                    app:mSrc="@{@drawable/ic_rate_app}"
-                    app:mTitle="@{@string/rate_app}" />
+                    <include
+                        android:id="@+id/container_data_usage"
+                        layout="@layout/item_menu_switch"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        app:layout_constraintTop_toBottomOf="@+id/container_speed_monitor"
+                        app:mSrc="@{@drawable/ic_data_usage}"
+                        app:mTitle="@{@string/data_usage_menu}" />
 
-                <include
-                    android:id="@+id/container_share"
-                    layout="@layout/item_menu"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:foreground="@drawable/ripple_effect_fg"
-                    app:layout_constraintTop_toBottomOf="@+id/container_rate"
-                    app:mSrc="@{@drawable/ic_share_menu}"
-                    app:mTitle="@{@string/share_app}" />
-
-                <include
-                    android:id="@+id/container_feedback"
-                    layout="@layout/item_menu"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:foreground="@drawable/ripple_effect_fg"
-                    app:layout_constraintTop_toBottomOf="@+id/container_share"
-                    app:mSrc="@{@drawable/ic_feedback}"
-                    app:mTitle="@{@string/feedback}" />
-
-                <include
-                    android:id="@+id/container_policy"
-                    layout="@layout/item_menu"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:foreground="@drawable/ripple_effect_fg"
-                    app:layout_constraintTop_toBottomOf="@+id/container_feedback"
-                    app:mSrc="@{@drawable/ic_policy}"
-                    app:mTitle="@{@string/policy}" />
+                    <include
+                        android:id="@+id/container_language"
+                        layout="@layout/item_menu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toBottomOf="@+id/container_data_usage"
+                        app:mSrc="@{@drawable/ic_language}"
+                        app:mTitle="@{@string/language}" />
 
 
+                    <View
+                        android:id="@+id/line"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginHorizontal="@dimen/_16sdp"
+                        android:background="@color/gray_400"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/container_language" />
+
+                    <include
+                        android:id="@+id/container_rate"
+                        layout="@layout/item_menu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:foreground="@drawable/ripple_effect_fg"
+                        app:layout_constraintTop_toBottomOf="@+id/line"
+                        app:mSrc="@{@drawable/ic_rate_app}"
+                        app:mTitle="@{@string/rate_app}" />
+
+                    <include
+                        android:id="@+id/container_share"
+                        layout="@layout/item_menu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:foreground="@drawable/ripple_effect_fg"
+                        app:layout_constraintTop_toBottomOf="@+id/container_rate"
+                        app:mSrc="@{@drawable/ic_share_menu}"
+                        app:mTitle="@{@string/share_app}" />
+
+                    <include
+                        android:id="@+id/container_feedback"
+                        layout="@layout/item_menu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:foreground="@drawable/ripple_effect_fg"
+                        app:layout_constraintTop_toBottomOf="@+id/container_share"
+                        app:mSrc="@{@drawable/ic_feedback}"
+                        app:mTitle="@{@string/feedback}" />
+
+                    <include
+                        android:id="@+id/container_policy"
+                        layout="@layout/item_menu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:foreground="@drawable/ripple_effect_fg"
+                        app:layout_constraintTop_toBottomOf="@+id/container_feedback"
+                        app:mSrc="@{@drawable/ic_policy}"
+                        app:mTitle="@{@string/policy}" />
 
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </ScrollView>
 
         </com.google.android.material.navigation.NavigationView>
 

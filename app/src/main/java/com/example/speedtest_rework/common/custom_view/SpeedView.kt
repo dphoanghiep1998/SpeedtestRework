@@ -28,9 +28,9 @@ import com.airbnb.lottie.value.LottieValueCallback
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
 import com.example.speedtest_rework.R
-import com.example.speedtest_rework.common.Constant
-import com.example.speedtest_rework.common.format
-import com.example.speedtest_rework.common.roundOffDecimal
+import com.example.speedtest_rework.common.utils.Constant
+import com.example.speedtest_rework.common.utils.format
+import com.example.speedtest_rework.common.utils.roundOffDecimal
 import com.example.speedtest_rework.core.SpeedTest
 import com.example.speedtest_rework.core.serverSelector.TestPoint
 import com.example.speedtest_rework.data.model.HistoryModel

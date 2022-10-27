@@ -2,7 +2,7 @@ package com.example.speedtest_rework.base.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.speedtest_rework.common.Event
+import com.example.speedtest_rework.common.utils.Event
 import com.example.speedtest_rework.network.BaseNetworkException
 import com.example.speedtest_rework.network.NetworkErrorException
 import kotlinx.coroutines.CoroutineExceptionHandler

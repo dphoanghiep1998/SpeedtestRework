@@ -17,7 +17,7 @@
  */
 package com.example.speedtest_rework.ui.main.analyzer.graph
 
-import com.example.speedtest_rework.common.EMPTY
+import com.example.speedtest_rework.common.utils.EMPTY
 import com.example.speedtest_rework.ui.main.analyzer.band.WiFiBand
 import com.example.speedtest_rework.ui.main.analyzer.band.WiFiChannel
 import com.example.speedtest_rework.ui.main.analyzer.band.WiFiChannelPair

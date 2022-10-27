@@ -37,6 +37,7 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
 }
 kapt {
     correctErrorTypes = true
@@ -107,5 +108,5 @@ dependencies {
     implementation "com.squareup.okhttp3:okhttp:$ok_httpclient_version"
     implementation "com.squareup.okhttp3:logging-interceptor:$ok_httpclient_version"
 //graphview
-    implementation 'com.jjoe64:graphview:4.2.2'
+    implementation 'com.github.dphoanghiep1998:GraphView:41ab637ce8'
 }

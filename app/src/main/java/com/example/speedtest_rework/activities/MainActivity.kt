@@ -2,20 +2,18 @@ package com.example.speedtest_rework.activities
 
 import android.Manifest
 import android.content.Context
-import android.content.Intent
 import android.content.IntentFilter
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.NavHostFragment
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.activity.BaseActivity
-import com.example.speedtest_rework.common.AppSharePreference
-import com.example.speedtest_rework.common.Constant
-import com.example.speedtest_rework.common.createContext
-import com.example.speedtest_rework.common.findByLanguageTag
+import com.example.speedtest_rework.common.utils.*
 import com.example.speedtest_rework.databinding.ActivityMainBinding
 import com.example.speedtest_rework.receivers.ConnectivityListener
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
@@ -44,7 +42,7 @@ class MainActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceChangeL
     override fun attachBaseContext(newBase: Context) =
         super.attachBaseContext(
             newBase.createContext(
-                findByLanguageTag(
+                Locale(
                     AppSharePreference.INSTANCE.getSavedLanguage(
                         R.string.key_language,
                         Locale.getDefault().language
@@ -52,6 +50,15 @@ class MainActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceChangeL
                 )
             )
         )
+
+    override fun applyOverrideConfiguration(overrideConfiguration: Configuration?) {
+        if (overrideConfiguration != null) {
+            val uiMode = overrideConfiguration.uiMode
+            overrideConfiguration.setTo(baseContext.resources.configuration)
+            overrideConfiguration.uiMode = uiMode
+        }
+        super.applyOverrideConfiguration(overrideConfiguration)
+    }
 
     override fun onDestroy() {
         super.onDestroy()
@@ -65,7 +72,7 @@ class MainActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceChangeL
     }
 
     private fun initLocaleViewModel() {
-        viewModel.currentLanguage = AppSharePreference.INSTANCE.getSavedLanguage(
+        viewModel.currentLanguage = AppSharePreference.getInstance(this).getSavedLanguage(
             R.string.key_language,
             Locale.getDefault().language
         )

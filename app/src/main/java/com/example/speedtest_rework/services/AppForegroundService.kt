@@ -11,15 +11,15 @@ import android.content.Intent
 import android.net.TrafficStats
 import android.os.CountDownTimer
 import android.os.IBinder
-import android.util.Log
 import android.view.View
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.activities.MainActivity
-import com.example.speedtest_rework.common.AppSharePreference
-import com.example.speedtest_rework.common.buildMinVersionM
-import com.example.speedtest_rework.common.buildMinVersionO
+import com.example.speedtest_rework.common.utils.buildMinVersionM
+import com.example.speedtest_rework.common.utils.buildMinVersionO
+import com.example.speedtest_rework.common.utils.AppSharePreference
+import com.example.speedtest_rework.common.utils.AppSharePreference.Companion.INSTANCE
 import java.math.RoundingMode
 import java.util.*
 

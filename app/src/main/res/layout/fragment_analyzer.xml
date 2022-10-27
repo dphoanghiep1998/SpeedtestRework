@@ -26,6 +26,7 @@
         <ViewFlipper
             android:id="@+id/graph"
             android:paddingHorizontal="@dimen/_10sdp"
+            android:paddingVertical="@dimen/_10sdp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical" />

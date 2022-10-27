@@ -7,9 +7,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.speedtest_rework.R
-import com.example.speedtest_rework.common.DateTimeUtils
+import com.example.speedtest_rework.common.utils.DateTimeUtils
 import com.example.speedtest_rework.common.custom_view.UnitType
-import com.example.speedtest_rework.common.format
+import com.example.speedtest_rework.common.utils.format
 
 import com.example.speedtest_rework.data.model.HistoryModel
 

@@ -17,7 +17,7 @@
  */
 package com.example.speedtest_rework.ui.main.analyzer.model
 
-import com.example.speedtest_rework.common.EMPTY
+import com.example.speedtest_rework.common.utils.EMPTY
 import java.util.*
 
 private const val SAE = "SAE"

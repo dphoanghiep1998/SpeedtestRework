@@ -18,7 +18,7 @@
 package com.example.speedtest_rework.ui.main.analyzer.model
 
 import android.net.wifi.ScanResult
-import com.example.speedtest_rework.common.buildMinVersionR
+import com.example.speedtest_rework.common.utils.buildMinVersionR
 
 typealias WiFiStandardId = Int
 

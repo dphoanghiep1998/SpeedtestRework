@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,7 +13,7 @@ import com.example.speedtest_rework.ui.main.result_history.adapter.HistoryAdapte
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.dialog.ConfirmDialog
 import com.example.speedtest_rework.base.fragment.BaseFragment
-import com.example.speedtest_rework.common.Constant
+import com.example.speedtest_rework.common.utils.Constant
 import com.example.speedtest_rework.data.model.HistoryModel
 import com.example.speedtest_rework.databinding.FragmentResultsBinding
 import com.example.speedtest_rework.ui.main.result_history.adapter.ResultTouchHelper
@@ -69,7 +70,18 @@ class FragmentResults : BaseFragment(), ResultTouchHelper, ConfirmDialog.Confirm
         linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
         binding.rcvConnectTestResult.layoutManager = linearLayoutManager
         binding.rcvConnectTestResult.adapter = adapter
-        viewModel.getListHistory().observe(viewLifecycleOwner) { list -> adapter.setData(list) }
+        viewModel.getListHistory().observe(viewLifecycleOwner) { list ->
+            if (list.isEmpty()) {
+                binding.btnDelete.setOnClickListener {
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.no_list_found),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+            adapter.setData(list)
+        }
     }
 
 

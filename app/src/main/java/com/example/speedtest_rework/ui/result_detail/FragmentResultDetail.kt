@@ -13,14 +13,13 @@ import androidx.navigation.fragment.findNavController
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.dialog.ConfirmDialog
 import com.example.speedtest_rework.base.fragment.BaseFragment
-import com.example.speedtest_rework.common.Constant
-import com.example.speedtest_rework.common.DateTimeUtils
+import com.example.speedtest_rework.common.utils.Constant
+import com.example.speedtest_rework.common.utils.DateTimeUtils
 import com.example.speedtest_rework.common.custom_view.UnitType
-import com.example.speedtest_rework.common.format
+import com.example.speedtest_rework.common.utils.format
 import com.example.speedtest_rework.data.model.HistoryModel
 import com.example.speedtest_rework.databinding.FragmentDetailResultBinding
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
-import kotlin.math.log
 
 class FragmentResultDetail : BaseFragment(), ConfirmDialog.ConfirmCallback {
     private lateinit var binding: FragmentDetailResultBinding
@@ -218,6 +217,8 @@ class FragmentResultDetail : BaseFragment(), ConfirmDialog.ConfirmCallback {
         }
         return value
     }
+
+
 
 
 }

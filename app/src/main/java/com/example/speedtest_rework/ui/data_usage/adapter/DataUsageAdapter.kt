@@ -1,10 +1,9 @@
 package com.example.speedtest_rework.ui.data_usage.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.speedtest_rework.common.DateTimeUtils
+import com.example.speedtest_rework.common.utils.DateTimeUtils
 import com.example.speedtest_rework.databinding.ItemDataUsageBinding
 import com.example.speedtest_rework.ui.data_usage.model.DataUsageModel
 import java.math.RoundingMode

@@ -19,10 +19,10 @@ package com.example.speedtest_rework.ui.main.analyzer.graphutils
 
 import android.net.wifi.ScanResult
 import android.net.wifi.WifiInfo
-import com.example.speedtest_rework.common.EMPTY
+import com.example.speedtest_rework.common.utils.EMPTY
 import com.example.speedtest_rework.common.annotation.OpenClass
-import com.example.speedtest_rework.common.buildMinVersionM
-import com.example.speedtest_rework.common.buildMinVersionR
+import com.example.speedtest_rework.common.utils.buildMinVersionM
+import com.example.speedtest_rework.common.utils.buildMinVersionR
 import com.example.speedtest_rework.ui.main.analyzer.model.*
 import com.example.speedtest_rework.ui.main.analyzer.model.Cache
 import com.example.speedtest_rework.ui.main.analyzer.model.CacheResult

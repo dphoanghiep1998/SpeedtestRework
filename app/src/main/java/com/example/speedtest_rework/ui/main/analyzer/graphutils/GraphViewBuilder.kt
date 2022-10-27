@@ -21,7 +21,7 @@ import android.content.Context
 import android.graphics.Color
 import android.view.View
 import android.view.ViewGroup
-import com.example.speedtest_rework.common.EMPTY
+import com.example.speedtest_rework.common.utils.EMPTY
 import com.jjoe64.graphview.GraphView
 import com.jjoe64.graphview.GridLabelRenderer
 import com.jjoe64.graphview.LabelFormatter
@@ -55,6 +55,7 @@ internal fun GridLabelRenderer.colors(): GridLabelRenderer {
 
 internal fun GridLabelRenderer.horizontalTitle(title: String): GridLabelRenderer {
     if (title.isNotEmpty()) {
+        labelsSpace =0
         this.horizontalAxisTitle = title
         this.horizontalAxisTitleTextSize = this.horizontalAxisTitleTextSize * AXIS_TEXT_SIZE_ADJUSTMENT
     }

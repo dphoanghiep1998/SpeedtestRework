@@ -1,57 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingVertical="16dp"
     android:background="@drawable/background_dialog_box"
-    android:orientation="vertical" >
-<TextView
-    android:id="@+id/tv_title"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="@string/delete_title"
-    android:textColor="@color/white"
-    android:textSize="24sp"
-    android:layout_gravity="center"
-    android:textStyle="bold"
-    />
+    android:orientation="vertical"
+    android:paddingVertical="16dp">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/delete_title"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:autoSizeMaxTextSize="@dimen/_24sdp"
+        app:autoSizeMinTextSize="@dimen/_15sdp"
+        app:autoSizeStepGranularity="1dp"
+        app:autoSizeTextType="uniform" />
+
     <TextView
         android:id="@+id/tv_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_margin="10dp"
+        android:layout_margin="@dimen/_10sdp"
         android:text="@string/delete_content"
         android:textColor="@android:color/white"
-        android:textSize="16dp" />
+        android:textSize="@dimen/_14sdp" />
 
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:orientation="horizontal"
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="@dimen/_16sdp"
+        android:orientation="horizontal">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_yes"
-            android:layout_width="100dp"
-            android:layout_height="40dp"
+            android:layout_width="@dimen/_70sdp"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_marginEnd="50dp"
             android:background="@drawable/button_background_start"
             android:clickable="true"
             android:textColor="@color/black"
             android:textStyle="bold"
-            android:layout_marginEnd="50dp"/>
+            android:focusable="true" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_no"
-            android:layout_width="100dp"
-            android:layout_height="40dp"
-            android:layout_marginLeft="5dp"
-            android:textColor="@color/white"
+            android:layout_width="@dimen/_70sdp"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_marginStart="@dimen/_5sdp"
             android:background="@drawable/button_negative_dialog_box"
             android:clickable="true"
-            android:textStyle="bold" />
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:focusable="true" />
     </LinearLayout>
 
 </LinearLayout>
