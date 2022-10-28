@@ -12,6 +12,7 @@ import android.os.Looper
 import android.transition.AutoTransition
 import android.transition.TransitionManager
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -30,6 +31,7 @@ import com.daimajia.androidanimations.library.YoYo
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.common.utils.Constant
 import com.example.speedtest_rework.common.utils.format
+import com.example.speedtest_rework.common.utils.hasHardwareAcceleration
 import com.example.speedtest_rework.common.utils.roundOffDecimal
 import com.example.speedtest_rework.core.SpeedTest
 import com.example.speedtest_rework.core.serverSelector.TestPoint
@@ -55,6 +57,10 @@ class SpeedView(
         val inflater = LayoutInflater.from(context)
         binding = LayoutSpeedviewBinding.inflate(inflater, this)
         initView()
+    }
+
+    fun setHasHardwareEnabled(status: Boolean) {
+        binding.speedView.setHasHardwareEnabled(status)
     }
 
     fun setData(
@@ -137,8 +143,6 @@ class SpeedView(
                         )
                     }
                     MotionEvent.ACTION_UP -> {
-                        binding.btnStart.scaleX = 1.1f
-                        binding.btnStart.scaleY = 1.1f
                         binding.btnStart.addValueCallback(
                             KeyPath("**"), LottieProperty.COLOR_FILTER
                         ) { null }
@@ -150,15 +154,11 @@ class SpeedView(
                         prepareViewSpeedTest()
                     }
                     MotionEvent.ACTION_CANCEL -> {
-                        binding.btnStart.scaleX = 1.1f
-                        binding.btnStart.scaleY = 1.1f
                         binding.btnStart.addValueCallback(
                             KeyPath("**"), LottieProperty.COLOR_FILTER
                         ) { null }
                     }
                     MotionEvent.ACTION_OUTSIDE -> {
-                        binding.btnStart.scaleX = 1.1f
-                        binding.btnStart.scaleY = 1.1f
                         binding.btnStart.addValueCallback(
                             KeyPath("**"), LottieProperty.COLOR_FILTER
                         ) { null }
@@ -171,6 +171,9 @@ class SpeedView(
         binding.speedView.isWithPointer = false
         binding.speedView.textSize = 40f
         binding.speedView.withTremble = false
+//        binding.btnTest.setOnClickListener{
+//            binding.speedView.visibility = VISIBLE
+//        }
     }
 
     private fun changeUnitType() {
@@ -185,14 +188,16 @@ class SpeedView(
         binding.tvDownloadValue.visibility = GONE
         binding.tvUploadValue.visibility = GONE
         changeUnitType()
-        countDownTimer = object : CountDownTimer(4000, 1000) {
+        var count = 0
+        countDownTimer = object : CountDownTimer(5000, 1000) {
             override fun onTick(l: Long) {
-                if (l <= 1000) {
+                count++
+                if (count == 4) {
                     showSpeedView()
 //                    binding.speedView.showArc()
                     showContainerSpeed()
                     showTvSpeed()
-                } else if (l <= 2000) {
+                } else if (count == 3) {
                     if (type == ConnectionType.UNKNOWN) {
                         Toast.makeText(context, "No connection", Toast.LENGTH_SHORT).show()
                         resetView()
@@ -208,9 +213,9 @@ class SpeedView(
                             )
                         }
                     }
-                } else if (l <= 3000) {
+                } else if (count == 2) {
                     showLoading()
-                } else if (l <= 4000) {
+                } else if (count == 1) {
                     hideBtnStart()
                     showTvConnecting()
                 }
@@ -224,6 +229,10 @@ class SpeedView(
     }
 
     private fun showSpeedView() {
+        Log.d("abc", "showSpeedView: " + Thread.currentThread())
+
+        binding.speedView.clearAnimation()
+
         val animation = ArcAnimation(binding.speedView)
         animation.duration = 1000
         animation.setAnimationListener(object : Animation.AnimationListener {
@@ -292,16 +301,13 @@ class SpeedView(
     }
 
     private fun hideTopView() {
-//        TransitionManager.beginDelayedTransition(binding.topView, AutoTransition())
-//        binding.topView.visibility = GONE
         YoYo.with(Techniques.SlideOutUp).onStart {
             binding.topView.visibility = View.GONE
         }.playOn(binding.topView)
     }
 
     private fun showTopView() {
-//        TransitionManager.beginDelayedTransition(binding.topView, AutoTransition())
-//        binding.topView.visibility = VISIBLE
+
         YoYo.with(Techniques.SlideInDown).onStart {
             binding.topView.visibility = View.VISIBLE
         }.playOn(binding.topView)
@@ -453,6 +459,7 @@ class SpeedView(
     }
 
     fun resetView() {
+        Log.d("abc", "resetView: " + Thread.currentThread())
         if (speedTest != null) {
             speedTest?.abort()
         }

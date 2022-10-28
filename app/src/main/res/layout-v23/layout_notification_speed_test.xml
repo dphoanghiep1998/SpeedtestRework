@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="40dp"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    >
+    android:paddingHorizontal="@dimen/_8sdp"
+    tools:ignore="RtlSymmetry">
 
 
     <ImageView
@@ -34,32 +35,28 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:autoSizeTextType="uniform"
                 android:drawableStart="@drawable/ic_download_notification"
                 android:drawablePadding="@dimen/_2sdp"
+                android:gravity="center"
                 android:maxLines="1"
                 android:paddingStart="@dimen/_4sdp"
                 android:text="@string/zero_value_dec"
                 android:textColor="@color/gray_700"
-                app:autoSizeMaxTextSize="@dimen/_10sdp"
-                app:autoSizeMinTextSize="@dimen/_6sdp"
-                app:autoSizeStepGranularity="1dp" />
+                android:textSize="@dimen/_10sdp" />
 
             <TextView
                 android:id="@+id/tv_upload_value_notification"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:autoSizeTextType="uniform"
                 android:drawableStart="@drawable/ic_upload_notification"
                 android:drawablePadding="@dimen/_2sdp"
+                android:gravity="center"
                 android:maxLines="1"
                 android:paddingStart="@dimen/_4sdp"
                 android:text="@string/zero_value_dec"
                 android:textColor="@color/gray_700"
-                app:autoSizeMaxTextSize="@dimen/_10sdp"
-                app:autoSizeMinTextSize="@dimen/_6sdp"
-                app:autoSizeStepGranularity="1dp" />
+                android:textSize="@dimen/_10sdp" />
         </LinearLayout>
 
         <LinearLayout
@@ -75,28 +72,25 @@
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/ic_mobile_usage"
                 android:drawablePadding="@dimen/_2sdp"
+                android:gravity="center"
                 android:maxLines="1"
                 android:paddingStart="@dimen/_4sdp"
                 android:text="@string/zero_value_dec"
                 android:textColor="@color/gray_700"
-                app:autoSizeMaxTextSize="@dimen/_10sdp"
-                app:autoSizeMinTextSize="@dimen/_6sdp"
-                app:autoSizeStepGranularity="1dp" />
+                android:textSize="@dimen/_10sdp" />
 
             <TextView
                 android:id="@+id/wifi_usage_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:autoSizeTextType="uniform"
                 android:drawableStart="@drawable/ic_wifi_usage_notification"
                 android:drawablePadding="@dimen/_2sdp"
+                android:gravity="center"
                 android:maxLines="1"
                 android:paddingStart="@dimen/_4sdp"
                 android:text="@string/zero_value_dec"
                 android:textColor="@color/gray_700"
-                app:autoSizeMaxTextSize="@dimen/_10sdp"
-                app:autoSizeMinTextSize="@dimen/_6sdp"
-                app:autoSizeStepGranularity="1dp" />
+                android:textSize="@dimen/_10sdp" />
         </LinearLayout>
 
 

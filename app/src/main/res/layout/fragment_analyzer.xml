@@ -201,7 +201,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:background="@drawable/button_background_start"
-                android:foreground="@drawable/ripple_effect_fg"
+                android:foreground="@drawable/ripple_effect_corner_fg"
                 android:paddingHorizontal="@dimen/_40sdp"
                 android:textStyle="bold"
                 android:text="@string/open_wifi_setting"

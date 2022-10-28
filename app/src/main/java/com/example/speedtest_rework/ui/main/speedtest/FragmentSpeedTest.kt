@@ -1,6 +1,7 @@
 package com.example.speedtest_rework.ui.main.speedtest
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +17,7 @@ import com.example.speedtest_rework.common.custom_view.UnitType
 import com.example.speedtest_rework.common.utils.AppSharePreference.Companion.INSTANCE
 import com.example.speedtest_rework.common.utils.Constant
 import com.example.speedtest_rework.common.utils.NetworkUtils
+import com.example.speedtest_rework.common.utils.hasHardwareAcceleration
 import com.example.speedtest_rework.core.getIP.AddressInfo
 import com.example.speedtest_rework.core.getIP.CurrentNetworkInfo
 import com.example.speedtest_rework.core.serverSelector.TestPoint
@@ -56,6 +58,7 @@ class FragmentSpeedTest : BaseFragment() {
 
 
     private fun initView() {
+        initSpeedView()
         initExpandView()
     }
 
@@ -65,6 +68,16 @@ class FragmentSpeedTest : BaseFragment() {
 
     private fun loadServer() {
         viewModel.doMultiTask()
+    }
+
+    private fun initSpeedView() {
+        Log.d("TAG", "hasHardwareAcceleration: " + hasHardwareAcceleration(requireActivity()))
+        if (hasHardwareAcceleration(requireActivity())) {
+
+            binding.clSpeedview.setHasHardwareEnabled(true)
+        } else {
+            binding.clSpeedview.setHasHardwareEnabled(false)
+        }
     }
 
     private fun initExpandView() {

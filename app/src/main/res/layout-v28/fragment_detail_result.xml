@@ -2,7 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/_8sdp">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -15,8 +16,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/background_main"
-            android:paddingBottom="@dimen/_8sdp">
+            android:background="@color/background_main">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/toolbar"
@@ -33,7 +33,7 @@
                     android:layout_width="@dimen/_38sdp"
                     android:layout_height="@dimen/_38sdp"
                     android:padding="@dimen/_8sdp"
-                    android:contentDescription="@string/test"
+                    android:contentDescription="img"
                     android:foreground="@drawable/ripple_effect_corner_fg"
                     android:src="@drawable/ic_back"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -45,7 +45,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/result_detail"
                     android:textColor="@color/white"
-                    android:textStyle="bold"
+                    android:textFontWeight="800"
                     android:textSize="@dimen/_18sdp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -83,7 +83,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingStart="8dp"
-                android:textStyle="bold"
+                android:textFontWeight="800"
                 android:text="@string/test"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_14sdp"
@@ -132,7 +132,7 @@
                     android:fontFamily="@font/app_font_black"
                     android:text="@string/signal_status"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/_14sdp"
+                    android:textSize="18dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -141,11 +141,11 @@
                     android:id="@+id/tv_signal_strength"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_8sdp"
+                    android:layout_marginTop="8dp"
                     android:fontFamily="@font/app_font_black"
                     android:text="@string/speed_test_title"
                     android:textColor="@color/text_color_medium"
-                    android:textSize="@dimen/_20sdp"
+                    android:textSize="26dp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -155,9 +155,9 @@
                     android:id="@+id/pb_signal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/_16sdp"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:maxHeight="@dimen/_4sdp"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="16dp"
+                    android:maxHeight="5dp"
                     android:progress="50"
                     android:progressDrawable="@drawable/seekbar"
                     android:splitTrack="false"
@@ -168,8 +168,8 @@
                     android:id="@+id/tv_worseSignal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_8sdp"
-                    android:layout_marginStart="@dimen/_16sdp"
+                    android:layout_marginTop="8dp"
+                    android:paddingStart="32dp"
                     android:text="@string/signal_weak"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_12sdp"
@@ -189,7 +189,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/_16sdp"
+                    android:paddingEnd="32dp"
                     android:text="@string/signal_strong"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_12sdp"
@@ -213,7 +213,7 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="@dimen/_8sdp"
+                    android:layout_marginVertical="8dp"
                     android:gravity="center"
                     android:orientation="vertical"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -231,16 +231,18 @@
                             android:id="@+id/imv_downArrow"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
+                            android:layout_centerVertical="true"
                             android:src="@drawable/ic_download" />
 
                         <TextView
                             android:id="@+id/tv_downloadSpeed"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:paddingHorizontal="@dimen/_2sdp"
+                            android:layout_toEndOf="@id/imv_downArrow"
+                            android:paddingHorizontal="4dp"
                             android:text="@string/download"
-                            android:textColor="@color/gray_200"
-                            android:textSize="@dimen/_14sdp"
+                            android:textColor="#D7D7D7"
+                            android:textSize="18dp"
                             android:textStyle="bold" />
 
                     </LinearLayout>
@@ -255,7 +257,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:paddingTop="@dimen/_4sdp"
-                            android:text="@string/test"
+                            android:text="112.64"
                             android:textAlignment="gravity"
                             android:textSize="@dimen/_26sdp"
                             android:textStyle="bold"
@@ -266,9 +268,9 @@
                             android:id="@+id/tv_download_currency"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:paddingStart="@dimen/_2sdp"
-                            android:paddingTop="@dimen/_2sdp"
-                            android:text="@string/Mbps"
+                            android:paddingStart="4dp"
+                            android:paddingTop="4dp"
+                            android:text=" Mpbs"
                             android:textColor="@color/gray_400"
                             android:textSize="@dimen/_10sdp" />
                     </LinearLayout>
@@ -313,10 +315,10 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_toEndOf="@id/imv_upArrow"
-                            android:paddingHorizontal="@dimen/_2sdp"
+                            android:paddingHorizontal="4dp"
                             android:text="@string/upload"
-                            android:textColor="@color/gray_200"
-                            android:textSize="@dimen/_14sdp"
+                            android:textColor="#D7D7D7"
+                            android:textSize="18dp"
                             android:textStyle="bold" />
 
                     </LinearLayout>
@@ -331,7 +333,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="bottom"
                             android:paddingTop="@dimen/_4sdp"
-                            android:text="@string/test"
+                            android:text="112.64"
                             android:textSize="@dimen/_26sdp"
                             android:textStyle="bold"
                             app:colorFirst="@color/gradient_orange_start"
@@ -342,8 +344,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="bottom"
-                            android:paddingStart="@dimen/_2sdp"
-                            android:text="@string/Mbps"
+                            android:paddingStart="4dp"
+                            android:text="Mbps"
                             android:textColor="@color/gray_400"
                             android:textSize="@dimen/_10sdp" />
                     </androidx.appcompat.widget.LinearLayoutCompat>

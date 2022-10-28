@@ -61,7 +61,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/speed_test_title"
                     android:textColor="@color/white"
-                    android:textStyle="bold"
+                    android:textFontWeight="800"
                     android:textSize="@dimen/_18sdp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

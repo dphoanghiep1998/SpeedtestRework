@@ -225,20 +225,12 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback {
     }
 
     private fun notificationHandleIntentFlow() {
-
-        val actionDoSpeedTest =
-            requireActivity().intent.extras?.getString(getString(R.string.action_show_data_usage))
-        if (actionDoSpeedTest != null) {
-
-        }
         val actionShowDataUsage =
             requireActivity().intent.extras?.getString(getString(R.string.action_show_data_usage))
 
         if (actionShowDataUsage != null) {
             navigateToPage(R.id.action_fragmentMain_to_fragmentDataUsage)
         }
-
-
     }
 
 
@@ -257,7 +249,6 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback {
         binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
 
             override fun onPageSelected(position: Int) {
-                Log.d("TAG", "onPageSelected: $position ")
                 super.onPageSelected(position)
                 binding.navBottom.menu.getItem(position).isChecked = true
                 showMenu()
@@ -312,6 +303,10 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback {
     private fun hideBottomTabWhenScan() {
         binding.viewPager.isUserInputEnabled = false
         YoYo.with(Techniques.SlideOutDown).duration(400L).onEnd {
+            if(buildMaxVersionN()){
+                binding.navBottom.visibility = View.GONE
+                return@onEnd
+            }
             binding.navBottom.visibility = View.INVISIBLE
         }.playOn(binding.navBottom)
     }

@@ -353,8 +353,8 @@
 
         <ProgressBar
             android:id="@+id/loading"
-            android:layout_width="@dimen/_200sdp"
-            android:layout_height="@dimen/_200sdp"
+            android:layout_width="@dimen/_250sdp"
+            android:layout_height="@dimen/_250sdp"
             android:indeterminateDrawable="@drawable/custom_circle_progress"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -367,7 +367,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/connecting"
-            android:textSize="@dimen/_12sdp"
+            android:textSize="@dimen/_16sdp"
             android:visibility="gone"
             app:colorFirst="@color/gradient_green_start"
             app:colorSecond="@color/gradient_green_end"
@@ -405,7 +405,7 @@
             android:layout_marginTop="-50dp"
             android:text="0.0"
             android:textColor="@color/white"
-            android:textSize="@dimen/_16sdp"
+            android:textSize="@dimen/_18sdp"
             android:textStyle="bold"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="@id/speedView"
@@ -425,8 +425,8 @@
 
             <ImageView
                 android:id="@+id/icon_speed_value"
-                android:layout_width="@dimen/_10sdp"
-                android:layout_height="@dimen/_10sdp"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
                 android:src="@drawable/ic_download" />
 
             <TextView
@@ -436,7 +436,7 @@
                 android:paddingStart="@dimen/_4sdp"
                 android:text="@string/Mbps"
                 android:textColor="@color/white"
-                android:textSize="@dimen/_12sdp" />
+                android:textSize="@dimen/_16sdp" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </merge>

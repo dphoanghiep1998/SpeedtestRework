@@ -28,9 +28,9 @@
                 android:text="@string/Mbs"
                 android:textColor="@color/white"
                 android:maxLines="1"
-                app:autoSizeMaxTextSize="@dimen/_16sdp"
-                app:autoSizeMinTextSize="@dimen/_5sdp"
-                app:autoSizeStepGranularity="1dp" />
+                android:autoSizeMaxTextSize="@dimen/_16sdp"
+                android:autoSizeMinTextSize="@dimen/_5sdp"
+                android:autoSizeStepGranularity="1dp" />
 
             <View
                 android:id="@+id/line"
