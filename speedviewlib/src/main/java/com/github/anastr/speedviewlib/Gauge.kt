@@ -854,6 +854,7 @@ abstract class Gauge constructor(
         if (speedAnimator?.isRunning == false && realSpeedAnimator?.isRunning == false)
             return
         currentSpeed = 0f
+        invalidateGauge()
         cancelSpeedAnimator()
         tremble()
     }

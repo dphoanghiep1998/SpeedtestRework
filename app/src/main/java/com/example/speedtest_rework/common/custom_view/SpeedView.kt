@@ -39,6 +39,9 @@ import com.example.speedtest_rework.data.model.HistoryModel
 import com.example.speedtest_rework.databinding.LayoutSpeedviewBinding
 import com.example.speedtest_rework.viewmodel.ScanStatus
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 
 
 class SpeedView(
@@ -333,7 +336,7 @@ class SpeedView(
                             binding.tvSpeedValue.text = context.getString(R.string.zero_value)
                             testModel?.download = roundOffDecimal(dl)
                         }
-                        binding.speedView.speedTo(0f, 500L)
+                        binding.speedView.speedTo(0f, 200L)
                     }
                 }
             }
@@ -434,7 +437,10 @@ class SpeedView(
                 R.color.gradient_orange_start
             )
         )
-        binding.speedView.setState("upload")
+        Handler().postDelayed({
+            binding.speedView.setState("upload")
+        },200L)
+
 
     }
 
