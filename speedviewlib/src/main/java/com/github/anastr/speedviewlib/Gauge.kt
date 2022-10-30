@@ -851,8 +851,6 @@ abstract class Gauge constructor(
      * Use this method just when you wont to stop [speedTo] and [realSpeedTo].
      */
     fun stop() {
-        if (speedAnimator?.isRunning == false && realSpeedAnimator?.isRunning == false)
-            return
         currentSpeed = 0f
         invalidateGauge()
         cancelSpeedAnimator()

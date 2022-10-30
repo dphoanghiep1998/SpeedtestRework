@@ -1,6 +1,5 @@
 package com.github.anastr.speedviewlib
 
-import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
@@ -160,25 +159,24 @@ open class PointerSpeedometer @JvmOverloads constructor(
         updateBackgroundBitmap()
     }
 
-    fun reset() {
-        currentSpeed = 0f
+    fun setInitDone(status:Boolean){
+        initDone = status
+        invalidate()
     }
 
     private fun initDraw() {
-        if (initDone) return
-        invalidate()
-        initDone = true
-    }
-
-    override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
-        initDraw()
         rectF = RectF(
             speedometerRect.left + 5f,
             speedometerRect.top + 5f,
             speedometerRect.right - 5f,
             speedometerRect.bottom - 5f
         )
+    }
+
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+        initDraw()
+
         val position = getOffsetSpeed() * (getEndDegree() - getStartDegree())
 
 
@@ -198,30 +196,28 @@ open class PointerSpeedometer @JvmOverloads constructor(
             speedometerPaint
         )
 //        if (!hasHardwareEnabled) {
-            canvas.drawArc(
-                rectF,
-                getStartDegree().toFloat(),
-                position,
-                false,
-                blurPaint
-            )
+        canvas.drawArc(
+            rectF,
+            getStartDegree().toFloat(),
+            position,
+            false,
+            blurPaint
+        )
 //        }
-
-
-        drawIndicator(canvas)
-        drawTicks(canvas, getStartDegree() + position)
+        if (initDone){
+            drawIndicator(canvas)
+            drawTicks(canvas, getStartDegree() + position)
+        }
     }
 
+
     override fun updateBackgroundBitmap() {
+        Log.d("TAG", "updateBackgroundBitmap: ")
         val c = createBackgroundBitmapCanvas()
         initDraw()
-
         drawMarks(c)
-
-        if (tickNumber > 0)
+        if (ticks.isNotEmpty())
             drawTicks(c, 0f)
-        else
-            drawDefMinMaxSpeedPosition(c)
     }
 
     fun setState(state: String) {

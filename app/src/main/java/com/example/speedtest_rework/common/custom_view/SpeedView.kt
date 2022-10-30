@@ -31,7 +31,6 @@ import com.daimajia.androidanimations.library.YoYo
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.common.utils.Constant
 import com.example.speedtest_rework.common.utils.format
-import com.example.speedtest_rework.common.utils.hasHardwareAcceleration
 import com.example.speedtest_rework.common.utils.roundOffDecimal
 import com.example.speedtest_rework.core.SpeedTest
 import com.example.speedtest_rework.core.serverSelector.TestPoint
@@ -39,9 +38,7 @@ import com.example.speedtest_rework.data.model.HistoryModel
 import com.example.speedtest_rework.databinding.LayoutSpeedviewBinding
 import com.example.speedtest_rework.viewmodel.ScanStatus
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.withContext
+import com.github.anastr.speedviewlib.PointerSpeedometer
 
 
 class SpeedView(
@@ -55,6 +52,7 @@ class SpeedView(
     private var type = ConnectionType.UNKNOWN
     private var testPoint: TestPoint? = null
     private var viewModel: SpeedTestViewModel? = null
+    private var currentTicks = listOf<Float>()
 
     init {
         val inflater = LayoutInflater.from(context)
@@ -101,32 +99,33 @@ class SpeedView(
 //    var a = listOf(0f, .01f, .02f, .05f, .1f, .2f, .3f, .6f, 1f) 500
 //    var a = listOf(0f, .005f, .01f, .05f, .1f, .25f, .5f, .75f, 1f) 1000
 //    var a = listOf(0f, .05f, .15f, .2f, .3f, .5f, .75f, 1f) 100
+        binding.speedView.ticks = listOf()
         binding.speedView.maxSpeed = maxValue
         when (maxValue) {
             100f -> {
-                binding.speedView.ticks = listOf(0f, .05f, .1f, .15f, .2f, .3f, .5f, .75f, 1f)
+                currentTicks = listOf(0f, .05f, .1f, .15f, .2f, .3f, .5f, .75f, 1f)
             }
             500f -> {
-                binding.speedView.ticks = listOf(0f, .01f, .02f, .05f, .1f, .2f, .3f, .6f, 1f)
+                currentTicks = listOf(0f, .01f, .02f, .05f, .1f, .2f, .3f, .6f, 1f)
             }
             1000f -> {
-                binding.speedView.ticks = listOf(0f, .005f, .01f, .05f, .1f, .25f, .5f, .75f, 1f)
+                currentTicks = listOf(0f, .005f, .01f, .05f, .1f, .25f, .5f, .75f, 1f)
             }
             5000f -> {
-                binding.speedView.ticks = listOf(0f, .02f, .04f, .06f, .1f, .2f, .4f, .6f, 1f)
+                currentTicks = listOf(0f, .02f, .04f, .06f, .1f, .2f, .4f, .6f, 1f)
             }
             10000f -> {
-                binding.speedView.ticks = listOf(0f, .05f, .1f, .15f, .2f, .3f, .5f, .8f, 1f)
+                currentTicks = listOf(0f, .05f, .1f, .15f, .2f, .3f, .5f, .8f, 1f)
             }
             15000f -> {
-                binding.speedView.ticks =
+                currentTicks =
                     listOf(0f, 1 / 30f, 1 / 15f, 0.1f, 2 / 15f, 0.2f, 1 / 3f, 2 / 3f, 1f)
             }
             50f -> {
-                binding.speedView.ticks = listOf(0f, .02f, .04f, .06f, .1f, .2f, .3f, .6f, 1f)
+                currentTicks = listOf(0f, .02f, .04f, .06f, .1f, .2f, .3f, .6f, 1f)
             }
             10f -> {
-                binding.speedView.ticks = listOf(0f, .1f, .2f, .3f, .4f, .5f, .6f, .8f, 1f)
+                currentTicks = listOf(0f, .1f, .2f, .3f, .4f, .5f, .6f, .8f, 1f)
             }
         }
     }
@@ -174,9 +173,6 @@ class SpeedView(
         binding.speedView.isWithPointer = false
         binding.speedView.textSize = 40f
         binding.speedView.withTremble = false
-//        binding.btnTest.setOnClickListener{
-//            binding.speedView.visibility = VISIBLE
-//        }
     }
 
     private fun changeUnitType() {
@@ -190,6 +186,8 @@ class SpeedView(
         binding.placeholderUpload.visibility = VISIBLE
         binding.tvDownloadValue.visibility = GONE
         binding.tvUploadValue.visibility = GONE
+        binding.speedView.setInitDone(false)
+
         changeUnitType()
         var count = 0
         countDownTimer = object : CountDownTimer(5000, 1000) {
@@ -197,7 +195,6 @@ class SpeedView(
                 count++
                 if (count == 4) {
                     showSpeedView()
-//                    binding.speedView.showArc()
                     showContainerSpeed()
                     showTvSpeed()
                 } else if (count == 3) {
@@ -232,18 +229,33 @@ class SpeedView(
     }
 
     private fun showSpeedView() {
-        Log.d("abc", "showSpeedView: " + Thread.currentThread())
 
         binding.speedView.clearAnimation()
 
         val animation = ArcAnimation(binding.speedView)
-        animation.duration = 1000
+        animation.duration = 500
         animation.setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationStart(animation: Animation) {
                 binding.speedView.visibility = View.VISIBLE
             }
 
-            override fun onAnimationEnd(animation: Animation) {}
+            override fun onAnimationEnd(animation: Animation) {
+                var count = 0
+                val countDownTimer = object : CountDownTimer(2000, 50) {
+                    override fun onTick(p0: Long) {
+                        count++
+                        if (count <= currentTicks.size)
+                            binding.speedView.ticks = currentTicks.subList(0, count)
+                    }
+                    override fun onFinish() {
+                        binding.speedView.setInitDone(true)
+                    }
+
+                }
+                countDownTimer.start()
+
+            }
+
             override fun onAnimationRepeat(animation: Animation) {}
         })
         binding.speedView.startAnimation(animation)
@@ -439,7 +451,7 @@ class SpeedView(
         )
         Handler().postDelayed({
             binding.speedView.setState("upload")
-        },200L)
+        }, 200L)
 
 
     }
@@ -451,7 +463,10 @@ class SpeedView(
                 R.drawable.ic_download
             )
         )
+        binding.speedView.ticks = listOf()
+        binding.speedView.setInitDone(false)
         binding.speedView.stop()
+
         binding.speedView.setState("download")
         showBtnStart()
         binding.placeholderUpload.clearAnimation()
@@ -465,7 +480,6 @@ class SpeedView(
     }
 
     fun resetView() {
-        Log.d("abc", "resetView: " + Thread.currentThread())
         if (speedTest != null) {
             speedTest?.abort()
         }
@@ -478,6 +492,8 @@ class SpeedView(
                 R.drawable.ic_download
             )
         )
+        binding.speedView.ticks = listOf()
+        binding.speedView.setInitDone(false)
         binding.speedView.stop()
         binding.speedView.setState("download")
         hideTopView()

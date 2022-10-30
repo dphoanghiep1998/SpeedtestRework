@@ -88,9 +88,9 @@ class FragmentResultDetail : BaseFragment(), ConfirmDialog.ConfirmCallback {
         binding.tvTime.text = DateTimeUtils.getDateConvertedToResult(testModel.time)
         binding.tvDownloadValue.text = format(convert(testModel.download))
         binding.tvUploadValue.text = format(convert(testModel.upload))
-        binding.tvPingCount.text = testModel.ping.toString() + " ms"
-        binding.tvJitterCount.text = testModel.jitter.toString() + " ms"
-        binding.tvLossCount.text = testModel.loss.toString() + " %"
+        binding.tvPingCount.text = "${testModel.ping} ms"
+        binding.tvJitterCount.text = "${testModel.jitter} ms"
+        binding.tvLossCount.text = "${testModel.loss} %"
         binding.tvConnectNameValue.text = testModel.network
         binding.tvConnectNameValue.text = testModel.name_network
         binding.tvIspValue.text = testModel.isp

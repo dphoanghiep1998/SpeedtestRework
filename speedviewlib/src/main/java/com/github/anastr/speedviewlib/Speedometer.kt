@@ -5,6 +5,7 @@ import android.graphics.*
 import android.text.Layout
 import android.text.StaticLayout
 import android.util.AttributeSet
+import android.util.Log
 import com.github.anastr.speedviewlib.components.Style
 import com.github.anastr.speedviewlib.components.indicators.Indicator
 import com.github.anastr.speedviewlib.components.indicators.NoIndicator
@@ -196,7 +197,7 @@ abstract class Speedometer @JvmOverloads constructor(
 //    var a = listOf(0f, .01f, .02f, .05f, .1f, .2f, .3f, .6f, 1f) 500
 //    var a = listOf(0f, .005f, .01f, .05f, .1f, .25f, .5f, .75f, 1f) 1000
     //100 default
-    var ticks: List<Float> = listOf(0f, .1f, .2f, .3f, .4f, .5f, .6f, .8f, 1f)
+    var ticks: List<Float> = listOf()
         set(ticks) {
             field = ticks
             checkTicks()
@@ -210,7 +211,7 @@ abstract class Speedometer @JvmOverloads constructor(
      *  First padding, set by speedometer.
      *  this will not redraw background bitmap.
      */
-    protected var initTickPadding = 0f
+    protected var initTickPadding = 8f
 
     /**
      * Tick label's padding in pixel.
@@ -856,15 +857,7 @@ abstract class Speedometer @JvmOverloads constructor(
                 7 -> d = startDegree + range * .875f
                 8 -> d = startDegree + range * 1f
             }
-
             c.save()
-            c.rotate(d + 90f, size * .5f, size * .5f)
-            if (!tickRotation)
-                c.rotate(
-                    -(d + 90f),
-                    size * .5f,
-                    initTickPadding + textPaint.textSize + padding.toFloat() + tickPadding.toFloat()
-                )
             textPaint.textSize = dpTOpx(12f)
             val bold: Typeface = Typeface.create("app_font_black", Typeface.BOLD)
             textPaint.typeface = bold
@@ -874,6 +867,15 @@ abstract class Speedometer @JvmOverloads constructor(
                 textPaint.color = 0xFFA0A3BD.toInt()
 
             }
+            c.rotate(d + 90f, size * .5f, size * .5f)
+
+            if (!tickRotation)
+                c.rotate(
+                    -(d + 90f),
+                    size * .5f,
+                    initTickPadding + textPaint.textSize + padding.toFloat() + tickPadding.toFloat()
+                )
+
             var tick: CharSequence? = null
             if (onPrintTickLabel != null)
                 tick = onPrintTickLabel!!.invoke(index, getSpeedAtDegree(d))
@@ -889,10 +891,11 @@ abstract class Speedometer @JvmOverloads constructor(
             }
 
 
-            c.translate(0f, initTickPadding + padding.toFloat() + tickPadding.toFloat())
+            c.translate(0f, initTickPadding + padding.toFloat() + tickPadding)
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
                 StaticLayout.Builder.obtain(tick, 0, tick.length, textPaint, size)
                     .setAlignment(Layout.Alignment.ALIGN_CENTER)
+                    .setIncludePad(true)
                     .build()
                     .draw(c)
             } else {
@@ -900,8 +903,8 @@ abstract class Speedometer @JvmOverloads constructor(
                 StaticLayout(tick, textPaint, size, Layout.Alignment.ALIGN_CENTER, 1f, 0f, true)
                     .draw(c)
             }
-
             c.restore()
+
         }
     }
 

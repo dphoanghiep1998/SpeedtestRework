@@ -7,10 +7,12 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+
     <color name="bottom_nav_checked_start">#00FACC</color>
     <color name="bottom_nav_checked_end">#36E7E7</color>
     <color name="bottom_nav_unChecked">#4E4B66</color>
-    <color name="background_main">#1A1B2F</color>
+    <color name="background_main">#11111F</color>
     <color name="transparent">#00FFFFFF</color>
     <color name="background_ads_start">#FF80F0FF</color>
     <color name="background_ads_stop">#FF80F0FF</color>
@@ -37,9 +39,7 @@
     <color name="signal_poor">#F44336</color>
     <color name="signal_normal">#FFEB3B</color>
     <color name="signal_good">#15CD1C</color>
-    <color name="gray_600">#4E4B66</color>
-    <color name="gray_400">#A0A3BD</color>
-    <color name="gray_700">#11111F</color>
+
     <color name="gradient_green_start">#00FACC</color>
     <color name="gradient_green_end">#36E7E7</color>
     <color name="gradient_orange_start">#FF981F</color>
@@ -54,10 +54,12 @@
     <color name="gradient_text_premium_start">#5558FF</color>
     <color name="gradient_text_premium_end">#00C0FF</color>
 
+    <color name="gray_600">#4E4B66</color>
+    <color name="gray_400">#A0A3BD</color>
+    <color name="gray_700">#11111F</color>
     <color name="gray_800">#151529</color>
     <color name="gray_100">#F7F7FC</color>
     <color name="gray_900">#07070F</color>
-
     <color name="selected">#2196F3</color>
     <color name="gray_500">#6E7191</color>
     <color name="gray_200">#EFF0F6</color>

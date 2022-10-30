@@ -356,7 +356,9 @@
             android:layout_width="@dimen/_250sdp"
             android:layout_height="@dimen/_250sdp"
             android:indeterminateDrawable="@drawable/custom_circle_progress"
+            android:indeterminateOnly="true"
             android:visibility="gone"
+            android:progress="30"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -378,8 +380,8 @@
 
         <com.github.anastr.speedviewlib.PointerSpeedometer
             android:id="@+id/speedView"
-            android:layout_width="@dimen/_200sdp"
-            android:layout_height="@dimen/_200sdp"
+            android:layout_width="@dimen/_220sdp"
+            android:layout_height="@dimen/_220sdp"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -425,8 +427,8 @@
 
             <ImageView
                 android:id="@+id/icon_speed_value"
-                android:layout_width="@dimen/_20sdp"
-                android:layout_height="@dimen/_20sdp"
+                android:layout_width="@dimen/_15sdp"
+                android:layout_height="@dimen/_15sdp"
                 android:src="@drawable/ic_download" />
 
             <TextView
@@ -436,7 +438,7 @@
                 android:paddingStart="@dimen/_4sdp"
                 android:text="@string/Mbps"
                 android:textColor="@color/white"
-                android:textSize="@dimen/_16sdp" />
+                android:textSize="@dimen/_13sdp" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </merge>

@@ -357,6 +357,7 @@
             android:layout_height="@dimen/_200sdp"
             android:indeterminateDrawable="@drawable/custom_circle_progress"
             android:visibility="gone"
+            android:progress="20"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
