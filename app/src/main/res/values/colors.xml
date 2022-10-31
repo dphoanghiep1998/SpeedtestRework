@@ -8,7 +8,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-
+    <color name="button_agree_rate">#00A3FF</color>
     <color name="bottom_nav_checked_start">#00FACC</color>
     <color name="bottom_nav_checked_end">#36E7E7</color>
     <color name="bottom_nav_unChecked">#4E4B66</color>
@@ -63,4 +63,5 @@
     <color name="selected">#2196F3</color>
     <color name="gray_500">#6E7191</color>
     <color name="gray_200">#EFF0F6</color>
+    <color name="rate_des">#E5A800</color>
 </resources>

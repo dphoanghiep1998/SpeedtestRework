@@ -115,8 +115,8 @@ open class PointerSpeedometer @JvmOverloads constructor(
 
         blurPaint.style = Paint.Style.STROKE
         blurPaint.strokeCap = Paint.Cap.BUTT
-        blurPaint.maskFilter = BlurMaskFilter(0.4f * speedometerWidth, BlurMaskFilter.Blur.NORMAL)
-        blurPaint.strokeWidth = 1.3f * speedometerWidth
+        blurPaint.maskFilter = BlurMaskFilter(0.2f * speedometerWidth, BlurMaskFilter.Blur.NORMAL)
+        blurPaint.strokeWidth = speedometerWidth
 
         circlePaint.color = 0xFFFFFFFF.toInt()
         speedometerPaint.strokeWidth = speedometerWidth
@@ -163,6 +163,11 @@ open class PointerSpeedometer @JvmOverloads constructor(
         initDone = status
         invalidate()
     }
+     override fun stop (){
+         setState("download")
+        super.stop()
+        setEndDegree(135)
+    }
 
     private fun initDraw() {
         rectF = RectF(
@@ -195,7 +200,6 @@ open class PointerSpeedometer @JvmOverloads constructor(
             false,
             speedometerPaint
         )
-//        if (!hasHardwareEnabled) {
         canvas.drawArc(
             rectF,
             getStartDegree().toFloat(),
@@ -203,7 +207,6 @@ open class PointerSpeedometer @JvmOverloads constructor(
             false,
             blurPaint
         )
-//        }
         if (initDone){
             drawIndicator(canvas)
             drawTicks(canvas, getStartDegree() + position)
@@ -212,7 +215,6 @@ open class PointerSpeedometer @JvmOverloads constructor(
 
 
     override fun updateBackgroundBitmap() {
-        Log.d("TAG", "updateBackgroundBitmap: ")
         val c = createBackgroundBitmapCanvas()
         initDraw()
         drawMarks(c)
@@ -266,26 +268,12 @@ open class PointerSpeedometer @JvmOverloads constructor(
         pointerBackPaint.shader = pointerGradient
     }
 
-    fun getSpeedometerColor(): Int {
-        return speedometerColor
-    }
 
     fun setSpeedometerColor(speedometerColor: Int) {
         this.speedometerPaint.color = speedometerColor
         invalidate()
     }
 
-    fun getPointerColor(): Int {
-        return pointerColor
-    }
-
-    fun setPointerColor(pointerColor: Int) {
-        this.pointerColor = pointerColor
-        pointerPaint.color = pointerColor
-        updateRadial()
-        if (isAttachedToWindow)
-            invalidate()
-    }
 
     fun setHasHardwareEnabled(status: Boolean) {
         hasHardwareEnabled = status

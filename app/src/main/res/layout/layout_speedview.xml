@@ -351,17 +351,17 @@
         </androidx.cardview.widget.CardView>
 
 
-        <ProgressBar
+        <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/loading"
             android:layout_width="@dimen/_200sdp"
             android:layout_height="@dimen/_200sdp"
-            android:indeterminateDrawable="@drawable/custom_circle_progress"
             android:visibility="gone"
-            android:progress="20"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_rawRes="@raw/connecting" />
 
         <com.example.speedtest_rework.common.custom_view.GradientText
             android:id="@+id/tv_connecting"
@@ -404,7 +404,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="-50dp"
-            android:text="0.0"
+            android:text="@string/zero_value_dec"
             android:textColor="@color/white"
             android:textSize="@dimen/_16sdp"
             android:textStyle="bold"

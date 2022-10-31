@@ -19,7 +19,8 @@ import com.example.speedtest_rework.databinding.FragmentResultsBinding
 import com.example.speedtest_rework.ui.main.result_history.adapter.ResultTouchHelper
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
 
-class FragmentResults : BaseFragment(), ResultTouchHelper, ConfirmDialog.ConfirmCallback {
+class FragmentResults(private val onStartClickedListener: OnStartClickedListener) : BaseFragment(),
+    ResultTouchHelper, ConfirmDialog.ConfirmCallback {
     private lateinit var binding: FragmentResultsBinding
     private val viewModel: SpeedTestViewModel by activityViewModels()
     private var adapter: HistoryAdapter = HistoryAdapter(this)
@@ -53,6 +54,9 @@ class FragmentResults : BaseFragment(), ResultTouchHelper, ConfirmDialog.Confirm
             )
             customDialog.show()
         }
+        binding.btnTestAgain.setOnClickListener {
+            onStartClickedListener.onStartClicked()
+        }
 
     }
 
@@ -72,12 +76,26 @@ class FragmentResults : BaseFragment(), ResultTouchHelper, ConfirmDialog.Confirm
         binding.rcvConnectTestResult.adapter = adapter
         viewModel.getListHistory().observe(viewLifecycleOwner) { list ->
             if (list.isEmpty()) {
+                binding.containerEmpty.visibility = View.VISIBLE
                 binding.btnDelete.setOnClickListener {
                     Toast.makeText(
                         requireContext(),
                         getString(R.string.no_list_found),
                         Toast.LENGTH_SHORT
                     ).show()
+                }
+            } else {
+                binding.containerEmpty.visibility = View.GONE
+                binding.btnDelete.setOnClickListener {
+                    val customDialog = ConfirmDialog(
+                        requireActivity(),
+                        this,
+                        getString(R.string.delete_all_title),
+                        getString(R.string.delete_all_content),
+                        getString(R.string.YES),
+                        getString(R.string.NO)
+                    )
+                    customDialog.show()
                 }
             }
             adapter.setData(list)
@@ -97,5 +115,9 @@ class FragmentResults : BaseFragment(), ResultTouchHelper, ConfirmDialog.Confirm
         val bundle = Bundle()
         bundle.putParcelable(Constant.KEY_TEST_MODEL, historyModel)
         findNavController().navigate(R.id.action_fragmentMain_to_fragmentResultDetail, bundle)
+    }
+
+    interface OnStartClickedListener {
+        fun onStartClicked()
     }
 }

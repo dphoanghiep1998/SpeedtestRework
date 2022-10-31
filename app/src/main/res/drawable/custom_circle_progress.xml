@@ -1,34 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item>
-        <shape
-            android:innerRadiusRatio="3"
-            android:shape="ring"
-            android:thicknessRatio="80"
-            android:useLevel="false" >
+<rotate xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fromDegrees="135"
+    android:pivotX="50%"
+    android:pivotY="50%"
+    android:toDegrees="1440">
+    <shape
+        android:innerRadiusRatio="3"
+        android:shape="ring"
+        android:thicknessRatio="80"
+        android:useLevel="false">
+        <size
+            android:width="60dp"
+            android:height="60dp" />
+        <gradient
+            android:startColor="@color/gradient_green_start"
+            android:type="sweep"
+            android:centerY="0.50"
+            android:useLevel="false" />
 
-        </shape>
-    </item>
-    <item>
-        <rotate xmlns:android="http://schemas.android.com/apk/res/android"
-            android:fromDegrees="135"
-            android:toDegrees="1215">
-            <shape
-                android:innerRadiusRatio="3"
-                android:shape="ring"
-                android:thicknessRatio="80"
-                android:useLevel="false">
-                <size
-                    android:width="60dp"
-                    android:height="60dp" />
-                <gradient
-                    android:angle="0"
-                    android:startColor="@color/gradient_green_end"
-                    android:centerColor="@color/gradient_green_start"
-                    android:useLevel="true" />
+    </shape>
 
-            </shape>
-
-        </rotate>
-    </item>
-</layer-list>
+</rotate>

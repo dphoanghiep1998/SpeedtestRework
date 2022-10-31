@@ -1,105 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_height="match_parent">
 
     <androidx.appcompat.widget.LinearLayoutCompat
-        android:background="@color/gray_900"
         android:id="@+id/container_header"
-        android:gravity="center_vertical"
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        android:background="@color/gray_900"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
         android:weightSum="5"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.appcompat.widget.LinearLayoutCompat
-            android:gravity="center"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginHorizontal="4dp"
-            android:orientation="vertical"
             android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content">
-            <TextView
-                android:textSize="@dimen/_12sdp"
-                android:textColor="@color/white"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/type"/>
-        </androidx.appcompat.widget.LinearLayoutCompat>
-        <androidx.appcompat.widget.LinearLayoutCompat
             android:gravity="center"
-            android:layout_marginHorizontal="4dp"
-            android:orientation="vertical"
-            android:layout_weight="1.2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content">
+            android:orientation="vertical">
+
             <TextView
-                android:textSize="@dimen/_12sdp"
-                android:textColor="@color/white"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/date"/>
+                android:text="@string/type"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_12sdp" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="4dp"
+            android:layout_weight="1.2"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/date"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_12sdp" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
+
         <androidx.appcompat.widget.LinearLayoutCompat
-            android:gravity="center"
-            android:layout_marginHorizontal="4dp"
-            android:orientation="horizontal"
-            android:layout_weight="1.2"
             android:layout_width="0dp"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="4dp"
+            android:layout_weight="1.2"
+            android:gravity="center"
+            android:orientation="horizontal">
+
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:src="@drawable/ic_download_inactive"
-                />
+                android:src="@drawable/ic_download_inactive" />
+
             <TextView
                 android:id="@+id/tvDownloadCurrency"
-                android:paddingStart="2dp"
-                android:textColor="@color/white"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/_12sdp"
-                android:text="@string/Mbps"/>
+                android:paddingStart="2dp"
+                android:text="@string/Mbps"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_12sdp" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
+
         <androidx.appcompat.widget.LinearLayoutCompat
-            android:gravity="center"
-            android:layout_marginHorizontal="4dp"
-            android:orientation="horizontal"
-            android:layout_weight="1.2"
             android:layout_width="0dp"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="4dp"
+            android:layout_weight="1.2"
+            android:gravity="center"
+            android:orientation="horizontal">
+
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:src="@drawable/ic_upload_inactive"
-                />
+                android:src="@drawable/ic_upload_inactive" />
+
             <TextView
                 android:id="@+id/tvUploadCurrency"
-                android:paddingStart="2dp"
-                android:textColor="@color/white"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/_12sdp"
-                android:text="@string/Mbps"/>
+                android:paddingStart="2dp"
+                android:text="@string/Mbps"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_12sdp" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
+
         <LinearLayout
             android:id="@+id/btn_delete"
-            android:gravity="center"
-            android:orientation="horizontal"
             android:layout_width="20dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.4">
+            android:layout_weight="0.4"
+            android:gravity="center"
+            android:orientation="horizontal">
+
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:src="@drawable/ic_delete"
-                />
+                android:src="@drawable/ic_delete" />
         </LinearLayout>
 
 
@@ -114,8 +122,44 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/container_header"
-        app:layout_constraintVertical_bias="0.0"
-        tools:listitem="@layout/item_result" />
+        app:layout_constraintVertical_bias="0.0" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container_empty"
+        android:visibility="visible"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/container_header"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_data_result"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_14sdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginBottom="@dimen/_10sdp"
+            app:layout_constraintBottom_toTopOf="@id/btn_test_again" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_test_again"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_background_start"
+            android:foreground="@drawable/ripple_effect_corner_fg"
+            android:paddingHorizontal="@dimen/_16sdp"
+            android:textStyle="bold"
+            android:paddingVertical="@dimen/_8sdp"
+            android:text="@string/start_testing"
+            android:textSize="@dimen/_14sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

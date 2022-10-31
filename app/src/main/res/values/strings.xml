@@ -158,6 +158,17 @@
     <string name="no_list_found">No result found!</string>
     <string name="text_permission_button" translatable="false">Grant Permission &amp; Continue</string>
     <string name="total">Total</string>
+    <string name="ask_rate">"Are you satisfied with our app? "</string>
+    <string name="text_rate_button_good">GOOD</string>
+    <string name="text_rate_button_not_really">NOT REALLY</string>
+    <string name="expressive_bad">We’re sorry you had a bad experience</string>
+    <string name="expressive_normal">Please leave us some feedback</string>
+    <string name="expressive_good">Thank you so much for the wonderful review</string>
+    <string name="expressive_best">We like you too!</string>
+    <string name="expressive_holder">Rate your provider</string>
+    <string name="rate_us">RATE US</string>
+    <string name="no_data_result">You don’t have any test result yet</string>
+    <string name="start_testing">Go to Speed Test</string>
 
 
 </resources>

@@ -59,7 +59,6 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper {
     }
 
     override fun onResume() {
-        Log.d("TAG", "onResume: ")
         super.onResume()
     }
 

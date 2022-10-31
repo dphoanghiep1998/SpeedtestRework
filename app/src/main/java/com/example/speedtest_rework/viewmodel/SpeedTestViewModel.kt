@@ -30,6 +30,7 @@ class SpeedTestViewModel @Inject constructor(private val appRepository: AppRepos
     var isMultiTaskDone: MutableLiveData<Boolean> = MutableLiveData()
     var addressInfoList: MutableList<AddressInfo> = mutableListOf()
     var currentNetworkInfo: CurrentNetworkInfo = CurrentNetworkInfo()
+    var userActionRate: Boolean = false
     private val listDataUsage: MutableLiveData<List<DataUsageModel>> = MutableLiveData()
 
 

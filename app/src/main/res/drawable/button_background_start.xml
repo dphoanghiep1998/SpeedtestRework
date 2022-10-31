@@ -1,9 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <corners android:radius="40dp" />
-    <gradient
-        android:angle="90"
-        android:type="linear"
-        android:startColor="@color/gradient_green_end"
-        android:endColor="@color/gradient_green_start" />
-</shape>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_enabled="true">
+        <shape>
+            <corners android:radius="40dp" />
+            <gradient
+                android:angle="90"
+                android:type="linear"
+                android:startColor="@color/gradient_green_end"
+                android:endColor="@color/gradient_green_start" />
+        </shape>
+    </item>
+    <item android:state_enabled="false">
+        <shape>
+            <corners android:radius="40dp" />
+            <gradient
+                android:angle="90"
+                android:type="linear"
+                android:startColor="#6636E7E7"
+                android:endColor="#6600FACC" />
+        </shape>
+    </item>
+</selector>

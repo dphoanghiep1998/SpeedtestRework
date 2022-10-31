@@ -1,6 +1,8 @@
 package com.example.speedtest_rework.ui.result_detail
 
 import android.animation.ValueAnimator
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,7 +13,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.speedtest_rework.R
-import com.example.speedtest_rework.base.dialog.ConfirmDialog
+import com.example.speedtest_rework.base.dialog.*
 import com.example.speedtest_rework.base.fragment.BaseFragment
 import com.example.speedtest_rework.common.utils.Constant
 import com.example.speedtest_rework.common.utils.DateTimeUtils
@@ -21,7 +23,8 @@ import com.example.speedtest_rework.data.model.HistoryModel
 import com.example.speedtest_rework.databinding.FragmentDetailResultBinding
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
 
-class FragmentResultDetail : BaseFragment(), ConfirmDialog.ConfirmCallback {
+class FragmentResultDetail : BaseFragment(), ConfirmDialog.ConfirmCallback, AskRateCallBack,
+    RateCallBack {
     private lateinit var binding: FragmentDetailResultBinding
     private lateinit var testModel: HistoryModel
     private var fromSpeedTestFragment: Boolean? = false
@@ -57,10 +60,11 @@ class FragmentResultDetail : BaseFragment(), ConfirmDialog.ConfirmCallback {
     }
 
     private fun initView() {
+
         binding.btnBack.setOnClickListener {
             findNavController().popBackStack()
         }
-        binding.btnShare.setOnClickListener{
+        binding.btnShare.setOnClickListener {
             Log.d("TAG", "initView: ")
         }
         val progress =
@@ -113,6 +117,10 @@ class FragmentResultDetail : BaseFragment(), ConfirmDialog.ConfirmCallback {
             binding.btnScanAgain.visibility = View.GONE
             binding.btnClose.visibility = View.GONE
         } else {
+            if (!viewModel.userActionRate) {
+                val askRateDialog = AskRateDialog(requireContext(), this)
+                askRateDialog.show()
+            }
             binding.btnScanAgain.visibility = View.VISIBLE
             binding.btnClose.visibility = View.VISIBLE
 
@@ -209,16 +217,40 @@ class FragmentResultDetail : BaseFragment(), ConfirmDialog.ConfirmCallback {
     }
 
     private fun convert(value: Double): Double {
-        if (viewModel?.unitType?.value == UnitType.MBS) {
+        if (viewModel.unitType.value == UnitType.MBS) {
             return convertMbpsToMbs(value)
         }
-        if (viewModel?.unitType?.value == UnitType.KBS) {
+        if (viewModel.unitType.value == UnitType.KBS) {
             return convertMbpsToKbs(value)
         }
         return value
     }
 
+    override fun onDeny() {
+    }
 
+    override fun onAgree() {
+        val rateDialog = RateDialog(requireContext(), this)
+        rateDialog.show()
+    }
+
+    override fun onClickRateUs(star: Int) {
+        viewModel.userActionRate = true
+        if (star < 4) {
+            return
+        }
+        openLink("google.com")
+    }
+
+    private fun openLink(strUri: String?) {
+        try {
+            val uri = Uri.parse(strUri)
+            val intent = Intent(Intent.ACTION_VIEW, uri)
+            startActivity(intent)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
 
 
 }

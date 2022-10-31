@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.*
+import android.os.Build
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
@@ -119,7 +120,7 @@ abstract class Gauge constructor(
      * @see speed
      */
     var currentSpeed = minSpeed
-         set(value) {
+        set(value) {
             field = value
             checkSpeedIntChange()
             checkSectionChange()
@@ -850,7 +851,7 @@ abstract class Gauge constructor(
      * Stop speedometer and run tremble if [withTremble] is true.
      * Use this method just when you wont to stop [speedTo] and [realSpeedTo].
      */
-    fun stop() {
+    open fun stop() {
         currentSpeed = 0f
         invalidateGauge()
         cancelSpeedAnimator()
@@ -927,7 +928,7 @@ abstract class Gauge constructor(
      * @see realSpeedTo
      */
     @JvmOverloads
-    fun speedTo(speed: Float, moveDuration: Long = 500) {
+    fun speedTo(speed: Float, moveDuration: Long = 0L) {
         var newSpeed = speed
         newSpeed =
             if (newSpeed > maxSpeed) maxSpeed else if (newSpeed < minSpeed) minSpeed else newSpeed
@@ -940,7 +941,7 @@ abstract class Gauge constructor(
         cancelSpeedAnimator()
         speedAnimator = ValueAnimator.ofFloat(currentSpeed, newSpeed).apply {
             interpolator = DecelerateInterpolator()
-            duration = moveDuration
+            duration = if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1) moveDuration else 300L
             addUpdateListener { animation ->
                 currentSpeed = animation.animatedValue as Float
                 postInvalidate()

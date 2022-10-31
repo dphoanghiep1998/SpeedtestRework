@@ -16,13 +16,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.core.view.GravityCompat
+import androidx.core.view.get
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
 import com.example.speedtest_rework.R
-import com.example.speedtest_rework.base.dialog.PermissionDialog
+import com.example.speedtest_rework.base.dialog.*
 import com.example.speedtest_rework.base.fragment.BaseFragment
 import com.example.speedtest_rework.common.utils.*
 import com.example.speedtest_rework.common.utils.AppSharePreference.Companion.INSTANCE
@@ -38,7 +39,8 @@ import com.example.speedtest_rework.viewmodel.ScanStatus
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
 import java.util.*
 
-class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback {
+class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback,
+    RateCallBack, FragmentResults.OnStartClickedListener {
     private lateinit var binding: FragmentMainBinding
     private val viewModel: SpeedTestViewModel by activityViewModels()
     private lateinit var languageDialog: FragmentLanguage
@@ -238,7 +240,7 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback {
         val fragmentList = arrayListOf(
             FragmentSpeedTest(),
             FragmentAnalyzer(),
-            FragmentResults()
+            FragmentResults(this)
         )
         val adapter = ViewPagerAdapter(
             fragmentList, requireActivity().supportFragmentManager,
@@ -286,6 +288,8 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback {
     }
 
     private fun rateApp() {
+        val rateDialog = RateDialog(requireContext(), this)
+        rateDialog.show()
 
     }
 
@@ -303,7 +307,7 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback {
     private fun hideBottomTabWhenScan() {
         binding.viewPager.isUserInputEnabled = false
         YoYo.with(Techniques.SlideOutDown).duration(400L).onEnd {
-            if(buildMaxVersionN()){
+            if (buildMaxVersionN()) {
                 binding.navBottom.visibility = View.GONE
                 return@onEnd
             }
@@ -328,6 +332,7 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback {
         }.playOn(binding.imvStop)
     }
 
+    @Suppress("DEPRECATION")
     private fun loadLanguage() {
         val language = INSTANCE.getSavedLanguage(
             R.string.key_language,
@@ -396,6 +401,18 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback {
 
     override fun positiveAction() {
         requestAccessSettingPermission(requireContext())
+    }
+
+    override fun onClickRateUs(star: Int) {
+        viewModel.userActionRate = true
+        if (star < 4) {
+            return
+        }
+        openLink("google.com")
+    }
+
+    override fun onStartClicked() {
+        binding.viewPager.currentItem = 0
     }
 
 }

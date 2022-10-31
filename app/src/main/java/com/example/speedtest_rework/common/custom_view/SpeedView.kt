@@ -1,5 +1,6 @@
 package com.example.speedtest_rework.common.custom_view
 
+import android.animation.Animator
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
@@ -132,6 +133,29 @@ class SpeedView(
 
     @SuppressLint("ClickableViewAccessibility")
     private fun initView() {
+        binding.loading.speed = .7f
+        binding.loading.addAnimatorListener(object : Animator.AnimatorListener {
+            override fun onAnimationStart(p0: Animator?) {
+                showLoading()
+            }
+
+            override fun onAnimationEnd(p0: Animator?) {
+                hideLoading()
+                hideTvConnecting()
+                showSpeedView()
+                showContainerSpeed()
+                showTvSpeed()
+            }
+
+            override fun onAnimationCancel(p0: Animator?) {
+                showBtnStart()
+            }
+
+            override fun onAnimationRepeat(p0: Animator?) {
+            }
+
+
+        })
         binding.btnStart.setOnTouchListener(object : OnTouchListener {
             override fun onTouch(p0: View?, p1: MotionEvent?): Boolean {
                 when (p1?.action) {
@@ -194,17 +218,16 @@ class SpeedView(
             override fun onTick(l: Long) {
                 count++
                 if (count == 4) {
-                    showSpeedView()
-                    showContainerSpeed()
-                    showTvSpeed()
                 } else if (count == 3) {
                     if (type == ConnectionType.UNKNOWN) {
-                        Toast.makeText(context, "No connection", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            context,
+                            context.getString(R.string.no_connection),
+                            Toast.LENGTH_SHORT
+                        ).show()
                         resetView()
                         return
                     } else {
-                        hideLoading()
-                        hideTvConnecting()
                         if (binding.topView.visibility != VISIBLE) {
                             showTopView()
                             TransitionManager.beginDelayedTransition(
@@ -216,6 +239,7 @@ class SpeedView(
                 } else if (count == 2) {
                     showLoading()
                 } else if (count == 1) {
+                    Log.d("TAG", "onTick: ")
                     hideBtnStart()
                     showTvConnecting()
                 }
@@ -241,19 +265,19 @@ class SpeedView(
 
             override fun onAnimationEnd(animation: Animation) {
                 var count = 0
-                val countDownTimer = object : CountDownTimer(2000, 50) {
+                val countDownTimer = object : CountDownTimer(1000, 50) {
                     override fun onTick(p0: Long) {
                         count++
                         if (count <= currentTicks.size)
                             binding.speedView.ticks = currentTicks.subList(0, count)
                     }
+
                     override fun onFinish() {
                         binding.speedView.setInitDone(true)
                     }
 
                 }
                 countDownTimer.start()
-
             }
 
             override fun onAnimationRepeat(animation: Animation) {}
@@ -278,29 +302,29 @@ class SpeedView(
     }
 
     private fun hideLoading() {
-        YoYo.with(Techniques.FadeOut).onEnd {
-            binding.loading.visibility = View.GONE
-        }.playOn(binding.loading)
+        binding.loading.visibility = View.GONE
+
     }
 
     private fun showLoading() {
-        YoYo.with(Techniques.FadeIn).onStart {
-            binding.loading.visibility = View.VISIBLE
-        }.playOn(binding.loading)
+        Log.d("TAG", "onTick: " + Thread.currentThread())
+        if (!binding.loading.isAnimating) {
+            binding.loading.playAnimation()
+        }
+        binding.loading.visibility = View.VISIBLE
     }
 
     private fun hideBtnStart() {
         binding.btnStart.isEnabled = false
-        YoYo.with(Techniques.FadeOut).onEnd {
             binding.btnStartContainer.visibility = GONE
-        }.playOn(binding.btnStartContainer)
+
     }
 
     private fun showBtnStart() {
         binding.btnStart.isEnabled = true
-        YoYo.with(Techniques.FadeIn).onStart {
-        }.playOn(binding.btnStartContainer)
-        binding.btnStartContainer.visibility = VISIBLE
+
+            binding.btnStartContainer.visibility = View.VISIBLE
+
     }
 
     private fun showTvConnecting() {
@@ -466,8 +490,6 @@ class SpeedView(
         binding.speedView.ticks = listOf()
         binding.speedView.setInitDone(false)
         binding.speedView.stop()
-
-        binding.speedView.setState("download")
         showBtnStart()
         binding.placeholderUpload.clearAnimation()
         binding.placeholderDownload.clearAnimation()
@@ -480,6 +502,7 @@ class SpeedView(
     }
 
     fun resetView() {
+        Log.d("TAG", "resetView: ")
         if (speedTest != null) {
             speedTest?.abort()
         }
@@ -495,8 +518,8 @@ class SpeedView(
         binding.speedView.ticks = listOf()
         binding.speedView.setInitDone(false)
         binding.speedView.stop()
-        binding.speedView.setState("download")
         hideTopView()
+        binding.loading.cancelAnimation()
         binding.containerSpeed.visibility = GONE
         binding.speedView.visibility = GONE
         binding.tvDownloadValue.visibility = GONE
