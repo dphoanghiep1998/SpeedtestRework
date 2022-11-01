@@ -69,7 +69,7 @@ public class AddressInfo {
     }
 
     public void setHost(String host) {
-        this.host =host;
+        this.host = host;
     }
 
     public int getHttps_functional() {
@@ -142,8 +142,8 @@ public class AddressInfo {
     }
 
     public final String getDownloadUrl() {
-        String dlUrl = this.url;
-        return dlUrl.replace("upload.php", "random4000x4000.jpg");
+        String dlUrl = this.host;
+        return "https://" + this.host + "/random4000x4000.jpg";
     }
 
     public String toString() {

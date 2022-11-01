@@ -318,7 +318,7 @@ class FragmentSpeedTest : BaseFragment() {
             testPoint = TestPoint(
                 server.name,
                 "http://" + server.host,
-                "speedtest/",
+                server.downloadUrl,
                 "speedtest/upload",
                 ""
             )

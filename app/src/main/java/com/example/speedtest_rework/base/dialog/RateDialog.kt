@@ -8,6 +8,8 @@ import android.os.CountDownTimer
 import android.view.ViewGroup
 import android.view.Window
 import androidx.core.content.ContextCompat
+import com.daimajia.androidanimations.library.Techniques
+import com.daimajia.androidanimations.library.YoYo
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.databinding.DialogRateBinding
 
@@ -43,7 +45,7 @@ class RateDialog(context: Context, private val callback: RateCallBack) : Dialog(
         binding.btnRate.isEnabled = false
         binding.btnRate.setTextColor(Color.parseColor("#6611111F"))
         var count = 0
-        val countDownTimer = object : CountDownTimer(3000, 300) {
+        val countDownTimer = object : CountDownTimer(1500, 300) {
             override fun onTick(p0: Long) {
                 count++
                 when (count) {
@@ -122,88 +124,10 @@ class RateDialog(context: Context, private val callback: RateCallBack) : Dialog(
                                 R.drawable.ic_5_star
                             )
                         )
-                        binding.tvExpressive.text = context.getString(R.string.expressive_best)
-
-                    }
-                    6 -> {
-                        binding.star5.setImageDrawable(
-                            ContextCompat.getDrawable(
-                                context,
-                                R.drawable.ic_rate_app
-                            )
-                        )
-                        binding.imvExpressive.setImageDrawable(
-                            ContextCompat.getDrawable(
-                                context,
-                                R.drawable.ic_4_star
-                            )
-                        )
-                        binding.tvExpressive.text = context.getString(R.string.expressive_good)
-
-                    }
-                    7 -> {
-                        binding.star4.setImageDrawable(
-                            ContextCompat.getDrawable(
-                                context,
-                                R.drawable.ic_rate_app
-                            )
-                        )
-                        binding.imvExpressive.setImageDrawable(
-                            ContextCompat.getDrawable(
-                                context,
-                                R.drawable.ic_3_star
-                            )
-                        )
-                        binding.tvExpressive.text = context.getString(R.string.expressive_normal)
-
-                    }
-                    8 -> {
-                        binding.star3.setImageDrawable(
-                            ContextCompat.getDrawable(
-                                context,
-                                R.drawable.ic_rate_app
-                            )
-                        )
-                        binding.imvExpressive.setImageDrawable(
-                            ContextCompat.getDrawable(
-                                context,
-                                R.drawable.ic_2_star
-                            )
-                        )
-                        binding.tvExpressive.text = context.getString(R.string.expressive_bad)
-
-                    }
-                    9 -> {
-                        binding.star2.setImageDrawable(
-                            ContextCompat.getDrawable(
-                                context,
-                                R.drawable.ic_rate_app
-                            )
-                        )
-                        binding.imvExpressive.setImageDrawable(
-                            ContextCompat.getDrawable(
-                                context,
-                                R.drawable.ic_1_star
-                            )
-                        )
-                        binding.tvExpressive.text = context.getString(R.string.expressive_bad)
-                    }
-                    10 -> {
-                        binding.star1.setImageDrawable(
-                            ContextCompat.getDrawable(
-                                context,
-                                R.drawable.ic_rate_app
-                            )
-                        )
-                        binding.imvExpressive.setImageDrawable(
-                            ContextCompat.getDrawable(
-                                context,
-                                R.drawable.ic_5_star
-                            )
-                        )
                         binding.tvExpressive.text = context.getString(R.string.expressive_holder)
 
                     }
+
                 }
             }
 

@@ -59,13 +59,15 @@
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedtestRework/app/src/main/res/drawable/seekbar.xml" value="0.2005" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedtestRework/app/src/main/res/drawable/seekbar_strong.xml" value="0.152" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedtestRework/app/src/main/res/drawable/seekbar_weak.xml" value="0.152" />
+        <entry key="..\:/Users/y/AndroidStudioProjects/SpeedtestRework/app/src/main/res/drawable/splash_background.xml" value="0.21" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedtestRework/app/src/main/res/font/app_font_black.xml" value="0.2786458333333333" />
+        <entry key="..\:/Users/y/AndroidStudioProjects/SpeedtestRework/app/src/main/res/layout-h640dp/fragment_permission.xml" value="0.165625" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedtestRework/app/src/main/res/layout-h640dp/layout_speedview.xml" value="0.2015625" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedtestRework/app/src/main/res/layout-v23/layout_notification_speed_test.xml" value="0.20625" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedtestRework/app/src/main/res/layout-v24/layout_speedview.xml" value="0.2015625" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedtestRework/app/src/main/res/layout-v26/dialog_rate.xml" value="0.17760416666666667" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedtestRework/app/src/main/res/layout-v26/layout_notification_speed_test.xml" value="0.20625" />
-        <entry key="..\:/Users/y/AndroidStudioProjects/SpeedtestRework/app/src/main/res/layout-v28/dialog_permission.xml" value="0.21822916666666667" />
+        <entry key="..\:/Users/y/AndroidStudioProjects/SpeedtestRework/app/src/main/res/layout-v28/dialog_permission.xml" value="0.22" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedtestRework/app/src/main/res/layout-v28/fragment_data_usage.xml" value="0.17760416666666667" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedtestRework/app/src/main/res/layout-v28/fragment_detail_result.xml" value="0.17760416666666667" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedtestRework/app/src/main/res/layout-v28/fragment_main.xml" value="0.17760416666666667" />
@@ -89,6 +91,7 @@
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedtestRework/app/src/main/res/layout/fragment_results.xml" value="0.22" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedtestRework/app/src/main/res/layout/fragment_root.xml" value="0.21822916666666667" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedtestRework/app/src/main/res/layout/fragment_speed_test.xml" value="0.20989583333333334" />
+        <entry key="..\:/Users/y/AndroidStudioProjects/SpeedtestRework/app/src/main/res/layout/fragment_splash.xml" value="0.20833333333333334" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedtestRework/app/src/main/res/layout/fragment_vpn.xml" value="0.17760416666666667" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedtestRework/app/src/main/res/layout/item_data_usage.xml" value="0.21822916666666667" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedtestRework/app/src/main/res/layout/item_expand_view.xml" value="0.21770833333333334" />

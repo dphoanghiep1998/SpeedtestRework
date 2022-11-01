@@ -7,7 +7,9 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
+import android.os.Handler
+import android.view.Window
+import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.NavHostFragment
@@ -30,6 +32,7 @@ class MainActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceChangeL
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        changeStatusBarColor()
         binding = ActivityMainBinding.inflate(layoutInflater)
         initLocaleViewModel()
         AppSharePreference.getInstance(this).registerOnSharedPreferenceChangeListener(this)
@@ -78,8 +81,14 @@ class MainActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceChangeL
         )
     }
 
-    private fun handlePermissionFlow() {
+    private fun changeStatusBarColor(){
+        val window: Window = window
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        window.statusBarColor = ContextCompat.getColor(this, R.color.gray_700)
+    }
 
+    private fun handlePermissionFlow() {
         if (ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -89,9 +98,9 @@ class MainActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceChangeL
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            navHostFragment?.navController?.navigate(R.id.action_fragmentSplash_to_fragmentPermission)
+
         } else {
-            navHostFragment?.navController?.navigate(R.id.action_fragmentSplash_to_fragmentMain)
+            navHostFragment?.navController?.navigate(R.id.action_fragmentPermission_to_fragmentMain)
         }
     }
 

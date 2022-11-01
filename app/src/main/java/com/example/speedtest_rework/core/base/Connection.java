@@ -31,6 +31,7 @@ public class Connection {
             tryHTTP=true;
             try{
                 URL u=new URL(url);
+
                 host=u.getHost();
                 port=u.getPort();
             }catch(Throwable t){
@@ -62,6 +63,7 @@ public class Connection {
             if(mode == MODE_NOT_SET && tryHTTPS){
                 SocketFactory factory = SSLSocketFactory.getDefault();
                 socket=factory.createSocket();
+
                 if(connectTimeout>0){
                     socket.connect(new InetSocketAddress(host, port==-1?443:port),connectTimeout);
                 }else{
@@ -152,6 +154,7 @@ public class Connection {
             ps.print("Host: "+host+"\r\n");
             ps.print("User-Agent: "+USER_AGENT);
             ps.print("Connection: "+(keepAlive?"keep-alive":"close")+"\r\n");
+            ps.print("Cache-Control:no-cache");
             ps.print("Accept-Encoding: identity\r\n");
             if(LOCALE!=null) ps.print("Accept-Language: "+LOCALE+"\r\n");
             ps.print("\r\n");

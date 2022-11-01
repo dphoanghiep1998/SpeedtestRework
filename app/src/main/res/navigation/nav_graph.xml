@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/fragmentSplash">
+    app:startDestination="@id/fragmentPermission">
 
     <fragment
         android:id="@+id/fragmentPermission"
@@ -15,24 +15,6 @@
             app:destination="@id/fragmentMain"
             app:enterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_left"/>
-    </fragment>
-    <fragment
-        android:id="@+id/fragmentSplash"
-        android:name="com.example.speedtest_rework.ui.splash.FragmentSplash"
-        android:label="FragmentSplash"
-        tools:layout="@layout/fragment_splash">
-        <action
-            android:id="@+id/action_fragmentSplash_to_fragmentPermission"
-            app:destination="@id/fragmentPermission"
-            app:enterAnim="@anim/slide_in_left"
-            app:exitAnim="@anim/slide_out_left"
-            app:popExitAnim="@anim/slide_out_right" />
-        <action
-            android:id="@+id/action_fragmentSplash_to_fragmentMain"
-            app:destination="@id/fragmentMain"
-            app:enterAnim="@anim/slide_in_left"
-            app:exitAnim="@anim/slide_out_left"
-            app:popExitAnim="@anim/slide_out_left" />
     </fragment>
     <fragment
         android:id="@+id/fragmentMain"

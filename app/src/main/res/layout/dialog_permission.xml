@@ -73,6 +73,8 @@
             android:textColor="@color/gray_800"
             android:textFontWeight="800"
             android:textSize="@dimen/_14sdp"
+            android:maxWidth="@dimen/_120sdp"
+            android:maxLines="2"
             app:layout_constraintBottom_toBottomOf="@id/btn_back"
             app:layout_constraintStart_toStartOf="@id/tvSpeedTest"
             app:layout_constraintTop_toTopOf="@id/btn_back"

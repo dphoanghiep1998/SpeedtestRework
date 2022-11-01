@@ -12,13 +12,20 @@ android {
     compileSdk 32
 
     defaultConfig {
-        applicationId "com.example.speedtest_rework"
+        applicationId "com.nekosoft.internet.android.speedtest"
         minSdk 21
         targetSdk 32
         versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        def date = new Date()
+        def formattedDate = date.format('dd-MM')
+        Calendar calendar = GregorianCalendar.getInstance()
+        def hour = calendar.get(Calendar.HOUR_OF_DAY)
+        def minute = calendar.get(Calendar.MINUTE)
+        setProperty("archivesBaseName", "com.nekosoft.internet.android.speedtest__" + versionCode + "__" + versionName + "__${formattedDate}__${hour}h${minute}")
     }
     buildFeatures{
         viewBinding= true

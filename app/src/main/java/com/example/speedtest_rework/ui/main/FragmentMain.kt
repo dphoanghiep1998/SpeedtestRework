@@ -8,22 +8,23 @@ import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.core.view.GravityCompat
-import androidx.core.view.get
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
 import com.example.speedtest_rework.R
-import com.example.speedtest_rework.base.dialog.*
+import com.example.speedtest_rework.base.dialog.PermissionDialog
+import com.example.speedtest_rework.base.dialog.RateCallBack
+import com.example.speedtest_rework.base.dialog.RateDialog
 import com.example.speedtest_rework.base.fragment.BaseFragment
 import com.example.speedtest_rework.common.utils.*
 import com.example.speedtest_rework.common.utils.AppSharePreference.Companion.INSTANCE
@@ -102,7 +103,7 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback,
     }
 
     private fun initDrawerAction() {
-        binding.containerFeedback.root.setOnClickListener { openLink("http://www.google.com") }
+        binding.containerFeedback.root.setOnClickListener { feedBack() }
         binding.containerPolicy.root.setOnClickListener { openLink("http://www.facebook.com") }
         binding.containerShare.root.setOnClickListener { this.shareApp() }
         binding.containerRate.root.setOnClickListener { this.rateApp() }
@@ -135,7 +136,7 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback,
             }
             binding.containerDataUsage.root.visibility = View.VISIBLE
             binding.containerSpeedMonitor.root.visibility = View.VISIBLE
-            binding.containerSpeedMonitor.swSwitch.setOnCheckedChangeListener { item, checked ->
+            binding.containerSpeedMonitor.swSwitch.setOnCheckedChangeListener { _, checked ->
                 if (checked) {
                     AppForegroundService.getInstance()
                         .startService(requireContext(), ServiceType.SPEED_MONITOR)
@@ -179,6 +180,20 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback,
         binding.containerLanguage.root.setOnClickListener {
             findNavController().navigate(R.id.action_fragmentMain_to_languageFragment)
         }
+    }
+
+    private fun feedBack() {
+
+        val intent = Intent(Intent.ACTION_SENDTO).apply {
+            type = "message/rfc822"
+            data = Uri.parse("mailto:")
+            putExtra(Intent.EXTRA_EMAIL, arrayOf("",getString(R.string.mailTo)))
+            putExtra(Intent.EXTRA_SUBJECT, "${getString(R.string.app_name)} - SDK_CLIENT ${Build.VERSION.SDK_INT}")
+
+        }
+
+            startActivity(intent)
+
     }
 
     private fun initLanguageDialog() {
@@ -324,10 +339,10 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback,
 
 
     private fun showStopBtn() {
-        YoYo.with(Techniques.FadeOut).duration(400).onEnd {
+        YoYo.with(Techniques.FadeOut).duration(100).onEnd {
             binding.imvVip.visibility = View.GONE
         }.playOn(binding.imvVip)
-        YoYo.with(Techniques.FadeIn).duration(400).onEnd {
+        YoYo.with(Techniques.FadeIn).duration(100).onEnd {
             binding.imvStop.visibility = View.VISIBLE
         }.playOn(binding.imvStop)
     }
@@ -349,10 +364,10 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback,
     }
 
     private fun showVipBtn() {
-        YoYo.with(Techniques.FadeOut).duration(400).onEnd {
+        YoYo.with(Techniques.FadeOut).duration(100).onEnd {
             binding.imvStop.visibility = View.GONE
         }.playOn(binding.imvStop)
-        YoYo.with(Techniques.FadeIn).duration(400).onEnd {
+        YoYo.with(Techniques.FadeIn).duration(100).onEnd {
             binding.imvVip.visibility = View.VISIBLE
         }.playOn(binding.imvVip)
     }

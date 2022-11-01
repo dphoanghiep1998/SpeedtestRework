@@ -69,9 +69,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_16sdp"
+            android:gravity="center"
+            android:paddingHorizontal="@dimen/_16sdp"
             android:text="@string/ask_rate"
             android:textColor="@color/black"
-            android:textSize="@dimen/_16sdp"
+            android:textSize="@dimen/_14sdp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -97,23 +99,34 @@
                 android:layout_weight="1"
                 android:background="@drawable/background_rate_button_deny"
                 android:foreground="@drawable/ripple_effect_fg"
-                android:paddingVertical="@dimen/_8sdp"
+                android:maxWidth="@dimen/_120sdp"
+                android:paddingHorizontal="@dimen/_8sdp"
+                android:paddingVertical="@dimen/_4sdp"
                 android:text="@string/text_rate_button_not_really"
+                android:maxLines="1"
                 android:textColor="@color/gray_700"
-                android:textSize="@dimen/_14sdp" />
+                android:textSize="@dimen/_12sdp"
+                app:autoSizeMaxTextSize="@dimen/_14sdp"
+                app:autoSizeMinTextSize="@dimen/_8sdp"
+                app:autoSizeStepGranularity="1dp" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_agree"
-                android:layout_marginStart="@dimen/_8sdp"
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_8sdp"
                 android:layout_weight="1"
                 android:background="@drawable/button_background_start"
                 android:foreground="@drawable/ripple_effect_fg"
+                android:paddingHorizontal="@dimen/_8sdp"
                 android:text="@string/text_rate_button_good"
                 android:textColor="@color/gray_700"
-                android:textSize="@dimen/_14sdp" />
+                android:textSize="@dimen/_12sdp"
+                android:maxLines="1"
+                app:autoSizeMaxTextSize="@dimen/_14sdp"
+                app:autoSizeMinTextSize="@dimen/_8sdp"
+                app:autoSizeStepGranularity="1dp" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
