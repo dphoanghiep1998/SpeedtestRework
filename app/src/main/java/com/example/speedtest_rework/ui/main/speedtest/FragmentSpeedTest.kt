@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.NavHostFragment
@@ -72,12 +73,7 @@ class FragmentSpeedTest : BaseFragment() {
 
     private fun initSpeedView() {
         Log.d("TAG", "hasHardwareAcceleration: " + hasHardwareAcceleration(requireActivity()))
-        if (hasHardwareAcceleration(requireActivity())) {
 
-            binding.clSpeedview.setHasHardwareEnabled(true)
-        } else {
-            binding.clSpeedview.setHasHardwareEnabled(false)
-        }
     }
 
     private fun initExpandView() {
@@ -86,7 +82,7 @@ class FragmentSpeedTest : BaseFragment() {
             if (!isExpanded) {
                 YoYo.with(Techniques.SlideInLeft).duration(400L).onStart {
                     binding.containerExpandView.setBackgroundResource(R.drawable.background_gradient_config)
-                    layoutParams.width = ConstraintLayout.LayoutParams.MATCH_PARENT
+                    layoutParams.width = 0
                     binding.containerExpandView.layoutParams = layoutParams
                     binding.line2.visibility = View.VISIBLE
                     isExpanded = true

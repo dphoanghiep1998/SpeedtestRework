@@ -39,7 +39,6 @@ class AskRateDialog(context: Context, private val callback: AskRateCallBack) : D
             if (getNavBarHeight() > 0) getNavBarHeight() else 16
         )
         binding.root.setOnClickListener {
-            callback.onDeny()
             dismiss()
         }
         binding.btnAgree.setOnClickListener {

@@ -53,17 +53,52 @@ class SpeedView(
     private var type = ConnectionType.UNKNOWN
     private var testPoint: TestPoint? = null
     private var viewModel: SpeedTestViewModel? = null
+    private var reset = false
+
+    private lateinit var btnStartComposeShow: YoYo.AnimationComposer
+    private lateinit var btnStartComposeHide: YoYo.AnimationComposer
+    private lateinit var tvConnectingShow: YoYo.AnimationComposer
+    private lateinit var tvConnectingHide: YoYo.AnimationComposer
+    private lateinit var btnStartStringShow: YoYo.YoYoString
+    private lateinit var btnStartStringHide: YoYo.YoYoString
+
     private var currentTicks = listOf<Float>()
 
     init {
         val inflater = LayoutInflater.from(context)
         binding = LayoutSpeedviewBinding.inflate(inflater, this)
+        initAnimation()
         initView()
     }
 
-    fun setHasHardwareEnabled(status: Boolean) {
-        binding.speedView.setHasHardwareEnabled(status)
+    private fun initAnimation() {
+        btnStartComposeShow = YoYo.with(Techniques.FadeIn)
+            .onStart {
+                Log.d("TAG", "btnStartComposeShow: ")
+                binding.btnStartContainer.visibility = View.VISIBLE
+            }
+
+        btnStartComposeHide =
+            YoYo.with(Techniques.FadeOut).onEnd {
+                Log.d("TAG", "btnStartComposeHide: ")
+                binding.btnStartContainer.visibility = View.GONE
+            }.onCancel {
+                binding.btnStartContainer.visibility = View.VISIBLE
+            }
+        btnStartStringShow = btnStartComposeShow.playOn(binding.btnStartContainer)
+
+//        btnStartStringHide = YoYo.with(Techniques.FadeOut).onEnd {
+//            Log.d("TAG", "btnStartComposeHide: ")
+//            binding.btnStartContainer.visibility = View.GONE
+//        }.playOn(binding.btnStartContainer)
+
+        tvConnectingShow = YoYo.with(Techniques.SlideInRight).onStart {
+            binding.tvConnecting.visibility = View.VISIBLE
+        }
+        tvConnectingHide =
+            YoYo.with(Techniques.FadeOut).onEnd { binding.tvConnecting.visibility = View.GONE }
     }
+
 
     fun setData(
         testPoint: TestPoint,
@@ -92,14 +127,6 @@ class SpeedView(
 
 
     fun setData(maxValue: Float) {
-        //    var a = listOf(0f, 1 / 30f, 1 / 15f, 0.1f, 2 / 15f, 0.2f, 1 / 3f, 2 / 3f, 1f) 15k
-//    var a = listOf(0f, .05f, .1f, .15f, .2f, .3f, .5f, .8f, 1f)  10k
-//    var a = listOf(0f, .02f, .04f, .06f, .1f, .2f, .4f, .6f, 1f) 5k
-//    var a = listOf(0f,.02f,.04f,.06f,.1f,.2f,.3f,.6f,1f) 50
-//    var a = listOf(0f, .1f, .2f, .3f, .4f, .5f, .6f, .8f) 10
-//    var a = listOf(0f, .01f, .02f, .05f, .1f, .2f, .3f, .6f, 1f) 500
-//    var a = listOf(0f, .005f, .01f, .05f, .1f, .25f, .5f, .75f, 1f) 1000
-//    var a = listOf(0f, .05f, .15f, .2f, .3f, .5f, .75f, 1f) 100
         binding.speedView.ticks = listOf()
         binding.speedView.maxSpeed = maxValue
         when (maxValue) {
@@ -133,7 +160,7 @@ class SpeedView(
 
     @SuppressLint("ClickableViewAccessibility")
     private fun initView() {
-        binding.loading.speed = .7f
+        binding.loading.speed = 1f
         binding.loading.addAnimatorListener(object : Animator.AnimatorListener {
             override fun onAnimationStart(p0: Animator?) {
                 showLoading()
@@ -173,7 +200,11 @@ class SpeedView(
                             KeyPath("**"), LottieProperty.COLOR_FILTER
                         ) { null }
                         if (type == ConnectionType.UNKNOWN) {
-                            Toast.makeText(context, context.getText(R.string.no_connectivity), Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                context,
+                                context.getText(R.string.no_connectivity),
+                                Toast.LENGTH_SHORT
+                            ).show()
                             return true
                         }
                         viewModel?.setScanStatus(ScanStatus.SCANNING)
@@ -206,6 +237,7 @@ class SpeedView(
     }
 
     fun prepareViewSpeedTest() {
+        keepScreenOn = true
         binding.placeholderDownload.visibility = VISIBLE
         binding.placeholderUpload.visibility = VISIBLE
         binding.tvDownloadValue.visibility = GONE
@@ -238,7 +270,6 @@ class SpeedView(
                 } else if (count == 2) {
                     showLoading()
                 } else if (count == 1) {
-                    Log.d("TAG", "onTick: ")
                     hideBtnStart()
                     showTvConnecting()
                 }
@@ -256,7 +287,7 @@ class SpeedView(
         binding.speedView.clearAnimation()
 
         val animation = ArcAnimation(binding.speedView)
-        animation.duration = 500
+        animation.duration = 400
         animation.setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationStart(animation: Animation) {
                 binding.speedView.visibility = View.VISIBLE
@@ -313,37 +344,17 @@ class SpeedView(
     }
 
     private fun hideBtnStart() {
-        val animation = AnimationUtils.loadAnimation(context, R.anim.fade_out)
-        animation.duration = 200L
-        animation.setAnimationListener(object : Animation.AnimationListener {
-            override fun onAnimationStart(animation: Animation) {}
-            override fun onAnimationEnd(animation: Animation) {
-                binding.btnStartContainer.visibility = GONE
-            }
-
-            override fun onAnimationRepeat(animation: Animation) {}
-        })
-        binding.btnStartContainer.startAnimation(animation)
         binding.btnStart.isEnabled = false
+        btnStartComposeHide.playOn(binding.btnStartContainer)
     }
 
     private fun showBtnStart() {
         binding.btnStart.isEnabled = true
-
-        val animation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
-        animation.duration = 200L
-        animation.setAnimationListener(object : Animation.AnimationListener {
-            override fun onAnimationStart(animation: Animation) {
-                binding.btnStartContainer.visibility = VISIBLE
-            }
-            override fun onAnimationEnd(animation: Animation) {
-            }
-
-            override fun onAnimationRepeat(animation: Animation) {}
-        })
-        binding.btnStartContainer.startAnimation(animation)
-
-
+        val btnStartComposeHideString = btnStartComposeHide.playOn(binding.btnStartContainer)
+        if (btnStartComposeHideString.isStarted || btnStartComposeHideString.isRunning) {
+            btnStartComposeHideString.stop()
+        }
+        btnStartComposeShow.playOn(binding.btnStartContainer)
     }
 
     private fun showTvConnecting(): YoYo.YoYoString {
@@ -379,8 +390,6 @@ class SpeedView(
 
             override fun onDownloadUpdate(dl: Double, progress: Double) {
                 if (progress == 0.0) {
-                    Log.d("TAG", "runSpeedTest: "+this)
-
                     (context as Activity).runOnUiThread { downloadView() }
                 }
                 (context as Activity).runOnUiThread {
@@ -560,7 +569,7 @@ class SpeedView(
 
         binding.loading.visibility = GONE
         binding.tvConnecting.visibility = GONE
-        binding.btnStartContainer.clearAnimation()
+
         showBtnStart()
     }
 

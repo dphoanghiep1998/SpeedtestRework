@@ -50,6 +50,7 @@ class RateDialog(context: Context, private val callback: RateCallBack) : Dialog(
                 count++
                 when (count) {
                     1 -> {
+                        star = 1
                         binding.star1.setImageDrawable(
                             ContextCompat.getDrawable(
                                 context,
@@ -65,6 +66,7 @@ class RateDialog(context: Context, private val callback: RateCallBack) : Dialog(
                         binding.tvExpressive.text = context.getString(R.string.expressive_bad)
                     }
                     2 -> {
+                        star = 2
                         binding.star2.setImageDrawable(
                             ContextCompat.getDrawable(
                                 context,
@@ -80,6 +82,7 @@ class RateDialog(context: Context, private val callback: RateCallBack) : Dialog(
                         binding.tvExpressive.text = context.getString(R.string.expressive_bad)
                     }
                     3 -> {
+                        star = 3
                         binding.star3.setImageDrawable(
                             ContextCompat.getDrawable(
                                 context,
@@ -96,6 +99,7 @@ class RateDialog(context: Context, private val callback: RateCallBack) : Dialog(
 
                     }
                     4 -> {
+                        star = 4
                         binding.star4.setImageDrawable(
                             ContextCompat.getDrawable(
                                 context,
@@ -112,6 +116,7 @@ class RateDialog(context: Context, private val callback: RateCallBack) : Dialog(
 
                     }
                     5 -> {
+                        star = 5
                         binding.star5.setImageDrawable(
                             ContextCompat.getDrawable(
                                 context,

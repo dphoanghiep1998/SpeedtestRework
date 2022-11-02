@@ -227,6 +227,7 @@ class FragmentResultDetail : BaseFragment(), ConfirmDialog.ConfirmCallback, AskR
     }
 
     override fun onDeny() {
+        viewModel.userActionRate = true
     }
 
     override fun onAgree() {
@@ -239,7 +240,7 @@ class FragmentResultDetail : BaseFragment(), ConfirmDialog.ConfirmCallback, AskR
         if (star < 4) {
             return
         }
-        openLink("google.com")
+        openLink("http://www.facebook.com")
     }
 
     private fun openLink(strUri: String?) {

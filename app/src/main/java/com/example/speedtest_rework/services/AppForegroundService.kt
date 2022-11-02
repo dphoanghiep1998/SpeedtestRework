@@ -2,6 +2,7 @@ package com.example.speedtest_rework.services
 
 import android.annotation.SuppressLint
 import android.app.ActivityManager
+import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
 import android.app.usage.NetworkStats
@@ -9,17 +10,16 @@ import android.app.usage.NetworkStatsManager
 import android.content.Context
 import android.content.Intent
 import android.net.TrafficStats
-import android.os.CountDownTimer
 import android.os.IBinder
 import android.view.View
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.activities.MainActivity
+import com.example.speedtest_rework.common.utils.AppSharePreference
 import com.example.speedtest_rework.common.utils.buildMinVersionM
 import com.example.speedtest_rework.common.utils.buildMinVersionO
-import com.example.speedtest_rework.common.utils.AppSharePreference
-import com.example.speedtest_rework.common.utils.AppSharePreference.Companion.INSTANCE
+import kotlinx.coroutines.*
 import java.math.RoundingMode
 import java.util.*
 
@@ -42,11 +42,18 @@ enum class ServiceType {
 }
 
 class AppForegroundService : Service() {
-    private var countDownTimer: CountDownTimer? = null
-
+    private lateinit var job: Job
+    private lateinit var job2: Job
+    private val scope = CoroutineScope(Dispatchers.IO)
+    private var first = true
+    private var tempRx = 0L
+    private var tempTx = 0L
+    private lateinit var mNotificationManager: NotificationManager
     override fun onCreate() {
         super.onCreate()
         remoteViews = RemoteViews(packageName, R.layout.layout_notification_speed_test)
+        mNotificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager;
 
     }
 
@@ -129,11 +136,11 @@ class AppForegroundService : Service() {
         startForeground(SERVICE_ID, builder.build())
 
         when (serviceType) {
-            ServiceType.SPEED_MONITOR -> setDataSpeedMonitor(builder)
-            ServiceType.DATA_USAGE -> setDataUsageMonitor(builder)
+            ServiceType.SPEED_MONITOR -> job = startRepeatingJob(2000L, builder)
+            ServiceType.DATA_USAGE -> job2 = startRepeatingJob(builder)
             ServiceType.BOTH -> {
-                setDataSpeedMonitor(builder)
-                setDataUsageMonitor(builder)
+                job = startRepeatingJob(2000L, builder)
+                job2 = startRepeatingJob(builder)
             }
             else -> Unit
         }
@@ -141,42 +148,56 @@ class AppForegroundService : Service() {
 
     }
 
-    private fun setDataSpeedMonitor(builder: NotificationCompat.Builder) {
-        var tempRx = 0L
-        var tempTx = 0L
-        if (countDownTimer != null) {
-            countDownTimer?.cancel()
+    private fun startRepeatingJob(timeInterval: Long, builder: NotificationCompat.Builder): Job {
+        if(::job.isInitialized){
+            job.cancel()
         }
-        countDownTimer = object : CountDownTimer(Long.MAX_VALUE, 2000L) {
-            override fun onTick(tick: Long) {
-                if (tick < 2000) {
-                    tempRx = TrafficStats.getTotalRxBytes()
-                    tempTx = TrafficStats.getTotalTxBytes()
-                } else {
-                    val rxByte: Long = TrafficStats.getTotalRxBytes()
-                    val txByte: Long = TrafficStats.getTotalTxBytes()
-                    if (tempRx > 0 && tempTx > 0) {
-                        remoteViews.setTextViewText(
-                            R.id.tv_download_value_notification,
-                            (convert((rxByte - tempRx) / 1024f, 0))
-                        )
-                        remoteViews.setTextViewText(
-                            R.id.tv_upload_value_notification,
-                            (convert((txByte - tempTx) / 1024f, 1))
-                        )
-                    }
-                    tempRx = rxByte
-                    tempTx = txByte
-                }
-                startForeground(SERVICE_ID, builder.build())
+        return scope.launch {
+            while (true) {
+                ensureActive()
+                setDataSpeedMonitor(builder)
+                delay(timeInterval)
+                first = false
             }
-
-            override fun onFinish() {
-            }
-
         }
-        countDownTimer?.start()
     }
+
+    private fun startRepeatingJob(builder: NotificationCompat.Builder): Job {
+        if(::job2.isInitialized){
+            job2.cancel()
+        }
+        return scope.launch {
+            while (true) {
+                ensureActive()
+                setDataUsageMonitor(builder)
+                delay(60 * 60 * 1000L)
+            }
+        }
+    }
+
+    private fun setDataSpeedMonitor(builder: NotificationCompat.Builder) {
+        if (first) {
+            tempRx = TrafficStats.getTotalRxBytes()
+            tempTx = TrafficStats.getTotalTxBytes()
+        } else {
+            val rxByte: Long = TrafficStats.getTotalRxBytes()
+            val txByte: Long = TrafficStats.getTotalTxBytes()
+            if (tempRx > 0 && tempTx > 0) {
+                remoteViews.setTextViewText(
+                    R.id.tv_download_value_notification,
+                    (convert((rxByte - tempRx) / 1024f, 0))
+                )
+                remoteViews.setTextViewText(
+                    R.id.tv_upload_value_notification,
+                    (convert((txByte - tempTx) / 1024f, 1))
+                )
+            }
+            tempRx = rxByte
+            tempTx = txByte
+        }
+        mNotificationManager.notify(SERVICE_ID, builder.build())
+    }
+
 
     @SuppressLint("NewApi")
     private fun setDataUsageMonitor(builder: NotificationCompat.Builder) {
@@ -192,10 +213,8 @@ class AppForegroundService : Service() {
         remoteViews.setTextViewText(
             R.id.wifi_usage_value, convertData(totalWifi.toFloat())
         )
+        mNotificationManager.notify(SERVICE_ID, builder.build())
 
-        startForeground(
-            SERVICE_ID, builder.build()
-        )
     }
 
     @SuppressLint("NewApi")
@@ -340,6 +359,7 @@ class AppForegroundService : Service() {
                 serviceType = when (sType) {
                     ServiceType.DATA_USAGE -> {
                         hideViewDataUsage()
+                        if(::job2.isInitialized) job2.cancel()
                         AppSharePreference.INSTANCE.saveServiceType(
                             R.string.service_type_key,
                             ServiceType.SPEED_MONITOR
@@ -347,6 +367,7 @@ class AppForegroundService : Service() {
                         ServiceType.SPEED_MONITOR
                     }
                     else -> {
+                        if(::job.isInitialized) job.cancel()
                         hideViewSpeedMonitor()
                         AppSharePreference.INSTANCE.saveServiceType(
                             R.string.service_type_key,
@@ -358,6 +379,8 @@ class AppForegroundService : Service() {
 
             }
             else -> {
+                if(::job.isInitialized) job.cancel()
+                if(::job2.isInitialized) job2.cancel()
                 serviceType = ServiceType.NONE
                 AppSharePreference.INSTANCE.saveServiceType(
                     R.string.service_type_key,

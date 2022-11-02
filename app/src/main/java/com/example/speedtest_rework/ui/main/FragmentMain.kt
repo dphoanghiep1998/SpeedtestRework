@@ -423,7 +423,7 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback,
         if (star < 4) {
             return
         }
-        openLink("google.com")
+        openLink("http://www.facebook.com")
     }
 
     override fun onStartClicked() {

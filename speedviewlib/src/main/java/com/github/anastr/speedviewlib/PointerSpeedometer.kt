@@ -122,7 +122,7 @@ open class PointerSpeedometer @JvmOverloads constructor(
         speedometerPaint.strokeWidth = speedometerWidth
         darkPaint.strokeWidth = speedometerWidth
 
-        setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        setLayerType(View.LAYER_TYPE_SOFTWARE, null)
     }
 
     private fun initAttributeSet(context: Context, attrs: AttributeSet?) {
@@ -159,12 +159,13 @@ open class PointerSpeedometer @JvmOverloads constructor(
         updateBackgroundBitmap()
     }
 
-    fun setInitDone(status:Boolean){
+    fun setInitDone(status: Boolean) {
         initDone = status
         invalidate()
     }
-     override fun stop (){
-         setState("download")
+
+    override fun stop() {
+        setState("download")
         super.stop()
         setEndDegree(135)
     }
@@ -207,7 +208,7 @@ open class PointerSpeedometer @JvmOverloads constructor(
             false,
             blurPaint
         )
-        if (initDone){
+        if (initDone) {
             drawIndicator(canvas)
             drawTicks(canvas, getStartDegree() + position)
         }
