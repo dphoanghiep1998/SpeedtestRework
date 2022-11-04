@@ -11,6 +11,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -107,49 +108,23 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback,
         binding.containerPolicy.root.setOnClickListener { openLink("http://www.facebook.com") }
         binding.containerShare.root.setOnClickListener { this.shareApp() }
         binding.containerRate.root.setOnClickListener { this.rateApp() }
+        val saveServiceType = AppSharePreference.getInstance(requireContext())
+            .getServiceType(R.string.service_type_key, ServiceType.NONE)
         if (buildMinVersionM()) {
-            if (AppForegroundService.getInstance().isServiceSpeedMonitorRunning(
-                    requireContext(),
-                    AppForegroundService::class.java
-                )
-            ) {
-                binding.containerSpeedMonitor.swSwitch.isChecked = true
-                binding.containerSpeedMonitor.tvDes.visibility = View.VISIBLE
-
-            }
-            if (AppForegroundService.getInstance().isServiceDataUsageRunning(
-                    requireContext(),
-                    AppForegroundService::class.java
-                )
-            ) {
-                binding.containerDataUsage.swSwitch.isChecked = true
-                binding.containerDataUsage.tvDes.visibility = View.VISIBLE
-
-            }
-            binding.menu.setOnClickListener {
-                with(binding) {
-                    drawerContainer.openDrawer(
-                        GravityCompat.START,
-                        true
-                    )
-                }
-            }
-            binding.containerDataUsage.root.visibility = View.VISIBLE
-            binding.containerSpeedMonitor.root.visibility = View.VISIBLE
-            binding.containerSpeedMonitor.swSwitch.setOnCheckedChangeListener { _, checked ->
+            binding.swSwitchMonitor.setOnCheckedChangeListener { _, checked ->
                 if (checked) {
                     AppForegroundService.getInstance()
                         .startService(requireContext(), ServiceType.SPEED_MONITOR)
-                    binding.containerSpeedMonitor.tvDes.visibility = View.VISIBLE
+                    binding.tvDesMonitor.visibility = View.VISIBLE
                 } else {
                     AppForegroundService.getInstance()
                         .stopService(requireContext(), ServiceType.SPEED_MONITOR)
-                    binding.containerSpeedMonitor.tvDes.visibility = View.GONE
+                    binding.tvDesMonitor.visibility = View.GONE
 
                 }
             }
 
-            binding.containerDataUsage.swSwitch.setOnCheckedChangeListener { item, checked ->
+            binding.swSwitchDataUsage.setOnCheckedChangeListener { item, checked ->
                 if (checked) {
                     when (checkAccessSettingPermission(requireContext())) {
                         true -> {
@@ -158,7 +133,7 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback,
                                 requireContext(),
                                 ServiceType.DATA_USAGE
                             )
-                            binding.containerDataUsage.tvDes.visibility = View.VISIBLE
+                            binding.tvDesDataUsage.visibility = View.VISIBLE
 
                         }
                         else -> {
@@ -172,10 +147,31 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback,
                 } else {
                     AppForegroundService.getInstance()
                         .stopService(requireContext(), ServiceType.DATA_USAGE)
-                    binding.containerDataUsage.tvDes.visibility = View.GONE
+                    binding.tvDesDataUsage.visibility = View.GONE
 
                 }
             }
+            if (saveServiceType == ServiceType.SPEED_MONITOR || saveServiceType == ServiceType.BOTH) {
+                binding.swSwitchMonitor.isChecked = true
+                binding.tvDesMonitor.visibility = View.VISIBLE
+            }
+            if (saveServiceType == ServiceType.DATA_USAGE || saveServiceType == ServiceType.BOTH) {
+                binding.swSwitchDataUsage.isChecked = true
+                binding.tvDesDataUsage.visibility = View.VISIBLE
+
+            }
+            binding.menu.setOnClickListener {
+                with(binding) {
+                    drawerContainer.openDrawer(
+                        GravityCompat.START,
+                        true
+                    )
+                }
+            }
+            binding.containerDataUsage.visibility = View.VISIBLE
+            binding.containerSpeedMonitor.visibility = View.VISIBLE
+
+
         }
         binding.containerLanguage.root.setOnClickListener {
             findNavController().navigate(R.id.action_fragmentMain_to_languageFragment)
@@ -187,12 +183,15 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback,
         val intent = Intent(Intent.ACTION_SENDTO).apply {
             type = "message/rfc822"
             data = Uri.parse("mailto:")
-            putExtra(Intent.EXTRA_EMAIL, arrayOf("",getString(R.string.mailTo)))
-            putExtra(Intent.EXTRA_SUBJECT, "${getString(R.string.app_name)} - SDK_CLIENT ${Build.VERSION.SDK_INT}")
+            putExtra(Intent.EXTRA_EMAIL, arrayOf("", getString(R.string.mailTo)))
+            putExtra(
+                Intent.EXTRA_SUBJECT,
+                "${getString(R.string.app_name)} - SDK_CLIENT ${Build.VERSION.SDK_INT}"
+            )
 
         }
 
-            startActivity(intent)
+        startActivity(intent)
 
     }
 

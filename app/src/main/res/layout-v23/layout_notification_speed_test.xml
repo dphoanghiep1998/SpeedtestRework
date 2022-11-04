@@ -5,7 +5,6 @@
     android:layout_height="40dp"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:paddingHorizontal="@dimen/_8sdp"
     tools:ignore="RtlSymmetry">
 
 
@@ -62,7 +61,6 @@
             android:id="@+id/container_data_usage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:orientation="horizontal">
 
             <TextView
@@ -71,7 +69,6 @@
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/ic_mobile_usage"
                 android:drawablePadding="@dimen/_2sdp"
-                android:gravity="center"
                 android:maxLines="1"
                 android:paddingStart="@dimen/_4sdp"
                 android:text="@string/zero_value_dec"
@@ -84,7 +81,6 @@
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/ic_wifi_usage_notification"
                 android:drawablePadding="@dimen/_2sdp"
-                android:gravity="center"
                 android:maxLines="1"
                 android:paddingStart="@dimen/_4sdp"
                 android:text="@string/zero_value_dec"

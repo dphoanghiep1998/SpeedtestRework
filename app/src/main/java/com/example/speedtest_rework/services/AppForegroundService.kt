@@ -19,7 +19,10 @@ import com.example.speedtest_rework.activities.MainActivity
 import com.example.speedtest_rework.common.utils.AppSharePreference
 import com.example.speedtest_rework.common.utils.buildMinVersionM
 import com.example.speedtest_rework.common.utils.buildMinVersionO
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.math.RoundingMode
 import java.util.*
 
@@ -42,10 +45,7 @@ enum class ServiceType {
 }
 
 class AppForegroundService : Service() {
-    private lateinit var job: Job
-    private lateinit var job2: Job
-    private val scope = CoroutineScope(Dispatchers.IO)
-    private var first = true
+
     private var tempRx = 0L
     private var tempTx = 0L
     private lateinit var mNotificationManager: NotificationManager
@@ -53,7 +53,7 @@ class AppForegroundService : Service() {
         super.onCreate()
         remoteViews = RemoteViews(packageName, R.layout.layout_notification_speed_test)
         mNotificationManager =
-            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager;
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
     }
 
@@ -62,14 +62,11 @@ class AppForegroundService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-
         generateNotification()
         return START_NOT_STICKY
     }
 
     private fun generateNotification() {
-
-
         when (serviceType) {
             ServiceType.SPEED_MONITOR -> {
                 remoteViews.setOnClickPendingIntent(
@@ -136,11 +133,11 @@ class AppForegroundService : Service() {
         startForeground(SERVICE_ID, builder.build())
 
         when (serviceType) {
-            ServiceType.SPEED_MONITOR -> job = startRepeatingJob(2000L, builder)
-            ServiceType.DATA_USAGE -> job2 = startRepeatingJob(builder)
+            ServiceType.SPEED_MONITOR -> startRepeatingJob(2000L, builder)
+            ServiceType.DATA_USAGE -> startRepeatingJob(builder)
             ServiceType.BOTH -> {
-                job = startRepeatingJob(2000L, builder)
-                job2 = startRepeatingJob(builder)
+                startRepeatingJob(2000L, builder)
+                startRepeatingJob(builder)
             }
             else -> Unit
         }
@@ -148,13 +145,9 @@ class AppForegroundService : Service() {
 
     }
 
-    private fun startRepeatingJob(timeInterval: Long, builder: NotificationCompat.Builder): Job {
-        if(::job.isInitialized){
-            job.cancel()
-        }
-        return scope.launch {
-            while (true) {
-                ensureActive()
+    private fun startRepeatingJob(timeInterval: Long, builder: NotificationCompat.Builder) {
+        scope.launch {
+            while (isServiceSpeedMonitorStarted) {
                 setDataSpeedMonitor(builder)
                 delay(timeInterval)
                 first = false
@@ -162,15 +155,11 @@ class AppForegroundService : Service() {
         }
     }
 
-    private fun startRepeatingJob(builder: NotificationCompat.Builder): Job {
-        if(::job2.isInitialized){
-            job2.cancel()
-        }
-        return scope.launch {
-            while (true) {
-                ensureActive()
+    private fun startRepeatingJob(builder: NotificationCompat.Builder) {
+        scope.launch {
+            while (isServiceDataUsageStarted) {
                 setDataUsageMonitor(builder)
-                delay(60 * 60 * 1000L)
+                delay(3000L)
             }
         }
     }
@@ -195,7 +184,8 @@ class AppForegroundService : Service() {
             tempRx = rxByte
             tempTx = txByte
         }
-        mNotificationManager.notify(SERVICE_ID, builder.build())
+        if (serviceType == ServiceType.BOTH || serviceType == ServiceType.SPEED_MONITOR)
+            mNotificationManager.notify(SERVICE_ID, builder.build())
     }
 
 
@@ -213,7 +203,9 @@ class AppForegroundService : Service() {
         remoteViews.setTextViewText(
             R.id.wifi_usage_value, convertData(totalWifi.toFloat())
         )
-        mNotificationManager.notify(SERVICE_ID, builder.build())
+        if (serviceType == ServiceType.DATA_USAGE) {
+            mNotificationManager.notify(SERVICE_ID, builder.build())
+        }
 
     }
 
@@ -334,6 +326,18 @@ class AppForegroundService : Service() {
     }
 
     fun startService(context: Context, sType: ServiceType) {
+        when (sType) {
+            ServiceType.SPEED_MONITOR -> {
+                isServiceSpeedMonitorStarted = true
+            }
+            ServiceType.DATA_USAGE -> {
+                isServiceDataUsageStarted = true
+            }
+            else -> {
+                isServiceSpeedMonitorStarted = true
+                isServiceDataUsageStarted = true
+            }
+        }
         val intent = Intent(context, AppForegroundService::class.java)
         serviceType = if (serviceType == ServiceType.NONE) {
             AppSharePreference.INSTANCE.saveServiceType(R.string.service_type_key, sType)
@@ -346,6 +350,7 @@ class AppForegroundService : Service() {
             sType
         }
 
+
         if (buildMinVersionO()) {
             context.applicationContext.startForegroundService(intent)
         } else {
@@ -354,38 +359,39 @@ class AppForegroundService : Service() {
     }
 
     fun stopService(context: Context, sType: ServiceType) {
+
         when (serviceType) {
             ServiceType.BOTH -> {
                 serviceType = when (sType) {
                     ServiceType.DATA_USAGE -> {
                         hideViewDataUsage()
-                        if(::job2.isInitialized) job2.cancel()
                         AppSharePreference.INSTANCE.saveServiceType(
                             R.string.service_type_key,
                             ServiceType.SPEED_MONITOR
                         )
+                        isServiceDataUsageStarted = false
+
                         ServiceType.SPEED_MONITOR
                     }
                     else -> {
-                        if(::job.isInitialized) job.cancel()
                         hideViewSpeedMonitor()
                         AppSharePreference.INSTANCE.saveServiceType(
                             R.string.service_type_key,
                             ServiceType.DATA_USAGE
                         )
+                        isServiceSpeedMonitorStarted = false
                         ServiceType.DATA_USAGE
                     }
                 }
-
             }
             else -> {
-                if(::job.isInitialized) job.cancel()
-                if(::job2.isInitialized) job2.cancel()
                 serviceType = ServiceType.NONE
                 AppSharePreference.INSTANCE.saveServiceType(
                     R.string.service_type_key,
                     ServiceType.NONE
                 )
+                isServiceDataUsageStarted = false
+                isServiceSpeedMonitorStarted = false
                 killService(context)
             }
         }
@@ -431,13 +437,17 @@ class AppForegroundService : Service() {
 
 
     companion object {
+        private var first = true
         private lateinit var INSTANCE: AppForegroundService
         private lateinit var remoteViews: RemoteViews
         private const val REQUEST_CODE = 123
         private const val REQUEST_CODE_1 = 1234
         private const val SERVICE_ID = 2022
+        private var isServiceSpeedMonitorStarted = false
+        private var isServiceDataUsageStarted = false
+        private val scope = CoroutineScope(Dispatchers.Default)
         var serviceType =
-            AppSharePreference.INSTANCE.getServiceType(R.string.service_type_key, ServiceType.NONE)
+            ServiceType.NONE
 
 
         @JvmStatic
