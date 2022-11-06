@@ -11,6 +11,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.TrafficStats
 import android.os.IBinder
+import android.util.Log
 import android.view.View
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
@@ -65,6 +66,7 @@ class AppForegroundService : Service() {
         generateNotification()
         return START_NOT_STICKY
     }
+
 
     private fun generateNotification() {
         when (serviceType) {
@@ -128,16 +130,21 @@ class AppForegroundService : Service() {
         val builder = NotificationCompat.Builder(this, getString(R.string.channel_id))
         builder.setAutoCancel(true)
         builder.setSmallIcon(R.drawable.ic_logo_menu)
+            .setStyle(NotificationCompat.DecoratedCustomViewStyle())
             .setCustomContentView(remoteViews).setAutoCancel(false).setShowWhen(false)
             .setOnlyAlertOnce(true)
         startForeground(SERVICE_ID, builder.build())
 
+        Log.d("TAG", "serviceType: " + serviceType)
+        Log.d("TAG", "isServiceDataUsageStarted: " + isServiceDataUsageStarted)
+        Log.d("TAG", "isServiceSpeedMonitorStarted: " + isServiceSpeedMonitorStarted)
         when (serviceType) {
             ServiceType.SPEED_MONITOR -> startRepeatingJob(2000L, builder)
             ServiceType.DATA_USAGE -> startRepeatingJob(builder)
             ServiceType.BOTH -> {
                 startRepeatingJob(2000L, builder)
                 startRepeatingJob(builder)
+
             }
             else -> Unit
         }
@@ -146,6 +153,10 @@ class AppForegroundService : Service() {
     }
 
     private fun startRepeatingJob(timeInterval: Long, builder: NotificationCompat.Builder) {
+        if (isServiceSpeedMonitorStarted) {
+            return
+        }
+        isServiceSpeedMonitorStarted = true
         scope.launch {
             while (isServiceSpeedMonitorStarted) {
                 setDataSpeedMonitor(builder)
@@ -156,6 +167,10 @@ class AppForegroundService : Service() {
     }
 
     private fun startRepeatingJob(builder: NotificationCompat.Builder) {
+        if (isServiceDataUsageStarted) {
+            return
+        }
+        isServiceDataUsageStarted = true
         scope.launch {
             while (isServiceDataUsageStarted) {
                 setDataUsageMonitor(builder)
@@ -184,13 +199,17 @@ class AppForegroundService : Service() {
             tempRx = rxByte
             tempTx = txByte
         }
-        if (serviceType == ServiceType.BOTH || serviceType == ServiceType.SPEED_MONITOR)
-            mNotificationManager.notify(SERVICE_ID, builder.build())
+        if (serviceType == ServiceType.BOTH || serviceType == ServiceType.SPEED_MONITOR) {
+//            mNotificationManager.notify(SERVICE_ID, builder.build())
+            startForeground(SERVICE_ID, builder.build())
+
+        }
     }
 
 
     @SuppressLint("NewApi")
     private fun setDataUsageMonitor(builder: NotificationCompat.Builder) {
+
         val mobileData = getTodayMobileUsageData(applicationContext)
         val wifiData = getTodayWifiDataUsage(applicationContext)
         val totalMobile = mobileData.rxBytes + mobileData.txBytes
@@ -203,9 +222,9 @@ class AppForegroundService : Service() {
         remoteViews.setTextViewText(
             R.id.wifi_usage_value, convertData(totalWifi.toFloat())
         )
-        if (serviceType == ServiceType.DATA_USAGE) {
-            mNotificationManager.notify(SERVICE_ID, builder.build())
-        }
+        if (serviceType == ServiceType.DATA_USAGE)
+            startForeground(SERVICE_ID, builder.build())
+
 
     }
 
@@ -244,7 +263,6 @@ class AppForegroundService : Service() {
             System.currentTimeMillis()
         )
     }
-
 
     @SuppressLint("NewApi")
     private fun getUsageStatsManager(context: Context): NetworkStatsManager {
@@ -326,31 +344,14 @@ class AppForegroundService : Service() {
     }
 
     fun startService(context: Context, sType: ServiceType) {
-        when (sType) {
-            ServiceType.SPEED_MONITOR -> {
-                isServiceSpeedMonitorStarted = true
-            }
-            ServiceType.DATA_USAGE -> {
-                isServiceDataUsageStarted = true
-            }
-            else -> {
-                isServiceSpeedMonitorStarted = true
-                isServiceDataUsageStarted = true
-            }
-        }
         val intent = Intent(context, AppForegroundService::class.java)
-        serviceType = if (serviceType == ServiceType.NONE) {
-            AppSharePreference.INSTANCE.saveServiceType(R.string.service_type_key, sType)
-            sType
-        } else if (serviceType != sType && serviceType != ServiceType.NONE) {
+        serviceType = if (serviceType != sType && serviceType != ServiceType.NONE) {
             AppSharePreference.INSTANCE.saveServiceType(R.string.service_type_key, ServiceType.BOTH)
             ServiceType.BOTH
         } else {
             AppSharePreference.INSTANCE.saveServiceType(R.string.service_type_key, sType)
             sType
         }
-
-
         if (buildMinVersionO()) {
             context.applicationContext.startForegroundService(intent)
         } else {
@@ -445,9 +446,8 @@ class AppForegroundService : Service() {
         private const val SERVICE_ID = 2022
         private var isServiceSpeedMonitorStarted = false
         private var isServiceDataUsageStarted = false
-        private val scope = CoroutineScope(Dispatchers.Default)
-        var serviceType =
-            ServiceType.NONE
+        private val scope = CoroutineScope(Dispatchers.IO)
+        var serviceType = ServiceType.NONE
 
 
         @JvmStatic

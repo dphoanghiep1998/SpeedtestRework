@@ -113,9 +113,12 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback,
         if (buildMinVersionM()) {
             binding.swSwitchMonitor.setOnCheckedChangeListener { _, checked ->
                 if (checked) {
+                    binding.tvDesMonitor.visibility = View.VISIBLE
+                    if(AppForegroundService.getInstance().isServiceSpeedMonitorRunning(requireContext(),AppForegroundService::class.java)){
+                        return@setOnCheckedChangeListener
+                    }
                     AppForegroundService.getInstance()
                         .startService(requireContext(), ServiceType.SPEED_MONITOR)
-                    binding.tvDesMonitor.visibility = View.VISIBLE
                 } else {
                     AppForegroundService.getInstance()
                         .stopService(requireContext(), ServiceType.SPEED_MONITOR)
@@ -129,11 +132,15 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback,
                     when (checkAccessSettingPermission(requireContext())) {
                         true -> {
                             item.isChecked = true
+                            binding.tvDesDataUsage.visibility = View.VISIBLE
+
+                            if(AppForegroundService.getInstance().isServiceDataUsageRunning(requireContext(),AppForegroundService::class.java)){
+                                return@setOnCheckedChangeListener
+                            }
                             AppForegroundService.getInstance().startService(
                                 requireContext(),
                                 ServiceType.DATA_USAGE
                             )
-                            binding.tvDesDataUsage.visibility = View.VISIBLE
 
                         }
                         else -> {
@@ -181,8 +188,7 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback,
     private fun feedBack() {
 
         val intent = Intent(Intent.ACTION_SENDTO).apply {
-            type = "message/rfc822"
-            data = Uri.parse("mailto:")
+            setDataAndType(Uri.parse("mailto:"),"message/rfc822")
             putExtra(Intent.EXTRA_EMAIL, arrayOf("", getString(R.string.mailTo)))
             putExtra(
                 Intent.EXTRA_SUBJECT,

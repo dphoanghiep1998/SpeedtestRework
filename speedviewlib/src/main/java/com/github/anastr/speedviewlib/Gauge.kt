@@ -20,6 +20,9 @@ import java.util.*
 import kotlin.math.abs
 import kotlin.math.max
 
+interface Listener {
+    fun stopGauge()
+}
 
 typealias SpeedTextListener = (speed: Float) -> CharSequence
 

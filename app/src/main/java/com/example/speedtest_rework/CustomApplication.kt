@@ -3,8 +3,10 @@ package com.example.speedtest_rework
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import com.example.speedtest_rework.common.utils.buildMinVersionO
+import android.content.res.Configuration
+import android.util.Log
 import com.example.speedtest_rework.common.utils.AppSharePreference
+import com.example.speedtest_rework.common.utils.buildMinVersionO
 import com.example.speedtest_rework.services.AppForegroundService
 import dagger.hilt.android.HiltAndroidApp
 
@@ -22,6 +24,7 @@ class CustomApplication() : Application() {
         AppForegroundService.getInstance()
         createChannelNotification()
     }
+
 
     private fun createChannelNotification() {
         if (buildMinVersionO()) {
