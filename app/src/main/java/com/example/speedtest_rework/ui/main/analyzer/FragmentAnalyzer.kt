@@ -9,31 +9,29 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.*
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import androidx.annotation.RequiresApi
+import androidx.core.text.parseAsHtml
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.fragment.BaseFragment
-import com.example.speedtest_rework.common.utils.AppSharePreference
 import com.example.speedtest_rework.common.utils.buildMinVersionR
+import com.example.speedtest_rework.common.utils.compatColor
 import com.example.speedtest_rework.databinding.FragmentAnalyzerBinding
-import com.example.speedtest_rework.databinding.LayoutMenuFilterBinding
 import com.example.speedtest_rework.databinding.LayoutMenuInfoBinding
 import com.example.speedtest_rework.ui.main.analyzer.adapter.ItemTouchHelper
 import com.example.speedtest_rework.ui.main.analyzer.adapter.WifiChannelAdapter
 import com.example.speedtest_rework.ui.main.analyzer.band.WiFiBand
+import com.example.speedtest_rework.ui.main.analyzer.band.WiFiChannelPair
 import com.example.speedtest_rework.ui.main.analyzer.graph.ChannelGraphAdapter
-import com.example.speedtest_rework.ui.main.analyzer.graph.ChannelGraphNavigation
+import com.example.speedtest_rework.ui.main.analyzer.model.Cache
 import com.example.speedtest_rework.ui.main.analyzer.model.Transformer
 import com.example.speedtest_rework.ui.main.analyzer.model.WiFiData
 import com.example.speedtest_rework.ui.main.analyzer.model.WiFiDetail
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
-import com.example.speedtest_rework.ui.main.analyzer.model.Cache
-import com.example.speedtest_rework.viewmodel.Order
 
 
 class FragmentAnalyzer : BaseFragment(), ItemTouchHelper {
@@ -44,6 +42,8 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper {
     private lateinit var channelGraphAdapter: ChannelGraphAdapter
     private lateinit var wiFiData: WiFiData
     private lateinit var popupWindow: PopupWindow
+    private var wiFiBand = WiFiBand.GHZ2
+    private var wiFiChannelPair: WiFiChannelPair = wiFiBand.wiFiChannels.wiFiChannelPairs()[0]
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -116,15 +116,40 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper {
             startActivity(intent)
         }
         binding.imvInfo.setOnClickListener {
-//            popupWindow.showAsDropDown(binding.imvInfo,-36,0)
-            AppSharePreference.getInstance(requireContext())
-                .saveWifiBand(R.string.wifi_band_key, WiFiBand.GHZ5)
-
-            binding.graph.removeAllViews()
-            channelGraphAdapter.update(wiFiData)
+            popupWindow.showAsDropDown(binding.imvInfo, -36, 0)
         }
+        val navButton = listOf(
+            binding.graphNavigationSet1,
+            binding.graphNavigationSet2,
+            binding.graphNavigationSet3
+        )
+        navButton.forEachIndexed { index, item ->
+            val selected =
+                wiFiBand.wiFiChannels.wiFiChannelPairs()[index] == wiFiChannelPair
+            val color =
+                requireContext().compatColor(if (selected) R.color.selected else R.color.background_main)
+            val textValue =
+                """<strong>${wiFiBand.wiFiChannels.wiFiChannelPairs()[index].first.channel} &#8722 ${wiFiBand.wiFiChannels.wiFiChannelPairs()[index].second.channel}</strong>""".parseAsHtml()
+                    .toString()
+            item.text = textValue
+            item.setBackgroundColor(color)
 
 
+            kotlin.run {
+                item.setOnClickListener {
+                    wiFiBand = WiFiBand.GHZ5
+                    wiFiChannelPair = wiFiBand.wiFiChannels.wiFiChannelPairs()[index]
+                    channelGraphAdapter = ChannelGraphAdapter(
+                        requireContext(),
+                        wiFiBand,
+                        wiFiChannelPair
+                    )
+                    binding.graph.removeAllViews()
+                    channelGraphAdapter.update(wiFiData)
+                    binding.graph.addView(channelGraphAdapter.graphViews())
+                }
+            }
+        }
     }
 
     private fun initPopupWindow() {
@@ -184,10 +209,12 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper {
             val transformer = Transformer(cache)
             wiFiData = transformer.transformToWiFiData()
             adapter.setData(wiFiData)
-            val linearLayout: LinearLayout = binding.graphNavigation
-            val channelGraphNavigation =
-                ChannelGraphNavigation(linearLayout, requireActivity().applicationContext)
-            channelGraphAdapter = ChannelGraphAdapter(requireContext(), channelGraphNavigation)
+
+            channelGraphAdapter = ChannelGraphAdapter(
+                requireContext(),
+                wiFiBand,
+                wiFiChannelPair
+            )
             channelGraphAdapter.update(wiFiData)
             binding.graph.addView(channelGraphAdapter.graphViews())
             hideLoadingMain()

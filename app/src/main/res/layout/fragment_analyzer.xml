@@ -9,51 +9,48 @@
 
     <LinearLayout
         android:id="@+id/graphNavigation"
+        android:layout_marginStart="@dimen/_8sdp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="@id/imv_info"
         app:layout_constraintEnd_toStartOf="@id/imv_info"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/imv_info"
-        app:layout_constraintBottom_toBottomOf="@id/imv_info">
+        app:layout_constraintTop_toTopOf="@id/imv_info">
 
-        <LinearLayout
-            android:id="@+id/graphNavigationLine1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <Button
-                android:id="@+id/graphNavigationSet1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@null"
-                android:minWidth="0dp"
-                android:minHeight="0dp"
-                tools:text="100-199" />
 
-            <Button
-                android:id="@+id/graphNavigationSet2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_weight="1"
-                android:background="@null"
-                android:minWidth="0dp"
-                android:minHeight="0dp"
-                tools:text="200-299" />
+        <Button
+            android:id="@+id/graphNavigationSet1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@null"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            tools:text="100-199" />
 
-            <Button
-                android:id="@+id/graphNavigationSet3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_weight="1"
-                android:background="@null"
-                android:minWidth="0dp"
-                android:minHeight="0dp"
-                tools:text="300-399" />
-        </LinearLayout>
+        <Button
+            android:id="@+id/graphNavigationSet2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:background="@null"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            tools:text="200-299" />
+
+        <Button
+            android:id="@+id/graphNavigationSet3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:background="@null"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            tools:text="300-399" />
 
     </LinearLayout>
 
