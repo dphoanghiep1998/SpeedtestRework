@@ -57,12 +57,7 @@ class RateDialog(context: Context, private val callback: RateCallBack) : Dialog(
                                 R.drawable.ic_rate_app_active
                             )
                         )
-                        binding.imvExpressive.setImageDrawable(
-                            ContextCompat.getDrawable(
-                                context,
-                                R.drawable.ic_1_star
-                            )
-                        )
+
                         binding.tvExpressive.text = context.getString(R.string.expressive_bad)
                     }
                     2 -> {
@@ -73,12 +68,7 @@ class RateDialog(context: Context, private val callback: RateCallBack) : Dialog(
                                 R.drawable.ic_rate_app_active
                             )
                         )
-                        binding.imvExpressive.setImageDrawable(
-                            ContextCompat.getDrawable(
-                                context,
-                                R.drawable.ic_2_star
-                            )
-                        )
+
                         binding.tvExpressive.text = context.getString(R.string.expressive_bad)
                     }
                     3 -> {
@@ -87,12 +77,6 @@ class RateDialog(context: Context, private val callback: RateCallBack) : Dialog(
                             ContextCompat.getDrawable(
                                 context,
                                 R.drawable.ic_rate_app_active
-                            )
-                        )
-                        binding.imvExpressive.setImageDrawable(
-                            ContextCompat.getDrawable(
-                                context,
-                                R.drawable.ic_3_star
                             )
                         )
                         binding.tvExpressive.text = context.getString(R.string.expressive_normal)
@@ -106,12 +90,6 @@ class RateDialog(context: Context, private val callback: RateCallBack) : Dialog(
                                 R.drawable.ic_rate_app_active
                             )
                         )
-                        binding.imvExpressive.setImageDrawable(
-                            ContextCompat.getDrawable(
-                                context,
-                                R.drawable.ic_4_star
-                            )
-                        )
                         binding.tvExpressive.text = context.getString(R.string.expressive_good)
 
                     }
@@ -121,12 +99,6 @@ class RateDialog(context: Context, private val callback: RateCallBack) : Dialog(
                             ContextCompat.getDrawable(
                                 context,
                                 R.drawable.ic_rate_app_active
-                            )
-                        )
-                        binding.imvExpressive.setImageDrawable(
-                            ContextCompat.getDrawable(
-                                context,
-                                R.drawable.ic_5_star
                             )
                         )
                         binding.tvExpressive.text = context.getString(R.string.expressive_holder)
@@ -145,13 +117,7 @@ class RateDialog(context: Context, private val callback: RateCallBack) : Dialog(
 
         val groupStar =
             listOf(binding.star1, binding.star2, binding.star3, binding.star4, binding.star5)
-        val expressive = listOf(
-            R.drawable.ic_1_star,
-            R.drawable.ic_2_star,
-            R.drawable.ic_3_star,
-            R.drawable.ic_4_star,
-            R.drawable.ic_5_star
-        )
+
         val textExpressive = listOf(
             R.string.expressive_bad,
             R.string.expressive_bad,
@@ -166,12 +132,6 @@ class RateDialog(context: Context, private val callback: RateCallBack) : Dialog(
                     countDownTimer.cancel()
                     binding.btnRate.isEnabled = true
                     binding.btnRate.setTextColor(ContextCompat.getColor(context, R.color.gray_700))
-                    binding.imvExpressive.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            context,
-                            expressive[index]
-                        )
-                    )
 
                     binding.tvExpressive.text = context.getString(textExpressive[index])
                     val subStar = groupStar.slice(0..index)

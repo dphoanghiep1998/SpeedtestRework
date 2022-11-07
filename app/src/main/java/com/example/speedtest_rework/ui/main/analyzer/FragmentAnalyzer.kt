@@ -2,23 +2,30 @@ package com.example.speedtest_rework.ui.main.analyzer
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Insets
 import android.net.Uri
 import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.DisplayMetrics
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.LinearLayout
+import android.widget.PopupWindow
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.fragment.BaseFragment
+import com.example.speedtest_rework.common.utils.AppSharePreference
+import com.example.speedtest_rework.common.utils.buildMinVersionR
 import com.example.speedtest_rework.databinding.FragmentAnalyzerBinding
+import com.example.speedtest_rework.databinding.LayoutMenuFilterBinding
+import com.example.speedtest_rework.databinding.LayoutMenuInfoBinding
 import com.example.speedtest_rework.ui.main.analyzer.adapter.ItemTouchHelper
 import com.example.speedtest_rework.ui.main.analyzer.adapter.WifiChannelAdapter
+import com.example.speedtest_rework.ui.main.analyzer.band.WiFiBand
 import com.example.speedtest_rework.ui.main.analyzer.graph.ChannelGraphAdapter
 import com.example.speedtest_rework.ui.main.analyzer.graph.ChannelGraphNavigation
 import com.example.speedtest_rework.ui.main.analyzer.model.Transformer
@@ -26,6 +33,7 @@ import com.example.speedtest_rework.ui.main.analyzer.model.WiFiData
 import com.example.speedtest_rework.ui.main.analyzer.model.WiFiDetail
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
 import com.example.speedtest_rework.ui.main.analyzer.model.Cache
+import com.example.speedtest_rework.viewmodel.Order
 
 
 class FragmentAnalyzer : BaseFragment(), ItemTouchHelper {
@@ -35,6 +43,7 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper {
     private var mainWifi: WifiManager? = null
     private lateinit var channelGraphAdapter: ChannelGraphAdapter
     private lateinit var wiFiData: WiFiData
+    private lateinit var popupWindow: PopupWindow
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -56,10 +65,6 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper {
         observeScanResults()
         observePermissionChange()
         observeWifiEnabled()
-    }
-
-    override fun onResume() {
-        super.onResume()
     }
 
 
@@ -92,6 +97,7 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper {
 
     fun initView() {
         showLoadingMain()
+        initPopupWindow()
         mainWifi =
             requireContext().applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
         rcvWifiInit()
@@ -109,7 +115,39 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper {
                 Intent(Settings.ACTION_WIFI_SETTINGS)
             startActivity(intent)
         }
+        binding.imvInfo.setOnClickListener {
+//            popupWindow.showAsDropDown(binding.imvInfo,-36,0)
+            AppSharePreference.getInstance(requireContext())
+                .saveWifiBand(R.string.wifi_band_key, WiFiBand.GHZ5)
 
+            binding.graph.removeAllViews()
+            channelGraphAdapter.update(wiFiData)
+        }
+
+
+    }
+
+    private fun initPopupWindow() {
+        val inflater: LayoutInflater =
+            (requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater?)!!
+        val bindingLayout = LayoutMenuInfoBinding.inflate(inflater, null, false)
+        var width = 0
+        width = if (buildMinVersionR()) {
+            val windowMetrics: WindowMetrics = requireActivity().windowManager.currentWindowMetrics
+            val insets: Insets = windowMetrics.windowInsets
+                .getInsetsIgnoringVisibility(WindowInsets.Type.systemBars())
+            windowMetrics.bounds.width() - insets.left - insets.right
+
+        } else {
+            val displayMetrics = DisplayMetrics()
+            requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
+            displayMetrics.widthPixels
+        }
+        popupWindow =
+            PopupWindow(bindingLayout.root, width, LinearLayout.LayoutParams.WRAP_CONTENT, true)
+        bindingLayout.root.setOnClickListener {
+            popupWindow.dismiss()
+        }
 
     }
 

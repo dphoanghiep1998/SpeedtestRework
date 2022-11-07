@@ -135,16 +135,12 @@ class AppForegroundService : Service() {
             .setOnlyAlertOnce(true)
         startForeground(SERVICE_ID, builder.build())
 
-        Log.d("TAG", "serviceType: " + serviceType)
-        Log.d("TAG", "isServiceDataUsageStarted: " + isServiceDataUsageStarted)
-        Log.d("TAG", "isServiceSpeedMonitorStarted: " + isServiceSpeedMonitorStarted)
         when (serviceType) {
             ServiceType.SPEED_MONITOR -> startRepeatingJob(2000L, builder)
             ServiceType.DATA_USAGE -> startRepeatingJob(builder)
             ServiceType.BOTH -> {
                 startRepeatingJob(2000L, builder)
                 startRepeatingJob(builder)
-
             }
             else -> Unit
         }
@@ -189,11 +185,11 @@ class AppForegroundService : Service() {
             if (tempRx > 0 && tempTx > 0) {
                 remoteViews.setTextViewText(
                     R.id.tv_download_value_notification,
-                    (convert((rxByte - tempRx) / 1024f, 0))
+                    (convert((rxByte - tempRx) / 1024f))
                 )
                 remoteViews.setTextViewText(
                     R.id.tv_upload_value_notification,
-                    (convert((txByte - tempTx) / 1024f, 1))
+                    (convert((txByte - tempTx) / 1024f))
                 )
             }
             tempRx = rxByte
@@ -290,34 +286,26 @@ class AppForegroundService : Service() {
     }
 
 
-    private fun convert(value: Float, type: Int): String {
-        if (value < 1024) {
-            return if (type == 0) {
-                "${
-                    value.toBigDecimal().setScale(1, RoundingMode.UP)
-                } ${getString(R.string.Kbs)}"
-            } else {
-                "${
-                    value.toBigDecimal().setScale(1, RoundingMode.UP)
-                } ${getString(R.string.Kbs)}"
-            }
-        } else {
-            return if (type == 0) {
-                "${
-                    (value / 1024).toBigDecimal().setScale(1, RoundingMode.UP)
-                } ${getString(R.string.Mbs)}"
-            } else {
-                "${
-                    (value / 1024).toBigDecimal().setScale(1, RoundingMode.UP)
-                } ${getString(R.string.Mbs)}"
-            }
+    private fun convert(value: Float): String {
+        if (value <= 0) {
+            return "0 ${getString(R.string.Kbs)}"
+        }
+        return if (value < 1024)
+            "${
+                value.toBigDecimal().setScale(1, RoundingMode.UP)
+            } ${getString(R.string.Kbs)}"
+        else {
+            "${
+                (value / 1024).toBigDecimal().setScale(1, RoundingMode.UP)
+            } ${getString(R.string.Mbs)}"
+
         }
 
     }
 
     private fun convertData(value: Float): String {
         return when {
-            value <= 0 -> "0.0 MB"
+            value <= 0 -> "0 MB"
             value < 1024 -> "${round(value)} B"
             value < 1024 * 1024 -> "${round(value / 1024)} KB"
             value < 1024 * 1024 * 1024 -> "${round(value / (1024 * 1024))} MB"

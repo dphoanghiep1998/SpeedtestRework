@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="40dp"
-    android:gravity="center_vertical"
+    android:gravity="center"
+    android:paddingHorizontal="8dp"
     android:orientation="horizontal"
     tools:ignore="RtlSymmetry">
 
@@ -16,13 +17,13 @@
 
 
     <LinearLayout
-        android:paddingHorizontal="@dimen/_8sdp"
         android:id="@+id/container_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="start"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/_8sdp">
 
         <LinearLayout
             android:id="@+id/container_speed_monitor"
@@ -39,7 +40,7 @@
                 android:gravity="center"
                 android:maxLines="1"
                 android:paddingStart="@dimen/_4sdp"
-                android:text="@string/zero_value_dec"
+                android:text="0 kB/s"
                 android:textColor="@color/gray_700"
                 android:textSize="@dimen/_10sdp" />
 
@@ -52,7 +53,7 @@
                 android:gravity="center"
                 android:maxLines="1"
                 android:paddingStart="@dimen/_4sdp"
-                android:text="@string/zero_value_dec"
+                android:text="0 kB/s"
                 android:textColor="@color/gray_700"
                 android:textSize="@dimen/_10sdp" />
         </LinearLayout>
@@ -71,7 +72,7 @@
                 android:drawablePadding="@dimen/_2sdp"
                 android:maxLines="1"
                 android:paddingStart="@dimen/_4sdp"
-                android:text="@string/zero_value_dec"
+                android:text="0 MB"
                 android:textColor="@color/gray_700"
                 android:textSize="@dimen/_10sdp" />
 
@@ -83,7 +84,7 @@
                 android:drawablePadding="@dimen/_2sdp"
                 android:maxLines="1"
                 android:paddingStart="@dimen/_4sdp"
-                android:text="@string/zero_value_dec"
+                android:text="0 MB"
                 android:textColor="@color/gray_700"
                 android:textSize="@dimen/_10sdp" />
         </LinearLayout>

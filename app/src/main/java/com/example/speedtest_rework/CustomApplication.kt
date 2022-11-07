@@ -3,9 +3,10 @@ package com.example.speedtest_rework
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.content.res.Configuration
 import android.util.Log
+import com.example.speedtest_rework.common.Configuration
 import com.example.speedtest_rework.common.utils.AppSharePreference
+import com.example.speedtest_rework.common.utils.NetworkUtils
 import com.example.speedtest_rework.common.utils.buildMinVersionO
 import com.example.speedtest_rework.services.AppForegroundService
 import dagger.hilt.android.HiltAndroidApp
@@ -21,7 +22,10 @@ class CustomApplication() : Application() {
         super.onCreate()
         app = this
         AppSharePreference.getInstance(applicationContext)
+        Configuration.getInstance()
+
         AppForegroundService.getInstance()
+        NetworkUtils(applicationContext)
         createChannelNotification()
     }
 

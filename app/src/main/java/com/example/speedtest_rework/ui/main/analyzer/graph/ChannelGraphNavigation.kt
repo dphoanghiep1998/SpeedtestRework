@@ -1,20 +1,4 @@
-/*
- * WiFiAnalyzer
- * Copyright (C) 2015 - 2022 VREM Software Development <VREMSoftwareDevelopment@gmail.com>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>
- */
+
 package com.example.speedtest_rework.ui.main.analyzer.graph
 
 import android.content.Context
@@ -24,25 +8,64 @@ import android.widget.Button
 import android.widget.LinearLayout
 import androidx.core.text.parseAsHtml
 import com.example.speedtest_rework.R
+import com.example.speedtest_rework.common.Configuration
 import com.example.speedtest_rework.common.annotation.OpenClass
+import com.example.speedtest_rework.common.utils.AppSharePreference
+import com.example.speedtest_rework.common.utils.compatColor
 import com.example.speedtest_rework.ui.main.analyzer.band.WiFiBand
 import com.example.speedtest_rework.ui.main.analyzer.band.WiFiChannelPair
+import com.example.speedtest_rework.ui.main.analyzer.band.WiFiChannelsGHZ5
 
 typealias NavigationSets = Map<Int, WiFiChannelPair>
 typealias NavigationLines = Map<Int, NavigationSets>
 
 internal val navigationGHZ2Lines = mapOf<Int, NavigationSets>()
-
+internal val navigationGHZ5Lines = mapOf(
+    R.id.graphNavigationLine1 to mapOf(
+        R.id.graphNavigationSet1 to WiFiChannelsGHZ5.SET1,
+        R.id.graphNavigationSet2 to WiFiChannelsGHZ5.SET2,
+        R.id.graphNavigationSet3 to WiFiChannelsGHZ5.SET3
+    )
+)
 
 @OpenClass
 class ChannelGraphNavigation(private val view: View, private val mainContext: Context) {
 
     internal fun update() {
-        val wiFiBand = WiFiBand.values()[0]
+        val wiFiBand = AppSharePreference.getInstance(mainContext)
+            .getWifiBand(R.string.wifi_band_key, WiFiBand.GHZ2)
+//        val wiFiBand = AppSharePreference.getInstance(mainContext)
+//            .getWifiBand(R.string.wifi_band_key, WiFiBand.GHZ2)
+        Log.d("TAG", "update: "+wiFiBand)
+        val selectedWiFiChannelPair = Configuration.getInstance()!!.wiFiChannelPair(wiFiBand)
+        Log.d("TAG", "update: "+selectedWiFiChannelPair)
         val navigationLines = navigationLines(wiFiBand)
         navigationLines.entries.forEach { entry ->
+            Log.d("TAG", "update: " + view + entry.key)
             view.findViewById<LinearLayout>(entry.key).visibility = visibility(entry.value)
+            buttons(entry.value, wiFiBand, selectedWiFiChannelPair)
+        }
+    }
 
+    private fun buttons(
+        navigationSets: NavigationSets,
+        wiFiBand: WiFiBand,
+        selectedWiFiChannelPair: WiFiChannelPair
+    ) {
+        navigationSets.forEach { entry ->
+            with(view.findViewById<Button>(entry.key)) {
+                val value = entry.value
+                val selected = value == selectedWiFiChannelPair
+                val color =
+                    mainContext.compatColor(if (selected) R.color.selected else R.color.background_main)
+                val textValue =
+                    """<strong>${value.first.channel} &#8722 ${value.second.channel}</strong>""".parseAsHtml()
+                        .toString()
+                setBackgroundColor(color)
+                text = textValue
+                isSelected = selected
+                setOnClickListener { onClickListener(wiFiBand, value) }
+            }
         }
     }
 
@@ -54,13 +77,15 @@ class ChannelGraphNavigation(private val view: View, private val mainContext: Co
             View.VISIBLE
         }
 
-    internal fun onClickListener(wiFiBand: WiFiBand, wiFiChannelPair: WiFiChannelPair) {
-
+    private fun onClickListener(wiFiBand: WiFiBand, wiFiChannelPair: WiFiChannelPair) {
+        Configuration.getInstance()!!.wiFiChannelPair(wiFiBand, wiFiChannelPair)
+        update()
     }
 
     private fun navigationLines(wiFiBand: WiFiBand): NavigationLines =
         when (wiFiBand) {
             WiFiBand.GHZ2 -> navigationGHZ2Lines
+            WiFiBand.GHZ5 -> navigationGHZ5Lines
         }
 
 }

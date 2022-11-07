@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
 import com.example.speedtest_rework.services.ServiceType
+import com.example.speedtest_rework.ui.main.analyzer.band.WiFiBand
 
 inline fun SharedPreferences.edit(func: SharedPreferences.Editor.() -> Unit) {
     val editor: SharedPreferences.Editor = edit()
@@ -73,6 +74,13 @@ class AppSharePreference(private val context: Context) {
             sharedPreferences().edit { putString(keyValue, defaultValues) }
             defaultValues
         }
+    }
+
+    fun getWifiBand(key: Int, defaultValues: WiFiBand): WiFiBand {
+        return WiFiBand.toWifiBand(getString(key, defaultValues.toString()))
+    }
+    fun saveWifiBand(key:Int,values: WiFiBand){
+        return saveString(key,values.toString())
     }
 
     private fun saveInt(key: Int, values: Int): Unit =

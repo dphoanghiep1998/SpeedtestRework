@@ -9,36 +9,92 @@
 
     <LinearLayout
         android:id="@+id/graphNavigation"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toStartOf="@id/imv_info"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/imv_info"
+        app:layout_constraintBottom_toBottomOf="@id/imv_info">
+
+        <LinearLayout
+            android:id="@+id/graphNavigationLine1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/graphNavigationSet1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@null"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                tools:text="100-199" />
+
+            <Button
+                android:id="@+id/graphNavigationSet2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:background="@null"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                tools:text="200-299" />
+
+            <Button
+                android:id="@+id/graphNavigationSet3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:background="@null"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                tools:text="300-399" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imv_info"
+        android:layout_width="@dimen/_36sdp"
+        android:layout_height="@dimen/_36sdp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="@drawable/ripple_effect_corner_fg"
+        android:padding="@dimen/_8sdp"
+        android:src="@drawable/ic_filter_freq"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/graphRefresh"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/layout_second"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_percent="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/imv_info">
 
         <ViewFlipper
             android:id="@+id/graph"
-            android:paddingHorizontal="@dimen/_10sdp"
-            android:paddingVertical="@dimen/_10sdp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical" />
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/_10sdp"
+            android:paddingVertical="@dimen/_10sdp" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_second"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.5"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/graphRefresh">
 
         <androidx.recyclerview.widget.RecyclerView
@@ -51,7 +107,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -135,8 +191,8 @@
                 android:background="@drawable/button_background_start"
                 android:foreground="@drawable/ripple_effect_fg"
                 android:paddingHorizontal="@dimen/_40sdp"
-                android:textStyle="bold"
                 android:text="@string/open_setting"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="@id/tv_title_permission_text"
                 app:layout_constraintStart_toStartOf="@+id/tv_title_permission_text"
                 app:layout_constraintTop_toBottomOf="@+id/tv_title_permission_text" />
@@ -203,8 +259,8 @@
                 android:background="@drawable/button_background_start"
                 android:foreground="@drawable/ripple_effect_corner_fg"
                 android:paddingHorizontal="@dimen/_40sdp"
-                android:textStyle="bold"
                 android:text="@string/open_wifi_setting"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="@id/tv_request_text"
                 app:layout_constraintStart_toStartOf="@+id/tv_request_text"
                 app:layout_constraintTop_toBottomOf="@+id/tv_request_text" />

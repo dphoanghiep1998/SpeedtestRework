@@ -173,6 +173,15 @@
     <string name="titlePopupMail">Send email using...</string>
     <string name="error_mail">No email clients installed.</string>
     <string name="no_connectivity">No connectivity!</string>
+    <string name="signal_strength">Signal Strength</string>
+    <string name="signal_strong_normal">Strong</string>
+    <string name="explain_good">-60 to -40 dBm</string>
+    <string name="explain_normal">-90 to -60 dBm</string>
+    <string name="explain_bad"><![CDATA[< -90dBm]]></string>
+    <string name="signal_normal_normal">Normal</string>
+    <string name="signal_bad_normal">Bad</string>
+    <string name="wifi_band_key" translatable="false">"wifi_band"</string>
+
 
 
 </resources>

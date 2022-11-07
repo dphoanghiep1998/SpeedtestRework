@@ -25,6 +25,12 @@ import java.nio.ByteOrder;
 import java.util.List;
 
 public class NetworkUtils {
+    private static Context context;
+
+    public NetworkUtils(Context context) {
+        NetworkUtils.context = context;
+    }
+
     public static boolean isConnected(@NonNull Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
@@ -48,7 +54,7 @@ public class NetworkUtils {
     }
 
     public static boolean isWifiEnabled(@NonNull Context context) {
-        WifiManager cm = (WifiManager) context.getApplicationContext().getSystemService(context.WIFI_SERVICE);
+        WifiManager cm = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         return cm == null && cm.isWifiEnabled();
     }
 
@@ -57,7 +63,7 @@ public class NetworkUtils {
     }
 
     public static NetworkInfo getInforMobileConnected(@NonNull Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(context.CONNECTIVITY_SERVICE);
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (cm != null) {
             NetworkInfo networkInfo = cm.getActiveNetworkInfo();
             return networkInfo;
@@ -68,7 +74,7 @@ public class NetworkUtils {
     }
 
     private static boolean isConnected(@NonNull Context context, int type) {
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(context.CONNECTIVITY_SERVICE);
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
 
         if (netInfo != null) {
@@ -98,7 +104,7 @@ public class NetworkUtils {
 
     public static int getDownloadSpeed(@NonNull Context context) {
         int downloadSpeed = 0;
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(context.CONNECTIVITY_SERVICE);
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (isWifiConnected(context)) {
             if (buildMinVersionM()) {
                 NetworkCapabilities nc = cm.getNetworkCapabilities(cm.getActiveNetwork());
@@ -112,7 +118,7 @@ public class NetworkUtils {
     @TargetApi(Build.VERSION_CODES.M)
     public static int getUploadSpeed(@NonNull Context context) {
         int uploadSpeed = 0;
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(context.CONNECTIVITY_SERVICE);
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         if (isWifiConnected(context)) {
             NetworkCapabilities nc = cm.getNetworkCapabilities(cm.getActiveNetwork());
@@ -123,7 +129,7 @@ public class NetworkUtils {
     }
 
     public static WifiInfo getWifiInfo(@NonNull Context context) {
-        WifiManager cm = (WifiManager) context.getApplicationContext().getSystemService(context.WIFI_SERVICE);
+        WifiManager cm = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         return cm.getConnectionInfo();
     }
 //    public static String getNameWifi(@NonNull Context context) {
@@ -221,7 +227,7 @@ public class NetworkUtils {
 
         }
 
-        int result[] = {r_range, l_range};
+        int[] result = {r_range, l_range};
         return result;
     }
 
@@ -249,20 +255,13 @@ public class NetworkUtils {
                 return true;
             } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
                 return true;
-            } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
-                return true;
-            } else {
-                return false;
-            }
+            } else return capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR);
         } else {
-            if (connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnectedOrConnecting()) {
-                return true;
-            } else {
-                return false;
-            }
+            return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnectedOrConnecting();
         }
 
     }
+
     public static boolean canGetLocation(Context context) {
         return isLocationEnabled(context.getApplicationContext()); // application context
     }
@@ -282,6 +281,14 @@ public class NetworkUtils {
             locationProviders = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
             return !TextUtils.isEmpty(locationProviders);
         }
+    }
+
+    public static boolean is5GHzBandSupported() {
+        WifiManager wifiManager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        if (wifiManager == null) {
+            return false;
+        }
+        return wifiManager.is5GHzBandSupported();
     }
 
 }
