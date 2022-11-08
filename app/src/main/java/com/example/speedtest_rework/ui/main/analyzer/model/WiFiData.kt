@@ -20,7 +20,7 @@ package com.example.speedtest_rework.ui.main.analyzer.model
 import com.example.speedtest_rework.common.annotation.OpenClass
 
 @OpenClass
-class WiFiData(var wiFiDetails: List<WiFiDetail>, val wiFiConnection: WiFiConnection) {
+data class WiFiData(var wiFiDetails: List<WiFiDetail>, val wiFiConnection: WiFiConnection) {
 
     fun connection(): WiFiDetail =
             wiFiDetails

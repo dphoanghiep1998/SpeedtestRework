@@ -81,9 +81,7 @@
     <string name="permission_text">"Access to Location permission "</string>
     <string name="des_permission">We need you, our respectable customers, please happy with 2 touch to permission granted</string>
 
-
-
-
+    <string name="text_permission_button" >Grant Permission &amp; Continue</string>
     <string name="data_usage">DATA USAGE</string>
     <string name="usage_permission">The data access service will be used to get the data consumption of all the apps in your device. You can always modify the authorization in the \"Settings\"  of the app</string>
     <string name="permission_title">Allow access to use</string>

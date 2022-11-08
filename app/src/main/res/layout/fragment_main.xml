@@ -81,6 +81,21 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+                <ImageView
+                    android:visibility="gone"
+                    android:id="@+id/imv_info"
+                    android:layout_width="@dimen/_40sdp"
+                    android:layout_height="@dimen/_40sdp"
+                    android:background="@drawable/ripple_effect_corner_fg"
+                    android:clickable="true"
+                    android:contentDescription="@string/test"
+                    android:focusable="true"
+                    android:padding="@dimen/_8sdp"
+                    android:src="@drawable/ic_info_circle"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
 
                 <ImageView
                     android:id="@+id/imv_stop"

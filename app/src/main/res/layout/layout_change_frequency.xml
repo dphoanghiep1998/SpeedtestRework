@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/transparent"
+    android:clickable="true"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+        android:background="@color/gray_800"
+        app:cardBackgroundColor="@color/transparent"
+        app:cardCornerRadius="@dimen/_5sdp"
+        android:layout_width="0dp"
+        app:layout_constraintWidth_percent=".35"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:background="@color/gray_800"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/tv_2GHZ"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/tv_2GHZ"
+                android:foreground="@drawable/ripple_effect_fg"
+                android:paddingVertical="@dimen/_16sdp"
+                android:text="@string/GHZ2"
+                android:textSize="@dimen/_14sdp"
+                android:layout_width="match_parent"
+                android:gravity="center"
+                android:layout_height="wrap_content"
+                android:textColor="@color/gray_100"/>
+            <TextView
+                android:id="@+id/tv_5GHZ"
+                app:layout_constraintTop_toBottomOf="@id/tv_2GHZ"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBaseline_toBottomOf="parent"
+                android:text="@string/GHZ5"
+                android:foreground="@drawable/ripple_effect_fg"
+                android:paddingVertical="@dimen/_16sdp"
+                android:textSize="@dimen/_14sdp"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/gray_100"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

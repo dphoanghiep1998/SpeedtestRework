@@ -156,7 +156,7 @@
     <string name="GERMAN" translatable="false">Deutsch</string>
     <string name="VIETNAM" translatable="false">Tiếng Việt</string>
     <string name="no_list_found">No result found!</string>
-    <string name="text_permission_button" translatable="false">Grant Permission &amp; Continue</string>
+    <string name="text_permission_button" >Grant Permission &amp; Continue</string>
     <string name="total">Total</string>
     <string name="ask_rate">"Are you satisfied with our app? "</string>
     <string name="text_rate_button_good">GOOD</string>
@@ -181,7 +181,9 @@
     <string name="signal_normal_normal">Normal</string>
     <string name="signal_bad_normal">Bad</string>
     <string name="wifi_band_key" translatable="false">"wifi_band"</string>
-
+    <string name="GHZ5">5 GHZ</string>
+    <string name="GHZ2">2.4 GHZ</string>
+    <string name="empty_list_wifi">No WiFi found!</string>
 
 
 </resources>

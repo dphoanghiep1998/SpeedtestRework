@@ -9,60 +9,71 @@
 
     <LinearLayout
         android:id="@+id/graphNavigation"
-        android:layout_marginStart="@dimen/_8sdp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_8sdp"
         android:gravity="center"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="@id/imv_info"
-        app:layout_constraintEnd_toStartOf="@id/imv_info"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/tv_info"
+        app:layout_constraintEnd_toStartOf="@id/tv_info"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/imv_info">
+        app:layout_constraintTop_toTopOf="@id/tv_info">
 
 
-        <Button
+        <TextView
             android:id="@+id/graphNavigationSet1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@null"
-            android:minWidth="0dp"
-            android:minHeight="0dp"
-            tools:text="100-199" />
+            android:background="@drawable/background_channel_button"
+            android:foreground="?selectableItemBackgroundBorderless"
+            android:gravity="center"
+            android:paddingVertical="@dimen/_4sdp"
+            android:text="36-64"
+            android:textColor="@color/gray_600" />
 
-        <Button
+        <TextView
             android:id="@+id/graphNavigationSet2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_weight="1"
-            android:background="@null"
-            android:minWidth="0dp"
-            android:minHeight="0dp"
-            tools:text="200-299" />
+            android:background="@drawable/background_channel_button"
+            android:foreground="?selectableItemBackgroundBorderless"
+            android:gravity="center"
+            android:paddingVertical="@dimen/_4sdp"
+            android:text="100-144"
 
-        <Button
+            android:textColor="@color/gray_600" />
+
+        <TextView
             android:id="@+id/graphNavigationSet3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_weight="1"
-            android:background="@null"
-            android:minWidth="0dp"
-            android:minHeight="0dp"
-            tools:text="300-399" />
+            android:background="@drawable/background_channel_button"
+            android:foreground="?selectableItemBackgroundBorderless"
+            android:gravity="center"
+            android:paddingVertical="@dimen/_4sdp"
+            android:text="149-177"
+            android:textColor="@color/gray_600" />
 
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/imv_info"
-        android:layout_width="@dimen/_36sdp"
-        android:layout_height="@dimen/_36sdp"
+    <TextView
+        android:id="@+id/tv_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:clickable="true"
         android:focusable="true"
-        android:foreground="@drawable/ripple_effect_corner_fg"
+        android:foreground="@drawable/ripple_effect_fg"
         android:padding="@dimen/_8sdp"
         android:src="@drawable/ic_filter_freq"
+        android:text="2.4 GHZ"
+        android:textColor="@color/green"
+        android:textSize="@dimen/_14sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -73,7 +84,7 @@
         app:layout_constraintBottom_toTopOf="@id/layout_second"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imv_info">
+        app:layout_constraintTop_toBottomOf="@id/tv_info">
 
         <ViewFlipper
             android:id="@+id/graph"
@@ -94,6 +105,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/graphRefresh">
 
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rcv_wifi"
             android:layout_width="match_parent"
@@ -105,6 +117,23 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/container_empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/empty_list_wifi"
+                android:textColor="@color/gray_100"
+                android:textSize="@dimen/_16sdp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout

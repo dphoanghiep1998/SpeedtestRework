@@ -7,14 +7,16 @@ import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.content.res.Resources
+import android.graphics.Insets
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.DisplayMetrics
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.LinearLayout
+import android.widget.PopupWindow
 import androidx.activity.OnBackPressedCallback
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.activityViewModels
@@ -30,6 +32,7 @@ import com.example.speedtest_rework.base.fragment.BaseFragment
 import com.example.speedtest_rework.common.utils.*
 import com.example.speedtest_rework.common.utils.AppSharePreference.Companion.INSTANCE
 import com.example.speedtest_rework.databinding.FragmentMainBinding
+import com.example.speedtest_rework.databinding.LayoutMenuInfoBinding
 import com.example.speedtest_rework.services.AppForegroundService
 import com.example.speedtest_rework.services.ServiceType
 import com.example.speedtest_rework.ui.main.analyzer.FragmentAnalyzer
@@ -46,6 +49,7 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback,
     private lateinit var binding: FragmentMainBinding
     private val viewModel: SpeedTestViewModel by activityViewModels()
     private lateinit var languageDialog: FragmentLanguage
+    private lateinit var popupWindow: PopupWindow
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,16 +73,43 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback,
 
 
     private fun initView() {
+        initPopupWindow()
         initLanguageDialog()
         initViewPager()
         initBottomNavigation()
         initDrawerAction()
         initButton()
     }
+    private fun initPopupWindow() {
+        val inflater: LayoutInflater =
+            (requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater?)!!
+        val bindingLayout = LayoutMenuInfoBinding.inflate(inflater, null, false)
+        var width = 0
+        width = if (buildMinVersionR()) {
+            val windowMetrics: WindowMetrics = requireActivity().windowManager.currentWindowMetrics
+            val insets: Insets = windowMetrics.windowInsets
+                .getInsetsIgnoringVisibility(WindowInsets.Type.systemBars())
+            windowMetrics.bounds.width() - insets.left - insets.right
+
+        } else {
+            val displayMetrics = DisplayMetrics()
+            requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
+            displayMetrics.widthPixels
+        }
+        popupWindow =
+            PopupWindow(bindingLayout.root, width, LinearLayout.LayoutParams.WRAP_CONTENT, true)
+        bindingLayout.root.setOnClickListener {
+            popupWindow.dismiss()
+        }
+
+    }
 
     private fun initButton() {
         binding.imvStop.setOnClickListener {
             viewModel.setScanStatus(ScanStatus.HARD_RESET)
+        }
+        binding.imvInfo.setOnClickListener{
+            popupWindow.showAsDropDown(binding.imvInfo, -36, 0)
         }
     }
 
@@ -114,7 +145,11 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback,
             binding.swSwitchMonitor.setOnCheckedChangeListener { _, checked ->
                 if (checked) {
                     binding.tvDesMonitor.visibility = View.VISIBLE
-                    if(AppForegroundService.getInstance().isServiceSpeedMonitorRunning(requireContext(),AppForegroundService::class.java)){
+                    if (AppForegroundService.getInstance().isServiceSpeedMonitorRunning(
+                            requireContext(),
+                            AppForegroundService::class.java
+                        )
+                    ) {
                         return@setOnCheckedChangeListener
                     }
                     AppForegroundService.getInstance()
@@ -134,7 +169,11 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback,
                             item.isChecked = true
                             binding.tvDesDataUsage.visibility = View.VISIBLE
 
-                            if(AppForegroundService.getInstance().isServiceDataUsageRunning(requireContext(),AppForegroundService::class.java)){
+                            if (AppForegroundService.getInstance().isServiceDataUsageRunning(
+                                    requireContext(),
+                                    AppForegroundService::class.java
+                                )
+                            ) {
                                 return@setOnCheckedChangeListener
                             }
                             AppForegroundService.getInstance().startService(
@@ -188,7 +227,7 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback,
     private fun feedBack() {
 
         val intent = Intent(Intent.ACTION_SENDTO).apply {
-            setDataAndType(Uri.parse("mailto:"),"message/rfc822")
+            setDataAndType(Uri.parse("mailto:"), "message/rfc822")
             putExtra(Intent.EXTRA_EMAIL, arrayOf("", getString(R.string.mailTo)))
             putExtra(
                 Intent.EXTRA_SUBJECT,
@@ -275,10 +314,26 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback,
                 binding.navBottom.menu.getItem(position).isChecked = true
                 showMenu()
                 when (position) {
-                    0 -> binding.tvTitle.text = getString(R.string.speed_test_title)
-                    1 -> binding.tvTitle.text = getString(R.string.wifi_analyzer_title)
-                    2 -> binding.tvTitle.text = getString(R.string.results_title)
-                    else -> binding.tvTitle.text = getString(R.string.speed_test_title)
+                    0 -> {
+                        binding.tvTitle.text = getString(R.string.speed_test_title)
+                        binding.imvVip.visibility = View.VISIBLE
+                        binding.imvInfo.visibility = View.GONE
+                    }
+                    1 -> {
+                        binding.tvTitle.text = getString(R.string.wifi_analyzer_title)
+                        binding.imvVip.visibility = View.GONE
+                        binding.imvInfo.visibility = View.VISIBLE
+                    }
+                    2 -> {
+                        binding.tvTitle.text = getString(R.string.results_title)
+                        binding.imvVip.visibility = View.VISIBLE
+                        binding.imvInfo.visibility = View.GONE
+                    }
+                    else -> {
+                        binding.tvTitle.text = getString(R.string.speed_test_title)
+                        binding.imvVip.visibility = View.VISIBLE
+                        binding.imvInfo.visibility = View.GONE
+                    }
                 }
             }
         })

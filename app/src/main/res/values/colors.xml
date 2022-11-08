@@ -64,4 +64,5 @@
     <color name="gray_500">#6E7191</color>
     <color name="gray_200">#EFF0F6</color>
     <color name="rate_des">#E5A800</color>
+    <color name="green">#00FACC</color>
 </resources>

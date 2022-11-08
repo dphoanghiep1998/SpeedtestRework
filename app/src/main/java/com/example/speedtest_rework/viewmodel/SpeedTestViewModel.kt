@@ -15,6 +15,7 @@ import com.example.speedtest_rework.core.getIP.CurrentNetworkInfo
 import com.example.speedtest_rework.data.model.HistoryModel
 import com.example.speedtest_rework.data.repositories.AppRepository
 import com.example.speedtest_rework.ui.data_usage.model.DataUsageModel
+import com.example.speedtest_rework.ui.main.analyzer.band.WiFiBand
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -31,6 +32,9 @@ class SpeedTestViewModel @Inject constructor(private val appRepository: AppRepos
     var addressInfoList: MutableList<AddressInfo> = mutableListOf()
     var currentNetworkInfo: CurrentNetworkInfo = CurrentNetworkInfo()
     var userActionRate: Boolean = false
+    var wiFiBand = MutableLiveData(WiFiBand.GHZ2)
+
+
     private val listDataUsage: MutableLiveData<List<DataUsageModel>> = MutableLiveData()
 
 
