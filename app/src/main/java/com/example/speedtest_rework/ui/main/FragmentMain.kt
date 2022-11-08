@@ -13,7 +13,6 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.*
 import android.widget.LinearLayout
 import android.widget.PopupWindow
@@ -43,6 +42,7 @@ import com.example.speedtest_rework.ui.viewpager.ViewPagerAdapter
 import com.example.speedtest_rework.viewmodel.ScanStatus
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
 import java.util.*
+import kotlin.math.roundToInt
 
 class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback,
     RateCallBack, FragmentResults.OnStartClickedListener {
@@ -80,6 +80,7 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback,
         initDrawerAction()
         initButton()
     }
+
     private fun initPopupWindow() {
         val inflater: LayoutInflater =
             (requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater?)!!
@@ -108,7 +109,7 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback,
         binding.imvStop.setOnClickListener {
             viewModel.setScanStatus(ScanStatus.HARD_RESET)
         }
-        binding.imvInfo.setOnClickListener{
+        binding.imvInfo.setOnClickListener {
             popupWindow.showAsDropDown(binding.imvInfo, -36, 0)
         }
     }
@@ -139,6 +140,9 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback,
         binding.containerPolicy.root.setOnClickListener { openLink("http://www.facebook.com") }
         binding.containerShare.root.setOnClickListener { this.shareApp() }
         binding.containerRate.root.setOnClickListener { this.rateApp() }
+        binding.containerTools.root.setOnClickListener {
+            navigateToPage(R.id.action_fragmentMain_to_fragmentTools)
+        }
         val saveServiceType = AppSharePreference.getInstance(requireContext())
             .getServiceType(R.string.service_type_key, ServiceType.NONE)
         if (buildMinVersionM()) {
@@ -219,6 +223,12 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback,
 
 
         }
+        binding.containerLanguage.root.setPadding(
+            resources.getDimension(com.intuit.sdp.R.dimen._16sdp).roundToInt(),
+            resources.getDimension(com.intuit.sdp.R.dimen._8sdp).roundToInt(),
+            resources.getDimension(com.intuit.sdp.R.dimen._16sdp).roundToInt(),
+            resources.getDimension(com.intuit.sdp.R.dimen._8sdp).roundToInt()
+        )
         binding.containerLanguage.root.setOnClickListener {
             findNavController().navigate(R.id.action_fragmentMain_to_languageFragment)
         }

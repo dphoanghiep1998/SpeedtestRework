@@ -36,6 +36,11 @@
             app:destination="@id/languageFragment"
             app:enterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_left"/>
+        <action
+            android:id="@+id/action_fragmentMain_to_fragmentTools"
+            app:enterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"
+            app:destination="@id/fragmentTools" />
     </fragment>
 
     <fragment
@@ -53,4 +58,9 @@
         android:name="com.example.speedtest_rework.ui.main.languages.FragmentLanguage"
         android:label="LanguageFragment"
         tools:layout="@layout/fragment_language" />
+    <fragment
+        android:id="@+id/fragmentTools"
+        android:name="com.example.speedtest_rework.ui.main.tools.FragmentTools"
+        android:label="FragmentTools"
+        tools:layout="@layout/fragment_tools"/>
 </navigation>

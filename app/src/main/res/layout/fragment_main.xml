@@ -301,13 +301,20 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
-
+                    <include
+                        android:id="@+id/container_tools"
+                        layout="@layout/item_menu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toBottomOf="@+id/container_data_usage"
+                        app:mSrc="@{@drawable/ic_tools}"
+                        app:mTitle="@{@string/tools}" />
                     <include
                         android:id="@+id/container_language"
                         layout="@layout/item_menu"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:layout_constraintTop_toBottomOf="@+id/container_data_usage"
+                        app:layout_constraintTop_toBottomOf="@+id/container_tools"
                         app:mSrc="@{@drawable/ic_language}"
                         app:mTitle="@{@string/language}" />
 

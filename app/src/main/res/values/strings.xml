@@ -184,6 +184,8 @@
     <string name="GHZ5">5 GHZ</string>
     <string name="GHZ2">2.4 GHZ</string>
     <string name="empty_list_wifi">No WiFi found!</string>
+    <string name="tools">Tools</string>
+    <string name="tools_title">TOOLS</string>
 
 
 </resources>

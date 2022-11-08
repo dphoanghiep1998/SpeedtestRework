@@ -11,13 +11,15 @@
         <variable
             name="mSrc"
             type="android.graphics.drawable.Drawable" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:foreground="@drawable/ripple_effect_fg"
-        android:padding="@dimen/_16sdp"
+        android:paddingHorizontal="@dimen/_16sdp"
+        android:paddingVertical="@dimen/_16sdp"
         app:layout_constraintTop_toBottomOf="@+id/ic_logo_menu">
 
         <ImageView
@@ -40,13 +42,14 @@
             app:layout_constraintBottom_toTopOf="@id/tv_des"
             app:layout_constraintStart_toEndOf="@+id/imv_speed_monitor"
             app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/tv_des"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
             android:textColor="@color/gray_400"
             android:textSize="@dimen/_10sdp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/tv_speed_monitor"
             app:layout_constraintTop_toBottomOf="@+id/tv_speed_monitor" />
