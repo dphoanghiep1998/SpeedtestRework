@@ -5,9 +5,11 @@ import android.graphics.Insets
 import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.*
 import android.widget.LinearLayout
 import android.widget.PopupWindow
+import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -43,6 +45,7 @@ class FragmentDataUsage : BaseFragment() {
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         observeListDataUsage()
+        changeBackPressCallBack()
         super.onViewCreated(view, savedInstanceState)
     }
 
@@ -126,7 +129,7 @@ class FragmentDataUsage : BaseFragment() {
         }
         popupWindow =
             PopupWindow(bindingLayout.root, width, LinearLayout.LayoutParams.WRAP_CONTENT, true)
-        bindingLayout.root.setOnClickListener{
+        bindingLayout.root.setOnClickListener {
             popupWindow.dismiss()
         }
         bindingLayout.thirtyDay.setOnCheckedChangeListener { _, checked ->
@@ -165,6 +168,17 @@ class FragmentDataUsage : BaseFragment() {
         }
 
 
+    }
+
+    private fun changeBackPressCallBack() {
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    Log.d("TAG", "handleOnBackPressed: ")
+                    findNavController().popBackStack()
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
     }
 
     private fun round(value: Double): Double {

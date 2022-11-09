@@ -96,6 +96,7 @@
             <enum name="QuarterLineIndicator" value="7" />
             <enum name="KiteIndicator" value="8" />
             <enum name="NeedleIndicator" value="9" />
+            <enum name="KiteIndicatorSignal" value="10" />
         </attr>
 
         <attr name="sv_speedometerMode" format="enum" >

@@ -842,21 +842,34 @@ abstract class Speedometer @JvmOverloads constructor(
         textPaint.textAlign = Paint.Align.LEFT
 
         val range = endDegree - startDegree
+
         ticks.forEachIndexed { index, t ->
             var d = 0f
             val z = startDegree + range * t
-            when (index) {
+            if (ticks.size > 5) {
+
+                when (index) {
 //                0 5 10 15 20 30 50 75 100
-                0 -> d = startDegree + range * 0f
-                1 -> d = startDegree + range * .125f
-                2 -> d = startDegree + range * .25f
-                3 -> d = startDegree + range * .375f
-                4 -> d = startDegree + range * .5f
-                5 -> d = startDegree + range * .625f
-                6 -> d = startDegree + range * .75f
-                7 -> d = startDegree + range * .875f
-                8 -> d = startDegree + range * 1f
+                    0 -> d = startDegree + range * 0f
+                    1 -> d = startDegree + range * .125f
+                    2 -> d = startDegree + range * .25f
+                    3 -> d = startDegree + range * .375f
+                    4 -> d = startDegree + range * .5f
+                    5 -> d = startDegree + range * .625f
+                    6 -> d = startDegree + range * .75f
+                    7 -> d = startDegree + range * .875f
+                    8 -> d = startDegree + range * 1f
+                }
+            } else {
+                when (index) {
+                    0 -> d = startDegree + range * 0f
+                    1 -> d = startDegree + range * .25f
+                    2 -> d = startDegree + range * .5f
+                    3 -> d = startDegree + range * .75f
+                    4 -> d = startDegree + range * 1f
+                }
             }
+
             c.save()
             textPaint.textSize = dpTOpx(12f)
             val bold: Typeface = Typeface.create("app_font_black", Typeface.BOLD)

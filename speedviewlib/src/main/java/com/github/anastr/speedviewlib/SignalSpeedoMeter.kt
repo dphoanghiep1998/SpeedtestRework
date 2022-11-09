@@ -12,7 +12,7 @@ import com.github.anastr.speedviewlib.components.indicators.SpindleIndicator
  * this Library build By Anas Altair
  * see it on [GitHub](https://github.com/anastr/SpeedView)
  */
-open class PointerSpeedometer @JvmOverloads constructor(
+open class SignalSpeedoMeter @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
@@ -50,7 +50,7 @@ open class PointerSpeedometer @JvmOverloads constructor(
     /**
      * change the width of the center circle.
      */
-    var centerCircleRadius = dpTOpx(12f)
+    var centerCircleRadius = dpTOpx(60f)
         set(centerCircleRadius) {
             field = centerCircleRadius
             if (isAttachedToWindow)
@@ -97,7 +97,7 @@ open class PointerSpeedometer @JvmOverloads constructor(
         super.markWidth = dpTOpx(2f)
         indicator = SpindleIndicator(context)
         indicator.apply {
-            width = dpTOpx(16f)
+            width = dpTOpx(32f)
             color = 0xFFFFFFFF.toInt()
         }
         super.backgroundCircleColor = 0xff48cce9.toInt()
@@ -118,19 +118,19 @@ open class PointerSpeedometer @JvmOverloads constructor(
         blurPaint.maskFilter = BlurMaskFilter(0.2f * speedometerWidth, BlurMaskFilter.Blur.NORMAL)
         blurPaint.strokeWidth = speedometerWidth
 
-        circlePaint.color = 0xFFFFFFFF.toInt()
+        circlePaint.color = 0xFF17172B.toInt()
         speedometerPaint.strokeWidth = speedometerWidth
         darkPaint.strokeWidth = speedometerWidth
 
-        setLayerType(View.LAYER_TYPE_SOFTWARE, null)
     }
 
-    fun setStrokeCapRound(){
+    fun setStrokeCapRound() {
         speedometerPaint.strokeCap = Paint.Cap.ROUND
         darkPaint.strokeCap = Paint.Cap.ROUND
         blurPaint.strokeCap = Paint.Cap.ROUND
 
     }
+
     private fun initAttributeSet(context: Context, attrs: AttributeSet?) {
         if (attrs == null) {
             initAttributeValue()
@@ -165,10 +165,6 @@ open class PointerSpeedometer @JvmOverloads constructor(
         updateBackgroundBitmap()
     }
 
-    fun setInitDone(status: Boolean) {
-        initDone = status
-        invalidate()
-    }
 
     override fun stop() {
         setState("download")
@@ -207,18 +203,12 @@ open class PointerSpeedometer @JvmOverloads constructor(
             false,
             speedometerPaint
         )
-        canvas.drawArc(
-            rectF,
-            getStartDegree().toFloat(),
-            position,
-            false,
-            blurPaint
-        )
 
-        if (initDone) {
-            drawIndicator(canvas)
-            drawTicks(canvas, getStartDegree() + position)
-        }
+
+        drawIndicator(canvas)
+        drawTicks(canvas, getStartDegree() + position)
+        canvas.drawCircle(size * .5f, size * .5f, centerCircleRadius, circlePaint)
+
     }
 
 

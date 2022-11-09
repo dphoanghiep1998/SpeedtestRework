@@ -628,6 +628,11 @@ abstract class Gauge constructor(
                 currentSpeed <= 15000f -> (1875f * 6 + 1875f / 5000 * (currentSpeed - 5000) - minSpeed) / (maxSpeed - minSpeed)
                 else -> a
             }
+            0f -> return when{
+                a <= -80f -> -80f
+                currentSpeed <= 0f -> (currentSpeed * 10 / 10 - minSpeed) / (maxSpeed - minSpeed)
+                else -> a
+            }
             else -> a
         }
     }
@@ -1145,7 +1150,7 @@ abstract class Gauge constructor(
      * @throws IllegalArgumentException If `minSpeed >= maxSpeed`
      */
     fun setMinMaxSpeed(minSpeed: Float, maxSpeed: Float) {
-        require(minSpeed < maxSpeed) { "minSpeed must be smaller than maxSpeed !!" }
+//        require(minSpeed < maxSpeed) { "minSpeed must be smaller than maxSpeed !!" }
         cancelSpeedAnimator()
         _minSpeed = minSpeed
         _maxSpeed = maxSpeed

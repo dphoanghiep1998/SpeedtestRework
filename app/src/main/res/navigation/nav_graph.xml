@@ -14,7 +14,7 @@
             android:id="@+id/action_fragmentPermission_to_fragmentMain"
             app:destination="@id/fragmentMain"
             app:enterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_left"/>
+            app:popExitAnim="@anim/slide_out_left" />
     </fragment>
     <fragment
         android:id="@+id/fragmentMain"
@@ -35,12 +35,12 @@
             android:id="@+id/action_fragmentMain_to_languageFragment"
             app:destination="@id/languageFragment"
             app:enterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_left"/>
+            app:popExitAnim="@anim/slide_out_left" />
         <action
             android:id="@+id/action_fragmentMain_to_fragmentTools"
+            app:destination="@id/fragmentTools"
             app:enterAnim="@anim/slide_in_right"
-            app:popExitAnim="@anim/slide_out_left"
-            app:destination="@id/fragmentTools" />
+            app:popExitAnim="@anim/slide_out_left" />
     </fragment>
 
     <fragment
@@ -62,5 +62,21 @@
         android:id="@+id/fragmentTools"
         android:name="com.example.speedtest_rework.ui.main.tools.FragmentTools"
         android:label="FragmentTools"
-        tools:layout="@layout/fragment_tools"/>
+        tools:layout="@layout/fragment_tools">
+        <action
+            android:id="@+id/action_fragmentTools_to_fragmentDataUsage"
+            app:destination="@id/fragmentDataUsage"
+            app:enterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/action_fragmentTools_to_fragmentSignalTest"
+            app:destination="@id/fragmentSignalTest"
+            app:enterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"/>
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentSignalTest"
+        android:name="com.example.speedtest_rework.ui.signal_test.FragmentSignalTest"
+        android:label="FragmentSignalTest"
+        tools:layout="@layout/fragment_signal_test"/>
 </navigation>

@@ -13,13 +13,11 @@ import android.os.Looper
 import android.transition.AutoTransition
 import android.transition.TransitionManager
 import android.util.AttributeSet
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
@@ -53,14 +51,12 @@ class SpeedView(
     private var type = ConnectionType.UNKNOWN
     private var testPoint: TestPoint? = null
     private var viewModel: SpeedTestViewModel? = null
-    private var reset = false
 
     private lateinit var btnStartComposeShow: YoYo.AnimationComposer
     private lateinit var btnStartComposeHide: YoYo.AnimationComposer
     private lateinit var tvConnectingShow: YoYo.AnimationComposer
     private lateinit var tvConnectingHide: YoYo.AnimationComposer
     private lateinit var btnStartStringShow: YoYo.YoYoString
-    private lateinit var btnStartStringHide: YoYo.YoYoString
 
     private var currentTicks = listOf<Float>()
 
@@ -74,13 +70,11 @@ class SpeedView(
     private fun initAnimation() {
         btnStartComposeShow = YoYo.with(Techniques.FadeIn)
             .onStart {
-                Log.d("TAG", "btnStartComposeShow: ")
                 binding.btnStartContainer.visibility = View.VISIBLE
             }
 
         btnStartComposeHide =
             YoYo.with(Techniques.FadeOut).onEnd {
-                Log.d("TAG", "btnStartComposeHide: ")
                 binding.btnStartContainer.visibility = View.GONE
             }.onCancel {
                 binding.btnStartContainer.visibility = View.VISIBLE

@@ -186,6 +186,10 @@
     <string name="empty_list_wifi">No WiFi found!</string>
     <string name="tools">Tools</string>
     <string name="tools_title">TOOLS</string>
+    <string name="wifi_detector">Wi-Fi Detector</string>
+    <string name="ping_test">Ping Test</string>
+    <string name="signal_test">Wi-Fi Signal Test</string>
+    <string name="signal_test_menu">WI-FI SIGNAL TEST</string>
 
 
 </resources>

@@ -11,12 +11,12 @@ import java.util.*
  * see it on [GitHub](https://github.com/anastr/SpeedView)
  */
 @Suppress("UNCHECKED_CAST")
-abstract class Indicator<out I : Indicator<I>> (context: Context): Observable() {
+abstract class Indicator<out I : Indicator<I>>(context: Context) : Observable() {
 
     protected var indicatorPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val density: Float = context.resources.displayMetrics.density
 
-    protected var speedometer :Speedometer? = null
+    protected var speedometer: Speedometer? = null
 
     /**
      * indicator width in pixel, this value has several meaning
@@ -47,10 +47,12 @@ abstract class Indicator<out I : Indicator<I>> (context: Context): Observable() 
      * @return top Y position of the indicator.
      */
     open fun getTop(): Float = if (speedometer != null) speedometer!!.padding.toFloat() else 0f
+
     /**
      * @return Bottom Y position of the indicator.
      */
     open fun getBottom(): Float = getCenterY()
+
     /**
      * @return down point after center.
      */
@@ -71,6 +73,7 @@ abstract class Indicator<out I : Indicator<I>> (context: Context): Observable() 
     }
 
     abstract fun draw(canvas: Canvas)
+
     /**
      * called when size change or color, width.
      * also when speedometer changed.
@@ -120,7 +123,8 @@ abstract class Indicator<out I : Indicator<I>> (context: Context): Observable() 
 
     /** indicator's shape  */
     enum class Indicators {
-        NoIndicator, NormalIndicator, NormalSmallIndicator, TriangleIndicator, SpindleIndicator, LineIndicator, HalfLineIndicator, QuarterLineIndicator, KiteIndicator, NeedleIndicator
+        NoIndicator, NormalIndicator, NormalSmallIndicator, TriangleIndicator,
+        SpindleIndicator, LineIndicator, HalfLineIndicator, QuarterLineIndicator, KiteIndicator, NeedleIndicator, KiteIndicatorSignal
     }
 
     companion object {
@@ -131,7 +135,11 @@ abstract class Indicator<out I : Indicator<I>> (context: Context): Observable() 
          * @param indicator new indicator (Enum value).
          * @return new indicator object.
          */
-        fun createIndicator(context: Context, speedometer: Speedometer, indicator: Indicators): Indicator<*> {
+        fun createIndicator(
+            context: Context,
+            speedometer: Speedometer,
+            indicator: Indicators
+        ): Indicator<*> {
             return when (indicator) {
                 Indicators.NoIndicator -> NoIndicator(context)
                 Indicators.NormalIndicator -> NormalIndicator(context)
@@ -143,6 +151,8 @@ abstract class Indicator<out I : Indicator<I>> (context: Context): Observable() 
                 Indicators.QuarterLineIndicator -> LineIndicator(context, .25f)
                 Indicators.KiteIndicator -> KiteIndicator(context)
                 Indicators.NeedleIndicator -> NeedleIndicator(context)
+                Indicators.KiteIndicatorSignal -> KiteIndicatorSignal(context)
+
 
             }.setTargetSpeedometer(speedometer)
         }

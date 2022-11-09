@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_main"
+    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <com.github.anastr.speedviewlib.SignalSpeedoMeter
+            android:id="@+id/speedView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent=".8"
+            app:sv_backgroundCircleColor="@android:color/transparent"
+            app:sv_indicator="KiteIndicatorSignal"
+            app:sv_markStyle="ROUND"
+            app:sv_marksNumber="0"
+            app:sv_speedTextColor="@android:color/transparent"
+            app:sv_speedometerWidth="@dimen/_10sdp"
+            app:sv_textColor="@color/white"
+            app:sv_tickRotation="false"
+            app:sv_unit=""
+            app:sv_withTremble="false" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_minus50sdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/speedView">
+
+            <com.example.speedtest_rework.common.custom_view.GradientText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="55"
+                android:textFontWeight="800"
+                android:textSize="@dimen/_30sdp"
+                app:colorFirst="@color/gradient_green_start"
+                app:colorSecond="@color/gradient_green_end" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/_4sdp"
+                android:text="@string/dbm"
+                android:textColor="@color/gray_100"
+                android:textSize="@dimen/_14sdp" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</merge>
