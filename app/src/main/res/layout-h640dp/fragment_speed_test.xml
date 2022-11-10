@@ -78,7 +78,6 @@
             android:layout_height="@dimen/_90sdp"
             android:background="@drawable/background_gradient_config_sizing"
             android:visibility="visible"
-            android:layout_marginBottom="@dimen/_32sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cl_speedview"

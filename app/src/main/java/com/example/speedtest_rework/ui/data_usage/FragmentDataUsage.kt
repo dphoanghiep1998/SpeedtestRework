@@ -174,7 +174,6 @@ class FragmentDataUsage : BaseFragment() {
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    Log.d("TAG", "handleOnBackPressed: ")
                     findNavController().popBackStack()
                 }
             }

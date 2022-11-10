@@ -663,6 +663,11 @@ abstract class Speedometer @JvmOverloads constructor(
                 speed <= 15000f -> (33.75f * 6 + 33.75f / 5000 * (speed - 5000)) + startDegree
                 else -> 15000f * (endDegree - startDegree) / (maxSpeed - minSpeed) + startDegree
             }
+            0f -> return when {
+                speed <= -80f -> 0f + startDegree
+                else -> (speed + 80) * (endDegree - startDegree) / (maxSpeed - minSpeed) + startDegree
+
+            }
             else -> 0f + startDegree
         }
     }
@@ -836,7 +841,7 @@ abstract class Speedometer @JvmOverloads constructor(
      * Draw speed value at each tick point.
      * @param c Canvas to draw.
      */
-    protected fun drawTicks(c: Canvas, currentPosition: Float) {
+    protected fun drawTicks(c: Canvas, currentPosition: Float, signal: Boolean) {
         if (ticks.isEmpty())
             return
         textPaint.textAlign = Paint.Align.LEFT
@@ -846,7 +851,7 @@ abstract class Speedometer @JvmOverloads constructor(
         ticks.forEachIndexed { index, t ->
             var d = 0f
             val z = startDegree + range * t
-            if (ticks.size > 5) {
+            if (!signal) {
 
                 when (index) {
 //                0 5 10 15 20 30 50 75 100

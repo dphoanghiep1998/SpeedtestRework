@@ -38,6 +38,24 @@ class SpeedTestViewModel @Inject constructor(private val appRepository: AppRepos
     private val listDataUsage: MutableLiveData<List<DataUsageModel>> = MutableLiveData()
 
 
+    private var listSignalLocation = MutableLiveData<MutableList<Pair<String, String>>>(
+        mutableListOf()
+    )
+    val mListSignalLocation: LiveData<MutableList<Pair<String, String>>>
+        get() = listSignalLocation
+
+    fun setListSignalLocation(list: MutableList<Pair<String, String>>) {
+        listSignalLocation.value = list
+    }
+
+    private var isSignalScanning = MutableLiveData(false)
+    val signalScanning: LiveData<Boolean>
+        get() = isSignalScanning
+
+    fun setSignalScanning(status: Boolean) {
+        isSignalScanning.value = status
+    }
+
     private var scanStatus = MutableLiveData<ScanStatus>()
     val mScanStatus: LiveData<ScanStatus>
         get() = scanStatus

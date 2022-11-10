@@ -190,6 +190,10 @@
     <string name="ping_test">Ping Test</string>
     <string name="signal_test">Wi-Fi Signal Test</string>
     <string name="signal_test_menu">WI-FI SIGNAL TEST</string>
+    <string name="stop">Stop</string>
+    <string name="start">Start</string>
+    <string name="des_signal_first">-Tap Start to test</string>
+    <string name="des_signal_second">-Move around, tap Record to note down signal strength on your spot</string>
 
 
 </resources>

@@ -35,6 +35,8 @@ open class SignalSpeedoMeter @JvmOverloads constructor(
     private var withPointer = true
     private var initDone = false
     private var rectF = RectF()
+    private var currentTicks = listOf(0f, .25f, .5f, .75f, 1f)
+
 
     /**
      * change the color of the center circle.
@@ -104,13 +106,21 @@ open class SignalSpeedoMeter @JvmOverloads constructor(
     }
 
     private fun init() {
+        ticks = currentTicks
+        maxSpeed = 0f
+        minSpeed = -80f
+        currentSpeed = -80f
+        setState("download")
+        setStrokeCapRound()
+
+
         speedometerPaint.style = Paint.Style.STROKE
         speedometerPaint.strokeCap = Paint.Cap.BUTT
         speedometerPaint.color = 0xFF00FACC.toInt()
 
         darkPaint.style = Paint.Style.STROKE
         darkPaint.strokeCap = Paint.Cap.BUTT
-        darkPaint.color = 0xFF4E4B66.toInt()
+        darkPaint.color = 0xFF151529.toInt()
 
 
         blurPaint.style = Paint.Style.STROKE
@@ -121,6 +131,7 @@ open class SignalSpeedoMeter @JvmOverloads constructor(
         circlePaint.color = 0xFF17172B.toInt()
         speedometerPaint.strokeWidth = speedometerWidth
         darkPaint.strokeWidth = speedometerWidth
+
 
     }
 
@@ -206,7 +217,7 @@ open class SignalSpeedoMeter @JvmOverloads constructor(
 
 
         drawIndicator(canvas)
-        drawTicks(canvas, getStartDegree() + position)
+        drawTicks(canvas, getStartDegree() + position, true)
         canvas.drawCircle(size * .5f, size * .5f, centerCircleRadius, circlePaint)
 
     }
@@ -217,7 +228,7 @@ open class SignalSpeedoMeter @JvmOverloads constructor(
         initDraw()
         drawMarks(c)
         if (ticks.isNotEmpty())
-            drawTicks(c, 0f)
+            drawTicks(c, 0f, true)
     }
 
     fun setState(state: String) {

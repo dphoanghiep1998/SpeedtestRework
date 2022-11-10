@@ -217,7 +217,7 @@ open class PointerSpeedometer @JvmOverloads constructor(
 
         if (initDone) {
             drawIndicator(canvas)
-            drawTicks(canvas, getStartDegree() + position)
+            drawTicks(canvas, getStartDegree() + position,false)
         }
     }
 
@@ -227,7 +227,7 @@ open class PointerSpeedometer @JvmOverloads constructor(
         initDraw()
         drawMarks(c)
         if (ticks.isNotEmpty())
-            drawTicks(c, 0f)
+            drawTicks(c, 0f,false)
     }
 
     fun setState(state: String) {
