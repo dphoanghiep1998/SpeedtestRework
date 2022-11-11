@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/gray_800"
+    android:paddingVertical="@dimen/_16sdp">
+
+    <ImageView
+        android:id="@+id/imv_device"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_width="@dimen/_30sdp"
+        android:layout_height="@dimen/_30sdp"
+        android:src="@drawable/ic_device"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_device_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_16sdp"
+        android:ellipsize="end"
+        android:maxWidth="@dimen/_180sdp"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_16sdp"
+        app:layout_constraintBottom_toTopOf="@id/tv_device_ip"
+        app:layout_constraintStart_toEndOf="@id/imv_device"
+        app:layout_constraintTop_toTopOf="@id/imv_device"
+        tools:text="My device" />
+
+    <TextView
+        android:id="@+id/tv_device_ip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/gray_600"
+        android:textSize="@dimen/_12sdp"
+        app:layout_constraintBottom_toBottomOf="@id/imv_device"
+        app:layout_constraintStart_toStartOf="@id/tv_device_name"
+        app:layout_constraintTop_toBottomOf="@id/tv_device_name"
+        tools:text="192.168.1.1" />
+
+    <ImageView
+        android:id="@+id/imv_flag"
+        android:layout_width="@dimen/_46sdp"
+        android:layout_height="@dimen/_46sdp"
+        android:padding="@dimen/_8sdp"
+        android:src="@drawable/ic_flag_inactive"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

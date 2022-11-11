@@ -55,8 +55,12 @@ class FragmentTools : BaseFragment(), PermissionDialog.ConfirmCallback {
                 permissionDialog.show()
             }
         }
-        binding.containerSignalTest.setOnClickListener{
+        binding.containerSignalTest.setOnClickListener {
             navigateToPage(R.id.action_fragmentTools_to_fragmentSignalTest)
+        }
+
+        binding.containerWifiDetector.setOnClickListener {
+            navigateToPage(R.id.action_fragmentTools_to_fragmentWifiDetector)
         }
     }
 

@@ -47,7 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textFontWeight="800"
-                android:textSize="@dimen/_24sdp"
+                android:textSize="@dimen/_20sdp"
                 app:colorFirst="@color/gradient_green_start"
                 app:colorSecond="@color/gradient_green_end" />
 
@@ -59,7 +59,7 @@
                 android:paddingStart="@dimen/_4sdp"
                 android:text="@string/dbm"
                 android:textColor="@color/gray_100"
-                android:textSize="@dimen/_10sdp" />
+                android:textSize="@dimen/_8sdp" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </merge>

@@ -194,6 +194,8 @@
     <string name="start">Start</string>
     <string name="des_signal_first">-Tap Start to test</string>
     <string name="des_signal_second">-Move around, tap Record to note down signal strength on your spot</string>
+    <string name="wifi_detector_title">WIFI DETECTOR</string>
+    <string name="device_detector">"devices are using this Wi-Fi"</string>
 
 
 </resources>

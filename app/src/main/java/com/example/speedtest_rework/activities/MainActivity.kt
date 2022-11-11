@@ -6,8 +6,11 @@ import android.content.IntentFilter
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.net.wifi.p2p.WifiP2pDeviceList
+import android.net.wifi.p2p.WifiP2pManager
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.Window
 import android.view.WindowManager
 import androidx.activity.viewModels
@@ -18,12 +21,13 @@ import com.example.speedtest_rework.base.activity.BaseActivity
 import com.example.speedtest_rework.common.utils.*
 import com.example.speedtest_rework.databinding.ActivityMainBinding
 import com.example.speedtest_rework.receivers.ConnectivityListener
+import com.example.speedtest_rework.ui.wifi_detector.model.DeviceModel
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
 @AndroidEntryPoint
-class MainActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
+class MainActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceChangeListener,WifiP2pManager.PeerListListener {
     private lateinit var binding: ActivityMainBinding
     private var navHostFragment: NavHostFragment? = null
     val viewModel: SpeedTestViewModel by viewModels()
@@ -32,6 +36,7 @@ class MainActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceChangeL
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d("TAG", "onCreate: ")
         changeStatusBarColor()
         binding = ActivityMainBinding.inflate(layoutInflater)
         initLocaleViewModel()
@@ -152,5 +157,10 @@ class MainActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceChangeL
         }
     }
 
+    override fun onPeersAvailable(peerList: WifiP2pDeviceList) {
+
+        Log.d("TAG", "onPeersAvailable: "+peerList)
+
+    }
 
 }
