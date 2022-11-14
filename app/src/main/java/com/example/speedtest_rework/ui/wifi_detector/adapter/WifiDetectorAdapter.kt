@@ -10,8 +10,15 @@ import com.example.speedtest_rework.ui.wifi_detector.model.DeviceModel
 class WifiDetectorAdapter(private val listener: ItemDeviceHelper) :
     RecyclerView.Adapter<WifiDetectorAdapter.WifiDetectorViewHolder>() {
     private var mList: List<DeviceModel> = mutableListOf()
-    fun setData(list: List<DeviceModel>) {
+    private var actionDone = true
+    fun setData(list: List<DeviceModel>, actionDone: Boolean) {
         mList = list
+        this.actionDone = actionDone
+        notifyDataSetChanged()
+    }
+
+    fun setData(actionDone: Boolean) {
+        this.actionDone = actionDone
         notifyDataSetChanged()
     }
 
@@ -30,6 +37,13 @@ class WifiDetectorAdapter(private val listener: ItemDeviceHelper) :
             binding.tvDeviceIp.text = mList[position].device_ip
             binding.imvFlag.setOnClickListener {
                 listener.onClickFlag(mList[position])
+            }
+            if (!actionDone) {
+                binding.imvFlag.isEnabled = false
+            } else {
+                binding.imvFlag.setOnClickListener {
+                    binding.imvFlag.isEnabled = true
+                }
             }
         }
     }

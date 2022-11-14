@@ -12,14 +12,17 @@ import com.example.speedtest_rework.base.viewmodel.BaseViewModel
 import com.example.speedtest_rework.common.custom_view.UnitType
 import com.example.speedtest_rework.core.getIP.AddressInfo
 import com.example.speedtest_rework.core.getIP.CurrentNetworkInfo
+import com.example.speedtest_rework.core.ping.Ping
 import com.example.speedtest_rework.data.model.HistoryModel
 import com.example.speedtest_rework.data.repositories.AppRepository
 import com.example.speedtest_rework.ui.data_usage.model.DataUsageModel
 import com.example.speedtest_rework.ui.main.analyzer.band.WiFiBand
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
+import java.net.URL
 import javax.inject.Inject
 
 
@@ -34,7 +37,8 @@ class SpeedTestViewModel @Inject constructor(private val appRepository: AppRepos
     var userActionRate: Boolean = false
     var wiFiBand = MutableLiveData(WiFiBand.GHZ2)
 
-
+    var pingResultDone = MutableLiveData<Boolean>()
+    var result = MutableLiveData<String>()
     private val listDataUsage: MutableLiveData<List<DataUsageModel>> = MutableLiveData()
 
 
@@ -141,6 +145,13 @@ class SpeedTestViewModel @Inject constructor(private val appRepository: AppRepos
 
     fun deleteAllHistoryAction() {
         viewModelScope.launch { appRepository.deleteAllHistory() }
+    }
+
+    fun getPingResult(address: String) {
+        viewModelScope.launch(Dispatchers.IO){
+            val ping = Ping()
+            result.postValue(ping.getPingResult("https://google.com"))
+        }
     }
 
 

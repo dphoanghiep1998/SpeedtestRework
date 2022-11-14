@@ -78,6 +78,11 @@
             app:destination="@id/fragmentWifiDetector"
             app:enterAnim="@anim/slide_in_right"
             app:popExitAnim="@anim/slide_out_left" />
+        <action
+            android:id="@+id/action_fragmentTools_to_fragmentPingTest"
+            app:destination="@id/fragmentPingTest"
+            app:enterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left" />
     </fragment>
     <fragment
         android:id="@+id/fragmentSignalTest"
@@ -88,4 +93,9 @@
         android:id="@+id/fragmentWifiDetector"
         android:name="com.example.speedtest_rework.ui.wifi_detector.FragmentWifiDetector"
         android:label="FragmentWifiDetector" />
+    <fragment
+        android:id="@+id/fragmentPingTest"
+        android:name="com.example.speedtest_rework.ui.ping_test.FragmentPingTest"
+        android:label="fragment_ping_test"
+        tools:layout="@layout/fragment_ping_test" />
 </navigation>

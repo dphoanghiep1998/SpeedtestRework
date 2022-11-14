@@ -4,7 +4,8 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
 import com.example.speedtest_rework.services.ServiceType
-import com.example.speedtest_rework.ui.main.analyzer.band.WiFiBand
+import com.google.gson.Gson
+
 
 inline fun SharedPreferences.edit(func: SharedPreferences.Editor.() -> Unit) {
     val editor: SharedPreferences.Editor = edit()
@@ -55,7 +56,7 @@ class AppSharePreference(private val context: Context) {
     }
 
     fun saveServiceType(key: Int, values: ServiceType) {
-        return saveString(key, values.toString())
+        saveString(key, values.toString())
     }
 
 
@@ -76,12 +77,18 @@ class AppSharePreference(private val context: Context) {
         }
     }
 
-    fun getWifiBand(key: Int, defaultValues: WiFiBand): WiFiBand {
-        return WiFiBand.toWifiBand(getString(key, defaultValues.toString()))
+    fun saveIpList(key: Int, list: List<String>) {
+        val gson = Gson()
+        saveString(key, gson.toJson(list))
     }
-    fun saveWifiBand(key:Int,values: WiFiBand){
-        return saveString(key,values.toString())
+
+    fun getIpList(key: Int, defaultValues: String): List<String> {
+        val returnedString = getString(key, defaultValues)
+        val gson = Gson()
+
+        return listOf(gson.fromJson(returnedString, String::class.java))
     }
+
 
     private fun saveInt(key: Int, values: Int): Unit =
         sharedPreferences().edit { putInt(context.getString(key), values) }
