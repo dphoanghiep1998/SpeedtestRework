@@ -218,6 +218,13 @@
     <string name="playstation">PlayStation</string>
     <string name="epic_game">EpicGames</string>
     <string name="detecting">Detecting ...</string>
+    <string name="my_device">My Device</string>
+    <string name="unknown_device">Unknown Device</string>
+    <string name="ip_list_key">IP_LIST_KEY</string>
+    <string name="ip_router">ip_router</string>
+    <string name="packet_loss">Packet Loss</string>
+    <string name="packet_sent">Packet Sent</string>
+    <string name="packet_received">Packet Receiced</string>
 
 
 </resources>

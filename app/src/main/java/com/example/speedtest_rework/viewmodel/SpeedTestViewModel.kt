@@ -1,33 +1,50 @@
 package com.example.speedtest_rework.viewmodel
 
+import android.content.Context
 import android.net.wifi.ScanResult
 import android.net.wifi.WifiInfo
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.viewmodel.BaseViewModel
 import com.example.speedtest_rework.common.custom_view.UnitType
+import com.example.speedtest_rework.common.utils.NetworkUtils
 import com.example.speedtest_rework.core.getIP.AddressInfo
 import com.example.speedtest_rework.core.getIP.CurrentNetworkInfo
-import com.example.speedtest_rework.core.ping.Ping
 import com.example.speedtest_rework.data.model.HistoryModel
 import com.example.speedtest_rework.data.repositories.AppRepository
 import com.example.speedtest_rework.ui.data_usage.model.DataUsageModel
 import com.example.speedtest_rework.ui.main.analyzer.band.WiFiBand
+import com.example.speedtest_rework.ui.ping_test.model.ContentPingTest
+import com.example.speedtest_rework.ui.ping_test.model.ItemPingTest
+import com.example.speedtest_rework.ui.wifi_detector.model.DeviceModel
+import com.stealthcopter.networktools.Ping
+import com.stealthcopter.networktools.Ping.PingListener
+import com.stealthcopter.networktools.SubnetDevices
+import com.stealthcopter.networktools.ping.PingResult
+import com.stealthcopter.networktools.ping.PingStats
+import com.stealthcopter.networktools.subnet.Device
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import java.net.URL
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 
 @HiltViewModel
-class SpeedTestViewModel @Inject constructor(private val appRepository: AppRepository) :
+class SpeedTestViewModel @Inject constructor(
+    private val appRepository: AppRepository,
+    @ApplicationContext val context: Context
+) :
     BaseViewModel() {
     var currentLanguage = ""
     var unitType = MutableLiveData(UnitType.MBPS)
@@ -36,11 +53,10 @@ class SpeedTestViewModel @Inject constructor(private val appRepository: AppRepos
     var currentNetworkInfo: CurrentNetworkInfo = CurrentNetworkInfo()
     var userActionRate: Boolean = false
     var wiFiBand = MutableLiveData(WiFiBand.GHZ2)
-
-    var pingResultDone = MutableLiveData<Boolean>()
-    var result = MutableLiveData<String>()
+    var isWifiDetectorDone = MutableLiveData(false)
+    var pingStatus = MutableLiveData(ScanStatus.DONE)
     private val listDataUsage: MutableLiveData<List<DataUsageModel>> = MutableLiveData()
-
+    var listDevice: MutableLiveData<MutableList<DeviceModel>> = MutableLiveData(mutableListOf())
 
     private var listSignalLocation = MutableLiveData<MutableList<Pair<String, String>>>(
         mutableListOf()
@@ -147,10 +163,69 @@ class SpeedTestViewModel @Inject constructor(private val appRepository: AppRepos
         viewModelScope.launch { appRepository.deleteAllHistory() }
     }
 
-    fun getPingResult(address: String) {
-        viewModelScope.launch(Dispatchers.IO){
-            val ping = Ping()
-            result.postValue(ping.getPingResult("https://google.com"))
+    fun getPingResult(listItem: List<ItemPingTest>) {
+        var loop = 0
+        viewModelScope.launch(Dispatchers.IO) {
+            listItem.filter {
+                it.type == 1
+            }.filter { itemPingTest ->
+                (itemPingTest as ContentPingTest).normal
+            }.map {
+                loop++
+                val item = (it as ContentPingTest)
+                val url = URL(item.url)
+                Ping.onAddress(url.host).setTimeOutMillis(3000).setTimes(2).setDelayMillis(3000)
+                    .doPing(object : PingListener {
+                        override fun onResult(pingResult: PingResult) {
+                        }
+
+                        override fun onFinished(pingStats: PingStats) {
+                            if (loop == 11) {
+                                pingStatus.postValue(ScanStatus.DONE)
+                            } else {
+                                pingStatus.postValue(ScanStatus.SCANNING)
+                            }
+                            it.value = pingStats.averageTimeTaken.roundToInt()
+                        }
+
+                        override fun onError(e: Exception) {
+                            Log.d("TAG", "Exception: " + e.message)
+                        }
+                    })
+            }
+
+
+        }
+    }
+
+    fun getDeviceListWifi() {
+        val mList: MutableList<DeviceModel> = mutableListOf()
+        viewModelScope.launch(Dispatchers.Main) {
+            SubnetDevices.fromLocalAddress().setTimeOutMillis(400)
+                .findDevices(object : SubnetDevices.OnSubnetDeviceFound {
+                    override fun onDeviceFound(device: Device?) {
+                        device?.let {
+                            if (it.ip == NetworkUtils.wifiIpAddress()) {
+                                val mDeviceName =
+                                    "${Build.MODEL} (${context.getString(R.string.my_device)})"
+                                mList.add(0, DeviceModel(mDeviceName, it.ip))
+                            } else {
+                                mList.add(
+                                    (DeviceModel(
+                                        context.getString(R.string.unknown_device),
+                                        it.ip
+                                    ))
+                                )
+                            }
+                        }
+                    }
+
+                    override fun onFinished(devicesFound: ArrayList<Device>?) {
+                        listDevice.postValue(mList)
+                        isWifiDetectorDone.postValue(true)
+                    }
+
+                })
         }
     }
 

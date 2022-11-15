@@ -92,10 +92,20 @@
     <fragment
         android:id="@+id/fragmentWifiDetector"
         android:name="com.example.speedtest_rework.ui.wifi_detector.FragmentWifiDetector"
-        android:label="FragmentWifiDetector" />
+        android:label="FragmentWifiDetector"
+        tools:layout="@layout/fragment_wifi_detector"/>
     <fragment
         android:id="@+id/fragmentPingTest"
         android:name="com.example.speedtest_rework.ui.ping_test.FragmentPingTest"
         android:label="fragment_ping_test"
-        tools:layout="@layout/fragment_ping_test" />
+        tools:layout="@layout/fragment_ping_test" >
+        <action
+            android:id="@+id/action_fragmentPingTest_to_fragmentAdvancedPing"
+            app:destination="@id/fragmentAdvancedPing" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentAdvancedPing"
+        android:name="com.example.speedtest_rework.ui.ping_test.advanced_ping_test.FragmentAdvancedPing"
+        android:label="fragment_advanced_ping"
+        tools:layout="@layout/fragment_advanced_ping" />
 </navigation>

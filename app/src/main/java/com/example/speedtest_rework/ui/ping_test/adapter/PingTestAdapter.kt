@@ -1,16 +1,21 @@
 package com.example.speedtest_rework.ui.ping_test.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.example.speedtest_rework.R
 import com.example.speedtest_rework.databinding.ItemPingTestContentBinding
 import com.example.speedtest_rework.databinding.ItemPingTestTitleBinding
+import com.example.speedtest_rework.ui.ping_test.interfaces.ItemHelper
 import com.example.speedtest_rework.ui.ping_test.model.ContentPingTest
 import com.example.speedtest_rework.ui.ping_test.model.ItemPingTest
 import com.example.speedtest_rework.ui.ping_test.model.TitlePingTest
 
-class PingTestAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class PingTestAdapter(val context: Context, private val listener: ItemHelper) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var mData: List<ItemPingTest> = mutableListOf()
 
     fun setData(list: List<ItemPingTest>) {
@@ -61,20 +66,62 @@ class PingTestAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder.itemViewType) {
             0 -> {
+                val itemTitle = mData[position] as TitlePingTest
                 with(holder as PingTestTitleViewHolder) {
-                    binding.tvTitle.text = (mData[position] as TitlePingTest).title
-                    binding.tvValue.text = (mData[position] as TitlePingTest).value
+                    binding.tvTitle.text = itemTitle.title
+                    binding.tvValue.text = itemTitle.value
                 }
             }
             1 -> {
+                val itemContent = mData[position] as ContentPingTest
                 with(holder as PingTestContentViewHolder) {
+                    binding.root.setOnClickListener {
+                        listener.onClickItemPing(itemContent)
+                    }
                     binding.tvValue.visibility = View.VISIBLE
 
-                    binding.tvTitle.text = (mData[position] as ContentPingTest).title
-                    if((mData[position] as ContentPingTest).normal){
+                    binding.tvTitle.text = itemContent.title
+                    if (itemContent.normal) {
                         binding.tvValue.text =
-                            if ((mData[position] as ContentPingTest).value == -1) "_ _" else (mData[position] as ContentPingTest).value.toString()
-                    }else{
+                            if (itemContent.value == 0) "_ _" else itemContent.value.toString()
+                        when (itemContent.value) {
+                            0 -> {
+                                binding.tvValue.setTextColor(
+                                    ContextCompat.getColor(
+                                        context,
+                                        R.color.gray_100
+                                    )
+                                )
+                            }
+                            in 1..50 -> {
+                                binding.tvValue.setTextColor(
+                                    ContextCompat.getColor(
+                                        context,
+                                        R.color.gradient_green_start
+                                    )
+                                )
+                            }
+                            in 51..100 -> {
+                                binding.tvValue.setTextColor(
+                                    ContextCompat.getColor(
+                                        context,
+                                        R.color.gradient_yellow_start
+                                    )
+                                )
+                            }
+                            else -> {
+                                binding.tvValue.setTextColor(
+                                    ContextCompat.getColor(
+                                        context,
+                                        R.color.gradient_red_start
+                                    )
+                                )
+                            }
+
+
+                        }
+
+                    } else {
                         binding.tvValue.visibility = View.GONE
                     }
 

@@ -121,18 +121,18 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper, ListSizeListener {
                         )
                         adapter.setData(wiFiData.copy(), 5320, 4900)
                         navButton[0].isSelected = true
-                        navButton[0].setTextColor(getColor(R.color.gray_100))
+                        navButton[0].setTextColor(getColor(R.color.gray_900))
                         updateView()
                         navButton.forEachIndexed { index, item ->
                             kotlin.run {
                                 item.setOnClickListener { _ ->
                                     item.isSelected = true
-                                    item.setTextColor(getColor(R.color.gray_100))
+                                    item.setTextColor(getColor(R.color.gray_900))
                                     adapterAction[index]()
                                     navButton.forEach { item1 ->
                                         if (item1 != item) {
                                             item1.isSelected = false
-                                            item1.setTextColor(getColor(R.color.gray_900))
+                                            item1.setTextColor(getColor(R.color.gray_100))
                                         }
                                     }
 

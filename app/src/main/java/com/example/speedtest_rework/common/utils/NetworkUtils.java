@@ -5,6 +5,7 @@ import static com.example.speedtest_rework.common.utils.BuildUtilsKt.buildMinVer
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.net.ConnectivityManager;
+import android.net.DhcpInfo;
 import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
@@ -179,8 +180,8 @@ public class NetworkUtils {
         return null;
     }
 
-    public static String wifiIpAddress(Context context) {
-        WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+    public static String wifiIpAddress() {
+        WifiManager wifiManager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         int ipAddress = wifiManager.getConnectionInfo().getIpAddress();
 
         // Convert little-endian to big-endianif needed
@@ -194,7 +195,6 @@ public class NetworkUtils {
         try {
             ipAddressString = InetAddress.getByAddress(ipByteArray).getHostAddress();
         } catch (UnknownHostException ex) {
-            Log.e("WIFIIP", "Unable to get host address.");
             ipAddressString = null;
         }
 

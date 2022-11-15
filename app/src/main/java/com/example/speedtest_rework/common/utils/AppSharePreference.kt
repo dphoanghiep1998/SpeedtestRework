@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
 import com.example.speedtest_rework.services.ServiceType
-import com.google.gson.Gson
 
 
 inline fun SharedPreferences.edit(func: SharedPreferences.Editor.() -> Unit) {
@@ -30,6 +29,22 @@ class AppSharePreference(private val context: Context) {
         sharedPreferences().registerOnSharedPreferenceChangeListener(
             onSharedPreferenceChangeListener
         )
+
+    fun saveIpRouter(key: Int, values: String) {
+        saveString(key, values)
+    }
+
+    fun getSavedIpRouter(key: Int, defaultValues: String): String {
+        return getString(key, defaultValues)
+    }
+
+    fun saveIpLocal(key: Int, values: String) {
+        saveString(key, values)
+    }
+
+    fun getSavedIpLocal(key: Int, defaultValues: String): String {
+        return getString(key, defaultValues)
+    }
 
     fun saveLanguage(key: Int, values: String) {
         saveString(key, values)
@@ -77,16 +92,26 @@ class AppSharePreference(private val context: Context) {
         }
     }
 
-    fun saveIpList(key: Int, list: List<String>) {
-        val gson = Gson()
-        saveString(key, gson.toJson(list))
+    fun saveIpList(key: Int, list: HashSet<String>) {
+        saveStringSet(key, list)
     }
 
-    fun getIpList(key: Int, defaultValues: String): List<String> {
-        val returnedString = getString(key, defaultValues)
-        val gson = Gson()
+    fun getIpList(key: Int, defaultValues: HashSet<String>): HashSet<String> {
+        return getStringSet(key, defaultValues)
+    }
 
-        return listOf(gson.fromJson(returnedString, String::class.java))
+    private fun saveStringSet(key: Int, values: HashSet<String>) {
+        sharedPreferences().edit { putStringSet(context.getString(key), values) }
+    }
+
+    private fun getStringSet(key: Int, defaultValues: HashSet<String>): HashSet<String> {
+        val keyValue: String = context.getString(key)
+        return try {
+            sharedPreferences().getStringSet(keyValue, defaultValues)!! as HashSet
+        } catch (e: Exception) {
+            sharedPreferences().edit { putStringSet(keyValue, defaultValues) }
+            defaultValues
+        }
     }
 
 
