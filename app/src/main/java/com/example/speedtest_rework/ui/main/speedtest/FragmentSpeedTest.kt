@@ -264,7 +264,7 @@ class FragmentSpeedTest : BaseFragment() {
                 val testModel = HistoryModel(
                     -1,
                     binding.tvWifiName.text.toString(),
-                    NetworkUtils.wifiIpAddress(requireContext()),
+                    NetworkUtils.wifiIpAddress(),
                     viewModel.currentNetworkInfo.selfIspIp,
                     viewModel.currentNetworkInfo.selfIsp,
                     0.0, 0.0, "wifi", 0.0, Date(), 0.0, 0.0

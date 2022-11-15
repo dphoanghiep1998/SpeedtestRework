@@ -54,54 +54,76 @@
 
     <ImageView
         android:id="@+id/imv_wifi_detector"
-        android:layout_width="@dimen/_100sdp"
-        android:layout_height="@dimen/_100sdp"
+        android:layout_width="@dimen/_80sdp"
+        android:layout_height="@dimen/_80sdp"
         android:layout_marginStart="@dimen/_16sdp"
         android:layout_marginTop="@dimen/_16sdp"
         android:src="@drawable/ic_wifi_detector"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
-    <TextView
-        android:id="@+id/tv_wifi"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_16sdp"
-        android:layout_marginTop="@dimen/_10sdp"
-        android:text="Neko"
-        android:textColor="@color/white"
-        android:textSize="@dimen/_16sdp"
-        app:layout_constraintBottom_toTopOf="@id/container_info"
-        app:layout_constraintStart_toEndOf="@id/imv_wifi_detector"
-        app:layout_constraintTop_toTopOf="@id/imv_wifi_detector" />
-
-    <LinearLayout
-        android:id="@+id/container_info"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:layout_marginBottom="@dimen/_10sdp"
         app:layout_constraintBottom_toBottomOf="@id/imv_wifi_detector"
-        app:layout_constraintStart_toStartOf="@id/tv_wifi"
-        app:layout_constraintTop_toBottomOf="@id/tv_wifi">
-
-        <com.example.speedtest_rework.common.custom_view.GradientText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="14"
-            android:textSize="@dimen/_16sdp"
-            app:colorFirst="@color/gradient_green_end"
-            app:colorSecond="@color/gradient_green_start" />
+        app:layout_constraintStart_toEndOf="@id/imv_wifi_detector"
+        app:layout_constraintTop_toTopOf="@id/imv_wifi_detector" >
 
         <TextView
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/container_info"
+            app:layout_constraintStart_toStartOf="parent"
+            android:id="@+id/tv_wifi"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:paddingStart="@dimen/_4sdp"
-            android:text="@string/device_detector"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_16sdp"
+            android:text="Neko"
             android:textColor="@color/white"
-            android:textSize="@dimen/_12sdp" />
-    </LinearLayout>
+            android:textSize="@dimen/_16sdp"
+           />
+
+        <LinearLayout
+            android:id="@+id/container_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@id/tv_wifi"
+            app:layout_constraintTop_toBottomOf="@id/tv_wifi">
+
+            <com.example.speedtest_rework.common.custom_view.GradientText
+                android:id="@+id/tv_numbers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:textSize="@dimen/_16sdp"
+                app:colorFirst="@color/gradient_green_end"
+                app:colorSecond="@color/gradient_green_start" />
+
+            <TextView
+                android:id="@+id/tv_placeholder"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:visibility="gone"
+                android:paddingStart="@dimen/_4sdp"
+                android:text="@string/device_detector"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_12sdp" />
+            <TextView
+                android:id="@+id/tv_detecting"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/detecting"
+                android:textColor="@color/gray_100"
+                android:textSize="@dimen/_14sdp"
+                />
+        </LinearLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ProgressBar
         android:id="@+id/pb_progress"
@@ -118,7 +140,6 @@
         android:id="@+id/refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:paddingVertical="@dimen/_8sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/pb_progress">
 

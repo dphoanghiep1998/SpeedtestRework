@@ -5,6 +5,8 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.speedtest_rework.R
+import com.example.speedtest_rework.common.utils.AppSharePreference
 import com.example.speedtest_rework.core.getIP.CurrentNetworkInfo
 import com.example.speedtest_rework.data.model.HistoryModel
 import com.example.speedtest_rework.data.services.AddressInfoRemoteService
@@ -58,6 +60,7 @@ class AppRepository @Inject constructor(
         var currentNetworkInfo: CurrentNetworkInfo
         withContext(dispatcher) {
             currentNetworkInfo = CurrentNetworkInfo().currentNetWorkInfo
+            AppSharePreference.INSTANCE.saveIpRouter(R.string.ip_router,"https://www.google.com")
         }
         return currentNetworkInfo
     }
@@ -70,6 +73,8 @@ class AppRepository @Inject constructor(
         }
         return mList
     }
+
+
 
 
 }

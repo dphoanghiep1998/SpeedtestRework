@@ -156,7 +156,7 @@
     <string name="GERMAN" translatable="false">Deutsch</string>
     <string name="VIETNAM" translatable="false">Tiếng Việt</string>
     <string name="no_list_found">No result found!</string>
-    <string name="text_permission_button" >Grant Permission &amp; Continue</string>
+    <string name="text_permission_button">Grant Permission &amp; Continue</string>
     <string name="total">Total</string>
     <string name="ask_rate">"Are you satisfied with our app? "</string>
     <string name="text_rate_button_good">GOOD</string>
@@ -196,6 +196,35 @@
     <string name="des_signal_second">-Move around, tap Record to note down signal strength on your spot</string>
     <string name="wifi_detector_title">WIFI DETECTOR</string>
     <string name="device_detector">"devices are using this Wi-Fi"</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="ping_test_title">PING TEST</string>
+    <string name="customized">Customized</string>
+    <string name="latency_ping_test">Latency (ms)</string>
+    <string name="advanced_ping">Advanced Ping</string>
+    <string name="game">Game</string>
+    <string name="video">Video</string>
+    <string name="social">Social</string>
+    <string name="others">Others</string>
+    <string name="router">Router</string>
+    <string name="instagram">Instagram</string>
+    <string name="twitter">Twitter</string>
+    <string name="facebook">Facebook</string>
+    <string name="tiktok">Tiktok</string>
+    <string name="netflix">Netflix</string>
+    <string name="youtube">Youtube</string>
+    <string name="minecraft">Minecraft</string>
+    <string name="steam">Steam</string>
+    <string name="playstation">PlayStation</string>
+    <string name="epic_game">EpicGames</string>
+    <string name="detecting">Detecting ...</string>
+    <string name="my_device">My Device</string>
+    <string name="unknown_device">Unknown Device</string>
+    <string name="ip_list_key">IP_LIST_KEY</string>
+    <string name="ip_router">ip_router</string>
+    <string name="packet_loss">Packet Loss</string>
+    <string name="packet_sent">Packet Sent</string>
+    <string name="packet_received">Packet Receiced</string>
 
 
 </resources>

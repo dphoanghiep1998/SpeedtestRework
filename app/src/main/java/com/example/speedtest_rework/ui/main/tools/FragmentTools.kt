@@ -62,6 +62,9 @@ class FragmentTools : BaseFragment(), PermissionDialog.ConfirmCallback {
         binding.containerWifiDetector.setOnClickListener {
             navigateToPage(R.id.action_fragmentTools_to_fragmentWifiDetector)
         }
+        binding.containerPingTest.setOnClickListener{
+            navigateToPage(R.id.action_fragmentTools_to_fragmentPingTest)
+        }
     }
 
     private fun checkAccessSettingPermission(context: Context): Boolean =

@@ -53,6 +53,7 @@ kapt {
 dependencies {
     implementation project(path: ':speedviewlib')
     implementation 'androidx.preference:preference-ktx:1.2.0'
+    implementation 'com.android.volley:volley:1.2.0'
     def room_version = "2.4.3"
     def lifecycle_version = "2.6.0-alpha01"
     def lottieVersion = "3.4.0"
@@ -118,4 +119,9 @@ dependencies {
     implementation 'com.github.dphoanghiep1998:GraphView:41ab637ce8'
     //refresh layout
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+    //dns
+    implementation("com.android.volley:volley:1.2.1")
+    implementation 'com.stanfy:gson-xml-java:0.1.+'
+    implementation 'com.github.stealthcopter:AndroidNetworkTools:0.4.5.3'
+
 }
