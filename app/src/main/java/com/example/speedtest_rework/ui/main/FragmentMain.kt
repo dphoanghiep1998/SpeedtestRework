@@ -245,9 +245,7 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback,
             )
 
         }
-
         startActivity(intent)
-
     }
 
     private fun initLanguageDialog() {
@@ -312,7 +310,7 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback,
             FragmentResults(this)
         )
         val adapter = ViewPagerAdapter(
-            fragmentList, requireActivity().supportFragmentManager,
+            fragmentList, childFragmentManager,
             lifecycle
         )
         binding.viewPager.adapter = adapter
