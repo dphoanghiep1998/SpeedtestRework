@@ -12,7 +12,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.viewmodel.BaseViewModel
-import com.example.speedtest_rework.common.MutableListLiveData
 import com.example.speedtest_rework.common.custom_view.UnitType
 import com.example.speedtest_rework.common.utils.NetworkUtils
 import com.example.speedtest_rework.core.getIP.AddressInfo
@@ -37,7 +36,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
-import okhttp3.internal.notify
 import java.net.URL
 import javax.inject.Inject
 import kotlin.math.roundToInt
@@ -61,6 +59,9 @@ class SpeedTestViewModel @Inject constructor(
 
     private val listPingResult = MutableLiveData<MutableList<PingResultTest>>()
     val listPingResultLive: LiveData<MutableList<PingResultTest>> = listPingResult
+    fun setDataPingResult(list: MutableList<PingResultTest>) {
+        listPingResult.postValue(list)
+    }
 
     private val listDataUsage: MutableLiveData<List<DataUsageModel>> = MutableLiveData()
     var listDevice: MutableLiveData<MutableList<DeviceModel>> = MutableLiveData(mutableListOf())
@@ -206,12 +207,13 @@ class SpeedTestViewModel @Inject constructor(
     }
 
     fun getPingResultAdvanced(address: String) {
-        var listResult : MutableList<PingResultTest> = mutableListOf()
+        var listResult: MutableList<PingResultTest> = mutableListOf()
         viewModelScope.launch(Dispatchers.IO) {
             val url = URL(address)
-            Ping.onAddress(url.host).setTimeOutMillis(3000).setTimes(10).setDelayMillis(1000)
+            Ping.onAddress(url.host).setTimeOutMillis(1000).setTimes(10).setDelayMillis(1000)
                 .doPing(object : PingListener {
                     override fun onResult(pingResult: PingResult) {
+                        Log.d("TAG", "onResult: " + pingResult.isReachable)
                         listResult.add(
                             PingResultTest(
                                 pingResult.timeTaken.toInt(),

@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gradient_orange_start"
     tools:context=".ui.ping_test.advanced_ping_test.FragmentAdvancedPing">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -164,8 +163,8 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:indeterminateOnly="false"
-            android:progress="20"
-
+            android:progress="0"
+            android:max="1000"
             android:progressDrawable="@drawable/custom_progressbar_ping"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="1:1"
@@ -186,6 +185,8 @@
             app:layout_constraintWidth_percent=".35">
 
             <LinearLayout
+                android:id="@+id/container_value"
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -210,6 +211,20 @@
                     android:textColor="@color/white"
                     android:textSize="@dimen/_10sdp" />
             </LinearLayout>
+
+
+            <com.example.speedtest_rework.common.custom_view.GradientText
+                android:id="@+id/tv_start"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/_30sdp"
+                android:text="@string/start"
+                app:colorFirst="@color/gradient_green_start"
+                app:colorSecond="@color/gradient_green_end" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

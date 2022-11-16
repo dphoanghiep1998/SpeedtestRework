@@ -1,9 +1,13 @@
 package com.example.speedtest_rework.ui.ping_test.advanced_ping_test
 
+import android.animation.ObjectAnimator
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.DecelerateInterpolator
+import android.widget.ProgressBar
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.speedtest_rework.R
@@ -22,9 +26,10 @@ class FragmentAdvancedPing : BaseFragment() {
     private val viewMoDel: SpeedTestViewModel by activityViewModels()
     private var itemContentPingTest: ContentPingTest? = null
     private var barChart = ArrayList<BarEntry>()
+    private var packetReceived = 0
+    private var packetLoss = 0
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentAdvancedPingBinding.inflate(layoutInflater)
         return binding.root
@@ -32,6 +37,8 @@ class FragmentAdvancedPing : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d("TAG", "onCreateView: ")
+
         getDataFromBundle()
         initBarArrayData()
         initView()
@@ -42,11 +49,15 @@ class FragmentAdvancedPing : BaseFragment() {
     private fun initBarArrayData() {
         barChart = ArrayList()
         for (i in 0..9) {
-            barChart.add(BarEntry(i.toFloat(), 0f))
+            barChart.add(BarEntry((i + 1).toFloat(), 0f))
         }
+
     }
 
     private fun initView() {
+        binding.containerValue.visibility = View.GONE
+        binding.tvStart.visibility = View.VISIBLE
+
         initButton()
         initChart()
     }
@@ -57,8 +68,14 @@ class FragmentAdvancedPing : BaseFragment() {
         }
         binding.containerProgress.setOnClickListener {
             initBarArrayData()
+            binding.pbLoading.progress = 0
+            binding.containerValue.visibility = View.VISIBLE
+            binding.tvStart.visibility = View.GONE
             val barDataSet = BarDataSet(barChart, null)
             val data = BarData(barDataSet)
+            packetLoss = 0
+            packetReceived = 0
+            data.barWidth = .5f
             binding.graphView.data = data
             binding.graphView.invalidate()
             viewMoDel.getPingResultAdvanced(itemContentPingTest!!.url)
@@ -67,7 +84,7 @@ class FragmentAdvancedPing : BaseFragment() {
 
     private fun initChart() {
 
-        binding.graphView.setTouchEnabled(true)
+        binding.graphView.setTouchEnabled(false)
         binding.graphView.isClickable = false
         binding.graphView.isDoubleTapToZoomEnabled = false
         binding.graphView.isDoubleTapToZoomEnabled = false
@@ -89,6 +106,8 @@ class FragmentAdvancedPing : BaseFragment() {
         binding.graphView.axisRight.setDrawGridLines(false)
         binding.graphView.axisRight.setDrawLabels(false)
         binding.graphView.axisRight.setDrawAxisLine(false)
+        binding.graphView.axisLeft.axisMinimum = 0f
+        binding.graphView.setNoDataText("")
 
 
     }
@@ -96,21 +115,57 @@ class FragmentAdvancedPing : BaseFragment() {
     private fun observeDataPing() {
         viewMoDel.listPingResultLive.observe(viewLifecycleOwner) {
             if (it.isNotEmpty()) {
+                binding.pingValue.text = it[it.size - 1].ping_value.toString()
+                binding.tvPacketSentValue.text = (it.size).toString()
+                setProgressAnimate(binding.pbLoading, it.size)
+                if (it[it.size - 1].isReachable) {
+                    binding.tvPacketReceivedValue.text = (++packetReceived).toString()
+                } else {
+                    packetLoss++
+                    countPacketLoss(it.size, packetLoss)
+                }
+                val data = BarData()
+                data.barWidth = .5f
+                binding.graphView.data = data
+
                 barChart[it.size - 1] =
-                    BarEntry(it.size.toFloat() - 1, it[it.size - 1].ping_value.toFloat())
+                    BarEntry(it.size.toFloat(), it[it.size - 1].ping_value.toFloat())
                 val barDataSet = BarDataSet(barChart, null)
                 barDataSet.setGradientColor(
                     getColor(R.color.gradient_green_start_zero),
                     getColor(R.color.gradient_green_start)
                 )
-                val data = BarData(barDataSet)
-                data.barWidth = .5f
-                binding.graphView.data = data
+                barDataSet.valueTextColor = getColor(R.color.gray_100)
+
+                data.addDataSet(barDataSet)
+                binding.graphView.notifyDataSetChanged()
                 binding.graphView.invalidate()
-
+            } else {
+                val data = BarData()
+                binding.graphView.data = data
+                binding.graphView.notifyDataSetChanged()
+                binding.graphView.invalidate()
             }
-
         }
+    }
+
+    private fun setProgressAnimate(pb: ProgressBar, progressTo: Int) {
+        val animation: ObjectAnimator =
+            ObjectAnimator.ofInt(pb, "progress", pb.progress, progressTo * 100)
+        animation.duration = 3000
+        animation.interpolator = DecelerateInterpolator()
+        animation.start()
+    }
+
+    private fun countPacketLoss(packetSent: Int, lossNumber: Int) {
+        val percent = (lossNumber.toFloat() / packetSent.toFloat()) * 100
+        binding.tvPacketLossValue.text = "${percent.toInt()} %"
+
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        viewMoDel.setDataPingResult(mutableListOf())
     }
 
     private fun getDataFromBundle() {
