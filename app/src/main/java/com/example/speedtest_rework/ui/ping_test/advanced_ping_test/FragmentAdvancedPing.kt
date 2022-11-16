@@ -2,12 +2,12 @@ package com.example.speedtest_rework.ui.ping_test.advanced_ping_test
 
 import android.animation.ObjectAnimator
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import android.widget.ProgressBar
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.speedtest_rework.R
@@ -19,6 +19,8 @@ import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.formatter.ValueFormatter
+import com.github.mikephil.charting.utils.ViewPortHandler
 
 
 class FragmentAdvancedPing : BaseFragment() {
@@ -37,7 +39,6 @@ class FragmentAdvancedPing : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("TAG", "onCreateView: ")
 
         getDataFromBundle()
         initBarArrayData()
@@ -60,13 +61,14 @@ class FragmentAdvancedPing : BaseFragment() {
 
         initButton()
         initChart()
+        changeBackPressCallBack()
     }
 
     private fun initButton() {
         binding.btnBack.setOnClickListener {
             findNavController().popBackStack()
         }
-        binding.containerProgress.setOnClickListener {
+        binding.btnStart.setOnClickListener {
             initBarArrayData()
             binding.pbLoading.progress = 0
             binding.containerValue.visibility = View.VISIBLE
@@ -109,17 +111,35 @@ class FragmentAdvancedPing : BaseFragment() {
         binding.graphView.axisLeft.axisMinimum = 0f
         binding.graphView.setNoDataText("")
 
+    }
+
+    private fun changeBackPressCallBack() {
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    findNavController().popBackStack()
+
+                }
+            }
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
 
     }
 
     private fun observeDataPing() {
         viewMoDel.listPingResultLive.observe(viewLifecycleOwner) {
             if (it.isNotEmpty()) {
-                binding.pingValue.text = it[it.size - 1].ping_value.toString()
                 binding.tvPacketSentValue.text = (it.size).toString()
                 setProgressAnimate(binding.pbLoading, it.size)
                 if (it[it.size - 1].isReachable) {
+                    binding.pingValue.text = it[it.size - 1].ping_value.toString()
+                    binding.tvMs.visibility = View.VISIBLE
                     binding.tvPacketReceivedValue.text = (++packetReceived).toString()
+                } else if (!it[it.size - 1].isReachable && it.size == 1) {
+                    binding.pingValue.text = "_ _"
+                    binding.tvMs.visibility = View.GONE
+                    packetLoss++
+                    countPacketLoss(it.size, packetLoss)
                 } else {
                     packetLoss++
                     countPacketLoss(it.size, packetLoss)
@@ -135,7 +155,7 @@ class FragmentAdvancedPing : BaseFragment() {
                     getColor(R.color.gradient_green_start_zero),
                     getColor(R.color.gradient_green_start)
                 )
-                barDataSet.valueTextColor = getColor(R.color.gray_100)
+                barDataSet.valueFormatter = ValueBarFormatter()
 
                 data.addDataSet(barDataSet)
                 binding.graphView.notifyDataSetChanged()

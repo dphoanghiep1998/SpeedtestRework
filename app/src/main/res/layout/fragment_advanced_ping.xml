@@ -174,8 +174,10 @@
             app:layout_constraintWidth_percent=".9" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/btn_start"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:foreground="@drawable/ripple_effect_corner_fg"
             android:background="@drawable/background_circle"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="1:1"
@@ -198,7 +200,7 @@
                     android:id="@+id/ping_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="49"
+                    android:text="_ _"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_26sdp" />
 
@@ -235,7 +237,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/container_progress" />
+        app:layout_constraintTop_toBottomOf="@id/container_progress"
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
