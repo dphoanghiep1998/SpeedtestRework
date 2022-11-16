@@ -7,14 +7,15 @@ plugins {
     id 'dagger.hilt.android.plugin'
 
 }
+apply plugin: 'kotlin-android'
 
 android {
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.nekosoft.internet.android.speedtest"
         minSdk 21
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -110,18 +111,21 @@ dependencies {
     // moshi
     def moshi_version = '1.11.0'
     implementation "com.squareup.moshi:moshi-kotlin:$moshi_version"
-
     // okhttpclient
     def ok_httpclient_version = '4.9.0'
     implementation "com.squareup.okhttp3:okhttp:$ok_httpclient_version"
     implementation "com.squareup.okhttp3:logging-interceptor:$ok_httpclient_version"
 //graphview
     implementation 'com.github.dphoanghiep1998:GraphView:41ab637ce8'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     //refresh layout
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     //dns
-    implementation("com.android.volley:volley:1.2.1")
-    implementation 'com.stanfy:gson-xml-java:0.1.+'
     implementation 'com.github.stealthcopter:AndroidNetworkTools:0.4.5.3'
+    implementation "androidx.core:core-ktx:+"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
+}
+repositories {
+    mavenCentral()
 }

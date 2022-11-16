@@ -41,6 +41,7 @@
     <color name="signal_good">#15CD1C</color>
 
     <color name="gradient_green_start">#00FACC</color>
+    <color name="gradient_green_start_zero">#0000FACC</color>
     <color name="gradient_green_end">#36E7E7</color>
     <color name="gradient_orange_start">#FF981F</color>
     <color name="gradient_orange_end">#FF7F0A</color>

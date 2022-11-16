@@ -12,6 +12,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.viewmodel.BaseViewModel
+import com.example.speedtest_rework.common.MutableListLiveData
 import com.example.speedtest_rework.common.custom_view.UnitType
 import com.example.speedtest_rework.common.utils.NetworkUtils
 import com.example.speedtest_rework.core.getIP.AddressInfo
@@ -22,6 +23,7 @@ import com.example.speedtest_rework.ui.data_usage.model.DataUsageModel
 import com.example.speedtest_rework.ui.main.analyzer.band.WiFiBand
 import com.example.speedtest_rework.ui.ping_test.model.ContentPingTest
 import com.example.speedtest_rework.ui.ping_test.model.ItemPingTest
+import com.example.speedtest_rework.ui.ping_test.model.PingResultTest
 import com.example.speedtest_rework.ui.wifi_detector.model.DeviceModel
 import com.stealthcopter.networktools.Ping
 import com.stealthcopter.networktools.Ping.PingListener
@@ -35,6 +37,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
+import okhttp3.internal.notify
 import java.net.URL
 import javax.inject.Inject
 import kotlin.math.roundToInt
@@ -55,6 +58,10 @@ class SpeedTestViewModel @Inject constructor(
     var wiFiBand = MutableLiveData(WiFiBand.GHZ2)
     var isWifiDetectorDone = MutableLiveData(false)
     var pingStatus = MutableLiveData(ScanStatus.DONE)
+
+    private val listPingResult = MutableLiveData<MutableList<PingResultTest>>()
+    val listPingResultLive: LiveData<MutableList<PingResultTest>> = listPingResult
+
     private val listDataUsage: MutableLiveData<List<DataUsageModel>> = MutableLiveData()
     var listDevice: MutableLiveData<MutableList<DeviceModel>> = MutableLiveData(mutableListOf())
 
@@ -196,6 +203,34 @@ class SpeedTestViewModel @Inject constructor(
 
 
         }
+    }
+
+    fun getPingResultAdvanced(address: String) {
+        var listResult : MutableList<PingResultTest> = mutableListOf()
+        viewModelScope.launch(Dispatchers.IO) {
+            val url = URL(address)
+            Ping.onAddress(url.host).setTimeOutMillis(3000).setTimes(10).setDelayMillis(1000)
+                .doPing(object : PingListener {
+                    override fun onResult(pingResult: PingResult) {
+                        listResult.add(
+                            PingResultTest(
+                                pingResult.timeTaken.toInt(),
+                                pingResult.isReachable
+                            )
+                        )
+                        listPingResult.postValue(listResult)
+                    }
+
+                    override fun onFinished(pingStats: PingStats) {
+
+                    }
+
+                    override fun onError(e: Exception) {
+                    }
+                })
+        }
+
+
     }
 
     fun getDeviceListWifi() {

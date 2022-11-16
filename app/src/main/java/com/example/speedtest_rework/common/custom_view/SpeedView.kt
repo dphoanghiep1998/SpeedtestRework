@@ -156,11 +156,12 @@ class SpeedView(
     private fun initView() {
         binding.loading.speed = 1f
         binding.loading.addAnimatorListener(object : Animator.AnimatorListener {
-            override fun onAnimationStart(p0: Animator?) {
+
+            override fun onAnimationStart(p0: Animator) {
                 showLoading()
             }
 
-            override fun onAnimationEnd(p0: Animator?) {
+            override fun onAnimationEnd(p0: Animator) {
                 hideLoading()
                 hideTvConnecting()
                 showSpeedView()
@@ -168,11 +169,11 @@ class SpeedView(
                 showTvSpeed()
             }
 
-            override fun onAnimationCancel(p0: Animator?) {
+            override fun onAnimationCancel(p0: Animator) {
                 showBtnStart()
             }
 
-            override fun onAnimationRepeat(p0: Animator?) {
+            override fun onAnimationRepeat(p0: Animator) {
             }
 
 
