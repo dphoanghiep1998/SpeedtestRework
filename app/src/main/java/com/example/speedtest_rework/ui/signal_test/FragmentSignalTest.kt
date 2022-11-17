@@ -12,11 +12,9 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.fragment.BaseFragment
 import com.example.speedtest_rework.common.utils.NetworkUtils
-import com.example.speedtest_rework.common.utils.buildMinVersionS
 import com.example.speedtest_rework.databinding.FragmentSignalTestBinding
 import com.example.speedtest_rework.ui.signal_test.adapter.SignalLocationAdapter
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
@@ -151,24 +149,17 @@ class FragmentSignalTest : BaseFragment() {
     }
 
     private fun calculateWifi() {
-        if (buildMinVersionS()) {
+        val wifiManager: WifiManager =
+            requireContext().applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
 
-        } else {
-            val wifiManager: WifiManager =
-                requireContext().applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
-
-            job = lifecycleScope.launch {
-                while (isActive) {
-                    val wifiInfo: WifiInfo = wifiManager.connectionInfo
-                    currentValue = wifiInfo.rssi
-                    binding.signalMeter.setValue(wifiInfo.rssi.toFloat())
-                    delay(2000L)
-                }
+        job = lifecycleScope.launch {
+            while (isActive) {
+                val wifiInfo: WifiInfo = wifiManager.connectionInfo
+                currentValue = wifiInfo.rssi
+                binding.signalMeter.setValue(wifiInfo.rssi.toFloat())
+                delay(2000L)
             }
-
-
         }
-
     }
 
 }

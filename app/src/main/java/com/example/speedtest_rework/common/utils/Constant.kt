@@ -1,6 +1,7 @@
 package com.example.speedtest_rework.common.utils
 
 object Constant {
+    const val KEY_ITEM_ADVANCE = "KEY_ITEM_ADVANCE"
     const val KEY_ITEM_PING ="KEY_ITEM_PING"
     const val SERVER_ENDPOINT = ""
     const val SERVER_LIST = "http://speedtest.net/"

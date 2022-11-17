@@ -225,6 +225,7 @@
     <string name="packet_loss">Packet Loss</string>
     <string name="packet_sent">Packet Sent</string>
     <string name="packet_received">Packet Receiced</string>
+    <string name="history">History</string>
 
 
 </resources>
