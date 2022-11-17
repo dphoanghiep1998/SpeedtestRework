@@ -151,11 +151,11 @@ class FragmentAdvancedPing : BaseFragment() {
                 barChart[it.size - 1] =
                     BarEntry(it.size.toFloat(), it[it.size - 1].ping_value.toFloat())
                 val barDataSet = BarDataSet(barChart, null)
+                barDataSet.valueFormatter = ValueBarFormatter()
                 barDataSet.setGradientColor(
                     getColor(R.color.gradient_green_start_zero),
                     getColor(R.color.gradient_green_start)
                 )
-                barDataSet.valueFormatter = ValueBarFormatter()
 
                 data.addDataSet(barDataSet)
                 binding.graphView.notifyDataSetChanged()

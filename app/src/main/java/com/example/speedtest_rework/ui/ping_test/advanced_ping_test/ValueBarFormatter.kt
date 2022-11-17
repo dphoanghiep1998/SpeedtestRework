@@ -8,7 +8,7 @@ class ValueBarFormatter : ValueFormatter() {
         return if(value == 0f){
             ""
         }else{
-            super.getFormattedValue(value)
+            value.toString()
         }
     }
 }
