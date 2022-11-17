@@ -12,9 +12,11 @@ import com.example.speedtest_rework.data.model.HistoryModel
 import com.example.speedtest_rework.data.services.AddressInfoRemoteService
 import com.example.speedtest_rework.data.services.HistoryLocalService
 import com.example.speedtest_rework.data.services.PrivilegedService
+import com.example.speedtest_rework.data.services.RecentLocalService
 import com.example.speedtest_rework.di.IoDispatcher
 import com.example.speedtest_rework.network.NetworkResult
 import com.example.speedtest_rework.ui.data_usage.model.DataUsageModel
+import com.example.speedtest_rework.ui.ping_test.advanced_ping_test.model.RecentModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -23,6 +25,7 @@ import javax.inject.Inject
 class AppRepository @Inject constructor(
     private val addressInfoRemoteService: AddressInfoRemoteService,
     private val historyLocalService: HistoryLocalService,
+    private val recentLocalService: RecentLocalService,
     private val privilegeService: PrivilegedService,
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) {
@@ -43,6 +46,20 @@ class AppRepository @Inject constructor(
 
     fun getAllHistory(): LiveData<List<HistoryModel>> =
         historyLocalService.historyDao.getListHistory()
+
+    suspend fun insertRecentModel(model: RecentModel) = withContext(dispatcher) {
+        recentLocalService.recentDao.insertRecent(model.toRecentEntity())
+    }
+
+    suspend fun deleteAllRecent() =
+        withContext(dispatcher) {
+            recentLocalService.recentDao.deleteAllRecent()
+        }
+
+
+    fun getAllRecent(): LiveData<List<RecentModel>> =
+        recentLocalService.recentDao.getListRecent()
+
 
     suspend fun getAddressInfo() = withContext(dispatcher) {
         when (val result = addressInfoRemoteService.getAddressInfoList()) {

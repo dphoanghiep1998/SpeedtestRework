@@ -2,8 +2,6 @@ package com.example.speedtest_rework.ui.wifi_detector
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,7 +26,6 @@ class FragmentWifiDetector : BaseFragment(), ItemDeviceHelper {
     private lateinit var adapter: WifiDetectorAdapter
     private val viewModel: SpeedTestViewModel by activityViewModels()
     private lateinit var rotate: RotateAnimation
-    private var handler: Handler = Handler(Looper.getMainLooper())
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -62,9 +59,7 @@ class FragmentWifiDetector : BaseFragment(), ItemDeviceHelper {
         initAnimation()
         initButton()
         initRecycleView()
-        handler.postDelayed({
-            discoveryDevice()
-        }, 2000)
+        discoveryDevice()
 
     }
 
@@ -97,7 +92,7 @@ class FragmentWifiDetector : BaseFragment(), ItemDeviceHelper {
 
     override fun onDestroy() {
         super.onDestroy()
-        handler.removeCallbacksAndMessages(null);
+        viewModel.wifiDetect?.cancel()
     }
 
 

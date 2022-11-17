@@ -60,13 +60,14 @@ class FragmentPingTest : BaseFragment(), ItemHelper {
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
 
     }
+
     private fun initView() {
         data = mutableListOf(
             TitlePingTest(
                 getString(R.string.customized),
                 getString(R.string.latency_ping_test)
             ),
-            ContentPingTest(getString(R.string.advanced_ping), "", 0, false),
+            ContentPingTest(getString(R.string.advanced_ping), "https://www.google.com/", 0, false),
             TitlePingTest(
                 getString(R.string.game),
                 getString(R.string.latency_ping_test)
@@ -134,17 +135,17 @@ class FragmentPingTest : BaseFragment(), ItemHelper {
     private fun initRecycleView() {
         val linearLayoutManager = LinearLayoutManager(requireContext())
         binding.rcvPingView.layoutManager = linearLayoutManager
-        adapter = PingTestAdapter(requireContext(),this)
+        adapter = PingTestAdapter(requireContext(), this)
         binding.rcvPingView.adapter = adapter
         adapter.setData(data)
     }
 
     private fun observePingDone() {
         viewModel.pingStatus.observe(viewLifecycleOwner) {
-            if(it == ScanStatus.DONE){
+            if (it == ScanStatus.DONE) {
                 adapter.setData(data)
                 binding.btnReload.clearAnimation()
-            }else{
+            } else {
                 adapter.setData(data)
             }
         }
@@ -153,7 +154,10 @@ class FragmentPingTest : BaseFragment(), ItemHelper {
     override fun onClickItemPing(item: ContentPingTest) {
         val bundle = Bundle()
         bundle.putParcelable(Constant.KEY_ITEM_PING, item)
-        findNavController().navigate(R.id.action_fragmentPingTest_to_fragmentAdvancedPing,bundle)
+        findNavController().navigate(
+            R.id.action_fragmentPingTest_to_fragmentAdvancedPing,
+            bundle
+        )
     }
 
 }

@@ -20,6 +20,7 @@ import com.example.speedtest_rework.data.model.HistoryModel
 import com.example.speedtest_rework.data.repositories.AppRepository
 import com.example.speedtest_rework.ui.data_usage.model.DataUsageModel
 import com.example.speedtest_rework.ui.main.analyzer.band.WiFiBand
+import com.example.speedtest_rework.ui.ping_test.advanced_ping_test.model.RecentModel
 import com.example.speedtest_rework.ui.ping_test.model.ContentPingTest
 import com.example.speedtest_rework.ui.ping_test.model.ItemPingTest
 import com.example.speedtest_rework.ui.ping_test.model.PingResultTest
@@ -56,7 +57,9 @@ class SpeedTestViewModel @Inject constructor(
     var wiFiBand = MutableLiveData(WiFiBand.GHZ2)
     var isWifiDetectorDone = MutableLiveData(false)
     var pingStatus = MutableLiveData(ScanStatus.DONE)
-
+    var pingAdvanced: Ping? = null
+    var pingNormal: Ping? = null
+    var wifiDetect: SubnetDevices? = null
     private val listPingResult = MutableLiveData<MutableList<PingResultTest>>()
     val listPingResultLive: LiveData<MutableList<PingResultTest>> = listPingResult
     fun setDataPingResult(list: MutableList<PingResultTest>) {
@@ -167,6 +170,19 @@ class SpeedTestViewModel @Inject constructor(
         viewModelScope.launch { appRepository.deleteHistory(historyModel) }
     }
 
+    fun deleteAllRecentAction() {
+        viewModelScope.launch { appRepository.deleteAllRecent() }
+    }
+
+    fun insertNewRecent(recentModel: RecentModel) {
+        viewModelScope.launch { appRepository.insertRecentModel(recentModel) }
+    }
+
+    fun getListRecent(): LiveData<List<RecentModel>> {
+        return appRepository.getAllRecent()
+    }
+
+
     fun deleteAllHistoryAction() {
         viewModelScope.launch { appRepository.deleteAllHistory() }
     }
@@ -182,24 +198,27 @@ class SpeedTestViewModel @Inject constructor(
                 loop++
                 val item = (it as ContentPingTest)
                 val url = URL(item.url)
-                Ping.onAddress(url.host).setTimeOutMillis(3000).setTimes(2).setDelayMillis(3000)
-                    .doPing(object : PingListener {
-                        override fun onResult(pingResult: PingResult) {
-                        }
-
-                        override fun onFinished(pingStats: PingStats) {
-                            if (loop == 11) {
-                                pingStatus.postValue(ScanStatus.DONE)
-                            } else {
-                                pingStatus.postValue(ScanStatus.SCANNING)
+                pingNormal =
+                    Ping.onAddress(url.host).setTimeOutMillis(3000).setTimes(2).setDelayMillis(3000).let{it1->
+                        it1.doPing(object : PingListener {
+                            override fun onResult(pingResult: PingResult) {
                             }
-                            it.value = pingStats.averageTimeTaken.roundToInt()
-                        }
 
-                        override fun onError(e: Exception) {
-                            Log.d("TAG", "Exception: " + e.message)
-                        }
-                    })
+                            override fun onFinished(pingStats: PingStats) {
+                                if (loop == 11) {
+                                    pingStatus.postValue(ScanStatus.DONE)
+                                } else {
+                                    pingStatus.postValue(ScanStatus.SCANNING)
+                                }
+                                it.value = pingStats.averageTimeTaken.roundToInt()
+                            }
+
+                            override fun onError(e: Exception) {
+                            }
+                        })
+
+                    }
+
             }
 
 
@@ -210,26 +229,28 @@ class SpeedTestViewModel @Inject constructor(
         var listResult: MutableList<PingResultTest> = mutableListOf()
         viewModelScope.launch(Dispatchers.IO) {
             val url = URL(address)
-            Ping.onAddress(url.host).setTimeOutMillis(1000).setTimes(10).setDelayMillis(1000)
-                .doPing(object : PingListener {
-                    override fun onResult(pingResult: PingResult) {
-                        Log.d("TAG", "onResult: " + pingResult.isReachable)
-                        listResult.add(
-                            PingResultTest(
-                                pingResult.timeTaken.toInt(),
-                                pingResult.isReachable
+            pingAdvanced =
+                Ping.onAddress(url.host).setTimeOutMillis(1000).setTimes(10).setDelayMillis(1000).let {
+                    it.doPing(object : PingListener {
+                        override fun onResult(pingResult: PingResult) {
+                            listResult.add(
+                                PingResultTest(
+                                    pingResult.timeTaken.toInt(),
+                                    pingResult.isReachable
+                                )
                             )
-                        )
-                        listPingResult.postValue(listResult)
-                    }
+                            listPingResult.postValue(listResult)
+                        }
 
-                    override fun onFinished(pingStats: PingStats) {
+                        override fun onFinished(pingStats: PingStats) {
 
-                    }
+                        }
 
-                    override fun onError(e: Exception) {
-                    }
-                })
+                        override fun onError(e: Exception) {
+                        }
+                    })
+
+                }
         }
 
 
@@ -237,20 +258,20 @@ class SpeedTestViewModel @Inject constructor(
 
     fun getDeviceListWifi() {
         val mList: MutableList<DeviceModel> = mutableListOf()
-        viewModelScope.launch(Dispatchers.Main) {
-            SubnetDevices.fromLocalAddress().setTimeOutMillis(400)
-                .findDevices(object : SubnetDevices.OnSubnetDeviceFound {
+        viewModelScope.launch(Dispatchers.IO) {
+            wifiDetect = SubnetDevices.fromLocalAddress().setTimeOutMillis(400).let {
+                it.findDevices(object : SubnetDevices.OnSubnetDeviceFound {
                     override fun onDeviceFound(device: Device?) {
-                        device?.let {
-                            if (it.ip == NetworkUtils.wifiIpAddress()) {
+                        device?.let { it1 ->
+                            if (it1.ip == NetworkUtils.wifiIpAddress()) {
                                 val mDeviceName =
                                     "${Build.MODEL} (${context.getString(R.string.my_device)})"
-                                mList.add(0, DeviceModel(mDeviceName, it.ip))
+                                mList.add(0, DeviceModel(mDeviceName, it1.ip))
                             } else {
                                 mList.add(
                                     (DeviceModel(
                                         context.getString(R.string.unknown_device),
-                                        it.ip
+                                        it1.ip
                                     ))
                                 )
                             }
@@ -261,8 +282,9 @@ class SpeedTestViewModel @Inject constructor(
                         listDevice.postValue(mList)
                         isWifiDetectorDone.postValue(true)
                     }
-
                 })
+            }
+
         }
     }
 

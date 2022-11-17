@@ -11,6 +11,7 @@
                 android:thicknessRatio="50"
                 android:useLevel="false">
                 <solid android:color="@color/gray_800" />
+                <corners android:radius="@dimen/_5sdp"/>
             </shape>
         </rotate>
     </item>
@@ -27,6 +28,8 @@
                 <gradient
                     android:startColor="@color/gradient_green_end"
                     android:endColor="@color/gradient_green_start" />
+                <corners android:radius="@dimen/_5sdp"/>
+
             </shape>
         </rotate>
     </item>
