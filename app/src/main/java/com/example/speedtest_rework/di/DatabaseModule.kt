@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.room.Room
 import com.example.speedtest_rework.data.database.AppDatabase
 import com.example.speedtest_rework.data.database.dao.HistoryDao
-import com.example.speedtest_rework.data.database.dao.RecentDao
 
 import dagger.Module
 import dagger.Provides
@@ -26,11 +25,5 @@ class DatabaseModule {
     fun provideHistoryDao(appDatabase: AppDatabase): HistoryDao {
         return appDatabase.historyDao
     }
-
-    @Provides
-    fun provideRecentDao(appDatabase: AppDatabase): RecentDao {
-        return appDatabase.recentDao
-    }
-
 
 }

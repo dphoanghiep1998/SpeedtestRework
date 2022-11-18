@@ -28,12 +28,16 @@ class HistoryModel(
     }
 
     fun setNetworkType(i: Int) {
-        if (i == 0) {
-            this.network = NETWORK_UNKNOWN
-        } else if (i == 1) {
-            this.network = NETWORK_WIFI
-        } else if (i == 2) {
-            this.network = NETWORK_MOBILE
+        when (i) {
+            0 -> {
+                this.network = NETWORK_UNKNOWN
+            }
+            1 -> {
+                this.network = NETWORK_WIFI
+            }
+            2 -> {
+                this.network = NETWORK_MOBILE
+            }
         }
     }
 

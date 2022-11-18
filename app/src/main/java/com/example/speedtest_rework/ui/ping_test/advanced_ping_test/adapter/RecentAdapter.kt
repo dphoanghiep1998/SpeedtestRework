@@ -4,12 +4,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.speedtest_rework.databinding.ItemContentRecentBinding
-import com.example.speedtest_rework.ui.ping_test.advanced_ping_test.model.RecentModel
+import com.example.speedtest_rework.ui.ping_test.advanced_ping_test.interfaces.RecentHelper
 
-class RecentAdapter() :
+class RecentAdapter(private val listener: RecentHelper) :
     RecyclerView.Adapter<RecentAdapter.RecentContentViewHolder>() {
-    private var mList: List<RecentModel> = mutableListOf()
-    fun setList(list: List<RecentModel>) {
+    private var mList: List<String> = mutableListOf()
+    fun setList(list: List<String>) {
         this.mList = list
         notifyDataSetChanged()
     }
@@ -33,7 +33,10 @@ class RecentAdapter() :
     override fun onBindViewHolder(holder: RecentContentViewHolder, position: Int) {
 
         with(holder) {
-            binding.tvContent.text = mList[position].content
+            binding.tvContent.text = mList[position]
+            binding.tvContent.setOnClickListener {
+                listener.onClickItem(mList[position])
+            }
         }
 
     }

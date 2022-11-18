@@ -268,7 +268,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -298,6 +297,7 @@
             android:layout_marginHorizontal="@dimen/_16sdp"
             android:background="@drawable/background_edittext"
             android:inputType="text"
+            android:imeOptions="actionSearch"
             android:maxLines="1"
             android:paddingHorizontal="@dimen/_16sdp"
             android:paddingVertical="@dimen/_8sdp"

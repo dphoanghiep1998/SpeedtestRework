@@ -1,21 +1,28 @@
 package com.example.speedtest_rework.ui.ping_test.advanced_ping_test
 
 import android.animation.ObjectAnimator
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.DecelerateInterpolator
+import android.view.animation.LinearInterpolator
+import android.view.inputmethod.InputMethodManager
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.fragment.BaseFragment
+import com.example.speedtest_rework.common.utils.AppSharePreference
 import com.example.speedtest_rework.common.utils.Constant
 import com.example.speedtest_rework.databinding.FragmentAdvancedPingBinding
 import com.example.speedtest_rework.ui.ping_test.advanced_ping_test.adapter.RecentAdapter
+import com.example.speedtest_rework.ui.ping_test.advanced_ping_test.interfaces.RecentHelper
 import com.example.speedtest_rework.ui.ping_test.model.ContentPingTest
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
 import com.github.mikephil.charting.animation.Easing
@@ -24,8 +31,9 @@ import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 
 
-class FragmentAdvancedPing : BaseFragment() {
+class FragmentAdvancedPing : BaseFragment(), RecentHelper {
     private lateinit var binding: FragmentAdvancedPingBinding
+    private var normalType = true
     private val viewMoDel: SpeedTestViewModel by activityViewModels()
     private var itemContentPingTest: ContentPingTest? = null
     private var barChart = ArrayList<BarEntry>()
@@ -42,13 +50,13 @@ class FragmentAdvancedPing : BaseFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
+        viewMoDel.setDataPingResult(mutableListOf())
         getDataFromBundle()
         initBarArrayData()
         initView()
         observeDataPing()
         observeListRecent()
+        observeFlagChangeBack()
 
     }
 
@@ -65,23 +73,38 @@ class FragmentAdvancedPing : BaseFragment() {
     private fun initView() {
         binding.containerValue.visibility = View.GONE
         binding.tvStart.visibility = View.VISIBLE
-
+        resetData()
+        initEditText()
         initRcv()
         initButton()
         initChart()
         changeBackPressCallBack()
     }
 
+    private fun initEditText() {
+        binding.edtUrl.setOnKeyListener { _, keyCode, keyEvent ->
+            if ((keyEvent.action == KeyEvent.ACTION_UP) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                doCheckPing(binding.edtUrl.text.toString())
+                return@setOnKeyListener true
+            }
+            return@setOnKeyListener false
+        }
+    }
+
     private fun initButton() {
         binding.btnBack.setOnClickListener {
             findNavController().popBackStack()
+
         }
         binding.btnStart.setOnClickListener {
+            viewMoDel.stopPing = false
             initBarArrayData()
             binding.btnStart.isEnabled = false
             binding.pbLoading.progress = 0
             binding.containerValue.visibility = View.VISIBLE
             binding.tvStart.visibility = View.GONE
+            binding.containerShowUrl.isEnabled = false
+
             val barDataSet = BarDataSet(barChart, null)
             val data = BarData(barDataSet)
             packetLoss = 0
@@ -91,10 +114,11 @@ class FragmentAdvancedPing : BaseFragment() {
             binding.graphView.data = data
             binding.graphView.invalidate()
             viewMoDel.getPingResultAdvanced(itemContentPingTest!!.url)
+
         }
 
         binding.imvDelete.setOnClickListener {
-            viewMoDel.deleteAllRecentAction()
+            viewMoDel.listRecent.value = listOf()
         }
     }
 
@@ -131,19 +155,18 @@ class FragmentAdvancedPing : BaseFragment() {
     private fun initRcv() {
         val linearLayoutManager = LinearLayoutManager(requireContext())
         linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
-        adapter = RecentAdapter()
+        adapter = RecentAdapter(this)
         binding.rcvEdit.layoutManager = linearLayoutManager
         binding.rcvEdit.adapter = adapter
     }
 
     private fun changeBackPressCallBack() {
-        val callback: OnBackPressedCallback =
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    findNavController().popBackStack()
+        val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findNavController().popBackStack()
 
-                }
             }
+        }
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
 
@@ -151,12 +174,19 @@ class FragmentAdvancedPing : BaseFragment() {
 
     private fun observeDataPing() {
         viewMoDel.listPingResultLive.observe(viewLifecycleOwner) {
+            Log.d("TAG", "observeDataPing: " + it.size)
             if (it.isNotEmpty()) {
                 if (it.size == 10) {
-                    binding.btnStart.isEnabled = true
+                    binding.tvStart.visibility = View.VISIBLE
+                    binding.containerShowUrl.isEnabled = true
+                    binding.containerValue.visibility = View.GONE
+                    with(binding.btnStart) {
+                        this.isEnabled = true
+                        this.visibility = View.VISIBLE
+                    }
                 }
-                binding.tvPacketSentValue.text = (it.size).toString()
                 setProgressAnimate(binding.pbLoading, it.size)
+                binding.tvPacketSentValue.text = (it.size).toString()
                 if (it[it.size - 1].isReachable) {
                     binding.pingValue.text = it[it.size - 1].ping_value.toString()
                     if (it[it.size - 1].ping_value > maxValue) {
@@ -201,39 +231,37 @@ class FragmentAdvancedPing : BaseFragment() {
 
                 barChart[it.size - 1] =
                     BarEntry(it.size.toFloat(), it[it.size - 1].ping_value.toFloat())
-                val barDataSet = BarDataSet(barChart, null)
-                barDataSet.setGradientColor(
-                    getColor(R.color.gradient_green_start_zero),
-                    getColor(R.color.gradient_green_start)
-                )
-                barDataSet.valueFormatter = ValueBarFormatter()
-                if (it[it.size - 1].isReachable) {
-                    barDataSet.setValueTextColors(colorsText)
+
+                BarDataSet(barChart, null).also { it1 ->
+                    it1.setGradientColor(
+                        getColor(R.color.gradient_green_start_zero),
+                        getColor(R.color.gradient_green_start)
+                    )
+                    it1.valueFormatter = ValueBarFormatter()
+                    if (it[it.size - 1].isReachable) {
+                        it1.setValueTextColors(colorsText)
+                    }
+                    data.addDataSet(it1)
                 }
 
-                data.addDataSet(barDataSet)
-                binding.graphView.notifyDataSetChanged()
-                binding.graphView.invalidate()
+                with(binding.graphView) {
+                    this.notifyDataSetChanged()
+                    this.invalidate()
+                }
+
             } else {
-                val data = BarData()
-                binding.graphView.data = data
-                binding.graphView.notifyDataSetChanged()
-                binding.graphView.invalidate()
+                resetData()
             }
         }
     }
 
-    private fun observeListRecent() {
-        viewMoDel.getListRecent().observe(viewLifecycleOwner) {
-            adapter.setList(it)
-        }
-    }
 
     private fun setProgressAnimate(pb: ProgressBar, progressTo: Int) {
         val animation: ObjectAnimator =
             ObjectAnimator.ofInt(pb, "progress", pb.progress, progressTo * 100)
-        animation.duration = 3000
-        animation.interpolator = DecelerateInterpolator()
+        animation.duration = 2000
+        animation.interpolator = LinearInterpolator()
+        animation.setAutoCancel(true)
         animation.start()
     }
 
@@ -243,11 +271,12 @@ class FragmentAdvancedPing : BaseFragment() {
 
     }
 
+
     override fun onDestroy() {
         super.onDestroy()
+        viewMoDel.stopPing = true
         viewMoDel.pingNormal?.cancel()
         viewMoDel.pingAdvanced?.cancel()
-        viewMoDel.setDataPingResult(mutableListOf())
     }
 
     private fun getDataFromBundle() {
@@ -257,8 +286,10 @@ class FragmentAdvancedPing : BaseFragment() {
             binding.title.text = item.title
             itemContentPingTest = item
             if (item.normal) {
+                normalType = true
                 binding.containerEdit.visibility = View.GONE
             } else {
+                normalType = false
                 handleFlowItemAdvance()
             }
         }
@@ -267,12 +298,144 @@ class FragmentAdvancedPing : BaseFragment() {
     private fun handleFlowItemAdvance() {
         binding.tvShowUrl.text = itemContentPingTest?.url
         binding.containerShowUrl.visibility = View.VISIBLE
-
         binding.containerShowUrl.setOnClickListener {
             it.visibility = View.GONE
             binding.containerEdit.visibility = View.VISIBLE
-            binding.edtUrl.isFocusable = true
+            binding.edtUrl.requestFocus()
+            viewMoDel.flagChangeBack.postValue(true)
         }
+    }
+
+    private fun checkUrl(input: String): Boolean {
+        return android.util.Patterns.WEB_URL.matcher(input).matches()
+    }
+
+    private fun observeFlagChangeBack() {
+        viewMoDel.flagChangeBack.observe(viewLifecycleOwner) {
+            if (it) {
+                binding.btnBack.setOnClickListener {
+                    binding.containerEdit.visibility = View.GONE
+                    binding.containerShowUrl.visibility = View.VISIBLE
+                    viewMoDel.flagChangeBack.postValue(false)
+                }
+            } else {
+                binding.btnBack.setOnClickListener {
+                    findNavController().popBackStack()
+                }
+            }
+        }
+    }
+
+    private fun observeListRecent() {
+        viewMoDel.listRecent.value = AppSharePreference.INSTANCE.getRecentList(
+            R.string.key_recent_list, listOf()
+        )
+        viewMoDel.listRecent.observe(viewLifecycleOwner) {
+            adapter.setList(it)
+            AppSharePreference.INSTANCE.saveRecentList(R.string.key_recent_list, it)
+        }
+    }
+
+
+    private fun doCheckPing(input: String) {
+        binding.tvShowUrl.text = input
+        if (checkUrl(input)) {
+            if (!input.startsWith("http://") || !input.startsWith("https://")) {
+                val address = "http://$input"
+                viewMoDel.getPingResultAdvanced(address)
+            } else {
+                viewMoDel.getPingResultAdvanced(input)
+            }
+            resetData()
+            binding.containerShowUrl.isEnabled = false
+
+            viewMoDel.flagChangeBack.postValue(false)
+            handleInsertNewRecent(input)
+        } else {
+            Toast.makeText(
+                requireContext(), getString(R.string.wrong_website_format), Toast.LENGTH_SHORT
+            ).show()
+        }
+
+    }
+
+    private fun handleInsertNewRecent(input: String) {
+        viewMoDel.listRecent.value?.let {
+            val mList = it.toMutableList()
+            var flag = true
+            mList.forEach { i ->
+                if (i == input) {
+                    mList.remove(i)
+                    mList.add(0, i)
+                    flag = false
+                }
+            }
+            if (flag) {
+                mList.add(0, input)
+            }
+            if (mList.size > 4) {
+                mList.removeAt(5)
+            }
+            viewMoDel.listRecent.value = mList
+        }
+
+    }
+
+    override fun onClickItem(input: String) {
+        hideKeyboard()
+        binding.tvShowUrl.text = input
+        resetData()
+        binding.containerValue.visibility = View.VISIBLE
+        binding.tvStart.visibility = View.GONE
+        viewMoDel.stopPing = false
+        if (!input.startsWith("http://") || !input.startsWith("https://")) {
+            val address = "http://$input"
+            viewMoDel.getPingResultAdvanced(address)
+        } else {
+            viewMoDel.getPingResultAdvanced(input)
+        }
+        binding.containerEdit.visibility = View.GONE
+        binding.containerShowUrl.visibility = View.VISIBLE
+        binding.containerShowUrl.isEnabled = false
+        viewMoDel.flagChangeBack.postValue(false)
+        handleInsertNewRecent(input)
+    }
+
+    private fun hideKeyboard() {
+        val imm: InputMethodManager =
+            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+
+        imm.hideSoftInputFromWindow(
+            requireView().windowToken, InputMethodManager.HIDE_NOT_ALWAYS
+        )
+    }
+
+    private fun resetData() {
+        hideKeyboard()
+        if (!normalType) {
+            binding.containerEdit.visibility = View.GONE
+            binding.containerShowUrl.visibility = View.VISIBLE
+            binding.containerShowUrl.isEnabled = true
+        }
+        binding.btnStart.isEnabled = true
+        binding.containerValue.visibility = View.GONE
+        binding.tvStart.visibility = View.VISIBLE
+        setProgressAnimate(binding.pbLoading,0)
+        binding.tvPacketLossValue.text = "0 %"
+        binding.tvPacketSentValue.text = "0"
+        binding.tvPacketReceivedValue.text = "0"
+
+        barChart = ArrayList()
+        packetReceived = 0
+        packetLoss = 0
+        maxValue = 0
+        colorsText = mutableListOf()
+        initBarArrayData()
+        val barDataSet = BarDataSet(barChart, null)
+        val data = BarData(barDataSet)
+        data.barWidth = .5f
+        binding.graphView.data = data
+        binding.graphView.invalidate()
     }
 
 }

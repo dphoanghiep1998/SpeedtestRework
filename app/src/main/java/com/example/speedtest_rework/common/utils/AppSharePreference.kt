@@ -2,8 +2,11 @@ package com.example.speedtest_rework.common.utils
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.preference.PreferenceManager
 import com.example.speedtest_rework.services.ServiceType
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 
 inline fun SharedPreferences.edit(func: SharedPreferences.Editor.() -> Unit) {
@@ -25,6 +28,14 @@ class AppSharePreference(private val context: Context) {
         }
     }
 
+    fun saveRecentList(key: Int, values: List<String>) {
+        saveStringList(key, values)
+    }
+
+    fun getRecentList(key: Int, defaultValues: List<String>): List<String> {
+        return getStringList(key, defaultValues)
+    }
+
     fun registerOnSharedPreferenceChangeListener(onSharedPreferenceChangeListener: SharedPreferences.OnSharedPreferenceChangeListener): Unit =
         sharedPreferences().registerOnSharedPreferenceChangeListener(
             onSharedPreferenceChangeListener
@@ -37,6 +48,7 @@ class AppSharePreference(private val context: Context) {
     fun getSavedIpRouter(key: Int, defaultValues: String): String {
         return getString(key, defaultValues)
     }
+
 
     fun saveIpLocal(key: Int, values: String) {
         saveString(key, values)
@@ -88,6 +100,25 @@ class AppSharePreference(private val context: Context) {
             sharedPreferences().getString(keyValue, defaultValues)!!
         } catch (e: Exception) {
             sharedPreferences().edit { putString(keyValue, defaultValues) }
+            defaultValues
+        }
+    }
+
+    private fun saveStringList(key: Int, values: List<String>): Unit {
+        val gson = Gson()
+        sharedPreferences().edit { putString(context.getString(key), gson.toJson(values)) }
+    }
+
+    private fun getStringList(key: Int, defaultValues: List<String>): List<String> {
+        val keyValue: String = context.getString(key)
+        val gson = Gson()
+        val type = object : TypeToken<List<String>>() {}.type
+        return try {
+            val returnString = sharedPreferences().getString(keyValue, gson.toJson(defaultValues))
+            gson.fromJson(returnString, type)
+        } catch (e: Exception) {
+
+            sharedPreferences().edit { putString(keyValue, gson.toJson(defaultValues)) }
             defaultValues
         }
     }

@@ -1,6 +1,7 @@
 package com.example.speedtest_rework.ui.ping_test
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,6 +33,11 @@ class FragmentPingTest : BaseFragment(), ItemHelper {
     private lateinit var data: List<ItemPingTest>
     private lateinit var rotate: RotateAnimation
 
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Log.d("TAG", "onCreate: ")
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

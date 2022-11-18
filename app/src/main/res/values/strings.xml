@@ -226,6 +226,8 @@
     <string name="packet_sent">Packet Sent</string>
     <string name="packet_received">Packet Receiced</string>
     <string name="history">History</string>
+    <string name="wrong_website_format">Wrong website url format</string>
+    <string name="key_recent_list">KEY_RECENT_LIST</string>
 
 
 </resources>

@@ -20,7 +20,6 @@ import com.example.speedtest_rework.data.model.HistoryModel
 import com.example.speedtest_rework.data.repositories.AppRepository
 import com.example.speedtest_rework.ui.data_usage.model.DataUsageModel
 import com.example.speedtest_rework.ui.main.analyzer.band.WiFiBand
-import com.example.speedtest_rework.ui.ping_test.advanced_ping_test.model.RecentModel
 import com.example.speedtest_rework.ui.ping_test.model.ContentPingTest
 import com.example.speedtest_rework.ui.ping_test.model.ItemPingTest
 import com.example.speedtest_rework.ui.ping_test.model.PingResultTest
@@ -60,11 +59,17 @@ class SpeedTestViewModel @Inject constructor(
     var pingAdvanced: Ping? = null
     var pingNormal: Ping? = null
     var wifiDetect: SubnetDevices? = null
+    var stopPing = true
     private val listPingResult = MutableLiveData<MutableList<PingResultTest>>()
+
+    var listRecent = MutableLiveData<List<String>>()
     val listPingResultLive: LiveData<MutableList<PingResultTest>> = listPingResult
     fun setDataPingResult(list: MutableList<PingResultTest>) {
         listPingResult.postValue(list)
     }
+
+
+    var flagChangeBack = MutableLiveData(false)
 
     private val listDataUsage: MutableLiveData<List<DataUsageModel>> = MutableLiveData()
     var listDevice: MutableLiveData<MutableList<DeviceModel>> = MutableLiveData(mutableListOf())
@@ -170,19 +175,6 @@ class SpeedTestViewModel @Inject constructor(
         viewModelScope.launch { appRepository.deleteHistory(historyModel) }
     }
 
-    fun deleteAllRecentAction() {
-        viewModelScope.launch { appRepository.deleteAllRecent() }
-    }
-
-    fun insertNewRecent(recentModel: RecentModel) {
-        viewModelScope.launch { appRepository.insertRecentModel(recentModel) }
-    }
-
-    fun getListRecent(): LiveData<List<RecentModel>> {
-        return appRepository.getAllRecent()
-    }
-
-
     fun deleteAllHistoryAction() {
         viewModelScope.launch { appRepository.deleteAllHistory() }
     }
@@ -199,25 +191,26 @@ class SpeedTestViewModel @Inject constructor(
                 val item = (it as ContentPingTest)
                 val url = URL(item.url)
                 pingNormal =
-                    Ping.onAddress(url.host).setTimeOutMillis(3000).setTimes(2).setDelayMillis(3000).let{it1->
-                        it1.doPing(object : PingListener {
-                            override fun onResult(pingResult: PingResult) {
-                            }
-
-                            override fun onFinished(pingStats: PingStats) {
-                                if (loop == 11) {
-                                    pingStatus.postValue(ScanStatus.DONE)
-                                } else {
-                                    pingStatus.postValue(ScanStatus.SCANNING)
+                    Ping.onAddress(url.host).setTimeOutMillis(1000).setTimes(2).setDelayMillis(1000)
+                        .let { it1 ->
+                            it1.doPing(object : PingListener {
+                                override fun onResult(pingResult: PingResult) {
                                 }
-                                it.value = pingStats.averageTimeTaken.roundToInt()
-                            }
 
-                            override fun onError(e: Exception) {
-                            }
-                        })
+                                override fun onFinished(pingStats: PingStats) {
+                                    if (loop == 11) {
+                                        pingStatus.postValue(ScanStatus.DONE)
+                                    } else {
+                                        pingStatus.postValue(ScanStatus.SCANNING)
+                                    }
+                                    it.value = pingStats.averageTimeTaken.roundToInt()
+                                }
 
-                    }
+                                override fun onError(e: Exception) {
+                                }
+                            })
+
+                        }
 
             }
 
@@ -226,31 +219,34 @@ class SpeedTestViewModel @Inject constructor(
     }
 
     fun getPingResultAdvanced(address: String) {
-        var listResult: MutableList<PingResultTest> = mutableListOf()
+        val listResult: MutableList<PingResultTest> = mutableListOf()
         viewModelScope.launch(Dispatchers.IO) {
             val url = URL(address)
             pingAdvanced =
-                Ping.onAddress(url.host).setTimeOutMillis(1000).setTimes(10).setDelayMillis(1000).let {
-                    it.doPing(object : PingListener {
+                Ping.onAddress(url.host).setTimeOutMillis(0).setTimes(10).setDelayMillis(1000)
+                    .doPing(object : PingListener {
                         override fun onResult(pingResult: PingResult) {
-                            listResult.add(
-                                PingResultTest(
-                                    pingResult.timeTaken.toInt(),
-                                    pingResult.isReachable
+                            if (!stopPing) {
+                                Log.d("TAG", "onResult: ")
+                                listResult.add(
+                                    PingResultTest(
+                                        pingResult.timeTaken.toInt(),
+                                        pingResult.isReachable
+                                    )
                                 )
-                            )
-                            listPingResult.postValue(listResult)
+                                listPingResult.postValue(listResult)
+                            }
+
                         }
 
                         override fun onFinished(pingStats: PingStats) {
-
+                            Log.d("TAG", "onFinished: ")
                         }
 
                         override fun onError(e: Exception) {
+                            e.printStackTrace()
                         }
                     })
-
-                }
         }
 
 
@@ -302,5 +298,6 @@ class SpeedTestViewModel @Inject constructor(
         }
         registerJobFinish()
     }
+
 
 }
