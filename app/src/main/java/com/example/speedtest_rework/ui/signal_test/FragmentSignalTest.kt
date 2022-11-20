@@ -8,7 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,7 +17,7 @@ import com.example.speedtest_rework.base.fragment.BaseFragment
 import com.example.speedtest_rework.common.utils.NetworkUtils
 import com.example.speedtest_rework.databinding.FragmentSignalTestBinding
 import com.example.speedtest_rework.ui.signal_test.adapter.SignalLocationAdapter
-import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
+import com.example.speedtest_rework.viewmodel.FragmentSignalTestViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -25,7 +25,7 @@ import kotlinx.coroutines.launch
 
 class FragmentSignalTest : BaseFragment() {
     private lateinit var binding: FragmentSignalTestBinding
-    private val viewModel: SpeedTestViewModel by activityViewModels()
+    private val viewModel: FragmentSignalTestViewModel by viewModels()
     private lateinit var adapter: SignalLocationAdapter
     private var currentValue = 0
     private lateinit var job: Job

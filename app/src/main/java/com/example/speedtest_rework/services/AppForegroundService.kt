@@ -11,7 +11,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.TrafficStats
 import android.os.IBinder
-import android.util.Log
 import android.view.View
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
@@ -334,10 +333,10 @@ class AppForegroundService : Service() {
     fun startService(context: Context, sType: ServiceType) {
         val intent = Intent(context, AppForegroundService::class.java)
         serviceType = if (serviceType != sType && serviceType != ServiceType.NONE) {
-            AppSharePreference.INSTANCE.saveServiceType(R.string.service_type_key, ServiceType.BOTH)
+            AppSharePreference.INSTANCE.saveServiceType(ServiceType.BOTH)
             ServiceType.BOTH
         } else {
-            AppSharePreference.INSTANCE.saveServiceType(R.string.service_type_key, sType)
+            AppSharePreference.INSTANCE.saveServiceType(sType)
             sType
         }
         if (buildMinVersionO()) {
@@ -355,7 +354,7 @@ class AppForegroundService : Service() {
                     ServiceType.DATA_USAGE -> {
                         hideViewDataUsage()
                         AppSharePreference.INSTANCE.saveServiceType(
-                            R.string.service_type_key,
+
                             ServiceType.SPEED_MONITOR
                         )
                         isServiceDataUsageStarted = false
@@ -365,7 +364,7 @@ class AppForegroundService : Service() {
                     else -> {
                         hideViewSpeedMonitor()
                         AppSharePreference.INSTANCE.saveServiceType(
-                            R.string.service_type_key,
+
                             ServiceType.DATA_USAGE
                         )
                         isServiceSpeedMonitorStarted = false
@@ -376,7 +375,7 @@ class AppForegroundService : Service() {
             else -> {
                 serviceType = ServiceType.NONE
                 AppSharePreference.INSTANCE.saveServiceType(
-                    R.string.service_type_key,
+
                     ServiceType.NONE
                 )
                 isServiceDataUsageStarted = false

@@ -196,7 +196,6 @@
     <string name="des_signal_second">-Move around, tap Record to note down signal strength on your spot</string>
     <string name="wifi_detector_title">WIFI DETECTOR</string>
     <string name="device_detector">"devices are using this Wi-Fi"</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="ping_test_title">PING TEST</string>
     <string name="customized">Customized</string>
@@ -224,12 +223,14 @@
     <string name="ip_router">ip_router</string>
     <string name="packet_loss">Packet Loss</string>
     <string name="packet_sent">Packet Sent</string>
-    <string name="packet_received">Packet Receiced</string>
+    <string name="packet_received">Packet Received</string>
     <string name="history">History</string>
+    <string name="wrong_website_format">Wrong website url format</string>
+    <string name="key_recent_list">KEY_RECENT_LIST</string>
     <string name="ok">OK</string>
     <string name="min_latency">Min Latency</string>
     <string name="avg_latency">Avg Latency</string>
-    <string name="packet_latency">Packet Latency</string>
+    <string name="max_latency">Max Latency</string>
 
 
 </resources>

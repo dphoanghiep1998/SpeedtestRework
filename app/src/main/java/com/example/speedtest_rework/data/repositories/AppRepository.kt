@@ -4,19 +4,15 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.example.speedtest_rework.R
 import com.example.speedtest_rework.common.utils.AppSharePreference
 import com.example.speedtest_rework.core.getIP.CurrentNetworkInfo
 import com.example.speedtest_rework.data.model.HistoryModel
 import com.example.speedtest_rework.data.services.AddressInfoRemoteService
 import com.example.speedtest_rework.data.services.HistoryLocalService
 import com.example.speedtest_rework.data.services.PrivilegedService
-import com.example.speedtest_rework.data.services.RecentLocalService
 import com.example.speedtest_rework.di.IoDispatcher
 import com.example.speedtest_rework.network.NetworkResult
 import com.example.speedtest_rework.ui.data_usage.model.DataUsageModel
-import com.example.speedtest_rework.ui.ping_test.advanced_ping_test.model.RecentModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -25,7 +21,6 @@ import javax.inject.Inject
 class AppRepository @Inject constructor(
     private val addressInfoRemoteService: AddressInfoRemoteService,
     private val historyLocalService: HistoryLocalService,
-    private val recentLocalService: RecentLocalService,
     private val privilegeService: PrivilegedService,
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) {
@@ -47,19 +42,6 @@ class AppRepository @Inject constructor(
     fun getAllHistory(): LiveData<List<HistoryModel>> =
         historyLocalService.historyDao.getListHistory()
 
-    suspend fun insertRecentModel(model: RecentModel) = withContext(dispatcher) {
-        recentLocalService.recentDao.insertRecent(model.toRecentEntity())
-    }
-
-    suspend fun deleteAllRecent() =
-        withContext(dispatcher) {
-            recentLocalService.recentDao.deleteAllRecent()
-        }
-
-
-    fun getAllRecent(): LiveData<List<RecentModel>> =
-        recentLocalService.recentDao.getListRecent()
-
 
     suspend fun getAddressInfo() = withContext(dispatcher) {
         when (val result = addressInfoRemoteService.getAddressInfoList()) {
@@ -77,21 +59,19 @@ class AppRepository @Inject constructor(
         var currentNetworkInfo: CurrentNetworkInfo
         withContext(dispatcher) {
             currentNetworkInfo = CurrentNetworkInfo().currentNetWorkInfo
-            AppSharePreference.INSTANCE.saveIpRouter(R.string.ip_router,"https://www.google.com")
+            AppSharePreference.INSTANCE.saveIpRouter("https://www.google.com")
         }
         return currentNetworkInfo
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
     suspend fun getDataUsageList(): List<DataUsageModel> {
-        var mList:List<DataUsageModel>
-        withContext(dispatcher){
+        var mList: List<DataUsageModel>
+        withContext(dispatcher) {
             mList = privilegeService.getUsageData()
         }
         return mList
     }
-
-
 
 
 }

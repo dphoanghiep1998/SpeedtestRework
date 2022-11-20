@@ -5,6 +5,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.speedtest_rework.base.fragment.BaseFragment
+import com.example.speedtest_rework.ui.main.result_history.FragmentResults
 
 class ViewPagerAdapter(
     list: ArrayList<BaseFragment>,

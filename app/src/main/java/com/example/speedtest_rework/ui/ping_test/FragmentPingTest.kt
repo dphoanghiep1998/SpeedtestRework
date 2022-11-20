@@ -8,44 +8,45 @@ import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
 import android.view.animation.RotateAnimation
 import androidx.activity.OnBackPressedCallback
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.fragment.BaseFragment
 import com.example.speedtest_rework.common.utils.AppSharePreference
-import com.example.speedtest_rework.common.utils.Constant
 import com.example.speedtest_rework.databinding.FragmentPingTestBinding
 import com.example.speedtest_rework.ui.ping_test.adapter.PingTestAdapter
+import com.example.speedtest_rework.ui.ping_test.advanced_ping_test.FragmentAdvancedPing
 import com.example.speedtest_rework.ui.ping_test.interfaces.ItemHelper
 import com.example.speedtest_rework.ui.ping_test.model.ContentPingTest
 import com.example.speedtest_rework.ui.ping_test.model.ItemPingTest
 import com.example.speedtest_rework.ui.ping_test.model.TitlePingTest
+import com.example.speedtest_rework.viewmodel.FragmentPingTestViewModel
 import com.example.speedtest_rework.viewmodel.ScanStatus
-import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
 
 
 class FragmentPingTest : BaseFragment(), ItemHelper {
     private lateinit var binding: FragmentPingTestBinding
     private lateinit var adapter: PingTestAdapter
-    private val viewModel: SpeedTestViewModel by activityViewModels()
+    private val viewModel: FragmentPingTestViewModel by viewModels()
     private lateinit var data: List<ItemPingTest>
     private lateinit var rotate: RotateAnimation
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
         binding = FragmentPingTestBinding.inflate(layoutInflater)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        observePingDone()
         initView()
         changeBackPressCallBack()
+        observePingDone()
+
     }
 
     private fun changeBackPressCallBack() {
@@ -53,10 +54,8 @@ class FragmentPingTest : BaseFragment(), ItemHelper {
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     findNavController().popBackStack()
-
                 }
             }
-
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
 
     }
@@ -96,16 +95,19 @@ class FragmentPingTest : BaseFragment(), ItemHelper {
             ),
             ContentPingTest(
                 getString(R.string.router),
-                AppSharePreference.INSTANCE.getSavedIpRouter(
-                    R.string.ip_router,
-                    "https://www.google.com"
-                )
+                AppSharePreference.INSTANCE.getSavedIpRouter("https://www.google.com")
             )
 
         )
         initAnimation()
         initRecycleView()
         initButton()
+        startAction()
+    }
+
+    private fun startAction(){
+        binding.btnReload.startAnimation(rotate)
+        viewModel.getPingResult(data)
     }
 
     private fun initButton() {
@@ -152,12 +154,8 @@ class FragmentPingTest : BaseFragment(), ItemHelper {
     }
 
     override fun onClickItemPing(item: ContentPingTest) {
-        val bundle = Bundle()
-        bundle.putParcelable(Constant.KEY_ITEM_PING, item)
-        findNavController().navigate(
-            R.id.action_fragmentPingTest_to_fragmentAdvancedPing,
-            bundle
-        )
+        val fragmentAdvancedPing = FragmentAdvancedPing(item)
+        fragmentAdvancedPing.show(childFragmentManager,"")
     }
 
 }

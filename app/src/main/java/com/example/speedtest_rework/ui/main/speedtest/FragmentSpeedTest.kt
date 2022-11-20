@@ -59,7 +59,6 @@ class FragmentSpeedTest : BaseFragment() {
 
 
     private fun initView() {
-        initSpeedView()
         initExpandView()
     }
 
@@ -69,11 +68,6 @@ class FragmentSpeedTest : BaseFragment() {
 
     private fun loadServer() {
         viewModel.doMultiTask()
-    }
-
-    private fun initSpeedView() {
-        Log.d("TAG", "hasHardwareAcceleration: " + hasHardwareAcceleration(requireActivity()))
-
     }
 
     private fun initExpandView() {
@@ -186,25 +180,19 @@ class FragmentSpeedTest : BaseFragment() {
     }
 
     private fun getUnitTypeFromPref(): String {
-        return INSTANCE.getUnitType(
-            R.string.unit_preference,
-            getString(R.string.Mbps)
-        )
+        return INSTANCE.getUnitType(getString(R.string.Mbps))
     }
 
     private fun saveUnitTypeToPref(value: String) {
-        INSTANCE.saveUnitType(R.string.unit_preference, value)
+        INSTANCE.saveUnitType(value)
     }
 
     private fun getUnitValueFromPref(): String {
-        return INSTANCE.getUnitValue(
-            R.string.unit_value_preference,
-            getString(R.string.val_100)
-        )
+        return INSTANCE.getUnitValue(getString(R.string.val_100))
     }
 
     private fun saveUnitValueToPref(value: String) {
-        INSTANCE.saveUnitValue(R.string.unit_value_preference, value)
+        INSTANCE.saveUnitValue(value)
     }
 
     private fun valueWhenUnitSelected(unit: UnitType) {
@@ -267,7 +255,7 @@ class FragmentSpeedTest : BaseFragment() {
                     NetworkUtils.wifiIpAddress(),
                     viewModel.currentNetworkInfo.selfIspIp,
                     viewModel.currentNetworkInfo.selfIsp,
-                    0.0, 0.0, "wifi", 0.0, Date(), 0.0, 0.0
+                    0.0, 0.0, "wifi", 0.0, Date(System.currentTimeMillis()), 0.0, 0.0
                 )
                 binding.clSpeedview.setData(testPoint!!, ConnectionType.WIFI, testModel, viewModel)
 
@@ -278,7 +266,7 @@ class FragmentSpeedTest : BaseFragment() {
                     "0.0.0.0",
                     viewModel.currentNetworkInfo.selfIspIp,
                     viewModel.currentNetworkInfo.selfIsp,
-                    0.0, 0.0, "mobile", 0.0, Date(), 0.0, 0.0
+                    0.0, 0.0, "mobile", 0.0, Date(System.currentTimeMillis()), 0.0, 0.0
                 )
                 binding.clSpeedview.setData(
                     testPoint!!,
@@ -403,32 +391,36 @@ class FragmentSpeedTest : BaseFragment() {
 
     private fun observeScanStatus() {
         viewModel.mScanStatus.observe(viewLifecycleOwner) {
-            if (it == ScanStatus.DONE) {
-                binding.clSpeedview.onScanningDone()
+            when (it) {
+                ScanStatus.DONE -> {
+                    binding.clSpeedview.onScanningDone()
 
-                YoYo.with(Techniques.SlideInLeft).duration(300L).onStart {
-                    YoYo.with(Techniques.FadeOut).duration(100L).onEnd {
-                        binding.inforHidden.visibility = View.GONE
+                    YoYo.with(Techniques.SlideInLeft).duration(300L).onStart {
+                        YoYo.with(Techniques.FadeOut).duration(100L).onEnd {
+                            binding.inforHidden.visibility = View.GONE
 
-                    }.playOn(binding.inforHidden)
+                        }.playOn(binding.inforHidden)
+                    }
+                        .playOn(binding.containerExpandView)
                 }
-                    .playOn(binding.containerExpandView)
-            } else if (it == ScanStatus.SCANNING) {
-                YoYo.with(Techniques.SlideOutLeft).duration(300L).onEnd {
-                    YoYo.with(Techniques.FadeIn).duration(100L).onStart {
-                        binding.inforHidden.visibility = View.VISIBLE
-                    }.playOn(binding.inforHidden)
+                ScanStatus.SCANNING -> {
+                    YoYo.with(Techniques.SlideOutLeft).duration(300L).onEnd {
+                        YoYo.with(Techniques.FadeIn).duration(100L).onStart {
+                            binding.inforHidden.visibility = View.VISIBLE
+                        }.playOn(binding.inforHidden)
+                    }
+                        .playOn(binding.containerExpandView)
                 }
-                    .playOn(binding.containerExpandView)
-            } else {
-                binding.clSpeedview.resetView()
-                YoYo.with(Techniques.SlideInLeft).duration(300L).onStart {
-                    YoYo.with(Techniques.FadeOut).duration(100L).onEnd {
-                        binding.inforHidden.visibility = View.GONE
+                else -> {
+                    binding.clSpeedview.resetView()
+                    YoYo.with(Techniques.SlideInLeft).duration(300L).onStart {
+                        YoYo.with(Techniques.FadeOut).duration(100L).onEnd {
+                            binding.inforHidden.visibility = View.GONE
 
-                    }.playOn(binding.inforHidden)
+                        }.playOn(binding.inforHidden)
+                    }
+                        .playOn(binding.containerExpandView)
                 }
-                    .playOn(binding.containerExpandView)
             }
         }
     }

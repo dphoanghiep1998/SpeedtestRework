@@ -24,8 +24,7 @@
         <action
             android:id="@+id/action_fragmentMain_to_fragmentResultDetail"
             app:destination="@id/fragmentDetail"
-            app:enterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_left" />
+            app:enterAnim="@anim/slide_in_left" />
         <action
             android:id="@+id/action_fragmentMain_to_fragmentDataUsage"
             app:destination="@id/fragmentDataUsage"
@@ -67,7 +66,7 @@
             android:id="@+id/action_fragmentTools_to_fragmentDataUsage"
             app:destination="@id/fragmentDataUsage"
             app:enterAnim="@anim/fade_in"
-            app:popExitAnim="@anim/fade_out" />
+            app:popExitAnim="@anim/slide_out_left" />
         <action
             android:id="@+id/action_fragmentTools_to_fragmentSignalTest"
             app:destination="@id/fragmentSignalTest"
@@ -98,16 +97,5 @@
         android:id="@+id/fragmentPingTest"
         android:name="com.example.speedtest_rework.ui.ping_test.FragmentPingTest"
         android:label="fragment_ping_test"
-        tools:layout="@layout/fragment_ping_test" >
-        <action
-            android:id="@+id/action_fragmentPingTest_to_fragmentAdvancedPing"
-            app:destination="@id/fragmentAdvancedPing"
-            app:enterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
-    </fragment>
-    <fragment
-        android:id="@+id/fragmentAdvancedPing"
-        android:name="com.example.speedtest_rework.ui.ping_test.advanced_ping_test.FragmentAdvancedPing"
-        android:label="fragment_advanced_ping"
-        tools:layout="@layout/fragment_advanced_ping" />
+        tools:layout="@layout/fragment_ping_test" />
 </navigation>

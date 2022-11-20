@@ -13,7 +13,7 @@ class WifiDetectorAdapter(private val listener: ItemDeviceHelper) :
     RecyclerView.Adapter<WifiDetectorAdapter.WifiDetectorViewHolder>() {
     private var mList: List<DeviceModel> = mutableListOf()
     private var actionDone = true
-    private var savedSetIp = AppSharePreference.INSTANCE.getIpList(R.string.ip_list_key, hashSetOf())
+    private var savedSetIp = AppSharePreference.INSTANCE.getIpList(hashSetOf())
     fun setData(list: List<DeviceModel>, actionDone: Boolean) {
         mList = list
         this.actionDone = actionDone
@@ -49,7 +49,7 @@ class WifiDetectorAdapter(private val listener: ItemDeviceHelper) :
                 } else {
                     savedSetIp.add(mList[position].device_ip)
                 }
-                AppSharePreference.INSTANCE.saveIpList(R.string.ip_list_key, savedSetIp)
+                AppSharePreference.INSTANCE.saveIpList(savedSetIp)
                 notifyItemChanged(position)
             }
             binding.imvFlag.isEnabled = actionDone

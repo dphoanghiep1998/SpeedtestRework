@@ -13,7 +13,7 @@ public abstract class SpeedtestWorker extends Thread {
     private TestPoint backend;
     private SpeedtestConfig config;
     private boolean stopASAP = false;
-    private double dl = -1, ul = -1, ping = -1, jitter = -1;
+    private double dl = -1, ul = -1, ping = -1, jitter = -1,count=0,sumDiff=0;
 
 
     public SpeedtestWorker(TestPoint backend, SpeedtestConfig config) {
@@ -179,7 +179,10 @@ public abstract class SpeedtestWorker extends Thread {
                     jitter = 0;
                 } else {
                     double j = Math.abs(ms - prevPing);
-                    jitter = j > jitter ? (jitter * 0.3 + j * 0.7) : (jitter * 0.8 + j * 0.2);
+                    sumDiff += j;
+                    count++;
+                    jitter = sumDiff/count;
+//                    jitter = j > jitter ? (jitter * 0.3 + j * 0.7) : (jitter * 0.8 + j * 0.2);
                 }
                 prevPing = ms;
                 double progress = counter / (double) config.getCount_ping();

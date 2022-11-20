@@ -4,6 +4,7 @@ import android.R
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
+import android.text.SpannableStringBuilder
 import android.view.ViewGroup
 import android.view.Window
 import com.example.speedtest_rework.databinding.DialogPingInfoBinding
@@ -12,14 +13,14 @@ interface PingInfoCallBack{
     fun onOk()
 }
 class PingInfoDialog(
-    context: Context, private val callback: PingInfoCallBack,
+    context: Context,
     private val url: String,
     private val packetLoss: String?,
     private val packetSent: String?,
     private val packetReceive: String?,
     private val minLatency: String?,
     private val avgLatency: String?,
-    private val packetLatency: String?,
+    private val maxLatency: String?,
 ) : Dialog(context) {
     private lateinit var binding: DialogPingInfoBinding
 
@@ -38,15 +39,15 @@ class PingInfoDialog(
         )
         window?.setBackgroundDrawableResource(R.color.transparent)
 
-        binding.tvTitle.text = "Success to connect to \\n ${url}"
-        binding.tvPacketLossValue.text = packetLoss
+
+        binding.tvTitle.text = "Success to connect to \n${url}"
+        binding.tvPacketLossValue.text = "$packetLoss%"
         binding.tvPacketReceivedValue.text = packetReceive
         binding.tvPacketSentValue.text = packetSent
         binding.tvAvgLatencyValue.text = avgLatency
         binding.tvMinLatencyValue.text = minLatency
-        binding.tvPacketLatencyValue.text = packetLatency
+        binding.tvMaxLatencyValue.text = maxLatency
         binding.tvOk.setOnClickListener{
-            callback.onOk()
             dismiss()
         }
         binding.root.setOnClickListener {

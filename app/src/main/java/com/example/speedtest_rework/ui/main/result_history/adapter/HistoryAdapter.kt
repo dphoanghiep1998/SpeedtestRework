@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.common.utils.DateTimeUtils
@@ -18,9 +19,12 @@ class HistoryAdapter(resultTouchHelper: ResultTouchHelper) :
     private var mList: List<HistoryModel>? = null
     private val resultTouchHelper: ResultTouchHelper
     private var unitType = UnitType.MBPS
-    fun setData(mList: List<HistoryModel>?) {
-        this.mList = mList
-        notifyDataSetChanged()
+
+    fun setData(newList: List<HistoryModel>?) {
+        val oldList = mList
+        val result = DiffUtil.calculateDiff(MyDiffUtilCallBack(newList,oldList))
+        this.mList = newList
+        result.dispatchUpdatesTo(this)
     }
 
     fun setData(unitType: UnitType) {

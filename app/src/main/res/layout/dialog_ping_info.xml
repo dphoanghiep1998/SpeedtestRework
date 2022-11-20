@@ -14,10 +14,10 @@
         android:layout_height="wrap_content"
         android:background="@drawable/background_dialog_ping"
         android:paddingVertical="@dimen/_16sdp"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/imv_chatBot"
@@ -44,141 +44,206 @@
 
         <TextView
             android:id="@+id/tv_packet_loss_value"
-            android:layout_marginTop="@dimen/_16sdp"
-            app:layout_constraintTop_toBottomOf="@id/tv_title"
-            app:layout_constraintStart_toStartOf="@id/tv_packet_loss_title"
-            app:layout_constraintEnd_toEndOf="@id/tv_packet_loss_title"
-            app:layout_constraintBottom_toTopOf="@id/tv_packet_loss_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_16sdp"
             android:textColor="@color/gray_900"
-            android:text="0%"/>
+            android:textFontWeight="500"
+            android:textSize="@dimen/_14sdp"
+            app:layout_constraintBottom_toTopOf="@id/tv_packet_loss_title"
+            app:layout_constraintEnd_toEndOf="@id/tv_packet_loss_title"
+            app:layout_constraintStart_toStartOf="@id/tv_packet_loss_title"
+            app:layout_constraintTop_toBottomOf="@id/tv_title" />
+
         <TextView
             android:id="@+id/tv_packet_loss_title"
-            android:layout_marginStart="@dimen/_16sdp"
-            app:layout_constraintTop_toBottomOf="@id/tv_packet_loss_value"
-            app:layout_constraintStart_toStartOf="parent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_16sdp"
+            android:text="@string/packet_loss"
+            android:textSize="@dimen/_10sdp"
             android:textColor="@color/gray_500"
-            android:text="@string/packet_loss"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_packet_loss_value" />
+
         <TextView
             android:id="@+id/tv_packet_sent_value"
-            app:layout_constraintStart_toEndOf="@id/tv_packet_loss_value"
-            app:layout_constraintTop_toTopOf="@id/tv_packet_loss_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/gray_900"
+            android:textFontWeight="500"
+            android:textSize="@dimen/_14sdp"
             app:layout_constraintEnd_toStartOf="@id/tv_packet_received_value"
+            app:layout_constraintStart_toEndOf="@id/tv_packet_loss_value"
+            app:layout_constraintTop_toTopOf="@id/tv_packet_loss_value" />
+
+        <TextView
+            android:id="@+id/tv_packet_sent_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/packet_sent"
+            android:textSize="@dimen/_10sdp"
+            android:textColor="@color/gray_500"
+            app:layout_constraintEnd_toEndOf="@id/tv_packet_sent_value"
+            app:layout_constraintStart_toStartOf="@id/tv_packet_sent_value"
+            app:layout_constraintTop_toBottomOf="@id/tv_packet_sent_value" />
+
+        <TextView
+            android:id="@+id/tv_packet_received_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/gray_900"
-            android:text="@string/zero_value"/>
-        <TextView
-            android:id="@+id/tv_packet_sent_title"
-            app:layout_constraintTop_toBottomOf="@id/tv_packet_sent_value"
-            app:layout_constraintStart_toStartOf="@id/tv_packet_sent_value"
-            app:layout_constraintEnd_toEndOf="@id/tv_packet_sent_value"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/gray_500"
-            android:text="@string/packet_sent"/>
-        <TextView
-            android:id="@+id/tv_packet_received_value"
-            app:layout_constraintTop_toTopOf="@id/tv_packet_sent_value"
+            android:textFontWeight="500"
+            android:textSize="@dimen/_14sdp"
             app:layout_constraintBottom_toTopOf="@id/tv_packet_received_title"
             app:layout_constraintEnd_toEndOf="@id/tv_packet_received_title"
             app:layout_constraintStart_toStartOf="@id/tv_packet_received_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/gray_900"
-            android:text="@string/zero_value"/>
+            app:layout_constraintTop_toTopOf="@id/tv_packet_sent_value" />
+
         <TextView
             android:id="@id/tv_packet_received_title"
-            app:layout_constraintTop_toBottomOf="@id/tv_packet_received_value"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/_16sdp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:textSize="@dimen/_10sdp"
+            android:text="@string/packet_received"
             android:textColor="@color/gray_500"
-            android:text="@string/packet_received"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_packet_received_value" />
 
 
-<!--sdadadasdsadasdasdsajguguiguguiguguygiugiuhiuhud-->
+        <!--sdadadasdsadasdasdsajguguiguguiguguygiugiuhiuhud-->
 
-
-        <TextView
-            android:id="@+id/tv_min_latency_value"
-            app:layout_constraintTop_toBottomOf="@id/tv_packet_loss_title"
-            app:layout_constraintStart_toStartOf="@id/tv_min_latency_title"
-            app:layout_constraintEnd_toEndOf="@id/tv_min_latency_title"
-            app:layout_constraintBottom_toTopOf="@id/tv_min_latency_title"
-            android:layout_marginTop="@dimen/_32sdp"
+        <LinearLayout
+            android:id="@+id/container_min_latency_value"
+            android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/gray_900"
-            android:text="0 ms"/>
+            android:layout_marginTop="@dimen/_32sdp"
+            app:layout_constraintBottom_toTopOf="@id/tv_min_latency_title"
+            app:layout_constraintEnd_toEndOf="@id/tv_min_latency_title"
+            app:layout_constraintStart_toStartOf="@id/tv_min_latency_title"
+            app:layout_constraintTop_toBottomOf="@id/tv_packet_loss_title">
+
+            <TextView
+                android:id="@+id/tv_min_latency_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/gray_900"
+                android:textFontWeight="500"
+                android:textSize="@dimen/_14sdp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" ms"
+                android:textFontWeight="500"
+                android:textColor="@color/gray_900"
+                android:textSize="@dimen/_8sdp" />
+        </LinearLayout>
+
         <TextView
             android:id="@+id/tv_min_latency_title"
-            app:layout_constraintTop_toBottomOf="@id/tv_min_latency_value"
-            app:layout_constraintStart_toStartOf="@id/tv_packet_loss_title"
-            app:layout_constraintEnd_toEndOf="@id/tv_packet_loss_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/min_latency"
+            android:textSize="@dimen/_10sdp"
             android:textColor="@color/gray_500"
-            android:text="@string/min_latency"/>
-        <TextView
-            android:id="@+id/tv_avg_latency_value"
-            app:layout_constraintStart_toStartOf="@id/tv_packet_sent_title"
-            app:layout_constraintTop_toTopOf="@id/tv_min_latency_value"
-            app:layout_constraintEnd_toEndOf="@id/tv_packet_sent_title"
-            app:layout_constraintBottom_toTopOf="@id/tv_avg_latency_title"
+            app:layout_constraintEnd_toEndOf="@id/tv_packet_loss_title"
+            app:layout_constraintStart_toStartOf="@id/tv_packet_loss_title"
+            app:layout_constraintTop_toBottomOf="@id/container_min_latency_value" />
+
+        <LinearLayout
+            android:id="@+id/container_avg_latency_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/gray_900"
-            android:text="0 ms"/>
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toTopOf="@id/tv_avg_latency_title"
+            app:layout_constraintEnd_toEndOf="@id/tv_packet_sent_title"
+            app:layout_constraintStart_toStartOf="@id/tv_packet_sent_title"
+            app:layout_constraintTop_toTopOf="@id/container_min_latency_value">
+
+            <TextView
+                android:id="@+id/tv_avg_latency_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/gray_900"
+                android:textFontWeight="500"
+                android:textSize="@dimen/_14sdp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" ms"
+                android:textFontWeight="500"
+                android:textColor="@color/gray_900"
+                android:textSize="@dimen/_8sdp" />
+        </LinearLayout>
+
         <TextView
             android:id="@+id/tv_avg_latency_title"
-            app:layout_constraintTop_toBottomOf="@id/tv_avg_latency_value"
-            app:layout_constraintStart_toStartOf="@id/tv_packet_sent_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/avg_latency"
+            android:textSize="@dimen/_10sdp"
+            android:textColor="@color/gray_500"
             app:layout_constraintEnd_toEndOf="@id/tv_packet_sent_title"
+            app:layout_constraintStart_toStartOf="@id/tv_packet_sent_title"
+            app:layout_constraintTop_toBottomOf="@id/container_avg_latency_value" />
+
+        <LinearLayout
+            android:id="@+id/container_max_latency_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@id/tv_max_latency_title"
+            app:layout_constraintEnd_toEndOf="@id/tv_max_latency_title"
+            app:layout_constraintStart_toStartOf="@id/tv_max_latency_title"
+            app:layout_constraintTop_toTopOf="@id/container_avg_latency_value">
+
+            <TextView
+                android:id="@+id/tv_max_latency_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/gray_900"
+                android:textFontWeight="500"
+                android:textSize="@dimen/_14sdp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" ms"
+                android:textFontWeight="500"
+                android:textColor="@color/gray_900"
+                android:textSize="@dimen/_8sdp" />
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/tv_max_latency_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/max_latency"
             android:textColor="@color/gray_500"
-            android:text="@string/avg_latency"/>
-        <TextView
-            android:id="@+id/tv_packet_latency_value"
-            app:layout_constraintTop_toTopOf="@id/tv_avg_latency_value"
-            app:layout_constraintBottom_toTopOf="@id/tv_packet_latency_title"
-            app:layout_constraintEnd_toEndOf="@id/tv_packet_latency_title"
-            app:layout_constraintStart_toStartOf="@id/tv_packet_latency_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/gray_900"
-            android:text="0 ms"/>
-        <TextView
-            android:id="@+id/tv_packet_latency_title"
-            app:layout_constraintTop_toBottomOf="@id/tv_packet_latency_value"
-            app:layout_constraintStart_toStartOf="@id/tv_packet_received_title"
+            android:textSize="@dimen/_10sdp"
             app:layout_constraintEnd_toEndOf="@id/tv_packet_received_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/gray_500"
-            android:text="@string/packet_latency"/>
+            app:layout_constraintStart_toStartOf="@id/tv_packet_received_title"
+            app:layout_constraintTop_toBottomOf="@id/container_max_latency_value" />
 
         <com.example.speedtest_rework.common.custom_view.GradientText
             android:id="@+id/tv_ok"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_16sdp"
-            app:layout_constraintTop_toBottomOf="@id/tv_packet_latency_title"
-            app:colorFirst="@color/gradient_green_end"
             android:foreground="?android:selectableItemBackgroundBorderless"
-            app:colorSecond="@color/gradient_green_start"
-            android:text="@string/ok"
-            android:textSize="@dimen/_16sdp"
             android:paddingHorizontal="@dimen/_16sdp"
             android:paddingVertical="@dimen/_16sdp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-
+            android:text="@string/ok"
+            android:textSize="@dimen/_16sdp"
+            app:colorFirst="@color/gradient_green_end"
+            app:colorSecond="@color/gradient_green_start"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_max_latency_title" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,7 +9,6 @@ import android.content.res.Configuration
 import android.net.wifi.p2p.WifiP2pDeviceList
 import android.net.wifi.p2p.WifiP2pManager
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import android.view.Window
 import android.view.WindowManager
@@ -18,16 +17,17 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.NavHostFragment
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.activity.BaseActivity
-import com.example.speedtest_rework.common.utils.*
+import com.example.speedtest_rework.common.utils.AppSharePreference
+import com.example.speedtest_rework.common.utils.Constant
+import com.example.speedtest_rework.common.utils.createContext
 import com.example.speedtest_rework.databinding.ActivityMainBinding
 import com.example.speedtest_rework.receivers.ConnectivityListener
-import com.example.speedtest_rework.ui.wifi_detector.model.DeviceModel
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
 @AndroidEntryPoint
-class MainActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceChangeListener,WifiP2pManager.PeerListListener {
+class MainActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceChangeListener{
     private lateinit var binding: ActivityMainBinding
     private var navHostFragment: NavHostFragment? = null
     val viewModel: SpeedTestViewModel by viewModels()
@@ -36,7 +36,6 @@ class MainActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceChangeL
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("TAG", "onCreate: ")
         changeStatusBarColor()
         binding = ActivityMainBinding.inflate(layoutInflater)
         initLocaleViewModel()
@@ -52,7 +51,6 @@ class MainActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceChangeL
             newBase.createContext(
                 Locale(
                     AppSharePreference.INSTANCE.getSavedLanguage(
-                        R.string.key_language,
                         Locale.getDefault().language
                     )
                 )
@@ -81,12 +79,11 @@ class MainActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceChangeL
 
     private fun initLocaleViewModel() {
         viewModel.currentLanguage = AppSharePreference.getInstance(this).getSavedLanguage(
-            R.string.key_language,
             Locale.getDefault().language
         )
     }
 
-    private fun changeStatusBarColor(){
+    private fun changeStatusBarColor() {
         val window: Window = window
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
@@ -144,23 +141,15 @@ class MainActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceChangeL
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         val settingLanguageLocale = viewModel.currentLanguage
         val languageLocaleChanged = AppSharePreference.INSTANCE.getSavedLanguage(
-            R.string.key_language,
             Locale.getDefault().language
         ) != settingLanguageLocale
         if (languageLocaleChanged) {
-            viewModel.currentLanguage = AppSharePreference.INSTANCE.getSavedLanguage(
-                R.string.key_language,
-                Locale.getDefault().language
-            )
+            viewModel.currentLanguage = AppSharePreference.INSTANCE.getSavedLanguage(Locale.getDefault().language)
             finish()
             startActivity(intent)
         }
     }
 
-    override fun onPeersAvailable(peerList: WifiP2pDeviceList) {
 
-        Log.d("TAG", "onPeersAvailable: "+peerList)
-
-    }
 
 }

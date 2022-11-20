@@ -144,7 +144,7 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback,
             navigateToPage(R.id.action_fragmentMain_to_fragmentTools)
         }
         val saveServiceType = AppSharePreference.getInstance(requireContext())
-            .getServiceType(R.string.service_type_key, ServiceType.NONE)
+            .getServiceType(ServiceType.NONE)
         if (buildMinVersionM()) {
             binding.swSwitchMonitor.setOnCheckedChangeListener { _, checked ->
                 if (checked) {
@@ -417,10 +417,7 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback,
 
     @Suppress("DEPRECATION")
     private fun loadLanguage() {
-        val language = INSTANCE.getSavedLanguage(
-            R.string.key_language,
-            Locale.getDefault().language
-        )
+        val language = INSTANCE.getSavedLanguage(Locale.getDefault().language)
         val locale = findByLanguageTag(language)
         Locale.setDefault(locale)
         val resources: Resources = requireActivity().resources

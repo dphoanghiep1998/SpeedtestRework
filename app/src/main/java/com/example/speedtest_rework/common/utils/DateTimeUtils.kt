@@ -10,7 +10,7 @@ object DateTimeUtils {
     }
 
     fun getDateConvertedToResult(date: Date?): String? {
-        val formatter = SimpleDateFormat("dd/MM/yyyy, hh:mm", Locale.ENGLISH)
+        val formatter = SimpleDateFormat("dd/MM/yyyy, HH:mm", Locale.ENGLISH)
         return formatter.format(date).toString()
     }
 

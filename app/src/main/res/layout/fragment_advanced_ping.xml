@@ -1,357 +1,359 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.ping_test.advanced_ping_test.FragmentAdvancedPing">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/toolbar"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_38sdp"
-        android:layout_marginTop="@dimen/_8sdp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent"
+  >
 
-        <ImageView
-            android:id="@+id/btn_back"
-            android:layout_width="@dimen/_38sdp"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/_38sdp"
-            android:contentDescription="img"
-            android:foreground="@drawable/ripple_effect_corner_fg"
-            android:padding="@dimen/_8sdp"
-            android:src="@drawable/ic_back"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:textFontWeight="800"
-            android:textSize="@dimen/_18sdp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="@string/test" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/container_show_url"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/_16sdp"
-        android:layout_marginTop="@dimen/_8sdp"
-        android:background="@drawable/background_edittext"
-        android:foreground="@drawable/ripple_effect_fg"
-        android:paddingVertical="@dimen/_8sdp"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/toolbar">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="@dimen/_8sdp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-                android:layout_width="@dimen/_20sdp"
-                android:layout_height="@dimen/_20sdp"
-                android:src="@drawable/ic_edit" />
-
-            <TextView
-                android:id="@+id/tv_show_url"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/_8sdp"
-                android:gravity="center"
-                android:text="232141233412"
-                android:textColor="@color/white"
-                android:textSize="@dimen/_12sdp"
+                android:id="@+id/btn_back"
+                android:layout_width="@dimen/_38sdp"
+                android:layout_height="@dimen/_38sdp"
+                android:contentDescription="img"
+                android:foreground="@drawable/ripple_effect_corner_fg"
+                android:padding="@dimen/_8sdp"
+                android:src="@drawable/ic_back"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-
-        </LinearLayout>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/container_info"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_16sdp"
-        app:layout_constraintTop_toBottomOf="@id/container_show_url">
-
-        <TextView
-            android:id="@+id/tv_packet_loss_title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/packet_loss"
-            android:textColor="@color/gray_500"
-            android:textSize="@dimen/_10sdp"
-            app:layout_constraintBottom_toTopOf="@id/tv_packet_loss_value"
-            app:layout_constraintEnd_toStartOf="@id/line_1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent=".3" />
-
-        <TextView
-            android:id="@+id/tv_packet_loss_value"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_4sdp"
-            android:text="0 %"
-            android:textColor="@color/gray_100"
-            android:textSize="@dimen/_14sdp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/tv_packet_loss_title"
-            app:layout_constraintStart_toStartOf="@id/tv_packet_loss_title"
-            app:layout_constraintTop_toBottomOf="@id/tv_packet_loss_title" />
-
-        <View
-            android:id="@+id/line_1"
-            android:layout_width="1dp"
-            android:layout_height="@dimen/_40sdp"
-            android:background="@drawable/ic_line_ping"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/tv_packet_sent_title"
-            app:layout_constraintStart_toEndOf="@id/tv_packet_loss_title"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tv_packet_sent_title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/packet_sent"
-            android:textColor="@color/gray_500"
-            android:textSize="@dimen/_10sdp"
-            app:layout_constraintBottom_toTopOf="@id/tv_packet_sent_value"
-            app:layout_constraintEnd_toStartOf="@id/line_2"
-            app:layout_constraintStart_toEndOf="@id/line_1"
-            app:layout_constraintTop_toTopOf="@id/tv_packet_loss_title"
-            app:layout_constraintWidth_percent=".3" />
-
-        <TextView
-            android:id="@+id/tv_packet_sent_value"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_4sdp"
-            android:text="@string/zero_value"
-            android:textColor="@color/gray_100"
-            android:textSize="@dimen/_14sdp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/tv_packet_sent_title"
-            app:layout_constraintStart_toStartOf="@id/tv_packet_sent_title"
-            app:layout_constraintTop_toBottomOf="@id/tv_packet_sent_title" />
-
-        <View
-            android:id="@+id/line_2"
-            android:layout_width="1dp"
-            android:layout_height="@dimen/_40sdp"
-            android:background="@drawable/ic_line_ping"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/tv_packet_received_title"
-            app:layout_constraintStart_toEndOf="@id/tv_packet_sent_title"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tv_packet_received_title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/packet_received"
-            android:textColor="@color/gray_500"
-            android:textSize="@dimen/_10sdp"
-            app:layout_constraintBottom_toTopOf="@id/tv_packet_received_value"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/line_2"
-            app:layout_constraintTop_toTopOf="@id/tv_packet_loss_title"
-            app:layout_constraintWidth_percent=".3" />
-
-        <TextView
-            android:id="@+id/tv_packet_received_value"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_4sdp"
-            android:text="@string/zero_value"
-            android:textColor="@color/gray_100"
-            android:textSize="@dimen/_14sdp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/tv_packet_received_title"
-            app:layout_constraintStart_toStartOf="@id/tv_packet_received_title"
-            app:layout_constraintTop_toBottomOf="@id/tv_packet_received_title" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/container_progress"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/container_info">
-
-        <ProgressBar
-            android:id="@+id/pb_loading"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:indeterminateOnly="false"
-            android:max="1000"
-            android:progress="0"
-            android:progressDrawable="@drawable/custom_progressbar_ping"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent=".9" />
-
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/btn_start"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@drawable/background_circle"
-            android:foreground="@drawable/ripple_button_circle"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent=".35">
-
-            <LinearLayout
-                android:id="@+id/container_value"
+            <TextView
+                android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
+                android:textColor="@color/white"
+                android:textFontWeight="800"
+                android:textSize="@dimen/_18sdp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="@string/test" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/container_show_url"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_16sdp"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:background="@drawable/background_edittext"
+            android:foreground="@drawable/ripple_effect_fg"
+            android:paddingVertical="@dimen/_8sdp"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <TextView
-                    android:id="@+id/ping_value"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="_ _"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/_26sdp" />
+                <ImageView
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:src="@drawable/ic_edit" />
 
                 <TextView
-                    android:id="@+id/tv_ms"
+                    android:id="@+id/tv_show_url"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:paddingStart="@dimen/_2sdp"
-                    android:text="@string/ms"
+                    android:layout_marginStart="@dimen/_8sdp"
+                    android:gravity="center"
+                    android:text="232141233412"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/_10sdp" />
+                    android:textSize="@dimen/_12sdp"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
             </LinearLayout>
 
-
-            <com.example.speedtest_rework.common.custom_view.GradientText
-                android:id="@+id/tv_start"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/start"
-                android:textSize="@dimen/_30sdp"
-                app:colorFirst="@color/gradient_green_start"
-                app:colorSecond="@color/gradient_green_end"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <com.github.mikephil.charting.charts.BarChart
-        android:id="@+id/graph_view"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/container_progress" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/container_edit"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="@dimen/_8sdp"
-        android:background="@color/gray_800"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar">
-
-
-        <EditText
-            android:id="@+id/edt_url"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/_16sdp"
-            android:background="@drawable/background_edittext"
-            android:inputType="text"
-            android:maxLines="1"
-            android:paddingHorizontal="@dimen/_16sdp"
-            android:paddingVertical="@dimen/_8sdp"
-            android:textColor="@color/white"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/container_header_rcv"
-            app:layout_constraintTop_toBottomOf="@id/edt_url"
+            android:id="@+id/container_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_8sdp"
-            android:paddingHorizontal="@dimen/_16sdp"
-            android:paddingVertical="@dimen/_8sdp">
-
-            <ImageView
-                android:id="@+id/imv_clock"
-                android:layout_width="@dimen/_20sdp"
-                android:layout_height="@dimen/_20sdp"
-                android:src="@drawable/ic_clock"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/gray_200" />
+            android:layout_marginTop="@dimen/_16sdp"
+            app:layout_constraintTop_toBottomOf="@id/container_show_url">
 
             <TextView
-                android:id="@+id/tv_history"
+                android:id="@+id/tv_packet_loss_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/packet_loss"
+                android:textColor="@color/gray_500"
+                android:textSize="@dimen/_10sdp"
+                app:layout_constraintBottom_toTopOf="@id/tv_packet_loss_value"
+                app:layout_constraintEnd_toStartOf="@id/line_1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent=".3" />
+
+            <TextView
+                android:id="@+id/tv_packet_loss_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_16sdp"
-                android:text="@string/history"
-                android:textColor="@color/white"
+                android:layout_marginTop="@dimen/_4sdp"
+                android:text="0 %"
+                android:textColor="@color/gray_100"
                 android:textSize="@dimen/_14sdp"
-                app:layout_constraintBottom_toBottomOf="@id/imv_clock"
-                app:layout_constraintStart_toEndOf="@id/imv_clock"
-                app:layout_constraintTop_toTopOf="@id/imv_clock" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/tv_packet_loss_title"
+                app:layout_constraintStart_toStartOf="@id/tv_packet_loss_title"
+                app:layout_constraintTop_toBottomOf="@id/tv_packet_loss_title" />
 
-            <ImageView
-                android:id="@+id/imv_delete"
-                android:layout_width="@dimen/_20sdp"
-                android:layout_height="@dimen/_20sdp"
-                android:src="@drawable/ic_delete"
-                app:layout_constraintBottom_toBottomOf="@id/imv_clock"
+            <View
+                android:id="@+id/line_1"
+                android:layout_width="1dp"
+                android:layout_height="@dimen/_40sdp"
+                android:background="@drawable/ic_line_ping"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/tv_packet_sent_title"
+                app:layout_constraintStart_toEndOf="@id/tv_packet_loss_title"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_packet_sent_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/packet_sent"
+                android:textColor="@color/gray_500"
+                android:textSize="@dimen/_10sdp"
+                app:layout_constraintBottom_toTopOf="@id/tv_packet_sent_value"
+                app:layout_constraintEnd_toStartOf="@id/line_2"
+                app:layout_constraintStart_toEndOf="@id/line_1"
+                app:layout_constraintTop_toTopOf="@id/tv_packet_loss_title"
+                app:layout_constraintWidth_percent=".3" />
+
+            <TextView
+                android:id="@+id/tv_packet_sent_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_4sdp"
+                android:text="@string/zero_value"
+                android:textColor="@color/gray_100"
+                android:textSize="@dimen/_14sdp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/tv_packet_sent_title"
+                app:layout_constraintStart_toStartOf="@id/tv_packet_sent_title"
+                app:layout_constraintTop_toBottomOf="@id/tv_packet_sent_title" />
+
+            <View
+                android:id="@+id/line_2"
+                android:layout_width="1dp"
+                android:layout_height="@dimen/_40sdp"
+                android:background="@drawable/ic_line_ping"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/tv_packet_received_title"
+                app:layout_constraintStart_toEndOf="@id/tv_packet_sent_title"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_packet_received_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/packet_received"
+                android:textColor="@color/gray_500"
+                android:textSize="@dimen/_10sdp"
+                app:layout_constraintBottom_toTopOf="@id/tv_packet_received_value"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/imv_clock" />
+                app:layout_constraintStart_toEndOf="@id/line_2"
+                app:layout_constraintTop_toTopOf="@id/tv_packet_loss_title"
+                app:layout_constraintWidth_percent=".3" />
+
+            <TextView
+                android:id="@+id/tv_packet_received_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_4sdp"
+                android:text="@string/zero_value"
+                android:textColor="@color/gray_100"
+                android:textSize="@dimen/_14sdp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/tv_packet_received_title"
+                app:layout_constraintStart_toStartOf="@id/tv_packet_received_title"
+                app:layout_constraintTop_toBottomOf="@id/tv_packet_received_title" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rcv_edit"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/container_progress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/container_info">
+
+            <ProgressBar
+                android:id="@+id/pb_loading"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:indeterminateOnly="false"
+                android:max="1000"
+                android:progress="0"
+                android:progressDrawable="@drawable/custom_progressbar_ping"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent=".9" />
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/btn_start"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/background_circle"
+                android:foreground="@drawable/ripple_button_circle"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent=".35">
+
+                <LinearLayout
+                    android:id="@+id/container_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/ping_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="_ _"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_26sdp" />
+
+                    <TextView
+                        android:id="@+id/tv_ms"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:paddingStart="@dimen/_2sdp"
+                        android:text="@string/ms"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_10sdp" />
+                </LinearLayout>
+
+
+                <com.example.speedtest_rework.common.custom_view.GradientText
+                    android:id="@+id/tv_start"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/start"
+                    android:textSize="@dimen/_30sdp"
+                    app:colorFirst="@color/gradient_green_start"
+                    app:colorSecond="@color/gradient_green_end"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/graph_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/container_progress" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/container_edit"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="@dimen/_8sdp"
-            android:layout_marginHorizontal="@dimen/_16sdp"
+            android:background="@color/gray_800"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/container_header_rcv" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_constraintTop_toBottomOf="@id/toolbar">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+            <EditText
+                android:id="@+id/edt_url"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_16sdp"
+                android:background="@drawable/background_edittext"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:maxLines="1"
+                android:paddingHorizontal="@dimen/_16sdp"
+                android:paddingVertical="@dimen/_8sdp"
+                android:textColor="@color/white"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/container_header_rcv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:paddingHorizontal="@dimen/_16sdp"
+                android:paddingVertical="@dimen/_8sdp"
+                app:layout_constraintTop_toBottomOf="@id/edt_url">
+
+                <ImageView
+                    android:id="@+id/imv_clock"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:src="@drawable/ic_clock"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/gray_200" />
+
+                <TextView
+                    android:id="@+id/tv_history"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_16sdp"
+                    android:text="@string/history"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_14sdp"
+                    app:layout_constraintBottom_toBottomOf="@id/imv_clock"
+                    app:layout_constraintStart_toEndOf="@id/imv_clock"
+                    app:layout_constraintTop_toTopOf="@id/imv_clock" />
+
+                <ImageView
+                    android:id="@+id/imv_delete"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:src="@drawable/ic_delete"
+                    app:layout_constraintBottom_toBottomOf="@id/imv_clock"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/imv_clock" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcv_edit"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginHorizontal="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_8sdp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/container_header_rcv" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>

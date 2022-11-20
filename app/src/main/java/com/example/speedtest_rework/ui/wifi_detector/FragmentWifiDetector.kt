@@ -9,7 +9,7 @@ import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
 import android.view.animation.RotateAnimation
 import androidx.activity.OnBackPressedCallback
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.speedtest_rework.R
@@ -18,13 +18,14 @@ import com.example.speedtest_rework.databinding.FragmentWifiDetectorBinding
 import com.example.speedtest_rework.ui.wifi_detector.adapter.WifiDetectorAdapter
 import com.example.speedtest_rework.ui.wifi_detector.interfaces.ItemDeviceHelper
 import com.example.speedtest_rework.ui.wifi_detector.model.DeviceModel
-import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
+import com.example.speedtest_rework.viewmodel.FragmentWifiDetectViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class FragmentWifiDetector : BaseFragment(), ItemDeviceHelper {
     private lateinit var binding: FragmentWifiDetectorBinding
     private lateinit var adapter: WifiDetectorAdapter
-    private val viewModel: SpeedTestViewModel by activityViewModels()
+    private val viewModel: FragmentWifiDetectViewModel by viewModels()
     private lateinit var rotate: RotateAnimation
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,9 +38,9 @@ class FragmentWifiDetector : BaseFragment(), ItemDeviceHelper {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initView()
         observeWifiDeviceList()
         observeWifiDetectDone()
-        initView()
         changeBackPressCallBack()
     }
 

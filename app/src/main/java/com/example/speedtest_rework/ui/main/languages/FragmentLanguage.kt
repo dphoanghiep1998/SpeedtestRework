@@ -39,10 +39,7 @@ class FragmentLanguage : BaseFragment(), TouchLanguageListener {
     }
 
     private fun getCurrentLanguage(): String {
-        return INSTANCE.getSavedLanguage(
-            R.string.key_language,
-            Locale.getDefault().language
-        )
+        return INSTANCE.getSavedLanguage(Locale.getDefault().language)
     }
     private fun changeBackPressCallBack() {
         val callback: OnBackPressedCallback =
@@ -55,7 +52,7 @@ class FragmentLanguage : BaseFragment(), TouchLanguageListener {
     }
 
     override fun onClickLanguage(locale: Locale) {
-        INSTANCE.saveLanguage(R.string.key_language, locale.language)
+        INSTANCE.saveLanguage(locale.language)
     }
 
 }
