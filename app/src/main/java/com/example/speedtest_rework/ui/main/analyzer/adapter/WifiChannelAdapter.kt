@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.speedtest_rework.R
+import com.example.speedtest_rework.common.utils.clickWithDebounce
 import com.example.speedtest_rework.ui.main.analyzer.band.WiFiBand
 import com.example.speedtest_rework.ui.main.analyzer.model.WiFiConnection
 import com.example.speedtest_rework.ui.main.analyzer.model.WiFiData
@@ -33,7 +34,6 @@ class WifiChannelAdapter(
     private var clickedPosition = -1
 
 
-    @SuppressLint("NotifyDataSetChanged")
     fun setData(wifiData: WiFiData, maxFreq: Int, minFreq: Int) {
         this.maxFreq = maxFreq
         this.minFreq = minFreq
@@ -88,7 +88,7 @@ class WifiChannelAdapter(
         } else {
             holder.tvConnected.visibility = View.GONE
         }
-        holder.itemView.setOnClickListener {
+        holder.itemView.clickWithDebounce {
             if (this.clickedPosition == holder.adapterPosition) {
                 this.clickedPosition = -1
             } else {

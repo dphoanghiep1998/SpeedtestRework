@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.fragment.BaseFragment
 import com.example.speedtest_rework.common.utils.NetworkUtils
+import com.example.speedtest_rework.common.utils.clickWithDebounce
 import com.example.speedtest_rework.databinding.FragmentSignalTestBinding
 import com.example.speedtest_rework.ui.signal_test.adapter.SignalLocationAdapter
 import com.example.speedtest_rework.viewmodel.FragmentSignalTestViewModel
@@ -81,7 +82,7 @@ class FragmentSignalTest : BaseFragment() {
             if (it) {
                 binding.tvRecord.isEnabled = true
                 binding.tvStart.setText(R.string.stop)
-                binding.tvStart.setOnClickListener {
+                binding.tvStart.clickWithDebounce {
                     if (::job.isInitialized) {
                         job.cancel()
                         currentValue = 0
@@ -93,7 +94,7 @@ class FragmentSignalTest : BaseFragment() {
             } else {
                 binding.tvRecord.isEnabled = false
                 binding.tvStart.setText(R.string.start)
-                binding.tvStart.setOnClickListener {
+                binding.tvStart.clickWithDebounce {
                     calculateWifi()
                     viewModel.setSignalScanning(true)
 
@@ -120,7 +121,7 @@ class FragmentSignalTest : BaseFragment() {
     }
 
     private fun initButton() {
-        binding.btnBack.setOnClickListener {
+        binding.btnBack.clickWithDebounce {
             findNavController().popBackStack()
             if (::job.isInitialized) {
                 job.cancel()
@@ -131,10 +132,10 @@ class FragmentSignalTest : BaseFragment() {
             }
         }
 
-        binding.tvStart.setOnClickListener {
+        binding.tvStart.clickWithDebounce {
             calculateWifi()
         }
-        binding.tvRecord.setOnClickListener {
+        binding.tvRecord.clickWithDebounce {
             var mList = viewModel.mListSignalLocation.value
             mList?.let {
                 it.add(

@@ -8,6 +8,7 @@ import android.text.SpannableStringBuilder
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import com.example.speedtest_rework.common.utils.clickWithDebounce
 import com.example.speedtest_rework.databinding.DialogPingInfoBinding
 
 interface PingInfoCallBack{
@@ -64,10 +65,10 @@ class PingInfoDialog(
         }
 
 
-        binding.tvOk.setOnClickListener{
+        binding.tvOk.clickWithDebounce{
             dismiss()
         }
-        binding.root.setOnClickListener {
+        binding.root.clickWithDebounce {
             dismiss()
         }
     }

@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.fragment.BaseFragment
+import com.example.speedtest_rework.common.utils.clickWithDebounce
 import com.example.speedtest_rework.databinding.FragmentWifiDetectorBinding
 import com.example.speedtest_rework.ui.wifi_detector.adapter.WifiDetectorAdapter
 import com.example.speedtest_rework.ui.wifi_detector.interfaces.ItemDeviceHelper
@@ -99,10 +100,10 @@ class FragmentWifiDetector : BaseFragment(), ItemDeviceHelper {
 
     @SuppressLint("MissingPermission")
     private fun initButton() {
-        binding.btnBack.setOnClickListener {
+        binding.btnBack.clickWithDebounce {
             findNavController().popBackStack()
         }
-        binding.btnReload.setOnClickListener {
+        binding.btnReload.clickWithDebounce {
             discoveryDevice()
         }
         binding.refreshLayout.setOnRefreshListener {

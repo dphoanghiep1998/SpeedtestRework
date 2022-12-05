@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.speedtest_rework.common.utils.clickWithDebounce
 import com.example.speedtest_rework.common.utils.supportDisplayLang
 import com.example.speedtest_rework.common.utils.supportedLanguages
 import com.example.speedtest_rework.databinding.ItemLanguageBinding
@@ -45,7 +46,7 @@ class LanguageAdapter(private val context: Context, private val listener: TouchL
             with(mLanguageList[position]) {
                 binding.tvCountry.text = context.getString(supportDisplayLang()[position].first)
                 binding.imvFlag.setImageDrawable(context.getDrawable(supportDisplayLang()[position].second))
-                binding.root.setOnClickListener {
+                binding.root.clickWithDebounce {
                     selectedLanguageIndex = adapterPosition
                     listener.onClickLanguage(this)
                     notifyDataSetChanged()

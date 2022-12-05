@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.fragment.BaseFragment
 import com.example.speedtest_rework.common.utils.AppSharePreference.Companion.INSTANCE
+import com.example.speedtest_rework.common.utils.clickWithDebounce
 import com.example.speedtest_rework.databinding.FragmentLanguageBinding
 import java.util.*
 
@@ -33,7 +34,7 @@ class FragmentLanguage : BaseFragment(), TouchLanguageListener {
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.rcvLanguage.adapter = adapter
 
-        binding.btnBack.setOnClickListener {
+        binding.btnBack.clickWithDebounce {
             findNavController().popBackStack()
         }
     }

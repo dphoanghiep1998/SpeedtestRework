@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.common.utils.AppSharePreference
+import com.example.speedtest_rework.common.utils.clickWithDebounce
 import com.example.speedtest_rework.databinding.ItemDeviceDetectorBinding
 import com.example.speedtest_rework.ui.wifi_detector.interfaces.ItemDeviceHelper
 import com.example.speedtest_rework.ui.wifi_detector.model.DeviceModel
@@ -43,7 +44,7 @@ class WifiDetectorAdapter(private val listener: ItemDeviceHelper) :
             }
             binding.tvDeviceName.text = mList[position].device_name
             binding.tvDeviceIp.text = mList[position].device_ip
-            binding.imvFlag.setOnClickListener {
+            binding.imvFlag.clickWithDebounce {
                 if (checkDevice(mList[position].device_ip)) {
                     savedSetIp.remove(mList[position].device_ip)
                 } else {

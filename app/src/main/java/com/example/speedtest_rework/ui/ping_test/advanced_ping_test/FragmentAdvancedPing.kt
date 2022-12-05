@@ -21,6 +21,7 @@ import com.example.speedtest_rework.base.dialog.BaseBottomDialogCallBack
 import com.example.speedtest_rework.base.dialog.ConfirmDialog
 import com.example.speedtest_rework.base.dialog.PingInfoDialog
 import com.example.speedtest_rework.common.utils.AppSharePreference
+import com.example.speedtest_rework.common.utils.clickWithDebounce
 import com.example.speedtest_rework.databinding.FragmentAdvancedPingBinding
 import com.example.speedtest_rework.ui.ping_test.advanced_ping_test.adapter.RecentAdapter
 import com.example.speedtest_rework.ui.ping_test.advanced_ping_test.interfaces.RecentHelper
@@ -126,10 +127,10 @@ open class FragmentAdvancedPing(private val itemContentPingTest: ContentPingTest
     }
 
     private fun initButton() {
-        binding.btnBack.setOnClickListener {
+        binding.btnBack.clickWithDebounce {
             dismiss()
         }
-        binding.btnStart.setOnClickListener {
+        binding.btnStart.clickWithDebounce {
             viewMoDel.stopPing = false
             initBarArrayData()
             binding.btnStart.isEnabled = false
@@ -158,7 +159,7 @@ open class FragmentAdvancedPing(private val itemContentPingTest: ContentPingTest
 
         }
 
-        binding.imvDelete.setOnClickListener {
+        binding.imvDelete.clickWithDebounce {
             if (viewMoDel.listRecent.value!!.isEmpty()) {
                 Toast.makeText(requireContext(), R.string.no_list_recet_found, Toast.LENGTH_SHORT)
                     .show()
@@ -398,14 +399,14 @@ open class FragmentAdvancedPing(private val itemContentPingTest: ContentPingTest
             Log.d("observeFlagChangeBack", "observeFlagChangeBack: " + it)
 
             if (it) {
-                binding.btnBack.setOnClickListener {
+                binding.btnBack.clickWithDebounce {
                     binding.containerEdit.visibility = View.GONE
                     binding.containerShowUrl.visibility = View.VISIBLE
                     hideKeyboard()
                     viewMoDel.flagChangeBack.postValue(false)
                 }
             } else {
-                binding.btnBack.setOnClickListener {
+                binding.btnBack.clickWithDebounce {
                     dismiss()
                 }
 

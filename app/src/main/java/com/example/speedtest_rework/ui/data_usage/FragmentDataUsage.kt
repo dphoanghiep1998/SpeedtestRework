@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.fragment.BaseFragment
 import com.example.speedtest_rework.common.utils.buildMinVersionR
+import com.example.speedtest_rework.common.utils.clickWithDebounce
 import com.example.speedtest_rework.databinding.FragmentDataUsageBinding
 import com.example.speedtest_rework.databinding.LayoutMenuFilterBinding
 import com.example.speedtest_rework.ui.data_usage.adapter.DataUsageAdapter
@@ -56,10 +57,10 @@ class FragmentDataUsage : BaseFragment() {
         val linearLayoutManager = LinearLayoutManager(requireContext())
         linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
         binding.rcvDataUsage.layoutManager = linearLayoutManager
-        binding.btnBack.setOnClickListener {
+        binding.btnBack.clickWithDebounce {
             findNavController().popBackStack()
         }
-        binding.tvFilter.setOnClickListener {
+        binding.tvFilter.clickWithDebounce {
             popupWindow.showAsDropDown(binding.containerHeader, 20, 0);
         }
 
@@ -129,7 +130,7 @@ class FragmentDataUsage : BaseFragment() {
         }
         popupWindow =
             PopupWindow(bindingLayout.root, width, LinearLayout.LayoutParams.WRAP_CONTENT, true)
-        bindingLayout.root.setOnClickListener {
+        bindingLayout.root.clickWithDebounce {
             popupWindow.dismiss()
         }
         bindingLayout.thirtyDay.setOnCheckedChangeListener { _, checked ->

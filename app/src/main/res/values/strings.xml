@@ -236,6 +236,8 @@
     <string name="min_latency">Min Latency</string>
     <string name="avg_latency">Avg Latency</string>
     <string name="max_latency">Max Latency</string>
+    <string name="no_provider">No provider found</string>
+    <string name="pick_one">Pick one</string>
 
 
 </resources>

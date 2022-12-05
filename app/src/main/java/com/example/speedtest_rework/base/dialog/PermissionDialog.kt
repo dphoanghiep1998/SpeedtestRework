@@ -6,6 +6,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.ViewGroup
 import android.view.Window
+import com.example.speedtest_rework.common.utils.clickWithDebounce
 import com.example.speedtest_rework.databinding.CustomDialogBoxBinding
 import com.example.speedtest_rework.databinding.DialogPermissionBinding
 
@@ -35,15 +36,15 @@ class PermissionDialog(
         )
         window?.setBackgroundDrawableResource(R.color.transparent)
 
-        binding.btnAllow.setOnClickListener {
+        binding.btnAllow.clickWithDebounce {
             callback?.positiveAction()
             dismiss()
         }
-        binding.btnDeny.setOnClickListener {
+        binding.btnDeny.clickWithDebounce {
             callback?.negativeAction()
             dismiss()
         }
-        binding.btnClose.setOnClickListener {
+        binding.btnClose.clickWithDebounce {
             callback?.negativeAction()
             dismiss()
         }

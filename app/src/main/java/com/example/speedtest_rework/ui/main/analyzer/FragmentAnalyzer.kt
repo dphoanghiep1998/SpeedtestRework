@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.fragment.BaseFragment
 import com.example.speedtest_rework.common.utils.buildMinVersionR
+import com.example.speedtest_rework.common.utils.clickWithDebounce
 import com.example.speedtest_rework.databinding.FragmentAnalyzerBinding
 import com.example.speedtest_rework.databinding.LayoutChangeFrequencyBinding
 import com.example.speedtest_rework.ui.main.analyzer.adapter.ItemTouchHelper
@@ -159,7 +160,7 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper, ListSizeListener {
                         updateView()
                         binding.graphNavigation.visibility = View.GONE
                         navButton.forEach { item ->
-                            item.setOnClickListener {
+                            item.clickWithDebounce {
                             }
                         }
                     }
@@ -211,7 +212,7 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper, ListSizeListener {
             requireContext().applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
         rcvWifiInit()
 
-        binding.btnPermission.setOnClickListener {
+        binding.btnPermission.clickWithDebounce {
             val intent =
                 Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
             val uri =
@@ -219,7 +220,7 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper, ListSizeListener {
             intent.data = uri
             requireActivity().startActivity(intent)
         }
-        binding.btnSetting.setOnClickListener {
+        binding.btnSetting.clickWithDebounce {
             val intent =
                 Intent(Settings.ACTION_WIFI_SETTINGS)
             startActivity(intent)
@@ -248,14 +249,14 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper, ListSizeListener {
         }
         popupWindow =
             PopupWindow(bindingLayout.root, width, LinearLayout.LayoutParams.WRAP_CONTENT, true)
-        bindingLayout.root.setOnClickListener {
+        bindingLayout.root.clickWithDebounce {
             popupWindow.dismiss()
         }
-        bindingLayout.tv2GHZ.setOnClickListener {
+        bindingLayout.tv2GHZ.clickWithDebounce {
             viewModel.wiFiBand.value = WiFiBand.GHZ2
             popupWindow.dismiss()
         }
-        bindingLayout.tv5GHZ.setOnClickListener {
+        bindingLayout.tv5GHZ.clickWithDebounce {
             viewModel.wiFiBand.value = WiFiBand.GHZ5
             popupWindow.dismiss()
         }

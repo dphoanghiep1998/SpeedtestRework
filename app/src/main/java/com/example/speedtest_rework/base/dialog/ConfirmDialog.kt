@@ -6,6 +6,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.ViewGroup
 import android.view.Window
+import com.example.speedtest_rework.common.utils.clickWithDebounce
 import com.example.speedtest_rework.databinding.CustomDialogBoxBinding
 
 class ConfirmDialog(
@@ -41,11 +42,11 @@ class ConfirmDialog(
         message?.let {
             binding.tvContent.text = it
         }
-        binding.btnYes.setOnClickListener {
+        binding.btnYes.clickWithDebounce {
             callback?.positiveAction()
             dismiss()
         }
-        binding.btnNo.setOnClickListener {
+        binding.btnNo.clickWithDebounce {
             callback?.negativeAction()
             dismiss()
         }

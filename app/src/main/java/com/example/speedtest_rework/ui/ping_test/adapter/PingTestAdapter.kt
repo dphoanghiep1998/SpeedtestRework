@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.speedtest_rework.R
+import com.example.speedtest_rework.common.utils.clickWithDebounce
 import com.example.speedtest_rework.databinding.ItemPingTestContentBinding
 import com.example.speedtest_rework.databinding.ItemPingTestTitleBinding
 import com.example.speedtest_rework.ui.ping_test.interfaces.ItemHelper
@@ -75,7 +76,7 @@ class PingTestAdapter(val context: Context, private val listener: ItemHelper) :
             1 -> {
                 val itemContent = mData[position] as ContentPingTest
                 with(holder as PingTestContentViewHolder) {
-                    binding.root.setOnClickListener {
+                    binding.root.clickWithDebounce {
                         listener.onClickItemPing(itemContent)
                     }
                     binding.tvValue.visibility = View.VISIBLE

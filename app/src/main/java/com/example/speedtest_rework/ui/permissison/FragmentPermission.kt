@@ -11,6 +11,7 @@ import androidx.core.app.ActivityCompat
 import com.example.speedtest_rework.base.fragment.BaseFragment
 import com.example.speedtest_rework.common.utils.Constant
 import com.example.speedtest_rework.common.utils.NetworkUtils
+import com.example.speedtest_rework.common.utils.clickWithDebounce
 import com.example.speedtest_rework.databinding.FragmentPermissionBinding
 
 class FragmentPermission : BaseFragment() {
@@ -30,7 +31,7 @@ class FragmentPermission : BaseFragment() {
     }
 
     private fun initView() {
-        binding.btnAccept.setOnClickListener {
+        binding.btnAccept.clickWithDebounce {
             try {
                 handleLocationService()
 

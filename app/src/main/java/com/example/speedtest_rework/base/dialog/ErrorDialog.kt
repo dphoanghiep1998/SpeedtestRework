@@ -7,6 +7,7 @@ import android.view.Window
 import android.widget.Button
 import android.widget.TextView
 import com.example.speedtest_rework.R
+import com.example.speedtest_rework.common.utils.clickWithDebounce
 
 class ErrorDialog (
     context: Context,
@@ -27,7 +28,7 @@ class ErrorDialog (
         textButton?.let {
             btnOK.text = textButton
         }
-        btnOK.setOnClickListener {
+        btnOK.clickWithDebounce {
             dismiss()
         }
         setContentView(rootView)

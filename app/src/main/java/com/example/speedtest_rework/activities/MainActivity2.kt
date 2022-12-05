@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.common.utils.buildMinVersionS
+import com.example.speedtest_rework.common.utils.clickWithDebounce
 import com.example.speedtest_rework.databinding.ActivityMain2Binding
 import kotlinx.coroutines.*
 
@@ -38,10 +39,10 @@ class MainActivity2 : AppCompatActivity() {
                     delay(2000L)
                 }
             }
-            binding.btnStop.setOnClickListener {
+            binding.btnStop.clickWithDebounce {
                 job.cancel()
             }
-            binding.btnStart.setOnClickListener {
+            binding.btnStart.clickWithDebounce {
                 calculateWifi()
             }
 

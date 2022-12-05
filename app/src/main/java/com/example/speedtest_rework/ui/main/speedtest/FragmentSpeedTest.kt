@@ -18,6 +18,7 @@ import com.example.speedtest_rework.common.custom_view.UnitType
 import com.example.speedtest_rework.common.utils.AppSharePreference.Companion.INSTANCE
 import com.example.speedtest_rework.common.utils.Constant
 import com.example.speedtest_rework.common.utils.NetworkUtils
+import com.example.speedtest_rework.common.utils.clickWithDebounce
 import com.example.speedtest_rework.common.utils.hasHardwareAcceleration
 import com.example.speedtest_rework.core.getIP.AddressInfo
 import com.example.speedtest_rework.core.getIP.CurrentNetworkInfo
@@ -71,7 +72,7 @@ class FragmentSpeedTest : BaseFragment() {
     }
 
     private fun initExpandView() {
-        binding.containerConfig.setOnClickListener {
+        binding.containerConfig.clickWithDebounce {
             val layoutParams = binding.containerExpandView.layoutParams
             if (!isExpanded) {
                 YoYo.with(Techniques.SlideInLeft).duration(400L).onStart {
@@ -132,7 +133,7 @@ class FragmentSpeedTest : BaseFragment() {
         //select unit type and max value speed view
         groupUnit.forEachIndexed { index, item ->
             run {
-                item.root.setOnClickListener {
+                item.root.clickWithDebounce {
                     saveUnitTypeToPref(item.textValue.text.toString())
                     //highlight text type
                     selectView(item.line)
@@ -163,7 +164,7 @@ class FragmentSpeedTest : BaseFragment() {
         }
         groupValue.forEachIndexed { index, item ->
             run {
-                item.root.setOnClickListener {
+                item.root.clickWithDebounce {
                     selectViewValue(item.line)
                     setMaxValue(groupValue[index].textValue.text.toString())
                     saveUnitValueToPref(item.textValue.text.toString())

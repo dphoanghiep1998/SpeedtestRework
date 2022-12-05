@@ -14,6 +14,7 @@ import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.dialog.ConfirmDialog
 import com.example.speedtest_rework.base.fragment.BaseFragment
 import com.example.speedtest_rework.common.utils.Constant
+import com.example.speedtest_rework.common.utils.clickWithDebounce
 import com.example.speedtest_rework.data.model.HistoryModel
 import com.example.speedtest_rework.databinding.FragmentResultsBinding
 import com.example.speedtest_rework.ui.main.result_history.adapter.ResultTouchHelper
@@ -43,7 +44,7 @@ class FragmentResults(private val onStartClickedListener: OnStartClickedListener
     }
 
     private fun initView() {
-        binding.btnDelete.setOnClickListener {
+        binding.btnDelete.clickWithDebounce {
             val customDialog = ConfirmDialog(
                 requireActivity(),
                 this,
@@ -54,7 +55,7 @@ class FragmentResults(private val onStartClickedListener: OnStartClickedListener
             )
             customDialog.show()
         }
-        binding.btnTestAgain.setOnClickListener {
+        binding.btnTestAgain.clickWithDebounce {
             onStartClickedListener.onStartClicked()
         }
 
@@ -77,7 +78,7 @@ class FragmentResults(private val onStartClickedListener: OnStartClickedListener
         viewModel.getListHistory().observe(viewLifecycleOwner) { list ->
             if (list.isEmpty()) {
                 binding.containerEmpty.visibility = View.VISIBLE
-                binding.btnDelete.setOnClickListener {
+                binding.btnDelete.clickWithDebounce {
                     Toast.makeText(
                         requireContext(),
                         getString(R.string.no_list_found),
@@ -86,7 +87,7 @@ class FragmentResults(private val onStartClickedListener: OnStartClickedListener
                 }
             } else {
                 binding.containerEmpty.visibility = View.GONE
-                binding.btnDelete.setOnClickListener {
+                binding.btnDelete.clickWithDebounce {
                     val customDialog = ConfirmDialog(
                         requireActivity(),
                         this,

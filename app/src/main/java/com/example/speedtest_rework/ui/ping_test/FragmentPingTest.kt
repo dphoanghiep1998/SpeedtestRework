@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.fragment.BaseFragment
 import com.example.speedtest_rework.common.utils.AppSharePreference
+import com.example.speedtest_rework.common.utils.clickWithDebounce
 import com.example.speedtest_rework.databinding.FragmentPingTestBinding
 import com.example.speedtest_rework.ui.ping_test.adapter.PingTestAdapter
 import com.example.speedtest_rework.ui.ping_test.advanced_ping_test.FragmentAdvancedPing
@@ -111,7 +112,7 @@ class FragmentPingTest : BaseFragment(), ItemHelper {
     }
 
     private fun initButton() {
-        binding.btnBack.setOnClickListener {
+        binding.btnBack.clickWithDebounce {
             findNavController().popBackStack()
         }
         binding.btnReload.setOnClickListener {

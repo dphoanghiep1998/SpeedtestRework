@@ -25,6 +25,7 @@ import com.example.speedtest_rework.base.dialog.*
 import com.example.speedtest_rework.common.custom_view.UnitType
 import com.example.speedtest_rework.common.utils.Constant
 import com.example.speedtest_rework.common.utils.DateTimeUtils
+import com.example.speedtest_rework.common.utils.clickWithDebounce
 import com.example.speedtest_rework.common.utils.format
 import com.example.speedtest_rework.data.model.HistoryModel
 import com.example.speedtest_rework.databinding.FragmentDetailResultBinding
@@ -97,10 +98,10 @@ class FragmentResultDetail : DialogFragment(), ConfirmDialog.ConfirmCallback, As
 
     private fun initView() {
 
-        binding.btnBack.setOnClickListener {
+        binding.btnBack.clickWithDebounce {
             findNavController().popBackStack()
         }
-        binding.btnShare.setOnClickListener {
+        binding.btnShare.clickWithDebounce {
             Log.d("TAG", "initView: ")
         }
         val progress =
@@ -137,7 +138,7 @@ class FragmentResultDetail : DialogFragment(), ConfirmDialog.ConfirmCallback, As
         binding.tvInternalIpValue.text = testModel.internalIP
         binding.tvExternalIpValue.text = testModel.externalIP
 
-        binding.btnDelete.setOnClickListener {
+        binding.btnDelete.clickWithDebounce {
             val customDialog = ConfirmDialog(
                 requireContext(),
                 this,
@@ -157,7 +158,7 @@ class FragmentResultDetail : DialogFragment(), ConfirmDialog.ConfirmCallback, As
             binding.btnScanAgain.visibility = View.VISIBLE
             binding.btnClose.visibility = View.VISIBLE
 
-            binding.btnScanAgain.setOnClickListener {
+            binding.btnScanAgain.clickWithDebounce {
                 findNavController().previousBackStackEntry?.savedStateHandle?.set(
                     Constant.KEY_SCAN_AGAIN,
                     true
@@ -165,7 +166,7 @@ class FragmentResultDetail : DialogFragment(), ConfirmDialog.ConfirmCallback, As
                 findNavController().popBackStack()
             }
 
-            binding.btnClose.setOnClickListener {
+            binding.btnClose.clickWithDebounce {
                 findNavController().previousBackStackEntry?.savedStateHandle?.set(
                     Constant.KEY_RESET,
                     true

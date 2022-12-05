@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
 import com.example.speedtest_rework.R
+import com.example.speedtest_rework.common.utils.clickWithDebounce
 import com.example.speedtest_rework.databinding.DialogRateBinding
 
 interface RateCallBack {
@@ -35,7 +36,7 @@ class RateDialog(context: Context, private val callback: RateCallBack) : Dialog(
         )
         window?.setBackgroundDrawableResource(android.R.color.transparent)
         initFirst()
-        binding.btnRate.setOnClickListener {
+        binding.btnRate.clickWithDebounce {
             callback.onClickRateUs(star)
             dismiss()
         }
@@ -127,7 +128,7 @@ class RateDialog(context: Context, private val callback: RateCallBack) : Dialog(
         )
         groupStar.forEachIndexed { index, item ->
             kotlin.run {
-                item.setOnClickListener {
+                item.clickWithDebounce {
                     star = index + 1
                     countDownTimer.cancel()
                     binding.btnRate.isEnabled = true

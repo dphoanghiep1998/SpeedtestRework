@@ -7,6 +7,7 @@ import android.content.res.Resources
 import android.os.Bundle
 import android.view.ViewGroup
 import android.view.Window
+import com.example.speedtest_rework.common.utils.clickWithDebounce
 import com.example.speedtest_rework.databinding.BottomsheetDialogBinding
 
 interface AskRateCallBack {
@@ -38,14 +39,14 @@ class AskRateDialog(context: Context, private val callback: AskRateCallBack) : D
             0,
             if (getNavBarHeight() > 0) getNavBarHeight() else 16
         )
-        binding.root.setOnClickListener {
+        binding.root.clickWithDebounce {
             dismiss()
         }
-        binding.btnAgree.setOnClickListener {
+        binding.btnAgree.clickWithDebounce {
             callback.onAgree()
             dismiss()
         }
-        binding.btnDeny.setOnClickListener {
+        binding.btnDeny.clickWithDebounce {
             callback.onDeny()
             dismiss()
         }

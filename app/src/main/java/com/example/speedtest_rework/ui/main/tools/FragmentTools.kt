@@ -17,6 +17,7 @@ import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.dialog.PermissionDialog
 import com.example.speedtest_rework.base.fragment.BaseFragment
 import com.example.speedtest_rework.common.utils.buildMinVersionQ
+import com.example.speedtest_rework.common.utils.clickWithDebounce
 import com.example.speedtest_rework.databinding.FragmentToolsBinding
 
 class FragmentTools : BaseFragment(), PermissionDialog.ConfirmCallback {
@@ -42,10 +43,10 @@ class FragmentTools : BaseFragment(), PermissionDialog.ConfirmCallback {
     }
 
     private fun initButton() {
-        binding.btnBack.setOnClickListener {
+        binding.btnBack.clickWithDebounce {
             findNavController().popBackStack()
         }
-        binding.containerDataUsage.setOnClickListener {
+        binding.containerDataUsage.clickWithDebounce {
             if (checkAccessSettingPermission(requireContext())) {
                 navigateToPage(R.id.action_fragmentTools_to_fragmentDataUsage)
             } else {
@@ -55,14 +56,14 @@ class FragmentTools : BaseFragment(), PermissionDialog.ConfirmCallback {
                 permissionDialog.show()
             }
         }
-        binding.containerSignalTest.setOnClickListener {
+        binding.containerSignalTest.clickWithDebounce {
             navigateToPage(R.id.action_fragmentTools_to_fragmentSignalTest)
         }
 
-        binding.containerWifiDetector.setOnClickListener {
+        binding.containerWifiDetector.clickWithDebounce {
             navigateToPage(R.id.action_fragmentTools_to_fragmentWifiDetector)
         }
-        binding.containerPingTest.setOnClickListener{
+        binding.containerPingTest.clickWithDebounce{
             navigateToPage(R.id.action_fragmentTools_to_fragmentPingTest)
         }
     }

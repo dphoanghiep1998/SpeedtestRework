@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.common.utils.DateTimeUtils
 import com.example.speedtest_rework.common.custom_view.UnitType
+import com.example.speedtest_rework.common.utils.clickWithDebounce
 import com.example.speedtest_rework.common.utils.format
 
 import com.example.speedtest_rework.data.model.HistoryModel
@@ -52,7 +53,7 @@ class HistoryAdapter(resultTouchHelper: ResultTouchHelper) :
             holder.date.text = DateTimeUtils.getDateConvertedToResult(model.time)
             holder.uploadRate.text = format(convert(model.upload))
             holder.downloadRate.text = format(convert(model.download))
-            holder.itemView.setOnClickListener {
+            holder.itemView.clickWithDebounce {
                 resultTouchHelper.onClickResultTest(
                     model
                 )

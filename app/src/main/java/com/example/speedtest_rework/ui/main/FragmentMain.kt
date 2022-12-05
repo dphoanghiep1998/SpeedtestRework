@@ -16,6 +16,7 @@ import android.util.DisplayMetrics
 import android.view.*
 import android.widget.LinearLayout
 import android.widget.PopupWindow
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.activityViewModels
@@ -44,8 +45,8 @@ import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
 import java.util.*
 import kotlin.math.roundToInt
 
-class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback,
-    RateCallBack, FragmentResults.OnStartClickedListener {
+class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallBack,
+    FragmentResults.OnStartClickedListener {
     private lateinit var binding: FragmentMainBinding
     private val viewModel: SpeedTestViewModel by activityViewModels()
     private lateinit var languageDialog: FragmentLanguage
@@ -58,9 +59,7 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback,
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentMainBinding.inflate(layoutInflater, container, false)
         changeBackPressCallBack()
@@ -88,8 +87,8 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback,
         var width = 0
         width = if (buildMinVersionR()) {
             val windowMetrics: WindowMetrics = requireActivity().windowManager.currentWindowMetrics
-            val insets: Insets = windowMetrics.windowInsets
-                .getInsetsIgnoringVisibility(WindowInsets.Type.systemBars())
+            val insets: Insets =
+                windowMetrics.windowInsets.getInsetsIgnoringVisibility(WindowInsets.Type.systemBars())
             windowMetrics.bounds.width() - insets.left - insets.right
 
         } else {
@@ -99,17 +98,17 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback,
         }
         popupWindow =
             PopupWindow(bindingLayout.root, width, LinearLayout.LayoutParams.WRAP_CONTENT, true)
-        bindingLayout.root.setOnClickListener {
+        bindingLayout.root.clickWithDebounce {
             popupWindow.dismiss()
         }
 
     }
 
     private fun initButton() {
-        binding.imvStop.setOnClickListener {
+        binding.imvStop.clickWithDebounce {
             viewModel.setScanStatus(ScanStatus.HARD_RESET)
         }
-        binding.imvInfo.setOnClickListener {
+        binding.imvInfo.clickWithDebounce {
             popupWindow.showAsDropDown(binding.imvInfo, -36, 0)
         }
     }
@@ -136,22 +135,21 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback,
     }
 
     private fun initDrawerAction() {
-        binding.containerFeedback.root.setOnClickListener { feedBack() }
-        binding.containerPolicy.root.setOnClickListener { openLink("http://www.facebook.com") }
-        binding.containerShare.root.setOnClickListener { this.shareApp() }
-        binding.containerRate.root.setOnClickListener { this.rateApp() }
-        binding.containerTools.root.setOnClickListener {
+        binding.containerFeedback.root.clickWithDebounce { feedBack() }
+        binding.containerPolicy.root.clickWithDebounce { openLink("http://www.facebook.com") }
+        binding.containerShare.root.clickWithDebounce { this.shareApp() }
+        binding.containerRate.root.clickWithDebounce { this.rateApp() }
+        binding.containerTools.root.clickWithDebounce {
             navigateToPage(R.id.action_fragmentMain_to_fragmentTools)
         }
-        val saveServiceType = AppSharePreference.getInstance(requireContext())
-            .getServiceType(ServiceType.NONE)
+        val saveServiceType =
+            AppSharePreference.getInstance(requireContext()).getServiceType(ServiceType.NONE)
         if (buildMinVersionM()) {
             binding.swSwitchMonitor.setOnCheckedChangeListener { _, checked ->
                 if (checked) {
                     binding.tvDesMonitor.visibility = View.VISIBLE
                     if (AppForegroundService.getInstance().isServiceSpeedMonitorRunning(
-                            requireContext(),
-                            AppForegroundService::class.java
+                            requireContext(), AppForegroundService::class.java
                         )
                     ) {
                         return@setOnCheckedChangeListener
@@ -174,15 +172,13 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback,
                             binding.tvDesDataUsage.visibility = View.VISIBLE
 
                             if (AppForegroundService.getInstance().isServiceDataUsageRunning(
-                                    requireContext(),
-                                    AppForegroundService::class.java
+                                    requireContext(), AppForegroundService::class.java
                                 )
                             ) {
                                 return@setOnCheckedChangeListener
                             }
                             AppForegroundService.getInstance().startService(
-                                requireContext(),
-                                ServiceType.DATA_USAGE
+                                requireContext(), ServiceType.DATA_USAGE
                             )
 
                         }
@@ -210,11 +206,10 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback,
                 binding.tvDesDataUsage.visibility = View.VISIBLE
 
             }
-            binding.menu.setOnClickListener {
+            binding.menu.clickWithDebounce {
                 with(binding) {
                     drawerContainer.openDrawer(
-                        GravityCompat.START,
-                        true
+                        GravityCompat.START, true
                     )
                 }
             }
@@ -229,14 +224,14 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback,
             resources.getDimension(com.intuit.sdp.R.dimen._16sdp).roundToInt(),
             resources.getDimension(com.intuit.sdp.R.dimen._8sdp).roundToInt()
         )
-        binding.containerLanguage.root.setOnClickListener {
+        binding.containerLanguage.root.clickWithDebounce {
             findNavController().navigate(R.id.action_fragmentMain_to_languageFragment)
         }
     }
 
     private fun feedBack() {
 
-        val intent = Intent(Intent.ACTION_SENDTO).apply {
+        val intent = Intent(Intent.ACTION_SEND).apply {
             setDataAndType(Uri.parse("mailto:"), "message/rfc822")
             putExtra(Intent.EXTRA_EMAIL, arrayOf("", getString(R.string.mailTo)))
             putExtra(
@@ -245,37 +240,38 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback,
             )
 
         }
-        startActivity(intent)
+        try {
+            startActivity(Intent.createChooser(intent,getString(R.string.pick_one)))
+
+        } catch (e: Exception) {
+            Toast.makeText(requireContext(), getString(R.string.no_provider), Toast.LENGTH_SHORT)
+                .show()
+        }
     }
 
     private fun initLanguageDialog() {
         languageDialog = FragmentLanguage()
     }
 
-    private fun checkAccessSettingPermission(context: Context): Boolean =
-        try {
-            val packageManager: PackageManager = context.packageManager
-            val applicationInfo: ApplicationInfo =
-                packageManager.getApplicationInfo(context.packageName, 0)
-            val appOpsManager: AppOpsManager =
-                context.getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
-            val mode: Int = if (buildMinVersionQ()) {
-                appOpsManager.unsafeCheckOpNoThrow(
-                    "android:get_usage_stats",
-                    applicationInfo.uid,
-                    applicationInfo.packageName
-                )
-            } else {
-                appOpsManager.checkOpNoThrow(
-                    "android:get_usage_stats",
-                    applicationInfo.uid,
-                    applicationInfo.packageName
-                )
-            }
-            mode == AppOpsManager.MODE_ALLOWED
-        } catch (e: PackageManager.NameNotFoundException) {
-            false
+    private fun checkAccessSettingPermission(context: Context): Boolean = try {
+        val packageManager: PackageManager = context.packageManager
+        val applicationInfo: ApplicationInfo =
+            packageManager.getApplicationInfo(context.packageName, 0)
+        val appOpsManager: AppOpsManager =
+            context.getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
+        val mode: Int = if (buildMinVersionQ()) {
+            appOpsManager.unsafeCheckOpNoThrow(
+                "android:get_usage_stats", applicationInfo.uid, applicationInfo.packageName
+            )
+        } else {
+            appOpsManager.checkOpNoThrow(
+                "android:get_usage_stats", applicationInfo.uid, applicationInfo.packageName
+            )
         }
+        mode == AppOpsManager.MODE_ALLOWED
+    } catch (e: PackageManager.NameNotFoundException) {
+        false
+    }
 
 
     private fun requestAccessSettingPermission(context: Context) {
@@ -305,13 +301,10 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback,
 
     private fun initViewPager() {
         val fragmentList = arrayListOf(
-            FragmentSpeedTest(),
-            FragmentAnalyzer(),
-            FragmentResults(this)
+            FragmentSpeedTest(), FragmentAnalyzer(), FragmentResults(this)
         )
         val adapter = ViewPagerAdapter(
-            fragmentList, childFragmentManager,
-            lifecycle
+            fragmentList, childFragmentManager, lifecycle
         )
         binding.viewPager.adapter = adapter
 
@@ -462,16 +455,15 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback,
     }
 
     private fun changeBackPressCallBack() {
-        val callback: OnBackPressedCallback =
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    if (binding.drawerContainer.isDrawerOpen(GravityCompat.START)) {
-                        binding.drawerContainer.close()
-                    } else {
-                        activity?.finish()
-                    }
+        val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (binding.drawerContainer.isDrawerOpen(GravityCompat.START)) {
+                    binding.drawerContainer.close()
+                } else {
+                    activity?.finish()
                 }
             }
+        }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
     }
 

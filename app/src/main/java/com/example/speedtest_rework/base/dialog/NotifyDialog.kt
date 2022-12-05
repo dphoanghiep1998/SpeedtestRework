@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.text.HtmlCompat
 import com.example.speedtest_rework.R
+import com.example.speedtest_rework.common.utils.clickWithDebounce
 
 class NotifyDialog (
     context: Context,
@@ -31,7 +32,7 @@ class NotifyDialog (
         textButton?.let {
             btnOK.text = textButton
         }
-        btnOK.setOnClickListener {
+        btnOK.clickWithDebounce {
             dismiss()
         }
 
