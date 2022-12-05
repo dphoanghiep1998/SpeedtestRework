@@ -24,7 +24,8 @@
         <action
             android:id="@+id/action_fragmentMain_to_fragmentResultDetail"
             app:destination="@id/fragmentDetail"
-            app:enterAnim="@anim/slide_in_left" />
+            app:enterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_left"/>
         <action
             android:id="@+id/action_fragmentMain_to_fragmentDataUsage"
             app:destination="@id/fragmentDataUsage"
@@ -42,7 +43,7 @@
             app:popExitAnim="@anim/slide_out_left" />
     </fragment>
 
-    <fragment
+    <dialog
         android:id="@+id/fragmentDetail"
         android:name="com.example.speedtest_rework.ui.result_detail.FragmentResultDetail"
         android:label="FragmentDetailResult"

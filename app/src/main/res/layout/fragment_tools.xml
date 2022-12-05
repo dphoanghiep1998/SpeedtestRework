@@ -2,7 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/gray_700">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/toolbar"
@@ -68,6 +69,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_20sdp"
             android:text="@string/wifi_detector"
+            android:paddingHorizontal="@dimen/_8sdp"
+            android:gravity="center"
             android:textColor="@color/gray_100"
             android:textSize="@dimen/_16sdp" />
     </LinearLayout>
@@ -98,7 +101,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_20sdp"
             android:text="@string/ping_test"
+            android:gravity="center"
             android:textColor="@color/gray_100"
+            android:paddingHorizontal="@dimen/_8sdp"
             android:textSize="@dimen/_16sdp" />
     </LinearLayout>
 
@@ -128,7 +133,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_20sdp"
             android:text="@string/signal_test"
+            android:paddingHorizontal="@dimen/_8sdp"
             android:textColor="@color/gray_100"
+            android:gravity="center"
             android:textSize="@dimen/_16sdp" />
     </LinearLayout>
 
@@ -158,6 +165,8 @@
             android:layout_marginTop="@dimen/_20sdp"
             android:text="@string/data_usage_menu"
             android:textColor="@color/gray_100"
+            android:paddingHorizontal="@dimen/_8sdp"
+            android:gravity="center"
             android:textSize="@dimen/_16sdp" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

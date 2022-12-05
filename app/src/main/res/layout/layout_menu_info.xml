@@ -10,8 +10,8 @@
         app:cardBackgroundColor="@color/transparent"
         app:cardCornerRadius="@dimen/_8sdp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintWidth_percent="0.85">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -31,15 +31,14 @@
                 android:textSize="@dimen/_16sdp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/btn_close"
-                app:layout_constraintBottom_toBottomOf="@id/btn_close"/>
+                app:layout_constraintTop_toTopOf="parent"/>
 
             <LinearLayout
                 android:id="@+id/container_item_good"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:layout_marginTop="@dimen/_8sdp"
+                android:gravity="center"
                 android:orientation="horizontal"
                 android:paddingHorizontal="@dimen/_16sdp"
                 android:paddingVertical="@dimen/_8sdp"
@@ -67,9 +66,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:minWidth="@dimen/_100sdp"
                     android:text="@string/explain_good"
                     android:textColor="@color/white"
-                    android:minWidth="@dimen/_100sdp"
                     android:textSize="@dimen/_14sdp" />
 
             </LinearLayout>
@@ -106,8 +105,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/explain_normal"
                     android:minWidth="@dimen/_100sdp"
+                    android:text="@string/explain_normal"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_14sdp" />
 
@@ -145,9 +144,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:minWidth="@dimen/_100sdp"
                     android:text="@string/explain_bad"
                     android:textColor="@color/white"
-                    android:minWidth="@dimen/_100sdp"
                     android:textSize="@dimen/_14sdp" />
 
             </LinearLayout>

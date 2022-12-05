@@ -131,7 +131,7 @@
                     android:fontFamily="@font/app_font_black"
                     android:text="@string/signal_status"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/_12sdp"
+                    android:textSize="@dimen/_14sdp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -144,7 +144,7 @@
                     android:fontFamily="@font/app_font_black"
                     android:text="@string/speed_test_title"
                     android:textColor="@color/text_color_medium"
-                    android:textSize="@dimen/_14sdp"
+                    android:textSize="@dimen/_18sdp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -171,7 +171,7 @@
                     android:layout_marginStart="@dimen/_16sdp"
                     android:text="@string/signal_weak"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/_12sdp"
+                    android:textSize="@dimen/_14sdp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/pb_signal" />
 
@@ -180,7 +180,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/signal_normal"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/_12sdp"
+                    android:textSize="@dimen/_14sdp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@id/tv_worseSignal" />
@@ -191,7 +191,7 @@
                     android:layout_marginEnd="@dimen/_16sdp"
                     android:text="@string/signal_strong"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/_12sdp"
+                    android:textSize="@dimen/_14sdp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/tv_worseSignal" />
 
@@ -239,7 +239,7 @@
                             android:paddingHorizontal="@dimen/_2sdp"
                             android:text="@string/download"
                             android:textColor="@color/gray_200"
-                            android:textSize="@dimen/_12sdp"
+                            android:textSize="@dimen/_14sdp"
                             android:textStyle="bold" />
 
                     </LinearLayout>
@@ -256,7 +256,7 @@
                             android:paddingTop="@dimen/_4sdp"
                             android:text="@string/test"
                             android:textAlignment="gravity"
-                            android:textSize="@dimen/_20sdp"
+                            android:textSize="@dimen/_22sdp"
                             android:textStyle="bold"
                             app:colorFirst="@color/gradient_green_start"
                             app:colorSecond="@color/gradient_green_end" />
@@ -315,7 +315,7 @@
                             android:paddingHorizontal="@dimen/_2sdp"
                             android:text="@string/upload"
                             android:textColor="@color/gray_200"
-                            android:textSize="@dimen/_12sdp"
+                            android:textSize="@dimen/_14sdp"
                             android:textStyle="bold" />
 
                     </LinearLayout>
@@ -331,7 +331,7 @@
                             android:layout_gravity="bottom"
                             android:paddingTop="@dimen/_4sdp"
                             android:text="@string/test"
-                            android:textSize="@dimen/_20sdp"
+                            android:textSize="@dimen/_22sdp"
                             android:textStyle="bold"
                             app:colorFirst="@color/gradient_orange_start"
                             app:colorSecond="@color/gradient_orange_end" />
@@ -387,7 +387,7 @@
                         android:layout_gravity="center"
                         android:text="@string/ping"
                         android:textColor="@color/gray_400"
-                        android:textSize="@dimen/_10sdp" />
+                        android:textSize="@dimen/_12sdp" />
 
                     <TextView
                         android:id="@+id/tv_pingCount"
@@ -396,7 +396,7 @@
                         android:layout_gravity="center"
                         android:paddingLeft="4dp"
                         android:textColor="@color/gray_400"
-                        android:textSize="@dimen/_10sdp" />
+                        android:textSize="@dimen/_12sdp" />
 
                 </LinearLayout>
 
@@ -422,7 +422,7 @@
                         android:paddingStart="@dimen/_2sdp"
                         android:text="@string/jitter"
                         android:textColor="@color/gray_400"
-                        android:textSize="@dimen/_10sdp" />
+                        android:textSize="@dimen/_12sdp" />
 
                     <TextView
                         android:id="@+id/tv_jitterCount"
@@ -431,7 +431,7 @@
                         android:layout_gravity="center"
                         android:paddingLeft="4dp"
                         android:textColor="@color/gray_400"
-                        android:textSize="@dimen/_10sdp" />
+                        android:textSize="@dimen/_12sdp" />
 
                 </LinearLayout>
 
@@ -456,7 +456,7 @@
                         android:paddingStart="@dimen/_2sdp"
                         android:text="@string/loss"
                         android:textColor="@color/gray_400"
-                        android:textSize="@dimen/_10sdp" />
+                        android:textSize="@dimen/_12sdp" />
 
                     <TextView
                         android:id="@+id/tv_lossCount"
@@ -465,7 +465,7 @@
                         android:layout_gravity="center"
                         android:paddingLeft="4dp"
                         android:textColor="@color/gray_400"
-                        android:textSize="@dimen/_10sdp" />
+                        android:textSize="@dimen/_12sdp" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -480,7 +480,7 @@
                 android:paddingHorizontal="60dp"
                 android:text="@string/scan_again"
                 android:textColor="@color/gray_800"
-                android:textSize="@dimen/_10sdp"
+                android:textSize="@dimen/_14sdp"
                 android:textStyle="bold"
                 android:textAllCaps="false"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -496,7 +496,7 @@
                 android:fontFamily="@font/app_font_black"
                 android:text="@string/connection_name"
                 android:textColor="@color/gray_400"
-                android:textSize="@dimen/_10sdp"
+                android:textSize="@dimen/_12sdp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/btn_scan_again" />
 
@@ -508,7 +508,7 @@
                 android:fontFamily="@font/app_font_black"
                 android:text="6,4m"
                 android:textColor="@color/gray_400"
-                android:textSize="@dimen/_10sdp"
+                android:textSize="@dimen/_12sdp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/tv_connectName"
 
@@ -523,7 +523,7 @@
                 android:fontFamily="@font/app_font_black"
                 android:text="@string/isp"
                 android:textColor="@color/gray_400"
-                android:textSize="@dimen/_10sdp"
+                android:textSize="@dimen/_12sdp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_connectName" />
 
@@ -535,7 +535,7 @@
                 android:fontFamily="@font/app_font_black"
                 android:text="Viettel"
                 android:textColor="@color/gray_400"
-                android:textSize="@dimen/_10sdp"
+                android:textSize="@dimen/_12sdp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/tv_isp"
 
@@ -550,7 +550,7 @@
                 android:fontFamily="@font/app_font_black"
                 android:text="@string/internal_ip"
                 android:textColor="@color/gray_400"
-                android:textSize="@dimen/_10sdp"
+                android:textSize="@dimen/_12sdp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_isp" />
 
@@ -563,7 +563,7 @@
                 android:letterSpacing="0.1"
                 android:text="0.0.0.0"
                 android:textColor="@color/gray_400"
-                android:textSize="@dimen/_10sdp"
+                android:textSize="@dimen/_12sdp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/tv_internal_ip"
 
@@ -578,8 +578,7 @@
                 android:fontFamily="@font/app_font_black"
                 android:text="@string/external_ip"
                 android:textColor="@color/gray_400"
-                android:textSize="@dimen/_10sdp"
-
+                android:textSize="@dimen/_12sdp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_internal_ip" />
 
@@ -592,7 +591,7 @@
                 android:letterSpacing="0.1"
                 android:text="0.0.0.0"
                 android:textColor="@color/gray_400"
-                android:textSize="@dimen/_10sdp"
+                android:textSize="@dimen/_12sdp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/tv_external_ip" />
         </androidx.constraintlayout.widget.ConstraintLayout>

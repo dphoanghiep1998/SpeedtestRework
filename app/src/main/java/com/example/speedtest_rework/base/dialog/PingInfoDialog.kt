@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.text.SpannableStringBuilder
+import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import com.example.speedtest_rework.databinding.DialogPingInfoBinding
@@ -38,15 +39,31 @@ class PingInfoDialog(
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
         window?.setBackgroundDrawableResource(R.color.transparent)
+        if(packetReceive == "0"){
+            binding.tvTitle.text = "Fail to connect to \n${url}"
+            binding.tvPacketLossValue.text = "$packetLoss%"
+            binding.tvPacketReceivedValue.text = packetReceive
+            binding.tvPacketSentValue.text = packetSent
+            binding.tvMs1.visibility = View.GONE
+            binding.tvMs2.visibility = View.GONE
+            binding.tvMs3.visibility = View.GONE
+            binding.tvAvgLatencyValue.text = avgLatency
+            binding.tvMinLatencyValue.text = minLatency
+            binding.tvMaxLatencyValue.text = maxLatency
+        }else{
+            binding.tvTitle.text = "Success to connect to \n${url}"
+            binding.tvPacketLossValue.text = "$packetLoss%"
+            binding.tvPacketReceivedValue.text = packetReceive
+            binding.tvMs1.visibility = View.VISIBLE
+            binding.tvMs2.visibility = View.VISIBLE
+            binding.tvMs3.visibility = View.VISIBLE
+            binding.tvPacketSentValue.text = packetSent
+            binding.tvAvgLatencyValue.text = avgLatency
+            binding.tvMinLatencyValue.text = minLatency
+            binding.tvMaxLatencyValue.text = maxLatency
+        }
 
 
-        binding.tvTitle.text = "Success to connect to \n${url}"
-        binding.tvPacketLossValue.text = "$packetLoss%"
-        binding.tvPacketReceivedValue.text = packetReceive
-        binding.tvPacketSentValue.text = packetSent
-        binding.tvAvgLatencyValue.text = avgLatency
-        binding.tvMinLatencyValue.text = minLatency
-        binding.tvMaxLatencyValue.text = maxLatency
         binding.tvOk.setOnClickListener{
             dismiss()
         }

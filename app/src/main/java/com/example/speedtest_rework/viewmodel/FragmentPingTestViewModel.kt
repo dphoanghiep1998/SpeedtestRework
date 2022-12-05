@@ -1,4 +1,5 @@
 package com.example.speedtest_rework.viewmodel
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -79,6 +80,7 @@ class FragmentPingTestViewModel @Inject constructor() : BaseViewModel() {
                     .doPing(object : Ping.PingListener {
                         override fun onResult(pingResult: PingResult) {
                             if (!stopPing) {
+                                Log.d("TAG", "onResult: "+pingResult.timeTaken)
                                 listResult.add(
                                     PingResultTest(
                                         pingResult.timeTaken.toInt(),

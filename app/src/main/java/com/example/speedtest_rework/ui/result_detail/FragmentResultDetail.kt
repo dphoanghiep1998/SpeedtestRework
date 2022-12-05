@@ -1,35 +1,57 @@
 package com.example.speedtest_rework.ui.result_detail
 
 import android.animation.ValueAnimator
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.SeekBar
 import androidx.activity.OnBackPressedCallback
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.dialog.*
-import com.example.speedtest_rework.base.fragment.BaseFragment
+import com.example.speedtest_rework.common.custom_view.UnitType
 import com.example.speedtest_rework.common.utils.Constant
 import com.example.speedtest_rework.common.utils.DateTimeUtils
-import com.example.speedtest_rework.common.custom_view.UnitType
 import com.example.speedtest_rework.common.utils.format
 import com.example.speedtest_rework.data.model.HistoryModel
 import com.example.speedtest_rework.databinding.FragmentDetailResultBinding
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
 
-class FragmentResultDetail : BaseFragment(), ConfirmDialog.ConfirmCallback, AskRateCallBack,
+class FragmentResultDetail : DialogFragment(), ConfirmDialog.ConfirmCallback, AskRateCallBack,
     RateCallBack {
     private lateinit var binding: FragmentDetailResultBinding
     private lateinit var testModel: HistoryModel
     private var fromSpeedTestFragment: Boolean? = false
     private val viewModel: SpeedTestViewModel by activityViewModels()
 
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val root = ConstraintLayout(requireContext())
+        root.layoutParams = ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
+        )
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(root)
+        dialog.window!!.setBackgroundDrawable(ColorDrawable(getColor(R.color.background_main)))
+        dialog.window!!.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
+        )
+
+        return dialog
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,11 +66,25 @@ class FragmentResultDetail : BaseFragment(), ConfirmDialog.ConfirmCallback, AskR
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        if (!viewModel.userActionRate) {
+            val askRateDialog = AskRateDialog(requireContext(), this)
+            Handler(Looper.getMainLooper()).postDelayed({
+                askRateDialog.show()
+            },1000)
+        }
+    }
+
     private fun observeUnitType() {
         viewModel.unitType.observe(viewLifecycleOwner) {
             binding.tvDownloadCurrency.text = getString(it.unit)
             binding.tvUploadCurrency.text = getString(it.unit)
         }
+    }
+
+    private fun getColor(resId: Int): Int {
+        return ContextCompat.getColor(requireContext(), resId)
     }
 
     private fun getDataFromBundle() {
@@ -117,10 +153,7 @@ class FragmentResultDetail : BaseFragment(), ConfirmDialog.ConfirmCallback, AskR
             binding.btnScanAgain.visibility = View.GONE
             binding.btnClose.visibility = View.GONE
         } else {
-            if (!viewModel.userActionRate) {
-                val askRateDialog = AskRateDialog(requireContext(), this)
-                askRateDialog.show()
-            }
+
             binding.btnScanAgain.visibility = View.VISIBLE
             binding.btnClose.visibility = View.VISIBLE
 
@@ -155,19 +188,25 @@ class FragmentResultDetail : BaseFragment(), ConfirmDialog.ConfirmCallback, AskR
     private fun setProgressBarColor(progressBar: SeekBar, state: Int) {
         when (state) {
             0 -> {
-                progressBar.progressDrawable = getDrawable(R.drawable.seekbar_strong)
-                progressBar.thumb = getDrawable(R.drawable.custom_thumb_strong)
+                progressBar.progressDrawable =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.seekbar_strong)
+                progressBar.thumb =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.custom_thumb_strong)
 
             }
             1 -> {
-                progressBar.progressDrawable = getDrawable(R.drawable.seekbar)
-                progressBar.thumb = getDrawable(R.drawable.custom_thumb)
+                progressBar.progressDrawable =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.seekbar)
+                progressBar.thumb =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.custom_thumb)
 
 
             }
             2 -> {
-                progressBar.progressDrawable = getDrawable(R.drawable.seekbar_weak)
-                progressBar.thumb = getDrawable(R.drawable.custom_thumb_weak)
+                progressBar.progressDrawable =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.seekbar_weak)
+                progressBar.thumb =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.custom_thumb_weak)
 
             }
         }
@@ -177,23 +216,23 @@ class FragmentResultDetail : BaseFragment(), ConfirmDialog.ConfirmCallback, AskR
         when (state) {
             0 -> {
                 binding.tvSignalStrength.setShader(
-                    getColor(R.color.wifi_strong_start),
-                    getColor(R.color.wifi_strong_end)
+                    ContextCompat.getColor(requireContext(), R.color.wifi_strong_start),
+                    ContextCompat.getColor(requireContext(), R.color.wifi_strong_end)
                 )
             }
             1 -> {
                 binding.tvSignalStrength.setShader(
                     intArrayOf(
-                        getColor(R.color.wifi_normal_start),
-                        getColor(R.color.wifi_normal_center),
-                        getColor(R.color.wifi_normal_end)
+                        ContextCompat.getColor(requireContext(), R.color.wifi_normal_start),
+                        ContextCompat.getColor(requireContext(), R.color.wifi_normal_center),
+                        ContextCompat.getColor(requireContext(), R.color.wifi_normal_end)
                     )
                 )
             }
             2 -> {
                 binding.tvSignalStrength.setShader(
-                    getColor(R.color.wifi_weak_start),
-                    getColor(R.color.wifi_weak_end)
+                    ContextCompat.getColor(requireContext(), R.color.wifi_weak_start),
+                    ContextCompat.getColor(requireContext(), R.color.wifi_weak_end)
                 )
             }
         }

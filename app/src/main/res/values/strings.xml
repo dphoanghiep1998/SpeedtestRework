@@ -102,7 +102,11 @@
     <string name="type">Type</string>
     <string name="date">Date</string>
     <string name="delete_all_title">DELETE ALL RESULTS ?</string>
+    <string name="delete_all_recent_title">DELETE ALL RECENT ?</string>
+
     <string name="delete_all_content">All results will be deleted</string>
+    <string name="delete_all_recent">All recent will be deleted</string>
+
     <!--    Detail Results Fragment    -->
     <string name="signal_weak">WEAK</string>
     <string name="signal_normal">NORMAL</string>
@@ -156,6 +160,7 @@
     <string name="GERMAN" translatable="false">Deutsch</string>
     <string name="VIETNAM" translatable="false">Tiếng Việt</string>
     <string name="no_list_found">No result found!</string>
+    <string name="no_list_recet_found">No recent found!</string>
     <string name="text_permission_button">Grant Permission &amp; Continue</string>
     <string name="total">Total</string>
     <string name="ask_rate">"Are you satisfied with our app? "</string>

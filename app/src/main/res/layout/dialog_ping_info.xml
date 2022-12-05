@@ -61,7 +61,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_16sdp"
             android:text="@string/packet_loss"
+            android:gravity="center"
             android:textSize="@dimen/_10sdp"
+            android:maxWidth="@dimen/_80sdp"
             android:textColor="@color/gray_500"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_packet_loss_value" />
@@ -85,6 +87,8 @@
             android:text="@string/packet_sent"
             android:textSize="@dimen/_10sdp"
             android:textColor="@color/gray_500"
+            android:maxWidth="@dimen/_80sdp"
+            android:gravity="center"
             app:layout_constraintEnd_toEndOf="@id/tv_packet_sent_value"
             app:layout_constraintStart_toStartOf="@id/tv_packet_sent_value"
             app:layout_constraintTop_toBottomOf="@id/tv_packet_sent_value" />
@@ -109,6 +113,8 @@
             android:textSize="@dimen/_10sdp"
             android:text="@string/packet_received"
             android:textColor="@color/gray_500"
+            android:maxWidth="@dimen/_80sdp"
+            android:gravity="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_packet_received_value" />
 
@@ -134,6 +140,7 @@
                 android:textFontWeight="500"
                 android:textSize="@dimen/_14sdp" />
             <TextView
+                android:id="@+id/tv_ms_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=" ms"
@@ -149,6 +156,8 @@
             android:text="@string/min_latency"
             android:textSize="@dimen/_10sdp"
             android:textColor="@color/gray_500"
+            android:maxWidth="@dimen/_80sdp"
+            android:gravity="center"
             app:layout_constraintEnd_toEndOf="@id/tv_packet_loss_title"
             app:layout_constraintStart_toStartOf="@id/tv_packet_loss_title"
             app:layout_constraintTop_toBottomOf="@id/container_min_latency_value" />
@@ -172,6 +181,7 @@
                 android:textSize="@dimen/_14sdp" />
 
             <TextView
+                android:id="@+id/tv_ms_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=" ms"
@@ -187,6 +197,8 @@
             android:text="@string/avg_latency"
             android:textSize="@dimen/_10sdp"
             android:textColor="@color/gray_500"
+            android:maxWidth="@dimen/_80sdp"
+            android:gravity="center"
             app:layout_constraintEnd_toEndOf="@id/tv_packet_sent_title"
             app:layout_constraintStart_toStartOf="@id/tv_packet_sent_title"
             app:layout_constraintTop_toBottomOf="@id/container_avg_latency_value" />
@@ -210,6 +222,7 @@
                 />
 
             <TextView
+                android:id="@+id/tv_ms_3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=" ms"
@@ -226,6 +239,8 @@
             android:text="@string/max_latency"
             android:textColor="@color/gray_500"
             android:textSize="@dimen/_10sdp"
+            android:gravity="center"
+            android:maxWidth="@dimen/_80sdp"
             app:layout_constraintEnd_toEndOf="@id/tv_packet_received_title"
             app:layout_constraintStart_toStartOf="@id/tv_packet_received_title"
             app:layout_constraintTop_toBottomOf="@id/container_max_latency_value" />

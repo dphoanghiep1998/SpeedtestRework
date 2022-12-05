@@ -3,7 +3,6 @@ package com.example.speedtest_rework.ui.ping_test.advanced_ping_test
 import android.animation.ObjectAnimator
 import android.app.Dialog
 import android.content.Context
-import android.content.res.Resources
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
@@ -19,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.dialog.BackPressBottomSheetDialogCallback
 import com.example.speedtest_rework.base.dialog.BaseBottomDialogCallBack
+import com.example.speedtest_rework.base.dialog.ConfirmDialog
 import com.example.speedtest_rework.base.dialog.PingInfoDialog
 import com.example.speedtest_rework.common.utils.AppSharePreference
 import com.example.speedtest_rework.databinding.FragmentAdvancedPingBinding
@@ -34,7 +34,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 
 open class FragmentAdvancedPing(private val itemContentPingTest: ContentPingTest) :
-    BottomSheetDialogFragment(), RecentHelper {
+    BottomSheetDialogFragment(), RecentHelper, ConfirmDialog.ConfirmCallback {
 
     private lateinit var binding: FragmentAdvancedPingBinding
     private var normalType = true
@@ -59,7 +59,7 @@ open class FragmentAdvancedPing(private val itemContentPingTest: ContentPingTest
         root.layoutParams = ViewGroup.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
         )
-        val dialog = BaseBottomDialogCallBack(requireContext(),callback)
+        val dialog = BaseBottomDialogCallBack(requireContext(), callback)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(root)
         dialog.window!!.setBackgroundDrawable(ColorDrawable(getColor(R.color.background_main)))
@@ -76,7 +76,6 @@ open class FragmentAdvancedPing(private val itemContentPingTest: ContentPingTest
         binding = FragmentAdvancedPingBinding.inflate(layoutInflater)
         return binding.root
     }
-
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -143,11 +142,15 @@ open class FragmentAdvancedPing(private val itemContentPingTest: ContentPingTest
             packetLoss = 0
             packetReceived = 0
             maxValue = 0
+            packetSent = 0
+            binding.tvPacketLossValue.text = "0%"
+            binding.tvPacketSentValue.text = "0"
+            binding.tvPacketReceivedValue.text = "0"
             data.barWidth = .5f
             binding.graphView.data = data
             binding.graphView.invalidate()
             if (normalType) {
-                viewMoDel.getPingResultAdvanced(itemContentPingTest!!.url)
+                viewMoDel.getPingResultAdvanced(itemContentPingTest.url)
             } else {
                 viewMoDel.getPingResultAdvanced(cUrl)
             }
@@ -156,7 +159,21 @@ open class FragmentAdvancedPing(private val itemContentPingTest: ContentPingTest
         }
 
         binding.imvDelete.setOnClickListener {
-            viewMoDel.listRecent.value = listOf()
+            if (viewMoDel.listRecent.value!!.isEmpty()) {
+                Toast.makeText(requireContext(), R.string.no_list_recet_found, Toast.LENGTH_SHORT)
+                    .show()
+            } else {
+                val customDialog = ConfirmDialog(
+                    requireActivity(),
+                    this,
+                    getString(R.string.delete_all_recent_title),
+                    getString(R.string.delete_all_recent),
+                    getString(R.string.YES),
+                    getString(R.string.NO)
+                )
+                customDialog.show()
+            }
+
         }
     }
 
@@ -200,9 +217,10 @@ open class FragmentAdvancedPing(private val itemContentPingTest: ContentPingTest
 
     private fun observeDataPing() {
         viewMoDel.listPingResultLive.observe(viewLifecycleOwner) {
+
             if (it.isNotEmpty()) {
+                setProgressAnimate(binding.pbLoading, 9)
                 packetSent = it.size
-                setProgressAnimate(binding.pbLoading, it.size)
                 binding.tvPacketSentValue.text = packetSent.toString()
                 if (it[it.size - 1].isReachable) {
                     binding.pingValue.text = it[it.size - 1].ping_value.toString()
@@ -229,9 +247,21 @@ open class FragmentAdvancedPing(private val itemContentPingTest: ContentPingTest
                     binding.tvMs.visibility = View.GONE
                     packetLoss++
                     countPacketLoss(it.size, packetLoss)
+                    binding.graphView.renderer = BarChartCustomRender(
+                        binding.graphView,
+                        binding.graphView.animator,
+                        binding.graphView.viewPortHandler,
+                        colorsText
+                    )
                 } else {
                     packetLoss++
                     countPacketLoss(it.size, packetLoss)
+                    binding.graphView.renderer = BarChartCustomRender(
+                        binding.graphView,
+                        binding.graphView.animator,
+                        binding.graphView.viewPortHandler,
+                        colorsText
+                    )
                 }
                 val color = when (it[it.size - 1].ping_value) {
                     in 0..50 -> {
@@ -247,11 +277,15 @@ open class FragmentAdvancedPing(private val itemContentPingTest: ContentPingTest
                 colorsText[it.size - 1] = color
                 val data = BarData()
                 data.barWidth = .5f
-                binding.graphView.axisLeft.axisMaximum = (maxValue + 10).toFloat()
+                if (maxValue == 0) {
+                    binding.graphView.axisLeft.axisMaximum = (maxValue + 100).toFloat()
+                } else {
+                    binding.graphView.axisLeft.axisMaximum = (maxValue + 20).toFloat()
+                }
                 binding.graphView.data = data
 
                 barChart[it.size - 1] =
-                    BarEntry(it.size.toFloat(), it[it.size - 1].ping_value.toFloat())
+                    BarEntry(it.size.toFloat(), it[it.size - 1].ping_value.toFloat() + 10)
 
                 BarDataSet(barChart, null).also { it1 ->
                     it1.setGradientColor(
@@ -259,9 +293,6 @@ open class FragmentAdvancedPing(private val itemContentPingTest: ContentPingTest
                         getColor(R.color.gradient_green_start)
                     )
                     it1.valueFormatter = ValueBarFormatter()
-                    if (it[it.size - 1].isReachable) {
-                        it1.setValueTextColors(colorsText)
-                    }
                     data.addDataSet(it1)
                 }
 
@@ -270,6 +301,7 @@ open class FragmentAdvancedPing(private val itemContentPingTest: ContentPingTest
                     this.invalidate()
                 }
                 if (it.size == 10) {
+                    setProgressAnimate(binding.pbLoading, 10,1000)
                     binding.tvStart.visibility = View.VISIBLE
                     binding.containerShowUrl.isEnabled = true
                     binding.containerValue.visibility = View.GONE
@@ -277,18 +309,32 @@ open class FragmentAdvancedPing(private val itemContentPingTest: ContentPingTest
                         this.isEnabled = true
                         this.visibility = View.VISIBLE
                     }
+                    if (packetReceived == 0) {
+                        val dialogPing = PingInfoDialog(
+                            requireContext(),
+                            cUrl,
+                            packetLoss.toString(),
+                            packetSent.toString(),
+                            packetReceived.toString(),
+                            "_ _",
+                            "_ _",
+                            "_ _"
+                        )
+                        dialogPing.show()
+                    } else {
+                        val dialogPing = PingInfoDialog(
+                            requireContext(),
+                            cUrl,
+                            packetLoss.toString(),
+                            packetSent.toString(),
+                            packetReceived.toString(),
+                            minLatency.toString(),
+                            (avgLatency / packetReceived).toString(),
+                            maxValue.toString()
+                        )
+                        dialogPing.show()
+                    }
 
-                    val dialogPing = PingInfoDialog(
-                        requireContext(),
-                        cUrl,
-                        packetLoss.toString(),
-                        packetSent.toString(),
-                        packetReceived.toString(),
-                        minLatency.toString(),
-                        (avgLatency / packetReceived).toString(),
-                        maxValue.toString()
-                    )
-                    dialogPing.show()
                 }
 
             } else {
@@ -298,7 +344,7 @@ open class FragmentAdvancedPing(private val itemContentPingTest: ContentPingTest
     }
 
 
-    private fun setProgressAnimate(pb: ProgressBar, progressTo: Int, duration: Long = 2000L) {
+    private fun setProgressAnimate(pb: ProgressBar, progressTo: Int, duration: Long = 8000) {
         val animation: ObjectAnimator =
             ObjectAnimator.ofInt(pb, "progress", pb.progress, progressTo * 100)
         animation.duration = duration
@@ -309,8 +355,7 @@ open class FragmentAdvancedPing(private val itemContentPingTest: ContentPingTest
 
     private fun countPacketLoss(packetSent: Int, lossNumber: Int) {
         val percent = (lossNumber.toFloat() / packetSent.toFloat()) * 100
-        packetLoss = percent.toInt()
-        binding.tvPacketLossValue.text = "${packetLoss} %"
+        binding.tvPacketLossValue.text = "${percent.toInt()} %"
 
     }
 
@@ -359,15 +404,6 @@ open class FragmentAdvancedPing(private val itemContentPingTest: ContentPingTest
                     hideKeyboard()
                     viewMoDel.flagChangeBack.postValue(false)
                 }
-//                val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
-//                    override fun handleOnBackPressed() {
-//                        binding.containerEdit.visibility = View.GONE
-//                        binding.containerShowUrl.visibility = View.VISIBLE
-//                        hideKeyboard()
-//                        viewMoDel.flagChangeBack.postValue(false)
-//                    }
-//                }
-//                requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
             } else {
                 binding.btnBack.setOnClickListener {
                     dismiss()
@@ -378,20 +414,19 @@ open class FragmentAdvancedPing(private val itemContentPingTest: ContentPingTest
     }
 
 
-      private val callback = object : BackPressBottomSheetDialogCallback {
-            override fun shouldInterceptBackPress(): Boolean {
-                return viewMoDel.flagChangeBack.value!!
-            }
-
-            override fun onBackPressIntercepted() {
-                binding.containerEdit.visibility = View.GONE
-                binding.containerShowUrl.visibility = View.VISIBLE
-                hideKeyboard()
-                viewMoDel.flagChangeBack.postValue(false)
-            }
-
+    private val callback = object : BackPressBottomSheetDialogCallback {
+        override fun shouldInterceptBackPress(): Boolean {
+            return viewMoDel.flagChangeBack.value!!
         }
 
+        override fun onBackPressIntercepted() {
+            binding.containerEdit.visibility = View.GONE
+            binding.containerShowUrl.visibility = View.VISIBLE
+            hideKeyboard()
+            viewMoDel.flagChangeBack.postValue(false)
+        }
+
+    }
 
 
     private fun observeListRecent() {
@@ -466,6 +501,7 @@ open class FragmentAdvancedPing(private val itemContentPingTest: ContentPingTest
         handleInsertNewRecent(input)
     }
 
+
     private fun hideKeyboard() {
         val imm: InputMethodManager =
             requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -510,6 +546,13 @@ open class FragmentAdvancedPing(private val itemContentPingTest: ContentPingTest
 
     private fun getColor(resId: Int): Int {
         return ContextCompat.getColor(requireContext(), resId)
+    }
+
+    override fun negativeAction() {
+    }
+
+    override fun positiveAction() {
+        viewMoDel.listRecent.value = listOf()
     }
 
 }
