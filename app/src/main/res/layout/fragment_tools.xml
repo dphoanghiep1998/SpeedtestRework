@@ -5,57 +5,23 @@
     android:layout_height="match_parent"
     android:background="@color/gray_700">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_38sdp"
-        android:layout_marginTop="@dimen/_8sdp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/btn_back"
-            android:layout_width="@dimen/_38sdp"
-            android:layout_height="@dimen/_38sdp"
-            android:contentDescription="img"
-            android:foreground="@drawable/ripple_effect_corner_fg"
-            android:padding="@dimen/_8sdp"
-            android:src="@drawable/ic_back"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/tools_title"
-            android:textColor="@color/white"
-            android:textFontWeight="800"
-            android:textSize="@dimen/_18sdp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     <LinearLayout
         android:id="@+id/container_wifi_detector"
-        app:layout_constraintDimensionRatio="1:1"
-        android:foreground="@drawable/ripple_effect_fg"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="@dimen/_16sdp"
         android:layout_marginEnd="1dp"
         android:layout_marginBottom="@dimen/_1sdp"
-        android:layout_marginTop="@dimen/_16sdp"
         android:background="@color/gray_800"
+        android:foreground="@drawable/ripple_effect_fg"
         android:gravity="center"
         android:orientation="vertical"
+        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toStartOf="@id/container_ping_test"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar">
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:layout_width="@dimen/_30sdp"
@@ -64,14 +30,14 @@
             android:src="@drawable/ic_wifi_menu" />
 
         <TextView
-            android:textFontWeight="500"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_20sdp"
-            android:text="@string/wifi_detector"
-            android:paddingHorizontal="@dimen/_8sdp"
             android:gravity="center"
+            android:paddingHorizontal="@dimen/_8sdp"
+            android:text="@string/wifi_detector"
             android:textColor="@color/gray_100"
+            android:textFontWeight="500"
             android:textSize="@dimen/_16sdp" />
     </LinearLayout>
 
@@ -79,12 +45,12 @@
         android:id="@+id/container_ping_test"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintDimensionRatio="1:1"
-        android:foreground="@drawable/ripple_effect_fg"
         android:layout_marginStart="1dp"
         android:background="@color/gray_800"
+        android:foreground="@drawable/ripple_effect_fg"
         android:gravity="center"
         android:orientation="vertical"
+        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/container_wifi_detector"
         app:layout_constraintTop_toTopOf="@id/container_wifi_detector">
@@ -96,28 +62,28 @@
             android:src="@drawable/ic_ping_test" />
 
         <TextView
-            android:textFontWeight="500"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_20sdp"
-            android:text="@string/ping_test"
             android:gravity="center"
-            android:textColor="@color/gray_100"
             android:paddingHorizontal="@dimen/_8sdp"
+            android:text="@string/ping_test"
+            android:textColor="@color/gray_100"
+            android:textFontWeight="500"
             android:textSize="@dimen/_16sdp" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/container_signal_test"
-        android:layout_marginTop="2dp"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintDimensionRatio="1:1"
-        android:foreground="@drawable/ripple_effect_fg"
+        android:layout_marginTop="2dp"
         android:layout_marginEnd="1dp"
         android:background="@color/gray_800"
+        android:foreground="@drawable/ripple_effect_fg"
         android:gravity="center"
         android:orientation="vertical"
+        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toStartOf="@id/container_data_usage"
         app:layout_constraintStart_toStartOf="@id/container_wifi_detector"
         app:layout_constraintTop_toBottomOf="@id/container_wifi_detector">
@@ -128,14 +94,14 @@
             android:src="@drawable/ic_wifi_signal_test" />
 
         <TextView
-            android:textFontWeight="500"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_20sdp"
-            android:text="@string/signal_test"
-            android:paddingHorizontal="@dimen/_8sdp"
-            android:textColor="@color/gray_100"
             android:gravity="center"
+            android:paddingHorizontal="@dimen/_8sdp"
+            android:text="@string/signal_test"
+            android:textColor="@color/gray_100"
+            android:textFontWeight="500"
             android:textSize="@dimen/_16sdp" />
     </LinearLayout>
 
@@ -143,12 +109,12 @@
         android:id="@+id/container_data_usage"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintDimensionRatio="1:1"
         android:layout_marginStart="1dp"
         android:background="@color/gray_800"
         android:foreground="@drawable/ripple_effect_fg"
         android:gravity="center"
         android:orientation="vertical"
+        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/container_signal_test"
         app:layout_constraintTop_toTopOf="@id/container_signal_test">
@@ -159,14 +125,47 @@
             android:src="@drawable/ic_data_usage" />
 
         <TextView
-            android:textFontWeight="500"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_20sdp"
+            android:gravity="center"
+            android:paddingHorizontal="@dimen/_8sdp"
             android:text="@string/data_usage_menu"
             android:textColor="@color/gray_100"
-            android:paddingHorizontal="@dimen/_8sdp"
+            android:textFontWeight="500"
+            android:textSize="@dimen/_16sdp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/container_wifi_analyzer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="2dp"
+        android:background="@color/gray_800"
+        android:foreground="@drawable/ripple_effect_fg"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="@id/container_signal_test"
+        app:layout_constraintStart_toStartOf="@id/container_signal_test"
+        app:layout_constraintTop_toBottomOf="@id/container_signal_test">
+
+        <ImageView
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_30sdp"
+            android:src="@drawable/ic_wifi_analyzer"
+            app:tint="@color/gradient_green_start" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_20sdp"
             android:gravity="center"
+            android:paddingHorizontal="@dimen/_8sdp"
+            android:text="@string/wifi_analyzer"
+            android:textColor="@color/gray_100"
+            android:textFontWeight="500"
             android:textSize="@dimen/_16sdp" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

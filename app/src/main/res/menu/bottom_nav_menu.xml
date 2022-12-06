@@ -6,8 +6,8 @@
         android:title="@string/speed" />
     <item
         android:id="@+id/analist"
-        android:icon="@drawable/ic_wifi_analyzer"
-        android:title="@string/wifi_analyzer" />
+        android:icon="@drawable/ic_tools"
+        android:title="@string/tools" />
     <item
         android:id="@+id/history"
         android:icon="@drawable/ic_result"

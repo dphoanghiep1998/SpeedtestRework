@@ -1,8 +1,6 @@
 package com.example.speedtest_rework.core.download;
 
 
-import android.util.Log;
-
 import com.example.speedtest_rework.core.base.Connection;
 
 import java.io.InputStream;

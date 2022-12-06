@@ -18,7 +18,7 @@ class PrivilegedService @Inject constructor(@ApplicationContext val context: Con
 
         val mList = mutableListOf<DataUsageModel>()
         val calendar = Calendar.getInstance()
-        for (i in 0..29) {
+        for (i in 0..30) {
             val startCalendar = Calendar.getInstance()
             val endCalendar = Calendar.getInstance()
 

@@ -42,7 +42,6 @@ public abstract class UploadStream {
                         try{c.close();}catch (Throwable t){}
                         return;
                     }
-
                     uploader =new Uploader(c,path,ckSize) {
                         @Override
                         public void onProgress(long uploaded) {
@@ -62,7 +61,6 @@ public abstract class UploadStream {
                             }
                         }
                     };
-
                 }catch (Throwable t){
                     try{c.close();}catch (Throwable t1){}
                     if(errorHandlingMode.equals(SpeedtestConfig.ONERROR_MUST_RESTART)){

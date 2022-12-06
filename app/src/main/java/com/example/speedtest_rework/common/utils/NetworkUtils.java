@@ -79,18 +79,12 @@ public class NetworkUtils {
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
 
         if (netInfo != null) {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                NetworkInfo networkInfo = cm.getNetworkInfo(type);
-                return networkInfo != null && networkInfo.isConnected();
-            } else {
-                return isConnected(cm, type);
-            }
+            return isConnected(cm, type);
         }
         return false;
 
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private static boolean isConnected(@NonNull ConnectivityManager cm, int type) {
         Network[] networks = cm.getAllNetworks();
         NetworkInfo networkInfo;
@@ -270,17 +264,12 @@ public class NetworkUtils {
         int locationMode = 0;
         String locationProviders;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            try {
-                locationMode = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
-            } catch (Settings.SettingNotFoundException e) {
-                e.printStackTrace();
-            }
-            return locationMode != Settings.Secure.LOCATION_MODE_OFF;
-        } else {
-            locationProviders = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
-            return !TextUtils.isEmpty(locationProviders);
+        try {
+            locationMode = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
+        } catch (Settings.SettingNotFoundException e) {
+            e.printStackTrace();
         }
+        return locationMode != Settings.Secure.LOCATION_MODE_OFF;
     }
 
     public static boolean is5GHzBandSupported() {

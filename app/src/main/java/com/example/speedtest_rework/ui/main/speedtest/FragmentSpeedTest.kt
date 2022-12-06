@@ -19,7 +19,6 @@ import com.example.speedtest_rework.common.utils.AppSharePreference.Companion.IN
 import com.example.speedtest_rework.common.utils.Constant
 import com.example.speedtest_rework.common.utils.NetworkUtils
 import com.example.speedtest_rework.common.utils.clickWithDebounce
-import com.example.speedtest_rework.common.utils.hasHardwareAcceleration
 import com.example.speedtest_rework.core.getIP.AddressInfo
 import com.example.speedtest_rework.core.getIP.CurrentNetworkInfo
 import com.example.speedtest_rework.core.serverSelector.TestPoint

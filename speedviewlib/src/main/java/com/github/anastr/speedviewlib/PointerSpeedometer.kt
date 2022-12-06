@@ -122,7 +122,6 @@ open class PointerSpeedometer @JvmOverloads constructor(
         speedometerPaint.strokeWidth = speedometerWidth
         darkPaint.strokeWidth = speedometerWidth
 
-        setLayerType(View.LAYER_TYPE_SOFTWARE, null)
     }
 
     fun setStrokeCapRound(){

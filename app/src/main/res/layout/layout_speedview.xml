@@ -189,6 +189,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
+            android:baselineAligned="false"
             android:id="@+id/container_ping_loss_jitter"
             android:layout_width="match_parent"
             android:layout_height="50dp"

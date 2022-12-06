@@ -1,6 +1,7 @@
 package com.example.speedtest_rework.ui.main
 
 import android.app.AppOpsManager
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ApplicationInfo
@@ -35,10 +36,10 @@ import com.example.speedtest_rework.databinding.FragmentMainBinding
 import com.example.speedtest_rework.databinding.LayoutMenuInfoBinding
 import com.example.speedtest_rework.services.AppForegroundService
 import com.example.speedtest_rework.services.ServiceType
-import com.example.speedtest_rework.ui.main.analyzer.FragmentAnalyzer
 import com.example.speedtest_rework.ui.main.languages.FragmentLanguage
 import com.example.speedtest_rework.ui.main.result_history.FragmentResults
 import com.example.speedtest_rework.ui.main.speedtest.FragmentSpeedTest
+import com.example.speedtest_rework.ui.main.tools.FragmentTools
 import com.example.speedtest_rework.ui.viewpager.ViewPagerAdapter
 import com.example.speedtest_rework.viewmodel.ScanStatus
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
@@ -72,7 +73,7 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
 
 
     private fun initView() {
-        initPopupWindow()
+
         initLanguageDialog()
         initViewPager()
         initBottomNavigation()
@@ -80,37 +81,12 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
         initButton()
     }
 
-    private fun initPopupWindow() {
-        val inflater: LayoutInflater =
-            (requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater?)!!
-        val bindingLayout = LayoutMenuInfoBinding.inflate(inflater, null, false)
-        var width = 0
-        width = if (buildMinVersionR()) {
-            val windowMetrics: WindowMetrics = requireActivity().windowManager.currentWindowMetrics
-            val insets: Insets =
-                windowMetrics.windowInsets.getInsetsIgnoringVisibility(WindowInsets.Type.systemBars())
-            windowMetrics.bounds.width() - insets.left - insets.right
-
-        } else {
-            val displayMetrics = DisplayMetrics()
-            requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
-            displayMetrics.widthPixels
-        }
-        popupWindow =
-            PopupWindow(bindingLayout.root, width, LinearLayout.LayoutParams.WRAP_CONTENT, true)
-        bindingLayout.root.clickWithDebounce {
-            popupWindow.dismiss()
-        }
-
-    }
 
     private fun initButton() {
         binding.imvStop.clickWithDebounce {
             viewModel.setScanStatus(ScanStatus.HARD_RESET)
         }
-        binding.imvInfo.clickWithDebounce {
-            popupWindow.showAsDropDown(binding.imvInfo, -36, 0)
-        }
+
     }
 
     private fun initBottomNavigation() {
@@ -139,9 +115,6 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
         binding.containerPolicy.root.clickWithDebounce { openLink("http://www.facebook.com") }
         binding.containerShare.root.clickWithDebounce { this.shareApp() }
         binding.containerRate.root.clickWithDebounce { this.rateApp() }
-        binding.containerTools.root.clickWithDebounce {
-            navigateToPage(R.id.action_fragmentMain_to_fragmentTools)
-        }
         val saveServiceType =
             AppSharePreference.getInstance(requireContext()).getServiceType(ServiceType.NONE)
         if (buildMinVersionM()) {
@@ -230,22 +203,25 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
     }
 
     private fun feedBack() {
-
-        val intent = Intent(Intent.ACTION_SEND).apply {
-            setDataAndType(Uri.parse("mailto:"), "message/rfc822")
-            putExtra(Intent.EXTRA_EMAIL, arrayOf("", getString(R.string.mailTo)))
-            putExtra(
-                Intent.EXTRA_SUBJECT,
-                "${getString(R.string.app_name)} - SDK_CLIENT ${Build.VERSION.SDK_INT}"
-            )
-
-        }
+        val to = arrayOf("",Constant.MAIL_TO)
+        val emailIntent = Intent(Intent.ACTION_SEND)
+        emailIntent.data = Uri.parse("mailto:")
+        emailIntent.type = "message/rfc822"
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, to)
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
+        emailIntent.putExtra(
+            Intent.EXTRA_SUBJECT,
+            "${getString(R.string.app_name)} - SDK_CLIENT ${Build.VERSION.SDK_INT}"
+        )
+        emailIntent.putExtra(Intent.EXTRA_TEXT, emailIntent);
         try {
-            startActivity(Intent.createChooser(intent,getString(R.string.pick_one)))
-
-        } catch (e: Exception) {
-            Toast.makeText(requireContext(), getString(R.string.no_provider), Toast.LENGTH_SHORT)
-                .show()
+            startActivity(Intent.createChooser(emailIntent, getString(R.string.app_name)))
+        } catch (ex: ActivityNotFoundException) {
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.no_provider),
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
@@ -301,7 +277,7 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
 
     private fun initViewPager() {
         val fragmentList = arrayListOf(
-            FragmentSpeedTest(), FragmentAnalyzer(), FragmentResults(this)
+            FragmentSpeedTest(), FragmentTools(), FragmentResults(this)
         )
         val adapter = ViewPagerAdapter(
             fragmentList, childFragmentManager, lifecycle
@@ -318,22 +294,18 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
                     0 -> {
                         binding.tvTitle.text = getString(R.string.speed_test_title)
                         binding.imvVip.visibility = View.VISIBLE
-                        binding.imvInfo.visibility = View.GONE
                     }
                     1 -> {
-                        binding.tvTitle.text = getString(R.string.wifi_analyzer_title)
+                        binding.tvTitle.text = getString(R.string.tools_title)
                         binding.imvVip.visibility = View.GONE
-                        binding.imvInfo.visibility = View.VISIBLE
                     }
                     2 -> {
                         binding.tvTitle.text = getString(R.string.results_title)
                         binding.imvVip.visibility = View.VISIBLE
-                        binding.imvInfo.visibility = View.GONE
                     }
                     else -> {
                         binding.tvTitle.text = getString(R.string.speed_test_title)
                         binding.imvVip.visibility = View.VISIBLE
-                        binding.imvInfo.visibility = View.GONE
                     }
                 }
             }

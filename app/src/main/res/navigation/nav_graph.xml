@@ -37,10 +37,17 @@
             app:enterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_left" />
         <action
-            android:id="@+id/action_fragmentMain_to_fragmentTools"
-            app:destination="@id/fragmentTools"
-            app:enterAnim="@anim/slide_in_right"
-            app:popExitAnim="@anim/slide_out_left" />
+            android:id="@+id/action_fragmentMain_to_fragmentPingTest"
+            app:destination="@id/fragmentPingTest" />
+        <action
+            android:id="@+id/action_fragmentMain_to_fragmentWifiDetector"
+            app:destination="@id/fragmentWifiDetector" />
+        <action
+            android:id="@+id/action_fragmentMain_to_fragmentSignalTest"
+            app:destination="@id/fragmentSignalTest" />
+        <action
+            android:id="@+id/action_fragmentMain_to_fragmentAnalyzer"
+            app:destination="@id/fragmentAnalyzer" />
     </fragment>
 
     <dialog
@@ -59,32 +66,6 @@
         android:label="LanguageFragment"
         tools:layout="@layout/fragment_language" />
     <fragment
-        android:id="@+id/fragmentTools"
-        android:name="com.example.speedtest_rework.ui.main.tools.FragmentTools"
-        android:label="FragmentTools"
-        tools:layout="@layout/fragment_tools">
-        <action
-            android:id="@+id/action_fragmentTools_to_fragmentDataUsage"
-            app:destination="@id/fragmentDataUsage"
-            app:enterAnim="@anim/fade_in"
-            app:popExitAnim="@anim/slide_out_left" />
-        <action
-            android:id="@+id/action_fragmentTools_to_fragmentSignalTest"
-            app:destination="@id/fragmentSignalTest"
-            app:enterAnim="@anim/slide_in_right"
-            app:popExitAnim="@anim/slide_out_left" />
-        <action
-            android:id="@+id/action_fragmentTools_to_fragmentWifiDetector"
-            app:destination="@id/fragmentWifiDetector"
-            app:enterAnim="@anim/slide_in_right"
-            app:popExitAnim="@anim/slide_out_left" />
-        <action
-            android:id="@+id/action_fragmentTools_to_fragmentPingTest"
-            app:destination="@id/fragmentPingTest"
-            app:enterAnim="@anim/slide_in_right"
-            app:popExitAnim="@anim/slide_out_left" />
-    </fragment>
-    <fragment
         android:id="@+id/fragmentSignalTest"
         android:name="com.example.speedtest_rework.ui.signal_test.FragmentSignalTest"
         android:label="FragmentSignalTest"
@@ -99,4 +80,9 @@
         android:name="com.example.speedtest_rework.ui.ping_test.FragmentPingTest"
         android:label="fragment_ping_test"
         tools:layout="@layout/fragment_ping_test" />
+    <fragment
+        tools:layout="@layout/fragment_analyzer"
+        android:id="@+id/fragmentAnalyzer"
+        android:name="com.example.speedtest_rework.ui.main.analyzer.FragmentAnalyzer"
+        android:label="FragmentAnalyzer" />
 </navigation>

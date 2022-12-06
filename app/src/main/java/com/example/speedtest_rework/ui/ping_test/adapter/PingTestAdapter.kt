@@ -21,7 +21,7 @@ class PingTestAdapter(val context: Context, private val listener: ItemHelper) :
 
     fun setData(list: List<ItemPingTest>) {
         this.mData = list
-        notifyDataSetChanged()
+        notifyItemRangeChanged(0,mData.size)
     }
 
     inner class PingTestTitleViewHolder(val binding: ItemPingTestTitleBinding) :

@@ -60,26 +60,3 @@ fun Context.compatColor(@ColorRes id: Int): Int =
     } else {
         ContextCompat.getColor(this, id)
     }
-
-fun hasHardwareAcceleration(activity: Activity): Boolean {
-    // Has HW acceleration been enabled manually in the current window?
-    val window: Window = activity.window
-    if ((window.attributes.flags
-                and WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED) != 0
-    ) {
-        return true
-    }
-
-    // Has HW acceleration been enabled in the manifest?
-    try {
-        val info: ActivityInfo = activity.getPackageManager().getActivityInfo(
-            activity.componentName, 0
-        )
-        if (info.flags and ActivityInfo.FLAG_HARDWARE_ACCELERATED != 0) {
-            return true
-        }
-    } catch (e: PackageManager.NameNotFoundException) {
-        e.printStackTrace()
-    }
-    return false
-}

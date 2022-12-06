@@ -20,8 +20,10 @@ class LanguageAdapter(private val context: Context, private val listener: TouchL
     fun setCurrentLanguage(language: String) {
         mLanguageList.forEachIndexed { index, l ->
             if (l.language == language) {
+                notifyItemChanged(selectedLanguageIndex)
                 selectedLanguageIndex = index
-                notifyDataSetChanged()
+                notifyItemChanged(selectedLanguageIndex)
+
             }
         }
     }
@@ -47,9 +49,12 @@ class LanguageAdapter(private val context: Context, private val listener: TouchL
                 binding.tvCountry.text = context.getString(supportDisplayLang()[position].first)
                 binding.imvFlag.setImageDrawable(context.getDrawable(supportDisplayLang()[position].second))
                 binding.root.clickWithDebounce {
+                    notifyItemChanged(selectedLanguageIndex)
                     selectedLanguageIndex = adapterPosition
+                    notifyItemChanged(selectedLanguageIndex)
                     listener.onClickLanguage(this)
-                    notifyDataSetChanged()
+
+
                 }
             }
 

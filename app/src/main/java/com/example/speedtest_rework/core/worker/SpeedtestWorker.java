@@ -1,7 +1,5 @@
 package com.example.speedtest_rework.core.worker;
 
-import android.util.Log;
-
 import com.example.speedtest_rework.core.base.Utils;
 import com.example.speedtest_rework.core.config.SpeedtestConfig;
 import com.example.speedtest_rework.core.download.DownloadStream;
@@ -102,13 +100,12 @@ public abstract class SpeedtestWorker extends Thread {
     private boolean ulCalled = false;
 
     private void ulTest() {
-        if (ulCalled) return;
-        else ulCalled = true;
-        final long start = System.currentTimeMillis();
-        onUploadUpdate(0, 0);
-        UploadStream[] streams = new UploadStream[config.getUl_parallelStreams()];
-        for (int i = 0; i < streams.length; i++) {
-            streams[i] = new UploadStream(backend.getServer(), backend.getUlURL(), config.getUl_ckSize(), config.getErrorHandlingMode(), config.getUl_connectTimeout(), config.getUl_soTimeout(), config.getUl_recvBuffer(), config.getUl_sendBuffer()) {
+        if(ulCalled) return; else ulCalled=true;
+        final long start=System.currentTimeMillis();
+        onUploadUpdate(0,0);
+        UploadStream[] streams=new UploadStream[config.getUl_parallelStreams()];
+        for(int i=0;i<streams.length;i++){
+            streams[i]=new UploadStream(backend.getServer(),backend.getUlURL(),config.getUl_ckSize(),config.getErrorHandlingMode(),config.getUl_connectTimeout(),config.getUl_soTimeout(),config.getUl_recvBuffer(),config.getUl_sendBuffer()) {
                 @Override
                 public void onError(String err) {
                     abort();
@@ -117,38 +114,38 @@ public abstract class SpeedtestWorker extends Thread {
             };
             Utils.sleep(config.getUl_streamDelay());
         }
-        boolean graceTimeDone = false;
-        long startT = System.currentTimeMillis(), bonusT = 0;
-        for (; ; ) {
-            double t = System.currentTimeMillis() - startT;
-            if (!graceTimeDone && t >= config.getUl_graceTime() * 1000) {
-                graceTimeDone = true;
-                for (UploadStream u : streams) u.resetUploadCounter();
-                startT = System.currentTimeMillis();
+        boolean graceTimeDone=false;
+        long startT=System.currentTimeMillis(), bonusT=0;
+        for(;;){
+            double t=System.currentTimeMillis()-startT;
+            if(!graceTimeDone&&t>=config.getUl_graceTime()*1000){
+                graceTimeDone=true;
+                for(UploadStream u:streams) u.resetUploadCounter();
+                startT=System.currentTimeMillis();
                 continue;
             }
-            if (stopASAP || t + bonusT >= config.getTime_ul_max() * 1000) {
-                for (UploadStream u : streams) u.stopASAP();
-                for (UploadStream u : streams) u.join();
+            if(stopASAP||t+bonusT>=config.getTime_ul_max()*1000){
+                for(UploadStream u:streams) u.stopASAP();
+                for(UploadStream u:streams) u.join();
                 break;
             }
-            if (graceTimeDone) {
+            if(graceTimeDone) {
                 long totUploaded = 0;
                 for (UploadStream u : streams) totUploaded += u.getTotalUploaded();
-                double speed = totUploaded / ((t < 100 ? 100 : t) / 1000.0);
+                double speed = totUploaded / ((t<100?100:t) / 1000.0);
                 if (config.getTime_auto()) {
                     double b = (2.5 * speed) / 100000.0;
                     bonusT += b > 200 ? 200 : b;
                 }
                 double progress = (t + bonusT) / (double) (config.getTime_ul_max() * 1000);
-                speed = (speed * 8 * config.getOverheadCompensationFactor()) / (config.getUseMebibits() ? 1048576.0 : 1000000.0);
+                speed = (speed * 16 * config.getOverheadCompensationFactor()) / (config.getUseMebibits() ? 1048576.0 : 1000000.0);
                 ul = speed;
-                onUploadUpdate(ul, progress > 1 ? 1 : progress);
+                onUploadUpdate(ul, progress>1?1:progress);
             }
             Utils.sleep(100);
         }
-        if (stopASAP) return;
-        onUploadUpdate(ul, 1);
+        if(stopASAP) return;
+        onUploadUpdate(ul,1);
     }
 
     private boolean pingCalled = false;

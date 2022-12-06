@@ -7,18 +7,18 @@ import java.util.*
 
 @Parcelize
 class HistoryModel(
-     val id: Int = -1,
-     var name_network: String,
-     var internalIP: String = "0.0.0.0",
-     var externalIP: String = "0.0.0.0",
-     var isp: String,
-     var jitter: Double,
-     var loss: Double = 0.0,
-     var network: String,
-     var ping: Double,
-     var time: Date,
-     var upload: Double,
-     var download: Double,
+    val id: Int = -1,
+    var name_network: String="",
+    var internalIP: String = "0.0.0.0",
+    var externalIP: String = "0.0.0.0",
+    var isp: String = "",
+    var jitter: Double = 0.0,
+    var loss: Double = 0.0,
+    var network: String = "0.0.0.0",
+    var ping: Double = 0.0,
+    var time: Date = Date(),
+    var upload: Double = 0.0,
+    var download: Double = 0.0,
 
     ) : Parcelable {
     companion object {

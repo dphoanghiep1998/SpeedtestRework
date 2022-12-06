@@ -99,7 +99,7 @@ class FragmentResults(private val onStartClickedListener: OnStartClickedListener
                     customDialog.show()
                 }
             }
-            adapter.setData(list)
+            adapter.setData(list.toMutableList())
         }
     }
 

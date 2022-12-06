@@ -28,5 +28,9 @@ object Constant {
     const val KEY_IP_ROUTER = "KEY_IP_ROUTER"
     const val KEY_IP_LIST = "KEY_IP_LIST"
     const val KEY_SERVICE_TYPE="KEY_SERVICE_TYPE"
+    const val MAIL_TO = "nekosoft.app@gmail.com"
+    const val URL_APP = "nekosoft.app@gmail.com"
+
+
 
 }

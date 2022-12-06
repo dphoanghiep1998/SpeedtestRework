@@ -2,23 +2,29 @@ package com.example.speedtest_rework.ui.data_usage.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.speedtest_rework.common.utils.DateTimeUtils
 import com.example.speedtest_rework.databinding.ItemDataUsageBinding
 import com.example.speedtest_rework.ui.data_usage.model.DataUsageModel
 import java.math.RoundingMode
 
-class DataUsageAdapter(private var data: List<DataUsageModel>) :
+class DataUsageAdapter :
     RecyclerView.Adapter<DataUsageAdapter.DataUsageViewHolder>() {
-    fun setData(data: List<DataUsageModel>) {
-        this.data = data
-        notifyDataSetChanged()
+    private var data: MutableList<DataUsageModel> = mutableListOf()
+    private val diffDataUsageCallBack = DiffDataUsageCallBack(data, mutableListOf())
+    fun setData(mData: List<DataUsageModel>) {
+        diffDataUsageCallBack.newList = mData
+        val diffResult = DiffUtil.calculateDiff(diffDataUsageCallBack)
+        data.clear()
+        data.addAll(mData)
+        diffResult.dispatchUpdatesTo(this)
     }
 
     inner class DataUsageViewHolder(val binding: ItemDataUsageBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+        RecyclerView.ViewHolder(binding.root)
 
-    }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataUsageViewHolder {
         val binding =

@@ -60,7 +60,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/speed_test_title"
                     android:textColor="@color/white"
-                    android:textStyle="bold"
+                    android:fontFamily="@font/app_font_bold"
                     android:textSize="@dimen/_18sdp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -80,21 +80,6 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
-                <ImageView
-                    android:visibility="gone"
-                    android:id="@+id/imv_info"
-                    android:layout_width="@dimen/_40sdp"
-                    android:layout_height="@dimen/_40sdp"
-                    android:background="@drawable/ripple_effect_corner_fg"
-                    android:clickable="true"
-                    android:contentDescription="@string/test"
-                    android:focusable="true"
-                    android:padding="@dimen/_8sdp"
-                    android:src="@drawable/ic_info_circle"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
 
                 <ImageView
                     android:id="@+id/imv_stop"
@@ -173,15 +158,14 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/container_speed_monitor"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_40sdp"
                         android:foreground="@drawable/ripple_effect_fg"
                         android:paddingHorizontal="@dimen/_16sdp"
                         android:paddingVertical="@dimen/_2sdp"
-                        android:layout_marginTop="@dimen/_40sdp"
                         app:layout_constraintTop_toBottomOf="@+id/ic_logo_menu">
 
                         <ImageView
@@ -301,19 +285,12 @@
                             app:layout_constraintTop_toTopOf="parent" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
                     <include
-                        android:id="@+id/container_tools"
-                        layout="@layout/item_menu"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintTop_toBottomOf="@+id/container_data_usage"
-                        app:mSrc="@{@drawable/ic_tools}"
-                        app:mTitle="@{@string/tools}" />
-                    <include
                         android:id="@+id/container_language"
                         layout="@layout/item_menu"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:layout_constraintTop_toBottomOf="@+id/container_tools"
+                        app:layout_constraintTop_toBottomOf="@+id/container_data_usage"
+
                         app:mSrc="@{@drawable/ic_language}"
                         app:mTitle="@{@string/language}" />
 
@@ -322,8 +299,8 @@
                         android:id="@+id/line"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:layout_marginTop="@dimen/_8sdp"
                         android:layout_marginHorizontal="@dimen/_16sdp"
+                        android:layout_marginTop="@dimen/_8sdp"
                         android:background="@color/gray_400"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"

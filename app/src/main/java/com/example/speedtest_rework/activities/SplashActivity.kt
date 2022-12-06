@@ -1,15 +1,16 @@
 package com.example.speedtest_rework.activities
 
 import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.view.animation.DecelerateInterpolator
-import com.example.speedtest_rework.activities.MainActivity
 import com.example.speedtest_rework.base.activity.BaseActivity
 import com.example.speedtest_rework.databinding.ActivitySplashBinding
 
 
+@SuppressLint("CustomSplashScreen")
 class SplashActivity : BaseActivity() {
     private lateinit var binding : ActivitySplashBinding
 

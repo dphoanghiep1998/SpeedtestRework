@@ -43,12 +43,9 @@ class FragmentTools : BaseFragment(), PermissionDialog.ConfirmCallback {
     }
 
     private fun initButton() {
-        binding.btnBack.clickWithDebounce {
-            findNavController().popBackStack()
-        }
         binding.containerDataUsage.clickWithDebounce {
             if (checkAccessSettingPermission(requireContext())) {
-                navigateToPage(R.id.action_fragmentTools_to_fragmentDataUsage)
+                navigateToPage(R.id.action_fragmentMain_to_fragmentDataUsage)
             } else {
                 val permissionDialog = PermissionDialog(requireContext(), this)
                 permissionDialog.window?.attributes?.windowAnimations =
@@ -57,14 +54,17 @@ class FragmentTools : BaseFragment(), PermissionDialog.ConfirmCallback {
             }
         }
         binding.containerSignalTest.clickWithDebounce {
-            navigateToPage(R.id.action_fragmentTools_to_fragmentSignalTest)
+            navigateToPage(R.id.action_fragmentMain_to_fragmentSignalTest)
         }
 
         binding.containerWifiDetector.clickWithDebounce {
-            navigateToPage(R.id.action_fragmentTools_to_fragmentWifiDetector)
+            navigateToPage(R.id.action_fragmentMain_to_fragmentWifiDetector)
         }
         binding.containerPingTest.clickWithDebounce{
-            navigateToPage(R.id.action_fragmentTools_to_fragmentPingTest)
+            navigateToPage(R.id.action_fragmentMain_to_fragmentPingTest)
+        }
+        binding.containerWifiAnalyzer.clickWithDebounce {
+            navigateToPage(R.id.action_fragmentMain_to_fragmentAnalyzer)
         }
     }
 

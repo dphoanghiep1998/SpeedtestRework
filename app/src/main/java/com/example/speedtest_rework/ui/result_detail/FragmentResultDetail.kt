@@ -8,7 +8,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,8 +33,8 @@ import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
 class FragmentResultDetail : DialogFragment(), ConfirmDialog.ConfirmCallback, AskRateCallBack,
     RateCallBack {
     private lateinit var binding: FragmentDetailResultBinding
-    private lateinit var testModel: HistoryModel
-    private var fromSpeedTestFragment: Boolean? = false
+    private var testModel: HistoryModel = HistoryModel()
+    private var fromSpeedTestFragment: Boolean = false
     private val viewModel: SpeedTestViewModel by activityViewModels()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -69,11 +68,15 @@ class FragmentResultDetail : DialogFragment(), ConfirmDialog.ConfirmCallback, As
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+    }
+
+    private fun handleShowRate() {
         if (!viewModel.userActionRate) {
             val askRateDialog = AskRateDialog(requireContext(), this)
             Handler(Looper.getMainLooper()).postDelayed({
                 askRateDialog.show()
-            },1000)
+            }, 1000)
         }
     }
 
@@ -91,8 +94,12 @@ class FragmentResultDetail : DialogFragment(), ConfirmDialog.ConfirmCallback, As
     private fun getDataFromBundle() {
         val bundle: Bundle? = this.arguments
         if (bundle != null) {
-            testModel = bundle.getParcelable("testModel")!!
-            fromSpeedTestFragment = bundle.getBoolean("from_speedTest_fragment")
+            testModel = bundle.getParcelable(Constant.KEY_TEST_MODEL)!!
+            fromSpeedTestFragment = bundle.getBoolean(Constant.KEY_FROM_SPEED_TEST_FRAGMENT, false)
+            if (fromSpeedTestFragment) {
+                handleShowRate()
+
+            }
         }
     }
 
@@ -102,7 +109,6 @@ class FragmentResultDetail : DialogFragment(), ConfirmDialog.ConfirmCallback, As
             findNavController().popBackStack()
         }
         binding.btnShare.clickWithDebounce {
-            Log.d("TAG", "initView: ")
         }
         val progress =
             if (testModel.download >= 40) 100 else if (testModel.download < 40 && testModel.download >= 20) 50 else 0
@@ -150,7 +156,7 @@ class FragmentResultDetail : DialogFragment(), ConfirmDialog.ConfirmCallback, As
             customDialog.show()
         }
 
-        if (fromSpeedTestFragment == null || fromSpeedTestFragment == false) {
+        if (!fromSpeedTestFragment) {
             binding.btnScanAgain.visibility = View.GONE
             binding.btnClose.visibility = View.GONE
         } else {
@@ -280,7 +286,7 @@ class FragmentResultDetail : DialogFragment(), ConfirmDialog.ConfirmCallback, As
         if (star < 4) {
             return
         }
-        openLink("http://www.facebook.com")
+        openLink(Constant.URL_APP)
     }
 
     private fun openLink(strUri: String?) {

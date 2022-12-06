@@ -5,7 +5,6 @@ import android.graphics.Insets
 import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.*
 import android.widget.LinearLayout
 import android.widget.PopupWindow
@@ -57,6 +56,8 @@ class FragmentDataUsage : BaseFragment() {
         val linearLayoutManager = LinearLayoutManager(requireContext())
         linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
         binding.rcvDataUsage.layoutManager = linearLayoutManager
+        adapter = DataUsageAdapter()
+        binding.rcvDataUsage.adapter = adapter
         binding.btnBack.clickWithDebounce {
             findNavController().popBackStack()
         }
@@ -78,11 +79,10 @@ class FragmentDataUsage : BaseFragment() {
     @RequiresApi(Build.VERSION_CODES.M)
     private fun observeListDataUsage() {
         viewModel.getListOfDataUsage().observe(viewLifecycleOwner) {
-            if (it.size >= 0) {
-                adapter = DataUsageAdapter(it)
-                countTotal(it)
-                hideLoading()
-            }
+            adapter.setData(it)
+            countTotal(it)
+            hideLoading()
+
         }
     }
 

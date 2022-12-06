@@ -1,8 +1,6 @@
 package com.example.speedtest_rework.ui.main.analyzer.adapter
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,12 +10,10 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.common.utils.clickWithDebounce
-import com.example.speedtest_rework.ui.main.analyzer.band.WiFiBand
 import com.example.speedtest_rework.ui.main.analyzer.model.WiFiConnection
 import com.example.speedtest_rework.ui.main.analyzer.model.WiFiData
 import com.example.speedtest_rework.ui.main.analyzer.model.WiFiDetail
 import com.example.speedtest_rework.ui.main.analyzer.model.getSecure
-import okhttp3.internal.filterList
 import java.util.*
 
 class WifiChannelAdapter(
@@ -88,17 +84,22 @@ class WifiChannelAdapter(
         } else {
             holder.tvConnected.visibility = View.GONE
         }
+
         holder.itemView.clickWithDebounce {
+            notifyItemChanged(clickedPosition)
+
             if (this.clickedPosition == holder.adapterPosition) {
                 this.clickedPosition = -1
             } else {
                 this.clickedPosition = holder.adapterPosition
             }
-            notifyDataSetChanged()
+            notifyItemChanged(clickedPosition)
+
             helper.onClickItemWifi(
                 wiFiDetail,
                 this.clickedPosition == -1
             )
+
         }
     }
 

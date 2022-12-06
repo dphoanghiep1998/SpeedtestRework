@@ -10,7 +10,7 @@ public class SpeedTest {
     private SpeedtestConfig config = new SpeedtestConfig();
     private int state = 0; //0=configs, 1=test points, 2=server selection, 3=ready, 4=testing, 5=finished
 
-    private Object mutex = new Object();
+    private final Object mutex = new Object();
 
 
     public void addTestPoint(TestPoint t) {

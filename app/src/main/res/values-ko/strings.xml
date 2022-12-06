@@ -16,7 +16,6 @@
 
     <string name="speed">속도</string>
     <string name="wifi_analyzer">와이파이 분석기</string>
-    <string name="vpn">VPN</string>
     <string name="result_bottom">결과</string>
 
 
@@ -33,7 +32,6 @@
     <string name="wifi_analyzer_title">와이파이 분석기</string>
     <string name="vpn_title">VPN</string>
     <string name="results_title">결과</string>
-    <string name="results">결과 확인</string>
     <string name="result_detail">결과</string>
 
     <string name="connecting">연결 중</string>

@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:text="@string/data_usage"
             android:textColor="@color/white"
-            android:textStyle="bold"
+            android:textFontWeight="800"
             android:textSize="@dimen/_18sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -60,13 +60,13 @@
 
             <TextView
                 android:id="@+id/tv_filter"
-                android:drawableStart="@drawable/ic_filter"
                 android:drawablePadding="@dimen/_2sdp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/thirty_day"
                 android:textColor="@color/white"
-                android:textSize="@dimen/_14sdp" />
+                android:textSize="@dimen/_14sdp"
+                app:drawableStartCompat="@drawable/ic_filter" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <androidx.appcompat.widget.LinearLayoutCompat
@@ -80,11 +80,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableStart="@drawable/ic_mobile_usage"
                 android:drawablePadding="@dimen/_2sdp"
                 android:text="@string/mobile"
                 android:textColor="@color/white"
-                android:textSize="@dimen/_14sdp" />
+                android:textSize="@dimen/_14sdp"
+                app:drawableStartCompat="@drawable/ic_mobile_usage" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -98,11 +98,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableStart="@drawable/ic_wifi_usage"
                 android:drawablePadding="@dimen/_2sdp"
                 android:text="@string/wifi"
                 android:textColor="@color/white"
-                android:textSize="@dimen/_14sdp" />
+                android:textSize="@dimen/_14sdp"
+                app:drawableStartCompat="@drawable/ic_wifi_usage" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 

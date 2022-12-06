@@ -8,29 +8,28 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.speedtest_rework.R
-import com.example.speedtest_rework.common.utils.DateTimeUtils
 import com.example.speedtest_rework.common.custom_view.UnitType
+import com.example.speedtest_rework.common.utils.DateTimeUtils
 import com.example.speedtest_rework.common.utils.clickWithDebounce
 import com.example.speedtest_rework.common.utils.format
-
 import com.example.speedtest_rework.data.model.HistoryModel
 
 class HistoryAdapter(resultTouchHelper: ResultTouchHelper) :
     RecyclerView.Adapter<HistoryAdapter.ConnectivityTestViewHolder>() {
-    private var mList: List<HistoryModel>? = null
+    private var mList: MutableList<HistoryModel> = mutableListOf()
     private val resultTouchHelper: ResultTouchHelper
     private var unitType = UnitType.MBPS
 
-    fun setData(newList: List<HistoryModel>?) {
-        val oldList = mList
-        val result = DiffUtil.calculateDiff(MyDiffUtilCallBack(newList,oldList))
-        this.mList = newList
+    fun setData(newList: MutableList<HistoryModel>) {
+        val result = DiffUtil.calculateDiff(MyDiffUtilCallBack(newList, mList))
+        mList.clear()
+        mList.addAll(newList)
         result.dispatchUpdatesTo(this)
     }
 
     fun setData(unitType: UnitType) {
         this.unitType = unitType
-        notifyDataSetChanged()
+        notifyItemRangeChanged(0, mList.size)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ConnectivityTestViewHolder {
@@ -41,8 +40,8 @@ class HistoryAdapter(resultTouchHelper: ResultTouchHelper) :
 
     override fun onBindViewHolder(holder: ConnectivityTestViewHolder, position: Int) {
 
-        mList?.let {
-            val model: HistoryModel = it[position]
+        with(mList) {
+            val model: HistoryModel = this[position]
             if (model.network == "wifi") {
                 val source: Int =
                     if (model.download >= 40) R.drawable.ic_signal_good else if (model.download < 40 && model.download >= 20) R.drawable.ic_signal_normal else R.drawable.ic_signal_low
@@ -63,9 +62,7 @@ class HistoryAdapter(resultTouchHelper: ResultTouchHelper) :
     }
 
     override fun getItemCount(): Int {
-        return if (mList != null) {
-            mList!!.size
-        } else 0
+        return mList.size
     }
 
     inner class ConnectivityTestViewHolder(itemView: View) :

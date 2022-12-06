@@ -1,29 +1,30 @@
 package com.example.speedtest_rework.ui.main.analyzer.adapter
 
 import androidx.recyclerview.widget.DiffUtil
+import com.example.speedtest_rework.ui.main.analyzer.model.WiFiData
 
 class DiffChannelCallback(
-    private val oldList: List<>,
-    var newList: List<>
+    private val oldData: WiFiData,
+    var newData: WiFiData
 ) : DiffUtil.Callback() {
 
     override fun getOldListSize(): Int {
-        return oldList.size
+        return oldData.wiFiDetails.size
     }
 
     override fun getNewListSize(): Int {
-        return newList.size
+        return newData.wiFiDetails.size
     }
 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        val oldItem = oldList[oldItemPosition]
-        val newItem = newList[newItemPosition]
-        return oldItem.id == newItem.id
+        val oldItem = oldData.wiFiDetails[oldItemPosition]
+        val newItem = newData.wiFiDetails[newItemPosition]
+        return oldItem.wiFiSignal == newItem.wiFiSignal
     }
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        val oldItem = oldList[oldItemPosition]
-        val newItem = newList[newItemPosition]
+        val oldItem = oldData.wiFiDetails[oldItemPosition]
+        val newItem = newData.wiFiDetails[newItemPosition]
         return oldItem == newItem
     }
 

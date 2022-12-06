@@ -9,7 +9,7 @@ class SignalLocationAdapter : RecyclerView.Adapter<SignalLocationAdapter.SignalV
     private var mList: List<Pair<String, String>> = listOf()
     fun setData(mListPassed: List<Pair<String, String>>) {
         mList = mListPassed
-        notifyDataSetChanged()
+        notifyItemRangeChanged(0,mList.size)
     }
 
     inner class SignalViewHolder(val binding: ItemSignalLocationBinding) :

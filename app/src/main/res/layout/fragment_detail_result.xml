@@ -22,7 +22,6 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_38sdp"
-                android:layout_marginTop="@dimen/_8sdp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -44,7 +43,6 @@
                     android:layout_height="wrap_content"
                     android:text="@string/result_detail"
                     android:textColor="@color/white"
-                    android:textStyle="bold"
                     android:textSize="@dimen/_18sdp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -311,7 +309,6 @@
                             android:id="@+id/tv_uploadSpeed"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_toEndOf="@id/imv_upArrow"
                             android:paddingHorizontal="@dimen/_2sdp"
                             android:text="@string/upload"
                             android:textColor="@color/gray_200"
@@ -354,6 +351,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <LinearLayout
+                android:baselineAligned="false"
                 android:id="@+id/container_ping_loss_jitter"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"

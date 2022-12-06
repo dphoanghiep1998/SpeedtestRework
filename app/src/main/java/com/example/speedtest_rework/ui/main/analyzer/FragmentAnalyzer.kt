@@ -9,12 +9,12 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.*
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.fragment.BaseFragment
@@ -22,6 +22,7 @@ import com.example.speedtest_rework.common.utils.buildMinVersionR
 import com.example.speedtest_rework.common.utils.clickWithDebounce
 import com.example.speedtest_rework.databinding.FragmentAnalyzerBinding
 import com.example.speedtest_rework.databinding.LayoutChangeFrequencyBinding
+import com.example.speedtest_rework.databinding.LayoutMenuInfoBinding
 import com.example.speedtest_rework.ui.main.analyzer.adapter.ItemTouchHelper
 import com.example.speedtest_rework.ui.main.analyzer.adapter.ListSizeListener
 import com.example.speedtest_rework.ui.main.analyzer.adapter.WifiChannelAdapter
@@ -42,6 +43,7 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper, ListSizeListener {
     private lateinit var channelGraphAdapter: ChannelGraphAdapter
     private lateinit var wiFiData: WiFiData
     private lateinit var popupWindow: PopupWindow
+    private lateinit var popupWindowTop: PopupWindow
     private var wiFiChannelPair = WiFiBand.GHZ2.wiFiChannels.wiFiChannelPairs()[0]
 
 
@@ -205,12 +207,47 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper, ListSizeListener {
         binding.graph.addView(channelGraphAdapter.graphViews())
     }
 
+    private fun initPopupWindowTop() {
+        val inflater: LayoutInflater =
+            (requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater?)!!
+        val bindingLayout = LayoutMenuInfoBinding.inflate(inflater, null, false)
+        var width = 0
+        width = if (buildMinVersionR()) {
+            val windowMetrics: WindowMetrics = requireActivity().windowManager.currentWindowMetrics
+            val insets: Insets =
+                windowMetrics.windowInsets.getInsetsIgnoringVisibility(WindowInsets.Type.systemBars())
+            windowMetrics.bounds.width() - insets.left - insets.right
+
+        } else {
+            val displayMetrics = DisplayMetrics()
+            requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
+            displayMetrics.widthPixels
+        }
+        popupWindowTop =
+            PopupWindow(bindingLayout.root, width, LinearLayout.LayoutParams.WRAP_CONTENT, true)
+        bindingLayout.root.clickWithDebounce {
+            popupWindowTop.dismiss()
+        }
+
+    }
+
+
     fun initView() {
         showLoadingMain()
         initPopupWindow()
+        initPopupWindowTop()
+        initButton()
         mainWifi =
             requireContext().applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
         rcvWifiInit()
+
+
+    }
+
+    private fun initButton() {
+        binding.imvInfo.clickWithDebounce {
+            popupWindowTop.showAsDropDown(binding.imvInfo, -36, 0)
+        }
 
         binding.btnPermission.clickWithDebounce {
             val intent =
@@ -228,7 +265,9 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper, ListSizeListener {
         binding.tvInfo.setOnClickListener {
             popupWindow.showAsDropDown(it, 0, -100)
         }
-
+        binding.btnBack.clickWithDebounce {
+            findNavController().popBackStack()
+        }
     }
 
     private fun initPopupWindow() {
@@ -313,7 +352,7 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper, ListSizeListener {
         if (size == 0) {
             binding.containerEmpty.visibility = View.VISIBLE
             binding.rcvWifi.visibility = View.GONE
-        }else {
+        } else {
             binding.containerEmpty.visibility = View.GONE
             binding.rcvWifi.visibility = View.VISIBLE
         }

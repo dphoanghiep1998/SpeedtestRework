@@ -21,9 +21,7 @@ public class SpeedtestConfig {
     private String getIP_distance=DISTANCE_KM;
     public static final String DISTANCE_NO="no", DISTANCE_MILES="mi", DISTANCE_KM="km";
     private boolean useMebibits=false;
-//    private String test_order="IP_D_U";
-private String test_order="P_D_U";
-
+    private String test_order="IP_D_U";
 
     private void check(){
         if(dl_ckSize<1) throw new IllegalArgumentException("dl_ckSize must be at least 1");
@@ -253,7 +251,7 @@ private String test_order="P_D_U";
     public String getTest_order() {
         return test_order;
     }
-    
+
     public void setDl_ckSize(int dl_ckSize) {
         if(dl_ckSize<1) throw new IllegalArgumentException("dl_ckSize must be at least 1");
         this.dl_ckSize = dl_ckSize;
@@ -295,62 +293,62 @@ private String test_order="P_D_U";
     }
 
     public void setDl_connectTimeout(int dl_connectTimeout) {
-        
+
         this.dl_connectTimeout = dl_connectTimeout;
     }
 
     public void setDl_soTimeout(int dl_soTimeout) {
-        
+
         this.dl_soTimeout = dl_soTimeout;
     }
 
     public void setUl_connectTimeout(int ul_connectTimeout) {
-        
+
         this.ul_connectTimeout = ul_connectTimeout;
     }
 
     public void setUl_soTimeout(int ul_soTimeout) {
-        
+
         this.ul_soTimeout = ul_soTimeout;
     }
 
     public void setPing_connectTimeout(int ping_connectTimeout) {
-        
+
         this.ping_connectTimeout = ping_connectTimeout;
     }
 
     public void setPing_soTimeout(int ping_soTimeout) {
-        
+
         this.ping_soTimeout = ping_soTimeout;
     }
 
     public void setDl_recvBuffer(int dl_recvBuffer) {
-        
+
         this.dl_recvBuffer = dl_recvBuffer;
     }
 
     public void setDl_sendBuffer(int dl_sendBuffer) {
-        
+
         this.dl_sendBuffer = dl_sendBuffer;
     }
 
     public void setUl_recvBuffer(int ul_recvBuffer) {
-        
+
         this.ul_recvBuffer = ul_recvBuffer;
     }
 
     public void setUl_sendBuffer(int ul_sendBuffer) {
-        
+
         this.ul_sendBuffer = ul_sendBuffer;
     }
 
     public void setPing_recvBuffer(int ping_recvBuffer) {
-        
+
         this.ping_recvBuffer = ping_recvBuffer;
     }
 
     public void setPing_sendBuffer(int ping_sendBuffer) {
-        
+
         this.ping_sendBuffer = ping_sendBuffer;
     }
 
@@ -370,7 +368,7 @@ private String test_order="P_D_U";
     }
 
     public void setTime_auto(boolean time_auto) {
-        
+
         this.time_auto = time_auto;
     }
 
@@ -380,7 +378,7 @@ private String test_order="P_D_U";
     }
 
     public void setTelemetry_extra(String telemetry_extra) {
-        
+
         this.telemetry_extra = telemetry_extra;
     }
 
@@ -390,7 +388,7 @@ private String test_order="P_D_U";
     }
 
     public void setGetIP_isp(boolean getIP_isp) {
-        
+
         this.getIP_isp = getIP_isp;
     }
 
@@ -400,7 +398,7 @@ private String test_order="P_D_U";
     }
 
     public void setUseMebibits(boolean useMebibits) {
-        
+
         this.useMebibits = useMebibits;
     }
 
