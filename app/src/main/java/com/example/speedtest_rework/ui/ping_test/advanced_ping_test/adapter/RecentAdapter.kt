@@ -13,11 +13,9 @@ class RecentAdapter(private val listener: RecentHelper) :
     private var mList: MutableList<String> = mutableListOf()
 
     fun setList(list: List<String>) {
-        val diffRecent = DiffRecent(mList, list)
-        val diffResult = DiffUtil.calculateDiff(diffRecent)
         mList.clear()
         mList.addAll(list)
-        diffResult.dispatchUpdatesTo(this)
+        notifyDataSetChanged()
     }
 
     inner class RecentContentViewHolder(val binding: ItemContentRecentBinding) :
@@ -44,7 +42,6 @@ class RecentAdapter(private val listener: RecentHelper) :
                 listener.onClickItem(mList[position])
             }
         }
-
     }
 
     override fun getItemCount(): Int {

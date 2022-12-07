@@ -70,19 +70,12 @@ class AppForegroundService : Service() {
     private fun generateNotification() {
         when (serviceType) {
             ServiceType.SPEED_MONITOR -> {
-                remoteViews.setOnClickPendingIntent(
-                    R.id.btn_speed_test_notification,
-                    startPendingIntent(
-                        getString(R.string.action_do_speed_test),
-                        getString(R.string.key_speed_test),
-                        REQUEST_CODE
-                    )
-                )
+
                 remoteViews.setViewVisibility(R.id.tv_upload_value_notification, View.VISIBLE)
                 remoteViews.setViewVisibility(R.id.tv_download_value_notification, View.VISIBLE)
                 remoteViews.setViewVisibility(R.id.mobile_usage_value, View.GONE)
                 remoteViews.setViewVisibility(R.id.wifi_usage_value, View.GONE)
-                remoteViews.setViewVisibility(R.id.btn_speed_test_notification, View.VISIBLE)
+
             }
             ServiceType.DATA_USAGE -> {
                 remoteViews.setOnClickPendingIntent(
@@ -97,7 +90,7 @@ class AppForegroundService : Service() {
                 remoteViews.setViewVisibility(R.id.tv_download_value_notification, View.GONE)
                 remoteViews.setViewVisibility(R.id.mobile_usage_value, View.VISIBLE)
                 remoteViews.setViewVisibility(R.id.wifi_usage_value, View.VISIBLE)
-                remoteViews.setViewVisibility(R.id.btn_speed_test_notification, View.GONE)
+
             }
             ServiceType.BOTH -> {
                 remoteViews.setOnClickPendingIntent(
@@ -121,7 +114,7 @@ class AppForegroundService : Service() {
                 remoteViews.setViewVisibility(R.id.tv_download_value_notification, View.VISIBLE)
                 remoteViews.setViewVisibility(R.id.mobile_usage_value, View.VISIBLE)
                 remoteViews.setViewVisibility(R.id.wifi_usage_value, View.VISIBLE)
-                remoteViews.setViewVisibility(R.id.btn_speed_test_notification, View.GONE)
+
             }
             else -> Unit
         }
@@ -320,13 +313,13 @@ class AppForegroundService : Service() {
     private fun hideViewSpeedMonitor() {
         remoteViews.setViewVisibility(R.id.tv_upload_value_notification, View.GONE)
         remoteViews.setViewVisibility(R.id.tv_download_value_notification, View.GONE)
-        remoteViews.setViewVisibility(R.id.btn_speed_test_notification, View.GONE)
+
     }
 
     private fun hideViewDataUsage() {
         remoteViews.setViewVisibility(R.id.mobile_usage_value, View.GONE)
         remoteViews.setViewVisibility(R.id.wifi_usage_value, View.GONE)
-        remoteViews.setViewVisibility(R.id.btn_speed_test_notification, View.VISIBLE)
+
 
     }
 

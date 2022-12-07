@@ -1,24 +1,19 @@
 package com.example.speedtest_rework.ui.main
 
 import android.app.AppOpsManager
-import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.content.res.Resources
-import android.graphics.Insets
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.util.DisplayMetrics
 import android.view.*
-import android.widget.LinearLayout
-import android.widget.PopupWindow
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -33,7 +28,6 @@ import com.example.speedtest_rework.base.fragment.BaseFragment
 import com.example.speedtest_rework.common.utils.*
 import com.example.speedtest_rework.common.utils.AppSharePreference.Companion.INSTANCE
 import com.example.speedtest_rework.databinding.FragmentMainBinding
-import com.example.speedtest_rework.databinding.LayoutMenuInfoBinding
 import com.example.speedtest_rework.services.AppForegroundService
 import com.example.speedtest_rework.services.ServiceType
 import com.example.speedtest_rework.ui.main.languages.FragmentLanguage
@@ -51,7 +45,6 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
     private lateinit var binding: FragmentMainBinding
     private val viewModel: SpeedTestViewModel by activityViewModels()
     private lateinit var languageDialog: FragmentLanguage
-    private lateinit var popupWindow: PopupWindow
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -113,8 +106,8 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
     private fun initDrawerAction() {
         binding.containerFeedback.root.clickWithDebounce { feedBack() }
         binding.containerPolicy.root.clickWithDebounce { openLink("http://www.facebook.com") }
-        binding.containerShare.root.clickWithDebounce { this.shareApp() }
-        binding.containerRate.root.clickWithDebounce { this.rateApp() }
+        binding.containerShare.root.clickWithDebounce { shareApp() }
+        binding.containerRate.root.clickWithDebounce { rateApp() }
         val saveServiceType =
             AppSharePreference.getInstance(requireContext()).getServiceType(ServiceType.NONE)
         if (buildMinVersionM()) {
@@ -203,25 +196,20 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
     }
 
     private fun feedBack() {
-        val to = arrayOf("",Constant.MAIL_TO)
-        val emailIntent = Intent(Intent.ACTION_SEND)
-        emailIntent.data = Uri.parse("mailto:")
-        emailIntent.type = "message/rfc822"
-        emailIntent.putExtra(Intent.EXTRA_EMAIL, to)
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
-        emailIntent.putExtra(
-            Intent.EXTRA_SUBJECT,
-            "${getString(R.string.app_name)} - SDK_CLIENT ${Build.VERSION.SDK_INT}"
+        val deviceName = Build.MODEL // returns model name
+        val deviceManufacturer = Build.MANUFACTURER
+
+        val testIntent = Intent(Intent.ACTION_VIEW)
+        val data: Uri = Uri.parse(
+            """mailto:?subject=Feedback ${getString(R.string.app_name)}&body=Device: $deviceManufacturer - $deviceName Android SDK ${Build.VERSION.SDK_INT} &to=${Constant.MAIL_TO}"""
         )
-        emailIntent.putExtra(Intent.EXTRA_TEXT, emailIntent);
+        testIntent.data = data
         try {
-            startActivity(Intent.createChooser(emailIntent, getString(R.string.app_name)))
-        } catch (ex: ActivityNotFoundException) {
-            Toast.makeText(
-                requireContext(),
-                getString(R.string.no_provider),
-                Toast.LENGTH_SHORT
-            ).show()
+            startActivity(testIntent)
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            toastShort(getString(R.string.no_provider))
         }
     }
 
@@ -255,12 +243,11 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
             val intent = Intent()
             intent.action = Settings.ACTION_USAGE_ACCESS_SETTINGS
             intent.data = Uri.parse("package:${context.packageName}")
-            context.startActivity(intent)
+            settingPermissionLauncher.launch(intent)
         } catch (e: Exception) {
             val intent = Intent()
             intent.action = Settings.ACTION_USAGE_ACCESS_SETTINGS
-            context.startActivity(intent)
-
+            settingPermissionLauncher.launch(intent)
         }
 
     }
@@ -370,7 +357,6 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
         }.playOn(binding.navBottom)
     }
 
-
     private fun showStopBtn() {
         YoYo.with(Techniques.FadeOut).duration(100).onEnd {
             binding.imvVip.visibility = View.GONE
@@ -416,6 +402,9 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
 
     private fun observeHardReset() {
         viewModel.mScanStatus.observe(viewLifecycleOwner) {
+            if (it == ScanStatus.HARD_RESET) {
+                toastShort(getString(R.string.scan_canceled))
+            }
             if (it == ScanStatus.SCANNING) {
                 hideBottomTabWhenScan()
                 showStopBtn()
@@ -437,6 +426,29 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+    }
+
+
+    private val settingPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (checkAccessSettingPermission(requireContext())) {
+                actionWhenPermissionGranted()
+            }
+        }
+
+    private fun actionWhenPermissionGranted() {
+        binding.swSwitchDataUsage.isChecked = true
+        binding.tvDesDataUsage.visibility = View.VISIBLE
+
+        if (AppForegroundService.getInstance().isServiceDataUsageRunning(
+                requireContext(), AppForegroundService::class.java
+            )
+        ) {
+            return
+        }
+        AppForegroundService.getInstance().startService(
+            requireContext(), ServiceType.DATA_USAGE
+        )
     }
 
     override fun negativeAction() {

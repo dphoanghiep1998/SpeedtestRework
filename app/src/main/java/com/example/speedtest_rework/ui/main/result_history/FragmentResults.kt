@@ -1,15 +1,12 @@
 package com.example.speedtest_rework.ui.main.result_history
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.speedtest_rework.ui.main.result_history.adapter.HistoryAdapter
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.dialog.ConfirmDialog
 import com.example.speedtest_rework.base.fragment.BaseFragment
@@ -17,6 +14,7 @@ import com.example.speedtest_rework.common.utils.Constant
 import com.example.speedtest_rework.common.utils.clickWithDebounce
 import com.example.speedtest_rework.data.model.HistoryModel
 import com.example.speedtest_rework.databinding.FragmentResultsBinding
+import com.example.speedtest_rework.ui.main.result_history.adapter.HistoryAdapter
 import com.example.speedtest_rework.ui.main.result_history.adapter.ResultTouchHelper
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
 
@@ -79,11 +77,7 @@ class FragmentResults(private val onStartClickedListener: OnStartClickedListener
             if (list.isEmpty()) {
                 binding.containerEmpty.visibility = View.VISIBLE
                 binding.btnDelete.clickWithDebounce {
-                    Toast.makeText(
-                        requireContext(),
-                        getString(R.string.no_list_found),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    toastShort(getString(R.string.no_list_found))
                 }
             } else {
                 binding.containerEmpty.visibility = View.GONE

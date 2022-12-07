@@ -65,6 +65,7 @@ class FragmentPingTestViewModel @Inject constructor() : BaseViewModel() {
                             }
 
                             override fun onError(e: Exception) {
+                                Log.d("TAG", "onError: ")
                             }
                         })
             }
@@ -83,7 +84,7 @@ class FragmentPingTestViewModel @Inject constructor() : BaseViewModel() {
                                 Log.d("TAG", "onResult: "+pingResult.timeTaken)
                                 listResult.add(
                                     PingResultTest(
-                                        pingResult.timeTaken.toInt(),
+                                        pingResult.timeTaken,
                                         pingResult.isReachable
                                     )
                                 )
@@ -96,7 +97,8 @@ class FragmentPingTestViewModel @Inject constructor() : BaseViewModel() {
                         }
 
                         override fun onError(e: Exception) {
-                            e.printStackTrace()
+                            Log.d("TAG", "onError: ")
+
                         }
                     })
         }

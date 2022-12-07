@@ -225,12 +225,12 @@ open class FragmentAdvancedPing(private val itemContentPingTest: ContentPingTest
                 binding.tvPacketSentValue.text = packetSent.toString()
                 if (it[it.size - 1].isReachable) {
                     binding.pingValue.text = it[it.size - 1].ping_value.toString()
-                    avgLatency += it[it.size - 1].ping_value
+                    avgLatency += it[it.size - 1].ping_value.toInt()
                     if (it[it.size - 1].ping_value > maxValue) {
-                        maxValue = it[it.size - 1].ping_value
+                        maxValue = it[it.size - 1].ping_value.toInt()
                     }
                     if (it[it.size - 1].ping_value < minLatency) {
-                        minLatency = it[it.size - 1].ping_value
+                        minLatency = it[it.size - 1].ping_value.toInt()
                     }
                     binding.tvMs.visibility = View.VISIBLE
                     binding.tvPacketReceivedValue.text = (++packetReceived).toString()
@@ -265,10 +265,10 @@ open class FragmentAdvancedPing(private val itemContentPingTest: ContentPingTest
                     )
                 }
                 val color = when (it[it.size - 1].ping_value) {
-                    in 0..50 -> {
+                    in 0f..50f -> {
                         getColor(R.color.gradient_green_start)
                     }
-                    in 51..100 -> {
+                    in 51f..100f -> {
                         getColor(R.color.gradient_yellow_end)
                     }
                     else -> {
@@ -357,7 +357,6 @@ open class FragmentAdvancedPing(private val itemContentPingTest: ContentPingTest
     private fun countPacketLoss(packetSent: Int, lossNumber: Int) {
         val percent = (lossNumber.toFloat() / packetSent.toFloat()) * 100
         binding.tvPacketLossValue.text = "${percent.toInt()} %"
-
     }
 
 
@@ -379,7 +378,7 @@ open class FragmentAdvancedPing(private val itemContentPingTest: ContentPingTest
     }
 
     private fun handleFlowItemAdvance() {
-        binding.tvShowUrl.text = itemContentPingTest?.url
+        binding.tvShowUrl.text = itemContentPingTest.url
         binding.containerShowUrl.visibility = View.VISIBLE
         binding.containerShowUrl.setOnClickListener {
             it.visibility = View.GONE
@@ -396,7 +395,7 @@ open class FragmentAdvancedPing(private val itemContentPingTest: ContentPingTest
 
     private fun observeFlagChangeBack() {
         viewMoDel.flagChangeBack.observe(viewLifecycleOwner) {
-            Log.d("observeFlagChangeBack", "observeFlagChangeBack: " + it)
+            Log.d("observeFlagChangeBack", "observeFlagChangeBack: $it")
 
             if (it) {
                 binding.btnBack.clickWithDebounce {
@@ -431,7 +430,6 @@ open class FragmentAdvancedPing(private val itemContentPingTest: ContentPingTest
 
 
     private fun observeListRecent() {
-
         viewMoDel.listRecent.observe(viewLifecycleOwner) {
             adapter.setList(it)
             AppSharePreference.INSTANCE.saveRecentList(it)
@@ -553,7 +551,7 @@ open class FragmentAdvancedPing(private val itemContentPingTest: ContentPingTest
     }
 
     override fun positiveAction() {
-        viewMoDel.listRecent.value = listOf()
+        viewMoDel.listRecent.postValue(mutableListOf())
     }
 
 }

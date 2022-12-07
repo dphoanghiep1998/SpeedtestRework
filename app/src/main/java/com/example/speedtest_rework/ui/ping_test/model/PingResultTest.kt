@@ -1,4 +1,4 @@
 package com.example.speedtest_rework.ui.ping_test.model
 
-class PingResultTest(var ping_value: Int = -1, val isReachable: Boolean) {
+class PingResultTest(var ping_value: Float = -1f, val isReachable: Boolean) {
 }

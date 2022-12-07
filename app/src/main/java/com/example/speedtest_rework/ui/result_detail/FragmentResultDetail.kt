@@ -26,6 +26,7 @@ import com.example.speedtest_rework.common.utils.Constant
 import com.example.speedtest_rework.common.utils.DateTimeUtils
 import com.example.speedtest_rework.common.utils.clickWithDebounce
 import com.example.speedtest_rework.common.utils.format
+import com.example.speedtest_rework.data.database.file_provider.DatabaseHelper
 import com.example.speedtest_rework.data.model.HistoryModel
 import com.example.speedtest_rework.databinding.FragmentDetailResultBinding
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
@@ -109,6 +110,7 @@ class FragmentResultDetail : DialogFragment(), ConfirmDialog.ConfirmCallback, As
             findNavController().popBackStack()
         }
         binding.btnShare.clickWithDebounce {
+            exportFile()
         }
         val progress =
             if (testModel.download >= 40) 100 else if (testModel.download < 40 && testModel.download >= 20) 50 else 0
@@ -297,6 +299,11 @@ class FragmentResultDetail : DialogFragment(), ConfirmDialog.ConfirmCallback, As
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    private fun exportFile() {
+        val databaseHelper = DatabaseHelper(requireContext())
+        databaseHelper.exportDatabaseToCSVFile(testModel)
     }
 
 

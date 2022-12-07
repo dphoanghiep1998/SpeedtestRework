@@ -1,7 +1,9 @@
 package com.example.speedtest_rework.ui.wifi_detector
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,17 +11,20 @@ import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
 import android.view.animation.RotateAnimation
 import androidx.activity.OnBackPressedCallback
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.fragment.BaseFragment
+import com.example.speedtest_rework.common.utils.NetworkUtils
 import com.example.speedtest_rework.common.utils.clickWithDebounce
 import com.example.speedtest_rework.databinding.FragmentWifiDetectorBinding
 import com.example.speedtest_rework.ui.wifi_detector.adapter.WifiDetectorAdapter
 import com.example.speedtest_rework.ui.wifi_detector.interfaces.ItemDeviceHelper
 import com.example.speedtest_rework.ui.wifi_detector.model.DeviceModel
 import com.example.speedtest_rework.viewmodel.FragmentWifiDetectViewModel
+import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -27,6 +32,7 @@ class FragmentWifiDetector : BaseFragment(), ItemDeviceHelper {
     private lateinit var binding: FragmentWifiDetectorBinding
     private lateinit var adapter: WifiDetectorAdapter
     private val viewModel: FragmentWifiDetectViewModel by viewModels()
+    private val shareViewModel: SpeedTestViewModel by activityViewModels()
     private lateinit var rotate: RotateAnimation
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,9 +46,25 @@ class FragmentWifiDetector : BaseFragment(), ItemDeviceHelper {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+        observeWifiEnabled()
         observeWifiDeviceList()
         observeWifiDetectDone()
         changeBackPressCallBack()
+    }
+
+    private fun observeWifiEnabled() {
+        shareViewModel.mWifiEnabled.observe(viewLifecycleOwner) {
+            if (it) {
+                discoveryDevice()
+                binding.requestWifiContainer.visibility = View.GONE
+                binding.btnReload.visibility = View.VISIBLE
+            } else {
+                binding.requestWifiContainer.visibility = View.VISIBLE
+                binding.btnReload.visibility = View.GONE
+
+            }
+
+        }
     }
 
     private fun changeBackPressCallBack() {
@@ -61,9 +83,8 @@ class FragmentWifiDetector : BaseFragment(), ItemDeviceHelper {
         initAnimation()
         initButton()
         initRecycleView()
-        discoveryDevice()
-
     }
+
 
     private fun initAnimation() {
         rotate = RotateAnimation(
@@ -109,6 +130,11 @@ class FragmentWifiDetector : BaseFragment(), ItemDeviceHelper {
         binding.refreshLayout.setOnRefreshListener {
             discoveryDevice()
             binding.refreshLayout.isRefreshing = false
+        }
+        binding.btnSetting.clickWithDebounce {
+            val intent =
+                Intent(Settings.ACTION_WIFI_SETTINGS)
+            startActivity(intent)
         }
     }
 

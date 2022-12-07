@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Theme.SpeedTest_Rework" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
@@ -10,9 +10,21 @@
         <item name="colorSecondaryVariant">@color/teal_200</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" >?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <item name="android:splitMotionEvents">false</item>
         <item name="android:windowEnableSplitTouch">false</item>
         <!-- Customize your theme here. -->
+    </style>
+
+    <style name="NotificationTextTitle" parent="TextAppearance.Compat.Notification.Title">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/_9sdp</item>
+
+    </style>
+
+    <style name="NotificationText" parent="TextAppearance.Compat.Notification">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/_9sdp</item>
+
     </style>
 </resources>

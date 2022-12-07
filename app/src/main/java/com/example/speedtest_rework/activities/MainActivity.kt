@@ -102,7 +102,7 @@ class MainActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceChangeL
         ) {
 
         } else {
-            navHostFragment?.navController?.navigate(R.id.action_fragmentPermission_to_fragmentMain)
+            navHostFragment?.navController?.navigate(R.id.fragmentMain)
         }
     }
 

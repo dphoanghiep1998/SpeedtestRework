@@ -2,11 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="40dp"
-    android:paddingHorizontal="8dp"
+    android:layout_height="wrap_content"
     android:gravity="center"
-    android:orientation="horizontal"
-    >
+    android:orientation="horizontal">
 
 
     <ImageView
@@ -21,98 +19,68 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:weightSum="4"
         android:gravity="start"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/_4sdp">
 
-        <LinearLayout
-            android:id="@+id/container_speed_monitor"
-            android:layout_width="wrap_content"
+
+        <TextView
+            android:id="@+id/tv_download_value_notification"
+            style="@style/NotificationText"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:drawableStart="@drawable/ic_download_notification"
+            android:drawablePadding="@dimen/_2sdp"
+            android:gravity="center|start"
+            android:maxLines="1"
+            android:text="0 kB/s" />
 
-            <TextView
-                android:id="@+id/tv_download_value_notification"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:autoSizeTextType="uniform"
-                android:drawableStart="@drawable/ic_download_notification"
-                android:drawablePadding="@dimen/_2sdp"
-                android:maxLines="1"
-                android:paddingStart="@dimen/_4sdp"
-                android:text="0 kB/s"
-                android:textColor="@color/gray_700"
-                app:autoSizeMaxTextSize="@dimen/_10sdp"
-                app:autoSizeMinTextSize="@dimen/_6sdp"
-                app:autoSizeStepGranularity="1dp" />
-
-            <TextView
-                android:id="@+id/tv_upload_value_notification"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:autoSizeTextType="uniform"
-                android:drawableStart="@drawable/ic_upload_notification"
-                android:drawablePadding="@dimen/_2sdp"
-                android:maxLines="1"
-                android:paddingStart="@dimen/_4sdp"
-                android:text="0 kB/s"
-                android:textColor="@color/gray_700"
-                app:autoSizeMaxTextSize="@dimen/_10sdp"
-                app:autoSizeMinTextSize="@dimen/_6sdp"
-                app:autoSizeStepGranularity="1dp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/container_data_usage"
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/tv_upload_value_notification"
+            style="@style/NotificationText"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:drawableStart="@drawable/ic_upload_notification"
+            android:drawablePadding="@dimen/_2sdp"
+            android:gravity="center|start"
 
-            <TextView
-                android:id="@+id/mobile_usage_value"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableStart="@drawable/ic_mobile_usage"
-                android:drawablePadding="@dimen/_2sdp"
-                android:maxLines="1"
-                android:paddingStart="@dimen/_4sdp"
-                android:text="0 MB"
-                android:textColor="@color/gray_700"
-                app:autoSizeMaxTextSize="@dimen/_10sdp"
-                app:autoSizeMinTextSize="@dimen/_6sdp"
-                app:autoSizeStepGranularity="1dp" />
+            android:maxLines="1"
+            android:text="0 kB/s"
+            app:autoSizeStepGranularity="1dp" />
 
-            <TextView
-                android:id="@+id/wifi_usage_value"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableStart="@drawable/ic_wifi_usage_notification"
-                android:drawablePadding="@dimen/_2sdp"
-                android:maxLines="1"
-                android:paddingStart="@dimen/_4sdp"
-                android:text="0 MB"
-                android:textColor="@color/gray_700"
-                app:autoSizeMaxTextSize="@dimen/_10sdp"
-                app:autoSizeMinTextSize="@dimen/_6sdp"
-                app:autoSizeStepGranularity="1dp" />
-        </LinearLayout>
+
+        <TextView
+            android:id="@+id/mobile_usage_value"
+            style="@style/NotificationText"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_mobile_usage"
+            android:drawablePadding="@dimen/_2sdp"
+            android:gravity="center|start"
+
+            android:maxLines="1"
+            android:text="0 MB" />
+
+        <TextView
+            android:id="@+id/wifi_usage_value"
+            style="@style/NotificationText"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_wifi_usage_notification"
+            android:drawablePadding="@dimen/_2sdp"
+            android:gravity="center|start"
+
+            android:maxLines="1"
+            android:paddingStart="@dimen/_4sdp"
+            android:text="0 MB" />
 
 
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/btn_speed_test_notification"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/button_background_start"
-        android:fontFamily="@font/app_font_bold"
-        android:paddingHorizontal="@dimen/_8sdp"
-        android:paddingVertical="@dimen/_8sdp"
-        android:text="@string/speed_test_title"
-        android:textColor="@color/gray_800"
-        android:textSize="@dimen/_8sdp"
-        android:textStyle="bold" />
 
 
 </LinearLayout>

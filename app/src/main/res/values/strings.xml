@@ -238,6 +238,10 @@
     <string name="max_latency">Max Latency</string>
     <string name="no_provider">No provider found</string>
     <string name="pick_one">Pick one</string>
+    <string name="generating_csv">Genarating CSV</string>
+    <string name="gen_csv_success">Generated Success</string>
+    <string name="gen_csv_failed">Generated Failed</string>
+    <string name="scan_canceled">Scaning process canceled</string>
 
 
 </resources>

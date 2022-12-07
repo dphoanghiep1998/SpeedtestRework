@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.navigation.fragment.findNavController
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.dialog.PermissionDialog
@@ -19,6 +20,8 @@ import com.example.speedtest_rework.base.fragment.BaseFragment
 import com.example.speedtest_rework.common.utils.buildMinVersionQ
 import com.example.speedtest_rework.common.utils.clickWithDebounce
 import com.example.speedtest_rework.databinding.FragmentToolsBinding
+import com.example.speedtest_rework.services.AppForegroundService
+import com.example.speedtest_rework.services.ServiceType
 
 class FragmentTools : BaseFragment(), PermissionDialog.ConfirmCallback {
     private lateinit var binding: FragmentToolsBinding
@@ -104,11 +107,21 @@ class FragmentTools : BaseFragment(), PermissionDialog.ConfirmCallback {
     }
 
     override fun negativeAction() {
-
+        //do nothing
     }
 
     override fun positiveAction() {
         requestAccessSettingPermission(requireContext())
+    }
+    private val settingPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (checkAccessSettingPermission(requireContext())) {
+                actionWhenPermissionGranted()
+            }
+        }
+
+    private fun actionWhenPermissionGranted() {
+        navigateToPage(R.id.action_fragmentMain_to_fragmentDataUsage)
     }
 
     private fun requestAccessSettingPermission(context: Context) {
@@ -116,12 +129,11 @@ class FragmentTools : BaseFragment(), PermissionDialog.ConfirmCallback {
             val intent = Intent()
             intent.action = Settings.ACTION_USAGE_ACCESS_SETTINGS
             intent.data = Uri.parse("package:${context.packageName}")
-            context.startActivity(intent)
+            settingPermissionLauncher.launch(intent)
         } catch (e: Exception) {
             val intent = Intent()
             intent.action = Settings.ACTION_USAGE_ACCESS_SETTINGS
-            context.startActivity(intent)
-
+            settingPermissionLauncher.launch(intent)
         }
 
     }

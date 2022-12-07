@@ -439,10 +439,11 @@ class SpeedView(
                     viewModel?.insertNewHistoryAction(testModel!!)
                     viewModel?.setScanStatus(ScanStatus.DONE)
                     binding.speedView.stop()
-                    Handler(Looper.getMainLooper()).postDelayed({
+                    Handler().postDelayed({
                         val bundle = Bundle()
                         bundle.putParcelable(Constant.KEY_TEST_MODEL, testModel)
                         bundle.putBoolean(Constant.KEY_FROM_SPEED_TEST_FRAGMENT, true)
+
                         Navigation.findNavController(binding.root)
                             .navigate(R.id.action_fragmentMain_to_fragmentResultDetail, bundle)
                     }, 600L)

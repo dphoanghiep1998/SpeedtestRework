@@ -2,6 +2,7 @@ package com.example.speedtest_rework.base.fragment
 
 import android.graphics.drawable.Drawable
 import android.view.View
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
@@ -13,6 +14,12 @@ import com.example.speedtest_rework.common.utils.EventObserver
 
 
 open class BaseFragment : Fragment() {
+    protected fun toastShort(message: String){
+        Toast.makeText(requireContext(),message,Toast.LENGTH_SHORT).show()
+    }
+    protected fun toastLong(message: String){
+        Toast.makeText(requireContext(),message,Toast.LENGTH_LONG).show()
+    }
 
     protected fun hideView(view: View) {
         view.visibility = View.GONE
