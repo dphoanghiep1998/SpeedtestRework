@@ -1,6 +1,5 @@
 package com.example.speedtest_rework.viewmodel
 
-import android.content.Context
 import android.net.wifi.ScanResult
 import android.net.wifi.WifiInfo
 import android.os.Build
@@ -18,7 +17,6 @@ import com.example.speedtest_rework.data.repositories.AppRepository
 import com.example.speedtest_rework.ui.data_usage.model.DataUsageModel
 import com.example.speedtest_rework.ui.main.analyzer.band.WiFiBand
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
@@ -28,7 +26,6 @@ import javax.inject.Inject
 @HiltViewModel
 class SpeedTestViewModel @Inject constructor(
     private val appRepository: AppRepository,
-    @ApplicationContext val context: Context
 ) :
     BaseViewModel() {
     var currentLanguage = ""
@@ -39,8 +36,7 @@ class SpeedTestViewModel @Inject constructor(
     var userActionRate: Boolean = false
     var wiFiBand = MutableLiveData(WiFiBand.GHZ2)
     private val listDataUsage: MutableLiveData<List<DataUsageModel>> = MutableLiveData()
-
-
+    var wifiName = MutableLiveData("")
 
 
     private var scanStatus = MutableLiveData<ScanStatus>()
@@ -129,9 +125,6 @@ class SpeedTestViewModel @Inject constructor(
     fun deleteAllHistoryAction() {
         viewModelScope.launch { appRepository.deleteAllHistory() }
     }
-
-
-
 
 
     fun doMultiTask() {

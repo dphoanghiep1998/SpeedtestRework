@@ -14,7 +14,7 @@ class HistoryModel(
     var isp: String = "",
     var jitter: Double = 0.0,
     var loss: Double = 0.0,
-    var network: String = "0.0.0.0",
+    var network: String = "wifi",
     var ping: Double = 0.0,
     var time: Date = Date(),
     var upload: Double = 0.0,

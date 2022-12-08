@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_main"
     tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
 
     <androidx.appcompat.widget.LinearLayoutCompat
@@ -189,10 +188,10 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
-            android:baselineAligned="false"
             android:id="@+id/container_ping_loss_jitter"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:baselineAligned="false"
             android:gravity="center"
             android:orientation="horizontal"
             android:visibility="visible"
@@ -324,7 +323,79 @@
         app:layout_constraintTop_toBottomOf="@id/topView">
 
 
+        <androidx.cardview.widget.CardView
+            android:id="@+id/btn_start_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:outlineAmbientShadowColor="@color/transparent"
+            android:outlineSpotShadowColor="@color/transparent"
+            app:cardBackgroundColor="@color/background_main"
+            app:cardCornerRadius="@dimen/_100sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/btn_start"
+                    android:layout_width="@dimen/_200sdp"
+                    android:layout_height="@dimen/_200sdp"
+                    android:scaleType="centerCrop"
+                    android:scaleX="1.1"
+                    android:scaleY="1.1"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="true"
+                    app:lottie_rawRes="@raw/go_animation" />
+
+                <com.example.speedtest_rework.common.custom_view.GradientText
+                    android:id="@+id/tv_go"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/go"
+                    android:textSize="@dimen/_30sdp"
+                    app:colorFirst="@color/gradient_green_start"
+                    app:colorSecond="@color/gradient_green_end"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/container_no_network"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/imv_no_network"
+                        android:layout_width="@dimen/_30sdp"
+                        android:layout_height="@dimen/_30sdp"
+                        android:src="@drawable/ic_no_network"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/no_network"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_16sdp"
+                        app:layout_constraintTop_toBottomOf="@id/imv_no_network" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
 
 
         <com.airbnb.lottie.LottieAnimationView
@@ -339,12 +410,13 @@
             app:lottie_autoPlay="true"
             app:lottie_rawRes="@raw/connecting" />
 
+
         <com.example.speedtest_rework.common.custom_view.GradientText
             android:id="@+id/tv_connecting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/connecting"
-            android:textSize="@dimen/_12sdp"
+            android:textSize="@dimen/_16sdp"
             android:visibility="gone"
             app:colorFirst="@color/gradient_green_start"
             app:colorSecond="@color/gradient_green_end"
@@ -355,8 +427,8 @@
 
         <com.github.anastr.speedviewlib.PointerSpeedometer
             android:id="@+id/speedView"
-            android:layout_width="@dimen/_200sdp"
-            android:layout_height="@dimen/_200sdp"
+            android:layout_width="@dimen/_220sdp"
+            android:layout_height="@dimen/_220sdp"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -380,9 +452,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="-50dp"
-            android:text="@string/zero_value_dec"
+            android:text="0.0"
             android:textColor="@color/white"
-            android:textSize="@dimen/_16sdp"
+            android:textSize="@dimen/_18sdp"
             android:textStyle="bold"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="@id/speedView"
@@ -402,8 +474,8 @@
 
             <ImageView
                 android:id="@+id/icon_speed_value"
-                android:layout_width="@dimen/_10sdp"
-                android:layout_height="@dimen/_10sdp"
+                android:layout_width="@dimen/_15sdp"
+                android:layout_height="@dimen/_15sdp"
                 android:src="@drawable/ic_download" />
 
             <TextView
@@ -413,33 +485,8 @@
                 android:paddingStart="@dimen/_4sdp"
                 android:text="@string/Mbps"
                 android:textColor="@color/white"
-                android:textSize="@dimen/_12sdp" />
+                android:textSize="@dimen/_13sdp" />
         </LinearLayout>
-        <androidx.cardview.widget.CardView
-            android:id="@+id/btn_start_container"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:outlineAmbientShadowColor="@color/transparent"
-            android:outlineSpotShadowColor="@color/transparent"
-            app:cardBackgroundColor="@color/background_main"
-            app:cardCornerRadius="@dimen/_100sdp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/btn_start"
-                android:layout_width="@dimen/_200sdp"
-                android:layout_height="@dimen/_200sdp"
-                android:scaleType="centerCrop"
-                android:scaleX="1.1"
-                android:scaleY="1.1"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:lottie_autoPlay="true"
-                app:lottie_loop="true"
-                app:lottie_rawRes="@raw/go" />
-        </androidx.cardview.widget.CardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </merge>

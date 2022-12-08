@@ -4,12 +4,15 @@ import android.animation.Animator
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.ColorFilter
+import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Looper
+import android.provider.Settings
 import android.transition.AutoTransition
 import android.transition.TransitionManager
 import android.util.AttributeSet
@@ -21,6 +24,7 @@ import android.view.animation.Animation
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.Navigation
 import com.airbnb.lottie.LottieProperty
 import com.airbnb.lottie.SimpleColorFilter
@@ -80,11 +84,8 @@ class SpeedView(
                 binding.btnStartContainer.visibility = View.VISIBLE
             }
         btnStartStringShow = btnStartComposeShow.playOn(binding.btnStartContainer)
+        btnStartComposeShow.playOn(binding.tvGo)
 
-//        btnStartStringHide = YoYo.with(Techniques.FadeOut).onEnd {
-//            Log.d("TAG", "btnStartComposeHide: ")
-//            binding.btnStartContainer.visibility = View.GONE
-//        }.playOn(binding.btnStartContainer)
 
         tvConnectingShow = YoYo.with(Techniques.SlideInRight).onStart {
             binding.tvConnecting.visibility = View.VISIBLE
@@ -106,6 +107,13 @@ class SpeedView(
         this.viewModel = viewModel
         speedTest = SpeedTest()
         speedTest?.addTestPoint(testPoint)
+        if (type == ConnectionType.UNKNOWN) {
+            binding.containerNoNetwork.visibility = View.VISIBLE
+            binding.tvGo.visibility = View.GONE
+        } else {
+            binding.containerNoNetwork.visibility = View.GONE
+            binding.tvGo.visibility = View.VISIBLE
+        }
     }
 
     fun setData(testPoint: TestPoint, type: ConnectionType) {
@@ -113,10 +121,24 @@ class SpeedView(
         this.type = type
         speedTest = SpeedTest()
         speedTest?.addTestPoint(testPoint)
+        if (type == ConnectionType.UNKNOWN) {
+            binding.containerNoNetwork.visibility = View.VISIBLE
+            binding.tvGo.visibility = View.GONE
+        } else {
+            binding.containerNoNetwork.visibility = View.GONE
+            binding.tvGo.visibility = View.VISIBLE
+        }
     }
 
     fun setData(type: ConnectionType) {
         this.type = type
+        if (type == ConnectionType.UNKNOWN) {
+            binding.containerNoNetwork.visibility = View.VISIBLE
+            binding.tvGo.visibility = View.GONE
+        } else {
+            binding.containerNoNetwork.visibility = View.GONE
+            binding.tvGo.visibility = View.VISIBLE
+        }
     }
 
 
@@ -182,38 +204,22 @@ class SpeedView(
             override fun onTouch(p0: View?, p1: MotionEvent?): Boolean {
                 when (p1?.action) {
                     MotionEvent.ACTION_DOWN -> {
-                        val filter = SimpleColorFilter(Color.WHITE)
-                        val callback: LottieValueCallback<ColorFilter> = LottieValueCallback(filter)
-                        binding.btnStart.addValueCallback(
-                            KeyPath("**"),
-                            LottieProperty.COLOR_FILTER,
-                            callback
-                        )
+                        changeColorWhenPressDown()
                     }
                     MotionEvent.ACTION_UP -> {
-                        binding.btnStart.addValueCallback(
-                            KeyPath("**"), LottieProperty.COLOR_FILTER
-                        ) { null }
+                        changeColorWhenRelease()
                         if (type == ConnectionType.UNKNOWN) {
-                            Toast.makeText(
-                                context,
-                                context.getText(R.string.no_connectivity),
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            openConnectivitySetting()
                             return true
                         }
                         viewModel?.setScanStatus(ScanStatus.SCANNING)
                         prepareViewSpeedTest()
                     }
                     MotionEvent.ACTION_CANCEL -> {
-                        binding.btnStart.addValueCallback(
-                            KeyPath("**"), LottieProperty.COLOR_FILTER
-                        ) { null }
+                        changeColorWhenRelease()
                     }
                     MotionEvent.ACTION_OUTSIDE -> {
-                        binding.btnStart.addValueCallback(
-                            KeyPath("**"), LottieProperty.COLOR_FILTER
-                        ) { null }
+                        changeColorWhenRelease()
                     }
                 }
                 return true
@@ -223,6 +229,31 @@ class SpeedView(
         binding.speedView.isWithPointer = false
         binding.speedView.textSize = 40f
         binding.speedView.withTremble = false
+    }
+    private fun openConnectivitySetting(){
+        context.startActivity(Intent(WifiManager.ACTION_PICK_WIFI_NETWORK));
+    }
+
+    private fun changeColorWhenPressDown() {
+        val filter = SimpleColorFilter(Color.WHITE)
+        val callback: LottieValueCallback<ColorFilter> = LottieValueCallback(filter)
+        binding.btnStart.addValueCallback(
+            KeyPath("**"),
+            LottieProperty.COLOR_FILTER,
+            callback
+        )
+        binding.tvGo.reset()
+    }
+
+    private fun changeColorWhenRelease() {
+        binding.btnStart.addValueCallback(
+            KeyPath("**"), LottieProperty.COLOR_FILTER
+        ) { null }
+        binding.tvGo.setShader(
+            ContextCompat.getColor(context, R.color.gradient_green_end),
+            ContextCompat.getColor(context, R.color.gradient_green_start)
+        )
+        binding.tvGo.setTextColor(ContextCompat.getColor(context, R.color.gradient_green_start))
     }
 
     private fun changeUnitType() {
@@ -439,14 +470,14 @@ class SpeedView(
                     viewModel?.insertNewHistoryAction(testModel!!)
                     viewModel?.setScanStatus(ScanStatus.DONE)
                     binding.speedView.stop()
-                    Handler().postDelayed({
-                        val bundle = Bundle()
-                        bundle.putParcelable(Constant.KEY_TEST_MODEL, testModel)
-                        bundle.putBoolean(Constant.KEY_FROM_SPEED_TEST_FRAGMENT, true)
 
-                        Navigation.findNavController(binding.root)
-                            .navigate(R.id.action_fragmentMain_to_fragmentResultDetail, bundle)
-                    }, 600L)
+                    val bundle = Bundle()
+                    bundle.putParcelable(Constant.KEY_TEST_MODEL, testModel)
+                    bundle.putBoolean(Constant.KEY_FROM_SPEED_TEST_FRAGMENT, true)
+
+                    Navigation.findNavController(binding.root)
+                        .navigate(R.id.action_fragmentMain_to_fragmentResultDetail, bundle)
+
                 }
             }
 
@@ -501,7 +532,7 @@ class SpeedView(
                 R.color.gradient_orange_start
             )
         )
-        Handler().postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed({
             binding.speedView.setState("upload")
         }, 200L)
 

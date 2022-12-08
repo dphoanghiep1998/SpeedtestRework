@@ -1,11 +1,9 @@
 package com.example.speedtest_rework.ui.main.speedtest
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.NavHostFragment
@@ -38,15 +36,14 @@ class FragmentSpeedTest : BaseFragment() {
     private var maxValue: Float = 100f
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentSpeedTestBinding.inflate(inflater, container, false)
         observeIsLoading()
         observeConnectivityChanged()
         observerMultiTaskDone()
         observeScanStatus()
+        observeWifiName()
         return binding.root
     }
 
@@ -249,32 +246,14 @@ class FragmentSpeedTest : BaseFragment() {
                 return
             }
             if (NetworkUtils.isWifiConnected(requireContext())) {
-                val testModel = HistoryModel(
-                    -1,
-                    binding.tvWifiName.text.toString(),
-                    NetworkUtils.wifiIpAddress(),
-                    viewModel.currentNetworkInfo.selfIspIp,
-                    viewModel.currentNetworkInfo.selfIsp,
-                    0.0, 0.0, "wifi", 0.0, Date(System.currentTimeMillis()), 0.0, 0.0
-                )
+                val testModel = HistoryModel()
                 binding.clSpeedview.setData(testPoint!!, ConnectionType.WIFI, testModel, viewModel)
 
             } else if (NetworkUtils.isMobileConnected(requireContext())) {
-                val testModel = HistoryModel(
-                    -1,
-                    binding.tvWifiName.text.toString(),
-                    "0.0.0.0",
-                    viewModel.currentNetworkInfo.selfIspIp,
-                    viewModel.currentNetworkInfo.selfIsp,
-                    0.0, 0.0, "mobile", 0.0, Date(System.currentTimeMillis()), 0.0, 0.0
-                )
+                val testModel = HistoryModel(network = "mobile")
                 binding.clSpeedview.setData(
-                    testPoint!!,
-                    ConnectionType.MOBILE,
-                    testModel,
-                    viewModel
+                    testPoint!!, ConnectionType.MOBILE, testModel, viewModel
                 )
-
             } else {
                 binding.clSpeedview.setData(ConnectionType.UNKNOWN)
 
@@ -300,11 +279,7 @@ class FragmentSpeedTest : BaseFragment() {
         if (addressInfo.isNotEmpty()) {
             val server = addressInfo[0]
             testPoint = TestPoint(
-                server.name,
-                "http://" + server.host,
-                server.downloadUrl,
-                "speedtest/upload",
-                ""
+                server.name, "https://" + server.host, server.downloadUrl, "speedtest/upload", ""
             )
 
         }
@@ -347,8 +322,7 @@ class FragmentSpeedTest : BaseFragment() {
 
     private fun onConnectivityChange() {
         if (NetworkUtils.isWifiConnected(requireContext())) {
-            binding.tvWifiName.text = NetworkUtils.getNameWifi(requireContext())
-            binding.tvWifiNameHidden.text = NetworkUtils.getNameWifi(requireContext())
+            viewModel.wifiName.value = NetworkUtils.getNameWifi(requireContext())
             loadServer()
         } else if (NetworkUtils.isMobileConnected(requireContext())) {
 
@@ -365,6 +339,14 @@ class FragmentSpeedTest : BaseFragment() {
                 viewModel.setScanStatus(ScanStatus.HARD_RESET)
             }
         }
+    }
+
+    private fun observeWifiName() {
+        viewModel.wifiName.observe(viewLifecycleOwner) {
+            binding.tvWifiName.text = it
+            binding.tvWifiNameHidden.text = it
+        }
+
     }
 
 
@@ -400,16 +382,14 @@ class FragmentSpeedTest : BaseFragment() {
                             binding.inforHidden.visibility = View.GONE
 
                         }.playOn(binding.inforHidden)
-                    }
-                        .playOn(binding.containerExpandView)
+                    }.playOn(binding.containerExpandView)
                 }
                 ScanStatus.SCANNING -> {
                     YoYo.with(Techniques.SlideOutLeft).duration(300L).onEnd {
                         YoYo.with(Techniques.FadeIn).duration(100L).onStart {
                             binding.inforHidden.visibility = View.VISIBLE
                         }.playOn(binding.inforHidden)
-                    }
-                        .playOn(binding.containerExpandView)
+                    }.playOn(binding.containerExpandView)
                 }
                 else -> {
                     binding.clSpeedview.resetView()
@@ -418,8 +398,7 @@ class FragmentSpeedTest : BaseFragment() {
                             binding.inforHidden.visibility = View.GONE
 
                         }.playOn(binding.inforHidden)
-                    }
-                        .playOn(binding.containerExpandView)
+                    }.playOn(binding.containerExpandView)
                 }
             }
         }

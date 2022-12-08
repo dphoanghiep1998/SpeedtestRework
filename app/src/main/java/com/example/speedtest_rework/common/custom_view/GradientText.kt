@@ -2,11 +2,8 @@ package com.example.speedtest_rework.common.custom_view
 
 import android.content.Context
 import android.graphics.*
-import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatTextView
-import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import com.example.speedtest_rework.R
 
 
@@ -37,6 +34,12 @@ open class GradientText(context: Context, attributeSet: AttributeSet?) :
 
         }
     }
+    fun reset(){
+        firstColor = 0xFFFFFFFF.toInt()
+        secondColor= 0xFFFFFFFF.toInt()
+        this.setTextColor(firstColor)
+        this.setShader(firstColor,secondColor)
+    }
 
     fun setShader(colorFirst: Int, colorSecond: Int) {
         val shader: Shader = LinearGradient(
@@ -48,6 +51,7 @@ open class GradientText(context: Context, attributeSet: AttributeSet?) :
             colorSecond,
             Shader.TileMode.CLAMP
         )
+
         textPaint.shader = shader
     }
 

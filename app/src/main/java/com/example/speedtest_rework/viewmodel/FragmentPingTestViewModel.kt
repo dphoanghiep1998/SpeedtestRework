@@ -76,8 +76,12 @@ class FragmentPingTestViewModel @Inject constructor() : BaseViewModel() {
         val listResult: MutableList<PingResultTest> = mutableListOf()
         viewModelScope.launch(Dispatchers.IO) {
             val url = URL(address)
+            val labels = url.host.split("\\.")
+            val result = labels.joinToString(separator = ".") { s ->
+                java.net.IDN.toASCII(s)
+            }
             pingAdvanced =
-                Ping.onAddress(url.host).setTimeOutMillis(0).setTimes(10).setDelayMillis(1000)
+                Ping.onAddress(result).setTimeOutMillis(0).setTimes(10).setDelayMillis(1000)
                     .doPing(object : Ping.PingListener {
                         override fun onResult(pingResult: PingResult) {
                             if (!stopPing) {
@@ -97,7 +101,7 @@ class FragmentPingTestViewModel @Inject constructor() : BaseViewModel() {
                         }
 
                         override fun onError(e: Exception) {
-                            Log.d("TAG", "onError: ")
+                            Log.d("TAG", "onError: $e")
 
                         }
                     })

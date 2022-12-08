@@ -1,9 +1,11 @@
 package com.example.speedtest_rework.ui.wifi_detector
 
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +19,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.fragment.BaseFragment
-import com.example.speedtest_rework.common.utils.NetworkUtils
 import com.example.speedtest_rework.common.utils.clickWithDebounce
 import com.example.speedtest_rework.databinding.FragmentWifiDetectorBinding
 import com.example.speedtest_rework.ui.wifi_detector.adapter.WifiDetectorAdapter
@@ -49,6 +50,7 @@ class FragmentWifiDetector : BaseFragment(), ItemDeviceHelper {
         observeWifiEnabled()
         observeWifiDeviceList()
         observeWifiDetectDone()
+        observeWifiName()
         changeBackPressCallBack()
     }
 
@@ -61,9 +63,7 @@ class FragmentWifiDetector : BaseFragment(), ItemDeviceHelper {
             } else {
                 binding.requestWifiContainer.visibility = View.VISIBLE
                 binding.btnReload.visibility = View.GONE
-
             }
-
         }
     }
 
@@ -83,6 +83,16 @@ class FragmentWifiDetector : BaseFragment(), ItemDeviceHelper {
         initAnimation()
         initButton()
         initRecycleView()
+    }
+
+
+    private fun setProgressAnimate(progressTo: Int, duration: Long = 5000) {
+        val animation: ObjectAnimator =
+            ObjectAnimator.ofInt(binding.pbProgress, "progress", binding.pbProgress.progress, progressTo)
+        animation.duration = duration
+        animation.interpolator = LinearInterpolator()
+        animation.setAutoCancel(true)
+        animation.start()
     }
 
 
@@ -142,10 +152,11 @@ class FragmentWifiDetector : BaseFragment(), ItemDeviceHelper {
     private fun discoveryDevice() {
         onScanning()
         viewModel.getDeviceListWifi()
-
     }
 
     private fun onScanning() {
+        binding.pbProgress.progress = 0
+        setProgressAnimate(90)
         adapter.setData(mutableListOf(), false)
         binding.tvPlaceholder.visibility = View.GONE
         binding.tvNumbers.visibility = View.GONE
@@ -157,6 +168,7 @@ class FragmentWifiDetector : BaseFragment(), ItemDeviceHelper {
     }
 
     private fun onScanFinished() {
+        setProgressAnimate(100,1000)
         binding.imvWifiDetector.setImageDrawable(getDrawable(R.drawable.ic_wifi_detector))
         binding.tvPlaceholder.visibility = View.VISIBLE
         binding.tvNumbers.visibility = View.VISIBLE
@@ -165,7 +177,6 @@ class FragmentWifiDetector : BaseFragment(), ItemDeviceHelper {
         binding.btnReload.clearAnimation()
         binding.btnReload.isEnabled = true
         adapter.setData(true)
-
     }
 
     private fun observeWifiDeviceList() {
@@ -173,6 +184,11 @@ class FragmentWifiDetector : BaseFragment(), ItemDeviceHelper {
             adapter.setData(it, false)
             binding.tvNumbers.text = it.size.toString()
 
+        }
+    }
+    private fun observeWifiName(){
+        shareViewModel.wifiName.observe(viewLifecycleOwner){
+            binding.tvWifi.text = it
         }
     }
 

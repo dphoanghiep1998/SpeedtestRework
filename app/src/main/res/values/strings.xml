@@ -242,6 +242,7 @@
     <string name="gen_csv_success">Generated Success</string>
     <string name="gen_csv_failed">Generated Failed</string>
     <string name="scan_canceled">Scaning process canceled</string>
+    <string name="no_network">No Network</string>
 
 
 </resources>

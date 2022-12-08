@@ -12,6 +12,7 @@ import android.util.DisplayMetrics
 import android.view.*
 import android.widget.LinearLayout
 import android.widget.PopupWindow
+import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -67,6 +68,7 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper, ListSizeListener {
         observePermissionChange()
         observeWifiBand()
         observeWifiEnabled()
+        changeBackPressCallBack()
     }
 
 
@@ -357,5 +359,17 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper, ListSizeListener {
             binding.rcvWifi.visibility = View.VISIBLE
         }
     }
+    private fun changeBackPressCallBack() {
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    findNavController().popBackStack()
+
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+
+    }
+
 
 }

@@ -28,9 +28,7 @@
             app:popExitAnim="@anim/slide_out_left"/>
         <action
             android:id="@+id/action_fragmentMain_to_fragmentDataUsage"
-            app:destination="@id/fragmentDataUsage"
-            app:enterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_left" />
+            app:destination="@id/fragmentDataUsage" />
         <action
             android:id="@+id/action_fragmentMain_to_languageFragment"
             app:destination="@id/languageFragment"

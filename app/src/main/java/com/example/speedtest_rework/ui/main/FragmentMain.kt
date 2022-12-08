@@ -56,17 +56,15 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentMainBinding.inflate(layoutInflater, container, false)
-        changeBackPressCallBack()
         loadLanguage()
         initView()
         observeIsScanning()
-        observeHardReset()
+
         return binding.root
     }
 
 
     private fun initView() {
-
         initLanguageDialog()
         initViewPager()
         initBottomNavigation()
@@ -77,6 +75,7 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
 
     private fun initButton() {
         binding.imvStop.clickWithDebounce {
+            toastShort(getString(R.string.scan_canceled))
             viewModel.setScanStatus(ScanStatus.HARD_RESET)
         }
 
@@ -105,7 +104,7 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
 
     private fun initDrawerAction() {
         binding.containerFeedback.root.clickWithDebounce { feedBack() }
-        binding.containerPolicy.root.clickWithDebounce { openLink("http://www.facebook.com") }
+        binding.containerPolicy.root.clickWithDebounce { openLink(Constant.POLICY_LINK) }
         binding.containerShare.root.clickWithDebounce { shareApp() }
         binding.containerRate.root.clickWithDebounce { rateApp() }
         val saveServiceType =
@@ -146,7 +145,6 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
                             AppForegroundService.getInstance().startService(
                                 requireContext(), ServiceType.DATA_USAGE
                             )
-
                         }
                         else -> {
                             item.isChecked = false
@@ -196,7 +194,7 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
     }
 
     private fun feedBack() {
-        val deviceName = Build.MODEL // returns model name
+        val deviceName = Build.MODEL
         val deviceManufacturer = Build.MANUFACTURER
 
         val testIntent = Intent(Intent.ACTION_VIEW)
@@ -397,32 +395,26 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
                 showBottomTabAfterScan()
                 showVipBtn()
             }
+            changeBackPressCallBack(it)
+
         }
     }
 
-    private fun observeHardReset() {
-        viewModel.mScanStatus.observe(viewLifecycleOwner) {
-            if (it == ScanStatus.HARD_RESET) {
-                toastShort(getString(R.string.scan_canceled))
-            }
-            if (it == ScanStatus.SCANNING) {
-                hideBottomTabWhenScan()
-                showStopBtn()
-            } else {
-                showBottomTabAfterScan()
-                showVipBtn()
-            }
-        }
-    }
 
-    private fun changeBackPressCallBack() {
+    private fun changeBackPressCallBack(status: ScanStatus) {
         val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (binding.drawerContainer.isDrawerOpen(GravityCompat.START)) {
-                    binding.drawerContainer.close()
+                if (status == ScanStatus.SCANNING) {
+                    toastShort(getString(R.string.scan_canceled))
+                    viewModel.setScanStatus(ScanStatus.HARD_RESET)
                 } else {
-                    activity?.finish()
+                    if (binding.drawerContainer.isDrawerOpen(GravityCompat.START)) {
+                        binding.drawerContainer.close()
+                    } else {
+                        activity?.finish()
+                    }
                 }
+
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
@@ -430,7 +422,7 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
 
 
     private val settingPermissionLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { _ ->
             if (checkAccessSettingPermission(requireContext())) {
                 actionWhenPermissionGranted()
             }

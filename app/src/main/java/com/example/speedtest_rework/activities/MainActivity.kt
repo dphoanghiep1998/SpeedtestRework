@@ -6,10 +6,7 @@ import android.content.IntentFilter
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.content.res.Configuration
-import android.net.wifi.p2p.WifiP2pDeviceList
-import android.net.wifi.p2p.WifiP2pManager
 import android.os.Bundle
-import android.util.Log
 import android.view.Window
 import android.view.WindowManager
 import androidx.activity.viewModels
@@ -27,7 +24,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
 @AndroidEntryPoint
-class MainActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceChangeListener{
+class MainActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
     private lateinit var binding: ActivityMainBinding
     private var navHostFragment: NavHostFragment? = null
     val viewModel: SpeedTestViewModel by viewModels()
@@ -85,7 +82,6 @@ class MainActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceChangeL
 
     private fun changeStatusBarColor() {
         val window: Window = window
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.statusBarColor = ContextCompat.getColor(this, R.color.gray_700)
     }
@@ -94,14 +90,12 @@ class MainActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceChangeL
         if (ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
+            ) == PackageManager.PERMISSION_GRANTED
             && ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
+            ) == PackageManager.PERMISSION_GRANTED
         ) {
-
-        } else {
             navHostFragment?.navController?.navigate(R.id.fragmentMain)
         }
     }
@@ -138,18 +132,20 @@ class MainActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceChangeL
         }
     }
 
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+    override fun onSharedPreferenceChanged(
+        sharedPreferences: SharedPreferences?,
+        key: String?
+    ) {
         val settingLanguageLocale = viewModel.currentLanguage
         val languageLocaleChanged = AppSharePreference.INSTANCE.getSavedLanguage(
             Locale.getDefault().language
         ) != settingLanguageLocale
         if (languageLocaleChanged) {
-            viewModel.currentLanguage = AppSharePreference.INSTANCE.getSavedLanguage(Locale.getDefault().language)
+            viewModel.currentLanguage =
+                AppSharePreference.INSTANCE.getSavedLanguage(Locale.getDefault().language)
             finish()
             startActivity(intent)
         }
     }
-
-
 
 }

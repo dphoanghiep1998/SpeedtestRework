@@ -62,7 +62,6 @@ class BarChartCustomRender(
                 val textValue = mChart.barData.getDataSetByIndex(0).valueFormatter.getBarLabel(
                     mChart.barData.getDataSetByIndex(0).getEntryForIndex(colorIndex)
                 )
-                Log.d("TAG", "drawValues: "+textValue)
                 val trueValue = textValue.toFloat() - 10
                 if (trueValue.toString() != "" && trueValue.toString() != "0.0" && trueValue.toString() != "0") {
                     rect = RectF(left - 10, top - 60, right + 10, top - 10)

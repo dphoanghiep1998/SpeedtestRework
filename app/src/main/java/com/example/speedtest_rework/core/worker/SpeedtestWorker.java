@@ -162,6 +162,7 @@ public abstract class SpeedtestWorker extends Thread {
 
             @Override
             public void onError(String err) {
+                onPingJitterUpdate(0, 0, 0);
                 abort();
                 onCriticalFailure(err);
             }
