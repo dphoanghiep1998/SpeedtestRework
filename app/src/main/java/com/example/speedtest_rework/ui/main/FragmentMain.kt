@@ -56,15 +56,16 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentMainBinding.inflate(layoutInflater, container, false)
+        changeBackPressCallBack()
         loadLanguage()
         initView()
         observeIsScanning()
-
         return binding.root
     }
 
 
     private fun initView() {
+
         initLanguageDialog()
         initViewPager()
         initBottomNavigation()
@@ -75,7 +76,6 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
 
     private fun initButton() {
         binding.imvStop.clickWithDebounce {
-            toastShort(getString(R.string.scan_canceled))
             viewModel.setScanStatus(ScanStatus.HARD_RESET)
         }
 
@@ -104,7 +104,7 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
 
     private fun initDrawerAction() {
         binding.containerFeedback.root.clickWithDebounce { feedBack() }
-        binding.containerPolicy.root.clickWithDebounce { openLink(Constant.POLICY_LINK) }
+        binding.containerPolicy.root.clickWithDebounce { openLink("http://www.facebook.com") }
         binding.containerShare.root.clickWithDebounce { shareApp() }
         binding.containerRate.root.clickWithDebounce { rateApp() }
         val saveServiceType =
@@ -145,6 +145,7 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
                             AppForegroundService.getInstance().startService(
                                 requireContext(), ServiceType.DATA_USAGE
                             )
+
                         }
                         else -> {
                             item.isChecked = false
@@ -194,7 +195,7 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
     }
 
     private fun feedBack() {
-        val deviceName = Build.MODEL
+        val deviceName = Build.MODEL // returns model name
         val deviceManufacturer = Build.MANUFACTURER
 
         val testIntent = Intent(Intent.ACTION_VIEW)
@@ -395,26 +396,19 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
                 showBottomTabAfterScan()
                 showVipBtn()
             }
-            changeBackPressCallBack(it)
-
         }
     }
 
 
-    private fun changeBackPressCallBack(status: ScanStatus) {
+
+    private fun changeBackPressCallBack() {
         val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (status == ScanStatus.SCANNING) {
-                    toastShort(getString(R.string.scan_canceled))
-                    viewModel.setScanStatus(ScanStatus.HARD_RESET)
+                if (binding.drawerContainer.isDrawerOpen(GravityCompat.START)) {
+                    binding.drawerContainer.close()
                 } else {
-                    if (binding.drawerContainer.isDrawerOpen(GravityCompat.START)) {
-                        binding.drawerContainer.close()
-                    } else {
-                        activity?.finish()
-                    }
+                    activity?.finish()
                 }
-
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
@@ -422,7 +416,7 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
 
 
     private val settingPermissionLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { _ ->
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (checkAccessSettingPermission(requireContext())) {
                 actionWhenPermissionGranted()
             }

@@ -225,10 +225,10 @@
     <string name="packet_sent">Gói đã gửi</string>
     <string name="packet_received">Gói đã nhận</string>
     <string name="history">Lịch sử</string>
-    <string name="wrong_website_format">Sai địn dạng trang web</string>
+    <string name="wrong_website_format">Sai định dạng trang web</string>
     <string name="ok">Chấp nhận</string>
     <string name="min_latency">Độ trễ nhỏ nhất</string>
-    <string name="avg_latency">Độ trể trung bình</string>
+    <string name="avg_latency">Độ trễ trung bình</string>
     <string name="max_latency">Độ trễ lớn nhất</string>
 
 

@@ -19,7 +19,7 @@ class DiffChannelCallback(
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
         val oldItem = oldData.wiFiDetails[oldItemPosition]
         val newItem = newData.wiFiDetails[newItemPosition]
-        return oldItem.wiFiSignal == newItem.wiFiSignal
+        return oldItem.wiFiIdentifier.ssid == newItem.wiFiIdentifier.ssid
     }
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {

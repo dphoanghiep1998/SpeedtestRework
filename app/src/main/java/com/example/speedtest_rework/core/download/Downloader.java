@@ -20,7 +20,7 @@ public abstract class Downloader extends Thread {
     public Downloader(Connection c, String path, int ckSize) {
         this.c = c;
         this.path = path;
-        this.ckSize = ckSize < 1 ? 1 : ckSize;
+        this.ckSize = Math.max(ckSize, 1);
         start();
     }
 
@@ -30,7 +30,7 @@ public abstract class Downloader extends Thread {
         try {
 
             long lastProgressEvent = System.currentTimeMillis();
-            long ckBytes = ckSize * 1048576, newRequestThreshold = ckBytes / 4;
+            long ckBytes = ckSize * 1048576L, newRequestThreshold = ckBytes / 4;
             long bytesLeft = 0;
             URL url = new URL(path);
             HttpsURLConnection httpsConn = (HttpsURLConnection) url.openConnection();

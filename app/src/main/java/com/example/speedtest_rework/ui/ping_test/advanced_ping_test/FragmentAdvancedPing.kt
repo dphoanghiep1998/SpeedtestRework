@@ -14,7 +14,6 @@ import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.dialog.BackPressBottomSheetDialogCallback
@@ -33,8 +32,6 @@ import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 
 open class FragmentAdvancedPing(private val itemContentPingTest: ContentPingTest) :
@@ -58,6 +55,12 @@ open class FragmentAdvancedPing(private val itemContentPingTest: ContentPingTest
         cUrl = itemContentPingTest.url
     }
 
+    override fun onResume() {
+        super.onResume()
+        Log.d("TAG", "onResume: ")
+        binding.graphView.notifyDataSetChanged()
+        binding.graphView.invalidate()
+    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val root = ConstraintLayout(requireContext())
@@ -98,11 +101,12 @@ open class FragmentAdvancedPing(private val itemContentPingTest: ContentPingTest
         barChart = ArrayList()
         colorsText = ArrayList()
         for (i in 0..9) {
+            barChart.add(BarEntry((i + 1).toFloat(), 0f))
             colorsText.add(getColor(R.color.transparent))
         }
         val barDataSet = BarDataSet(barChart, null)
         val data = BarData(barDataSet)
-        data.barWidth = .3f
+        data.barWidth = .5f
         binding.graphView.data = data
         binding.graphView.invalidate()
 
@@ -150,7 +154,7 @@ open class FragmentAdvancedPing(private val itemContentPingTest: ContentPingTest
             binding.tvPacketLossValue.text = "0%"
             binding.tvPacketSentValue.text = "0"
             binding.tvPacketReceivedValue.text = "0"
-            data.barWidth = .3f
+            data.barWidth = .5f
             binding.graphView.data = data
             binding.graphView.invalidate()
             if (normalType) {
@@ -201,8 +205,6 @@ open class FragmentAdvancedPing(private val itemContentPingTest: ContentPingTest
         binding.graphView.xAxis.setDrawGridLines(false)
         binding.graphView.xAxis.setDrawLabels(false)
         binding.graphView.xAxis.setDrawAxisLine(false)
-        binding.graphView.xAxis.axisMaximum =
-           10f
 
         binding.graphView.axisRight.setDrawGridLines(false)
         binding.graphView.axisRight.setDrawLabels(false)
@@ -223,125 +225,121 @@ open class FragmentAdvancedPing(private val itemContentPingTest: ContentPingTest
 
     private fun observeDataPing() {
         viewMoDel.listPingResultLive.observe(viewLifecycleOwner) {
-            lifecycleScope.launch(Dispatchers.Main) {
-                if (it.isNotEmpty()) {
-                    setProgressAnimate(binding.pbLoading, 9)
-                    packetSent = it.size
-                    binding.tvPacketSentValue.text = packetSent.toString()
-                    if (it[it.size - 1].isReachable) {
-                        binding.pingValue.text = it[it.size - 1].ping_value.toString()
-                        avgLatency += it[it.size - 1].ping_value.toInt()
-                        if (it[it.size - 1].ping_value > maxValue) {
-                            maxValue = it[it.size - 1].ping_value.toInt()
-                        }
-                        if (it[it.size - 1].ping_value < minLatency) {
-                            minLatency = it[it.size - 1].ping_value.toInt()
-                        }
-                        binding.tvMs.visibility = View.VISIBLE
-                        binding.tvPacketReceivedValue.text = (++packetReceived).toString()
 
-                    } else if (!it[it.size - 1].isReachable && it.size == 1) {
-                        binding.pingValue.text = "_ _"
-                        binding.tvMs.visibility = View.GONE
-                        packetLoss++
-                        countPacketLoss(it.size, packetLoss)
+            if (it.isNotEmpty()) {
+                setProgressAnimate(binding.pbLoading, 9)
+                packetSent = it.size
+                binding.tvPacketSentValue.text = packetSent.toString()
+                if (it[it.size - 1].isReachable) {
+                    binding.pingValue.text = it[it.size - 1].ping_value.toString()
+                    avgLatency += it[it.size - 1].ping_value.toInt()
+                    if (it[it.size - 1].ping_value > maxValue) {
+                        maxValue = it[it.size - 1].ping_value.toInt()
+                    }
+                    if (it[it.size - 1].ping_value < minLatency) {
+                        minLatency = it[it.size - 1].ping_value.toInt()
+                    }
+                    binding.tvMs.visibility = View.VISIBLE
+                    binding.tvPacketReceivedValue.text = (++packetReceived).toString()
 
-                    } else {
-                        packetLoss++
-                        countPacketLoss(it.size, packetLoss)
-
-                    }
-                    binding.graphView.renderer = BarChartCustomRender(
-                        binding.graphView,
-                        binding.graphView.animator,
-                        binding.graphView.viewPortHandler,
-                        colorsText
-                    )
-                    val color = when (it[it.size - 1].ping_value) {
-                        in 0f..50f -> {
-                            getColor(R.color.gradient_green_start)
-                        }
-                        in 51f..100f -> {
-                            getColor(R.color.gradient_yellow_end)
-                        }
-                        else -> {
-                            getColor(R.color.gradient_red_start)
-                        }
-                    }
-                    colorsText[it.size - 1] = color
-                    val data = BarData()
-                    if (maxValue == 0) {
-                        binding.graphView.axisLeft.axisMaximum = (maxValue + 100).toFloat()
-                    } else {
-                        binding.graphView.axisLeft.axisMaximum = (maxValue + 20).toFloat()
-                    }
-
-                    binding.graphView.data = data
-
-                    barChart.add(
-                        BarEntry(it.size.toFloat(), it[it.size - 1].ping_value + 10)
-                    )
-                    data.barWidth = .3f
--
-                    BarDataSet(barChart, null).also { it1 ->
-                        it1.setGradientColor(
-                            getColor(R.color.gradient_green_start_zero),
-                            getColor(R.color.gradient_green_start)
-                        )
-                        it1.valueFormatter = ValueBarFormatter()
-                        data.addDataSet(it1)
-                    }
-                    with(binding.graphView) {
-                        this.notifyDataSetChanged()
-                        this.invalidate()
-                    }
-                    if (it.size == 10) {
-                        setProgressAnimate(binding.pbLoading, 10, 1000)
-                        binding.tvStart.visibility = View.VISIBLE
-                        binding.containerShowUrl.isEnabled = true
-                        binding.containerValue.visibility = View.GONE
-                        with(binding.btnStart) {
-                            this.isEnabled = true
-                            this.visibility = View.VISIBLE
-                        }
-                        if (packetReceived == 0) {
-                            val dialogPing = PingInfoDialog(
-                                requireContext(),
-                                cUrl,
-                                packetLoss.toString(),
-                                packetSent.toString(),
-                                packetReceived.toString(),
-                                "_ _",
-                                "_ _",
-                                "_ _"
-                            )
-                            dialogPing.show()
-                        } else {
-                            val dialogPing = PingInfoDialog(
-                                requireContext(),
-                                cUrl,
-                                packetLoss.toString(),
-                                packetSent.toString(),
-                                packetReceived.toString(),
-                                minLatency.toString(),
-                                (avgLatency / packetReceived).toString(),
-                                maxValue.toString()
-                            )
-                            dialogPing.show()
-                        }
-
-                    }
+                } else if (!it[it.size - 1].isReachable && it.size == 1) {
+                    binding.pingValue.text = "_ _"
+                    binding.tvMs.visibility = View.GONE
+                    packetLoss++
+                    countPacketLoss(it.size, packetLoss)
 
                 } else {
-                    resetData()
+                    packetLoss++
+                    countPacketLoss(it.size, packetLoss)
                 }
-            }
+                binding.graphView.renderer = BarChartCustomRender(
+                    binding.graphView,
+                    binding.graphView.animator,
+                    binding.graphView.viewPortHandler,
+                    colorsText
+                )
+                val color = when (it[it.size - 1].ping_value) {
+                    in 0f..50f -> {
+                        getColor(R.color.gradient_green_start)
+                    }
+                    in 51f..100f -> {
+                        getColor(R.color.gradient_yellow_end)
+                    }
+                    else -> {
+                        getColor(R.color.gradient_red_start)
+                    }
+                }
+                colorsText[it.size - 1] = color
+                val data = BarData()
+                data.barWidth = .5f
+                if (maxValue == 0) {
+                    binding.graphView.axisLeft.axisMaximum = (maxValue + 100).toFloat()
+                } else {
+                    binding.graphView.axisLeft.axisMaximum = (maxValue + 50).toFloat()
+                }
+                binding.graphView.data = data
 
+                barChart[it.size - 1] =
+                    BarEntry(it.size.toFloat(), it[it.size - 1].ping_value.toFloat() + 10)
+
+                BarDataSet(barChart, null).also { it1 ->
+                    it1.setGradientColor(
+                        getColor(R.color.gradient_green_start_zero),
+                        getColor(R.color.gradient_green_start)
+                    )
+                    it1.valueFormatter = ValueBarFormatter()
+                    data.addDataSet(it1)
+                }
+                binding.graphView.data = data
+                with(binding.graphView) {
+                    this.notifyDataSetChanged()
+                    this.invalidate()
+                }
+                if (it.size == 10) {
+                    setProgressAnimate(binding.pbLoading, 10, 1000)
+                    binding.tvStart.visibility = View.VISIBLE
+                    binding.containerShowUrl.isEnabled = true
+                    binding.containerValue.visibility = View.GONE
+                    with(binding.btnStart) {
+                        this.isEnabled = true
+                        this.visibility = View.VISIBLE
+                    }
+                    if (packetReceived == 0) {
+                        val dialogPing = PingInfoDialog(
+                            requireContext(),
+                            cUrl,
+                            packetLoss.toString(),
+                            packetSent.toString(),
+                            packetReceived.toString(),
+                            "_ _",
+                            "_ _",
+                            "_ _"
+                        )
+                        dialogPing.show()
+                    } else {
+                        val dialogPing = PingInfoDialog(
+                            requireContext(),
+                            cUrl,
+                            packetLoss.toString(),
+                            packetSent.toString(),
+                            packetReceived.toString(),
+                            minLatency.toString(),
+                            (avgLatency / packetReceived).toString(),
+                            maxValue.toString()
+                        )
+                        dialogPing.show()
+                    }
+
+                }
+
+            } else {
+//                resetData()
+            }
         }
     }
 
 
-    private fun setProgressAnimate(pb: ProgressBar, progressTo: Int, duration: Long = 6000) {
+    private fun setProgressAnimate(pb: ProgressBar, progressTo: Int, duration: Long = 8000) {
         val animation: ObjectAnimator =
             ObjectAnimator.ofInt(pb, "progress", pb.progress, progressTo * 100)
         animation.duration = duration
@@ -353,6 +351,7 @@ open class FragmentAdvancedPing(private val itemContentPingTest: ContentPingTest
     private fun countPacketLoss(packetSent: Int, lossNumber: Int) {
         val percent = (lossNumber.toFloat() / packetSent.toFloat()) * 100
         binding.tvPacketLossValue.text = "${percent.toInt()} %"
+
     }
 
 
@@ -374,7 +373,7 @@ open class FragmentAdvancedPing(private val itemContentPingTest: ContentPingTest
     }
 
     private fun handleFlowItemAdvance() {
-        binding.tvShowUrl.text = itemContentPingTest.url
+        binding.tvShowUrl.text = itemContentPingTest?.url
         binding.containerShowUrl.visibility = View.VISIBLE
         binding.containerShowUrl.setOnClickListener {
             it.visibility = View.GONE
@@ -391,7 +390,6 @@ open class FragmentAdvancedPing(private val itemContentPingTest: ContentPingTest
 
     private fun observeFlagChangeBack() {
         viewMoDel.flagChangeBack.observe(viewLifecycleOwner) {
-
             if (it) {
                 binding.btnBack.clickWithDebounce {
                     binding.containerEdit.visibility = View.GONE
@@ -425,6 +423,7 @@ open class FragmentAdvancedPing(private val itemContentPingTest: ContentPingTest
 
 
     private fun observeListRecent() {
+
         viewMoDel.listRecent.observe(viewLifecycleOwner) {
             adapter.setList(it)
             AppSharePreference.INSTANCE.saveRecentList(it)
@@ -480,14 +479,11 @@ open class FragmentAdvancedPing(private val itemContentPingTest: ContentPingTest
         binding.containerValue.visibility = View.VISIBLE
         binding.tvStart.visibility = View.GONE
         viewMoDel.stopPing = false
-
         if (!input.startsWith("http://") || !input.startsWith("https://")) {
-            Log.d("TAG", "onClickItem: ")
             val address = "http://$input"
             cUrl = address
             viewMoDel.getPingResultAdvanced(address)
         } else {
-            Log.d("TAG", "else: ")
             cUrl = input
             viewMoDel.getPingResultAdvanced(input)
         }
@@ -549,7 +545,7 @@ open class FragmentAdvancedPing(private val itemContentPingTest: ContentPingTest
     }
 
     override fun positiveAction() {
-        viewMoDel.listRecent.postValue(mutableListOf())
+        viewMoDel.listRecent.value = listOf()
     }
 
 }

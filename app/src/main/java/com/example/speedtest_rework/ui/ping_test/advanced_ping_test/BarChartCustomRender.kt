@@ -37,6 +37,8 @@ class BarChartCustomRender(
         return
     }
 
+
+
     override fun drawValues(c: Canvas?) {
         super.drawValues(c)
         if (mBarBuffers.isNotEmpty()) {
