@@ -64,13 +64,14 @@ class BarChartCustomRender(
                 val textValue = mChart.barData.getDataSetByIndex(0).valueFormatter.getBarLabel(
                     mChart.barData.getDataSetByIndex(0).getEntryForIndex(colorIndex)
                 )
-                val trueValue = textValue.toFloat() - 10
+
+                val trueValue = textValue.replace(",",".").toFloat() - 10
                 if (trueValue.toString() != "" && trueValue.toString() != "0.0" && trueValue.toString() != "0") {
                     rect = RectF(left - 10, top - 60, right + 10, top - 10)
                     c?.drawRoundRect(rect, 5f, 5f, mPaint)
-                    val number3digits:Double = String.format("%.2f", trueValue).toDouble()
+//                    val number3digits:Double = String.format("%.2f", trueValue).toDouble()
                     c?.drawText(
-                        number3digits.toString(), (left + right) / 2, top - 25, textPaint
+                        trueValue.toString(), (left + right) / 2, top - 25, textPaint
                     )
                 }else{
                     rect = RectF(left - 10, top - 60, right + 10, top - 10)

@@ -8,17 +8,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.speedtest_rework.R
+import com.example.speedtest_rework.base.dialog.SignalInfoDialog
 import com.example.speedtest_rework.base.fragment.BaseFragment
 import com.example.speedtest_rework.common.utils.NetworkUtils
 import com.example.speedtest_rework.common.utils.clickWithDebounce
 import com.example.speedtest_rework.databinding.FragmentSignalTestBinding
 import com.example.speedtest_rework.ui.signal_test.adapter.SignalLocationAdapter
 import com.example.speedtest_rework.viewmodel.FragmentSignalTestViewModel
+import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -27,15 +30,14 @@ import kotlinx.coroutines.launch
 class FragmentSignalTest : BaseFragment() {
     private lateinit var binding: FragmentSignalTestBinding
     private val viewModel: FragmentSignalTestViewModel by viewModels()
+    private val shareViewModel: SpeedTestViewModel by activityViewModels()
     private lateinit var adapter: SignalLocationAdapter
     private var currentValue = 0
     private lateinit var job: Job
 
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentSignalTestBinding.inflate(layoutInflater)
         return binding.root
@@ -47,6 +49,7 @@ class FragmentSignalTest : BaseFragment() {
         observeSignalScanning()
         initView()
         changeBackPressCallBack()
+        observeWifiName()
     }
 
     private fun initView() {
@@ -54,6 +57,12 @@ class FragmentSignalTest : BaseFragment() {
         initButton()
         initRecycleView()
         observeListLocationSignal()
+    }
+
+    private fun observeWifiName() {
+        shareViewModel.wifiName.observe(viewLifecycleOwner) {
+            binding.tvWifi.text = it
+        }
     }
 
     private fun observeListLocationSignal() {
@@ -104,19 +113,18 @@ class FragmentSignalTest : BaseFragment() {
     }
 
     private fun changeBackPressCallBack() {
-        val callback: OnBackPressedCallback =
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    findNavController().popBackStack()
-                    if (::job.isInitialized) {
-                        job.cancel()
-                        currentValue = 0
-                        binding.signalMeter.initSignalView()
-                        viewModel.setSignalScanning(false)
-                        viewModel.setListSignalLocation(mutableListOf())
-                    }
+        val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findNavController().popBackStack()
+                if (::job.isInitialized) {
+                    job.cancel()
+                    currentValue = 0
+                    binding.signalMeter.initSignalView()
+                    viewModel.setSignalScanning(false)
+                    viewModel.setListSignalLocation(mutableListOf())
                 }
             }
+        }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
     }
 
@@ -136,16 +144,19 @@ class FragmentSignalTest : BaseFragment() {
             calculateWifi()
         }
         binding.tvRecord.clickWithDebounce {
-            var mList = viewModel.mListSignalLocation.value
+            val mList = viewModel.mListSignalLocation.value
             mList?.let {
                 it.add(
                     (Pair(
-                        "Location ${adapter.itemCount + 1}",
-                        "$currentValue dBm"
+                        "Location ${adapter.itemCount + 1}", "$currentValue dBm"
                     ))
                 )
                 viewModel.setListSignalLocation(it)
             }
+        }
+        binding.btnInfo.clickWithDebounce {
+            val dialogSignalInfo = SignalInfoDialog(requireContext())
+            dialogSignalInfo.show()
         }
     }
 

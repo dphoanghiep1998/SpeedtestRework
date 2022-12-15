@@ -7,7 +7,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.ColorFilter
-import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
@@ -24,7 +23,6 @@ import android.view.animation.Animation
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.Navigation
 import com.airbnb.lottie.LottieProperty
 import com.airbnb.lottie.SimpleColorFilter
@@ -34,6 +32,7 @@ import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.common.utils.Constant
+import com.example.speedtest_rework.common.utils.buildMinVersionQ
 import com.example.speedtest_rework.common.utils.format
 import com.example.speedtest_rework.common.utils.roundOffDecimal
 import com.example.speedtest_rework.core.SpeedTest
@@ -230,8 +229,12 @@ class SpeedView(
         binding.speedView.textSize = 40f
         binding.speedView.withTremble = false
     }
-    private fun openConnectivitySetting(){
-        context.startActivity(Intent(WifiManager.ACTION_PICK_WIFI_NETWORK));
+
+    private fun openConnectivitySetting() {
+        if (buildMinVersionQ())
+            context.startActivity(Intent(Settings.Panel.ACTION_INTERNET_CONNECTIVITY))
+        else
+            context.startActivity(Intent(Settings.ACTION_WIFI_SETTINGS))
     }
 
     private fun changeColorWhenPressDown() {

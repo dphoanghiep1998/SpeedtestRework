@@ -76,9 +76,9 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
 
     private fun initButton() {
         binding.imvStop.clickWithDebounce {
+            toastShort(getString(R.string.scan_canceled))
             viewModel.setScanStatus(ScanStatus.HARD_RESET)
         }
-
     }
 
     private fun initBottomNavigation() {

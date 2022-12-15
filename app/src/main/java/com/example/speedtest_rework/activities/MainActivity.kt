@@ -16,6 +16,7 @@ import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.activity.BaseActivity
 import com.example.speedtest_rework.common.utils.AppSharePreference
 import com.example.speedtest_rework.common.utils.Constant
+import com.example.speedtest_rework.common.utils.NetworkUtils
 import com.example.speedtest_rework.common.utils.createContext
 import com.example.speedtest_rework.databinding.ActivityMainBinding
 import com.example.speedtest_rework.receivers.ConnectivityListener
@@ -39,20 +40,20 @@ class MainActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceChangeL
         AppSharePreference.getInstance(this).registerOnSharedPreferenceChangeListener(this)
         setContentView(binding.root)
         registerConnectivityListener()
+        observeConnectivityChange()
         initNavController()
         handlePermissionFlow()
     }
 
-    override fun attachBaseContext(newBase: Context) =
-        super.attachBaseContext(
-            newBase.createContext(
-                Locale(
-                    AppSharePreference.INSTANCE.getSavedLanguage(
-                        Locale.getDefault().language
-                    )
+    override fun attachBaseContext(newBase: Context) = super.attachBaseContext(
+        newBase.createContext(
+            Locale(
+                AppSharePreference.INSTANCE.getSavedLanguage(
+                    Locale.getDefault().language
                 )
             )
         )
+    )
 
     override fun applyOverrideConfiguration(overrideConfiguration: Configuration?) {
         if (overrideConfiguration != null) {
@@ -88,12 +89,9 @@ class MainActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceChangeL
 
     private fun handlePermissionFlow() {
         if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-            && ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_COARSE_LOCATION
+                this, Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+                this, Manifest.permission.ACCESS_COARSE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
             navHostFragment?.navController?.navigate(R.id.fragmentMain)
@@ -119,9 +117,7 @@ class MainActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceChangeL
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String?>,
-        grantResults: IntArray
+        requestCode: Int, permissions: Array<String?>, grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == Constant.REQUEST_CODE_LOCATION_PERMISSION) {
@@ -133,8 +129,7 @@ class MainActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceChangeL
     }
 
     override fun onSharedPreferenceChanged(
-        sharedPreferences: SharedPreferences?,
-        key: String?
+        sharedPreferences: SharedPreferences?, key: String?
     ) {
         val settingLanguageLocale = viewModel.currentLanguage
         val languageLocaleChanged = AppSharePreference.INSTANCE.getSavedLanguage(
@@ -146,6 +141,16 @@ class MainActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceChangeL
             finish()
             startActivity(intent)
         }
+
     }
+
+    private fun observeConnectivityChange() {
+        viewModel.mConnectivityChanged.observe(this) {
+            if (NetworkUtils.isWifiConnected(this)) {
+                viewModel.wifiName.value = NetworkUtils.getNameWifi(this)
+            }
+        }
+    }
+
 
 }

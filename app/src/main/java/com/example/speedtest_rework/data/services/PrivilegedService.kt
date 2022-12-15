@@ -1,15 +1,22 @@
 package com.example.speedtest_rework.data.services
 
+import android.app.ActivityManager
 import android.app.usage.NetworkStats
 import android.app.usage.NetworkStatsManager
 import android.content.Context
+import android.content.Context.ACTIVITY_SERVICE
+import android.content.pm.ApplicationInfo
+import android.content.pm.PackageManager
+import android.net.TrafficStats
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import com.example.speedtest_rework.ui.data_usage.model.DataUsageModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import java.lang.String
 import java.util.*
 import javax.inject.Inject
+
 
 class PrivilegedService @Inject constructor(@ApplicationContext val context: Context) {
 
@@ -37,12 +44,11 @@ class PrivilegedService @Inject constructor(@ApplicationContext val context: Con
                 startCalendar.timeInMillis,
                 if (i != 0) endCalendar.timeInMillis else calendar.timeInMillis
             )
-            val bucketWifi =
-                getNetworkWifiData(
-                    context,
-                    startCalendar.timeInMillis,
-                    if (i != 0) endCalendar.timeInMillis else calendar.timeInMillis
-                )
+            val bucketWifi = getNetworkWifiData(
+                context,
+                startCalendar.timeInMillis,
+                if (i != 0) endCalendar.timeInMillis else calendar.timeInMillis
+            )
             val dataUsageModel = DataUsageModel(
                 startCalendar.time,
                 (bucketMobile.txBytes + bucketMobile.rxBytes).toDouble(),
@@ -53,34 +59,46 @@ class PrivilegedService @Inject constructor(@ApplicationContext val context: Con
         return mList
     }
 
+    fun getUsageAppList() {
+        for (info in context.packageManager.getInstalledApplications(PackageManager.GET_META_DATA)) {
+            if (context.packageManager.getLaunchIntentForPackage(info.packageName) != null) {
+                val received: Long = TrafficStats.getUidRxBytes(info.uid)
+                val sent: Long = TrafficStats.getUidTxBytes(info.uid)
+                Log.d(
+                    "LMAO", String.format(
+                        Locale.getDefault(),
+                        "uid: %1d - name: %s: Sent = %1d, Rcvd = %1d",
+                        info.uid,
+                        info.processName,
+                        sent,
+                        received
+                    )
+                )
+
+            }
+        }
+
+    }
+
+
 
     @RequiresApi(Build.VERSION_CODES.M)
     private fun getNetworkMobileData(
-        context: Context,
-        startTime: Long,
-        endTime: Long
+        context: Context, startTime: Long, endTime: Long
     ): NetworkStats.Bucket {
         val manager = getUsageStatsManager(context)
         return manager.querySummaryForDevice(
-            0,
-            null,
-            startTime,
-            endTime
+            0, null, startTime, endTime
         )
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
     private fun getNetworkWifiData(
-        context: Context,
-        startTime: Long,
-        endTime: Long
+        context: Context, startTime: Long, endTime: Long
     ): NetworkStats.Bucket {
         val manager = getUsageStatsManager(context)
         return manager.querySummaryForDevice(
-            1,
-            null,
-            startTime,
-            endTime
+            1, null, startTime, endTime
         )
     }
 

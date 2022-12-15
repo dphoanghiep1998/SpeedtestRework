@@ -39,6 +39,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="@string/test" />
+
+        <ImageView
+            android:id="@+id/btn_info"
+            android:layout_width="@dimen/_38sdp"
+            android:layout_height="@dimen/_38sdp"
+            android:contentDescription="img"
+            android:foreground="@drawable/ripple_effect_corner_fg"
+            android:padding="@dimen/_8sdp"
+            android:src="@drawable/ic_info_circle"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout

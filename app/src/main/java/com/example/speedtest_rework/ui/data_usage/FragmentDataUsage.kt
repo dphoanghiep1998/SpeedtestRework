@@ -64,6 +64,7 @@ class FragmentDataUsage : BaseFragment() {
         binding.tvFilter.clickWithDebounce {
             popupWindow.showAsDropDown(binding.containerHeader, 20, 0);
         }
+        viewModel.getListAppDataUsage()
 
     }
 

@@ -30,10 +30,9 @@ class AppRepository @Inject constructor(
         historyLocalService.historyDao.insertHistory(model.toHistoryEntity())
     }
 
-    suspend fun deleteAllHistory() =
-        withContext(dispatcher) {
-            historyLocalService.historyDao.deleteAllHistory()
-        }
+    suspend fun deleteAllHistory() = withContext(dispatcher) {
+        historyLocalService.historyDao.deleteAllHistory()
+    }
 
     suspend fun deleteHistory(model: HistoryModel) = withContext(dispatcher) {
         historyLocalService.historyDao.deleteHistory(model.toHistoryEntity())
@@ -71,6 +70,12 @@ class AppRepository @Inject constructor(
             mList = privilegeService.getUsageData()
         }
         return mList
+    }
+
+    suspend fun getDataUsageApp() {
+        withContext(dispatcher) {
+            Log.d("TAG", "getDataUsageApp: " + privilegeService.getUsageAppList())
+        }
     }
 
 

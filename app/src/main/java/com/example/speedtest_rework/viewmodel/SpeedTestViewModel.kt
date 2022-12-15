@@ -63,6 +63,15 @@ class SpeedTestViewModel @Inject constructor(
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.M)
+    fun getListAppDataUsage() {
+        viewModelScope.launch {
+            appRepository.getDataUsageApp()
+        }
+
+    }
+
+
     private var isPermissionGranted = MutableLiveData<Boolean>()
     val mPermissionGranted: LiveData<Boolean>
         get() = isPermissionGranted

@@ -9,7 +9,9 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Job
 
 open class BaseViewModel : ViewModel() {
-
+    fun <T> MutableLiveData<T>.notifyObserver() {
+        this.postValue(value)
+    }
     val isError = MutableLiveData(false)
     var baseNetworkException = MutableLiveData<Event<BaseNetworkException>>()
         protected set

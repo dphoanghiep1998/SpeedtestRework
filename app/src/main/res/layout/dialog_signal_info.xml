@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:cardCornerRadius="@dimen/_10sdp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:paddingVertical="@dimen/_12sdp"
+            android:paddingHorizontal="@dimen/_12sdp"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_tips"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/app_font_bold"
+                android:text="@string/tips"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_14sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_dbm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/dbm"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_12sdp"
+                android:layout_marginTop="@dimen/_12sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_tips" />
+
+            <TextView
+                android:id="@+id/tv_desc_dbm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/desc_dbm"
+                android:textColor="@color/gray_600"
+                android:layout_marginTop="@dimen/_6sdp"
+                android:textSize="@dimen/_12sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_dbm" />
+
+
+            <TextView
+                android:id="@+id/tv_dbm2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/dbm"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_12sdp"
+                android:layout_marginTop="@dimen/_12sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_desc_dbm" />
+
+            <TextView
+                android:id="@+id/tv_signal_strength"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/signal_strength"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_12sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tv_dbm2"
+                app:layout_constraintBottom_toBottomOf="@id/tv_dbm2"/>
+
+            <TextView
+                android:id="@+id/tv_perfect_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="&#62; -30"
+                android:layout_marginTop="@dimen/_6sdp"
+                android:textColor="@color/gray_600"
+                android:textSize="@dimen/_12sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_dbm2" />
+
+            <TextView
+                android:id="@+id/tv_perfect_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/perfect_signal"
+                android:textColor="@color/gray_600"
+                android:textSize="@dimen/_12sdp"
+                app:layout_constraintBottom_toBottomOf="@id/tv_perfect_value"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tv_perfect_value" />
+
+            <TextView
+                android:id="@+id/tv_able_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-30 ~ -67"
+                android:textColor="@color/gray_600"
+                android:layout_marginTop="@dimen/_6sdp"
+                android:textSize="@dimen/_12sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_perfect_value" />
+
+            <TextView
+                android:id="@+id/tv_able_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/able_to_watch_video"
+                android:textColor="@color/gray_600"
+                android:textSize="@dimen/_12sdp"
+                app:layout_constraintBottom_toBottomOf="@id/tv_able_value"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tv_able_value" />
+
+            <TextView
+                android:id="@+id/tv_light_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-68 ~ -70"
+                android:textColor="@color/gray_600"
+                android:textSize="@dimen/_12sdp"
+                android:layout_marginTop="@dimen/_6sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_able_value" />
+
+            <TextView
+                android:id="@+id/tv_light_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/light_browsing"
+                android:textColor="@color/gray_600"
+                android:textSize="@dimen/_12sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tv_light_value"
+                app:layout_constraintBottom_toBottomOf="@id/tv_light_value"/>
+
+            <TextView
+                android:id="@+id/tv_unstable_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-71 ~ -90"
+                android:textColor="@color/gray_600"
+                android:textSize="@dimen/_12sdp"
+                android:layout_marginTop="@dimen/_6sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_light_value" />
+
+            <TextView
+                android:id="@+id/tv_unstable_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/unstable_connection"
+                android:textColor="@color/gray_600"
+                android:textSize="@dimen/_12sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/tv_unstable_value"
+                app:layout_constraintTop_toTopOf="@id/tv_unstable_value" />
+
+            <TextView
+                android:id="@+id/tv_no_signal_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="&#65124;-90"
+                android:textColor="@color/gray_600"
+                android:textSize="@dimen/_12sdp"
+                android:layout_marginTop="@dimen/_6sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_unstable_value" />
+
+            <TextView
+                android:id="@+id/tv_no_signal_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no_signal"
+                android:textColor="@color/gray_600"
+                android:textSize="@dimen/_12sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tv_no_signal_value"
+                app:layout_constraintBottom_toBottomOf="@id/tv_no_signal_value"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

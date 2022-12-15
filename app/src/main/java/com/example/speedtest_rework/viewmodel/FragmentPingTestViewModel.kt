@@ -1,4 +1,5 @@
 package com.example.speedtest_rework.viewmodel
+
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -54,7 +55,6 @@ class FragmentPingTestViewModel @Inject constructor() : BaseViewModel() {
                         .doPing(object : Ping.PingListener {
                             override fun onResult(pingResult: PingResult) {
                             }
-
                             override fun onFinished(pingStats: PingStats) {
                                 if (loop == 11) {
                                     pingStatus.postValue(ScanStatus.DONE)
@@ -73,7 +73,6 @@ class FragmentPingTestViewModel @Inject constructor() : BaseViewModel() {
     }
 
     fun getPingResultAdvanced(address: String) {
-        val listResult: MutableList<PingResultTest> = mutableListOf()
         viewModelScope.launch(Dispatchers.IO) {
             val url = URL(address)
             val labels = url.host.split("\\.")
@@ -85,14 +84,15 @@ class FragmentPingTestViewModel @Inject constructor() : BaseViewModel() {
                     .doPing(object : Ping.PingListener {
                         override fun onResult(pingResult: PingResult) {
                             if (!stopPing) {
-                                Log.d("TAG", "onResult: "+pingResult.timeTaken)
-                                listResult.add(
+                                Log.d("TAG", "onResult: " + pingResult.timeTaken)
+
+                                listPingResult.value?.add(
                                     PingResultTest(
                                         pingResult.timeTaken,
                                         pingResult.isReachable
                                     )
                                 )
-                                listPingResult.postValue(listResult)
+                                listPingResult.notifyObserver()
                             }
 
                         }

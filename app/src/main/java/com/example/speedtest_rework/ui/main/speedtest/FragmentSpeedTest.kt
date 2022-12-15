@@ -393,9 +393,7 @@ class FragmentSpeedTest : BaseFragment() {
                 }
 
                 else -> {
-                    if (it == ScanStatus.HARD_RESET) {
-                        toastShort(getString(R.string.scan_canceled))
-                    }
+
                     binding.clSpeedview.resetView()
                     YoYo.with(Techniques.SlideInLeft).duration(300L).onStart {
                         YoYo.with(Techniques.FadeOut).duration(100L).onEnd {

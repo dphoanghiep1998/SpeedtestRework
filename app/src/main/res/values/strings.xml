@@ -40,7 +40,6 @@
     <string name="key_speed_test" translatable="false">speed_test</string>
     <string name="key_data_usage" translatable="false">data_usage</string>
 
-
     <!--    Bottom Nav    -->
     <string name="speed">Speed</string>
     <string name="wifi_analyzer">Wifi Analyzer</string>
@@ -243,6 +242,13 @@
     <string name="gen_csv_failed">Generated Failed</string>
     <string name="scan_canceled">Scaning process canceled</string>
     <string name="no_network">No Network</string>
+    <string name="tips">Tips</string>
+    <string name="desc_dbm">A unit of measure used to reference signal strength to electrical power level</string>
+    <string name="perfect_signal">Perfect Signal</string>
+    <string name="able_to_watch_video">Able to watch video</string>
+    <string name="unstable_connection">Unstable connection</string>
+    <string name="no_signal">No signal</string>
+    <string name="light_browsing">Light browsing</string>
 
 
 </resources>
