@@ -119,6 +119,7 @@ class FragmentPingTest : BaseFragment(), ItemHelper {
             viewModel.getPingResult(data)
             it.startAnimation(rotate)
         }
+
     }
 
     private fun initAnimation() {
@@ -141,6 +142,7 @@ class FragmentPingTest : BaseFragment(), ItemHelper {
         adapter = PingTestAdapter(requireContext(), this)
         binding.rcvPingView.adapter = adapter
         adapter.setData(data)
+
     }
 
     private fun observePingDone() {

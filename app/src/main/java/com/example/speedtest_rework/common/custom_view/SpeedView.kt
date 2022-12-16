@@ -15,6 +15,7 @@ import android.provider.Settings
 import android.transition.AutoTransition
 import android.transition.TransitionManager
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -32,6 +33,7 @@ import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.common.utils.Constant
+import com.example.speedtest_rework.common.utils.NetworkUtils
 import com.example.speedtest_rework.common.utils.buildMinVersionQ
 import com.example.speedtest_rework.common.utils.format
 import com.example.speedtest_rework.common.utils.roundOffDecimal
@@ -470,12 +472,14 @@ class SpeedView(
 
             override fun onEnd() {
                 (context as Activity).runOnUiThread {
+                    testModel?.name_network = NetworkUtils.getNameWifi(context)
                     viewModel?.insertNewHistoryAction(testModel!!)
                     viewModel?.setScanStatus(ScanStatus.DONE)
                     binding.speedView.stop()
 
                     val bundle = Bundle()
                     bundle.putParcelable(Constant.KEY_TEST_MODEL, testModel)
+
                     bundle.putBoolean(Constant.KEY_FROM_SPEED_TEST_FRAGMENT, true)
 
                     Navigation.findNavController(binding.root)

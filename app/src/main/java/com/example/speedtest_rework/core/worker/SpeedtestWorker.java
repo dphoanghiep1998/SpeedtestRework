@@ -155,7 +155,7 @@ public abstract class SpeedtestWorker extends Thread {
         else pingCalled = true;
         final long start = System.currentTimeMillis();
         onPingJitterUpdate(0, 0, 0);
-        PingStream ps = new PingStream(backend.getServer(), backend.getPingURL(), config.getCount_ping(), config.getErrorHandlingMode(), config.getPing_connectTimeout(), config.getPing_soTimeout(), config.getPing_recvBuffer(), config.getPing_sendBuffer()) {
+        PingStream ps = new PingStream(backend.getServer()) {
 
             private double minPing = Double.MAX_VALUE, prevPing = -1;
             private int counter = 0;
@@ -192,7 +192,6 @@ public abstract class SpeedtestWorker extends Thread {
             public void onDone() {
             }
         };
-        ps.join();
         if (stopASAP) return;
         onPingJitterUpdate(ping, jitter, 1);
     }

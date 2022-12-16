@@ -75,4 +75,5 @@ class HistoryModel(
             network = network
         )
     }
+
 }

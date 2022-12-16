@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData
 import com.example.speedtest_rework.common.utils.AppSharePreference
 import com.example.speedtest_rework.core.getIP.CurrentNetworkInfo
 import com.example.speedtest_rework.data.model.HistoryModel
+import com.example.speedtest_rework.data.model.UsagePackageModel
 import com.example.speedtest_rework.data.services.AddressInfoRemoteService
 import com.example.speedtest_rework.data.services.HistoryLocalService
 import com.example.speedtest_rework.data.services.PrivilegedService
@@ -63,7 +64,6 @@ class AppRepository @Inject constructor(
         return currentNetworkInfo
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
     suspend fun getDataUsageList(): List<DataUsageModel> {
         var mList: List<DataUsageModel>
         withContext(dispatcher) {
@@ -72,10 +72,12 @@ class AppRepository @Inject constructor(
         return mList
     }
 
-    suspend fun getDataUsageApp() {
+    suspend fun getDataUsageApp(): List<UsagePackageModel> {
+        var mList: List<UsagePackageModel>
         withContext(dispatcher) {
-            Log.d("TAG", "getDataUsageApp: " + privilegeService.getUsageAppList())
+            mList = privilegeService.getUsageAppList()
         }
+        return mList
     }
 
 

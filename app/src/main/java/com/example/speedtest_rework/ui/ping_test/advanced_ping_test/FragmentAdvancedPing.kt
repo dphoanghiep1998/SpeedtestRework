@@ -16,10 +16,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.speedtest_rework.R
-import com.example.speedtest_rework.base.dialog.BackPressBottomSheetDialogCallback
-import com.example.speedtest_rework.base.dialog.BaseBottomDialogCallBack
-import com.example.speedtest_rework.base.dialog.ConfirmDialog
-import com.example.speedtest_rework.base.dialog.PingInfoDialog
+import com.example.speedtest_rework.base.dialog.*
 import com.example.speedtest_rework.common.utils.AppSharePreference
 import com.example.speedtest_rework.common.utils.clickWithDebounce
 import com.example.speedtest_rework.databinding.FragmentAdvancedPingBinding
@@ -131,6 +128,10 @@ open class FragmentAdvancedPing(private val itemContentPingTest: ContentPingTest
     }
 
     private fun initButton() {
+        binding.btnInfo.clickWithDebounce {
+            val pingInfoPopup = PingInfoPopup(requireContext())
+            pingInfoPopup.show()
+        }
         binding.btnBack.clickWithDebounce {
             dismiss()
         }
@@ -273,7 +274,6 @@ open class FragmentAdvancedPing(private val itemContentPingTest: ContentPingTest
         viewMoDel.listPingResultLive.observe(viewLifecycleOwner) {
 
             if (it.isNotEmpty()) {
-                Log.e("TAG", "observeDataPing: " + it[it.size - 1].ping_value)
                 val isPingReachable = it[it.size - 1].isReachable
                 setProgressAnimate(binding.pbLoading, 9)
                 packetSent = it.size
@@ -282,7 +282,6 @@ open class FragmentAdvancedPing(private val itemContentPingTest: ContentPingTest
                     countMaxMinAvg(it[it.size - 1].ping_value.roundToInt())
                     showPing(it[it.size - 1].ping_value.roundToInt())
                     countPacketReceived()
-                    countPacketLoss()
                 } else if (it.size == 1) {
                     countPacketLoss()
                     hidePing()

@@ -249,6 +249,14 @@
     <string name="unstable_connection">Unstable connection</string>
     <string name="no_signal">No signal</string>
     <string name="light_browsing">Light browsing</string>
+    <string name="app_data_usage">APP DATA USAGE</string>
+    <string name="app">App</string>
+    <string name="icon_app">ICON APP</string>
+    <string name="desc_ping_test">Ping test is mainly used to check whether the connected network is smooth and stable</string>
+    <string name="packet_loss_rate">Packet loss rate</string>
+    <string name="desc_packet_loss_rate">Packet Loss Rate refers to the ratio of the number of packets lost in the test to the transmitted packets, which is used to reflect the network quality.</string>
+    <string name="desc_packet_sent">Packet sent reports the number of times a task went into a send sleep state while waiting for the network to send each packet to the client.</string>
+    <string name="packet_received_desc">A task received part of a multipacket batch and was switched out waiting for the client to send the next packet of the batch, or. A task completely finished ...</string>
 
 
 </resources>

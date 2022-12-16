@@ -24,7 +24,6 @@ import com.example.speedtest_rework.data.model.HistoryModel
 import com.example.speedtest_rework.databinding.FragmentSpeedTestBinding
 import com.example.speedtest_rework.viewmodel.ScanStatus
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
-import java.util.*
 
 
 class FragmentSpeedTest : BaseFragment() {
@@ -246,11 +245,21 @@ class FragmentSpeedTest : BaseFragment() {
                 return
             }
             if (NetworkUtils.isWifiConnected(requireContext())) {
-                val testModel = HistoryModel()
+                val testModel = HistoryModel(
+                    name_network = binding.tvWifiName.text.toString(),
+                    isp = binding.tvIspName.text.toString(),
+                    externalIP = viewModel.currentNetworkInfo.selfIspIp,
+                    internalIP = NetworkUtils.wifiIpAddress()
+                )
                 binding.clSpeedview.setData(testPoint!!, ConnectionType.WIFI, testModel, viewModel)
 
             } else if (NetworkUtils.isMobileConnected(requireContext())) {
-                val testModel = HistoryModel(network = "mobile")
+                val testModel = HistoryModel(
+                    network = "mobile",
+                    name_network = binding.tvWifiName.text.toString(),
+                    isp = binding.tvIspName.text.toString(),
+                    externalIP = viewModel.currentNetworkInfo.selfIspIp,
+                )
                 binding.clSpeedview.setData(
                     testPoint!!, ConnectionType.MOBILE, testModel, viewModel
                 )

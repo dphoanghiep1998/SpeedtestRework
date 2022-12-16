@@ -27,7 +27,6 @@ import java.util.List;
 
 public class NetworkUtils {
     private static Context context;
-
     public NetworkUtils(Context context) {
         NetworkUtils.context = context;
     }
@@ -110,7 +109,6 @@ public class NetworkUtils {
         return downloadSpeed;
     }
 
-    @TargetApi(Build.VERSION_CODES.M)
     public static int getUploadSpeed(@NonNull Context context) {
         int uploadSpeed = 0;
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);

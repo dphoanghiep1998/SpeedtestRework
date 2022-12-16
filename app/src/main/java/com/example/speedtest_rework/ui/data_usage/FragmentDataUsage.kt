@@ -2,14 +2,12 @@ package com.example.speedtest_rework.ui.data_usage
 
 import android.content.Context
 import android.graphics.Insets
-import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.*
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import androidx.activity.OnBackPressedCallback
-import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,7 +29,6 @@ class FragmentDataUsage : BaseFragment() {
     private val viewModel: SpeedTestViewModel by activityViewModels()
     private lateinit var popupWindow: PopupWindow
 
-    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -42,14 +39,12 @@ class FragmentDataUsage : BaseFragment() {
         return binding.root
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         observeListDataUsage()
         changeBackPressCallBack()
         super.onViewCreated(view, savedInstanceState)
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
     private fun initView() {
         setPopupMenu()
         showLoading()
@@ -60,6 +55,9 @@ class FragmentDataUsage : BaseFragment() {
         binding.rcvDataUsage.adapter = adapter
         binding.btnBack.clickWithDebounce {
             findNavController().popBackStack()
+        }
+        binding.containerBottom.clickWithDebounce {
+            navigateToPage(R.id.action_fragmentDataUsage_to_fragmentAppDataUsage)
         }
         binding.tvFilter.clickWithDebounce {
             popupWindow.showAsDropDown(binding.containerHeader, 20, 0);
@@ -74,10 +72,8 @@ class FragmentDataUsage : BaseFragment() {
 
     private fun hideLoading() {
         binding.containerLoading.visibility = View.GONE
-
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
     private fun observeListDataUsage() {
         viewModel.getListOfDataUsage().observe(viewLifecycleOwner) {
             adapter.setData(it)

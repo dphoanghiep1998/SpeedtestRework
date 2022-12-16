@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -99,7 +100,6 @@ class FragmentResultDetail : DialogFragment(), ConfirmDialog.ConfirmCallback, As
             fromSpeedTestFragment = bundle.getBoolean(Constant.KEY_FROM_SPEED_TEST_FRAGMENT, false)
             if (fromSpeedTestFragment) {
                 handleShowRate()
-
             }
         }
     }
@@ -140,7 +140,6 @@ class FragmentResultDetail : DialogFragment(), ConfirmDialog.ConfirmCallback, As
         binding.tvPingCount.text = "${testModel.ping} ms"
         binding.tvJitterCount.text = "${testModel.jitter} ms"
         binding.tvLossCount.text = "${testModel.loss} %"
-        binding.tvConnectNameValue.text = testModel.network
         binding.tvConnectNameValue.text = testModel.name_network
         binding.tvIspValue.text = testModel.isp
         binding.tvInternalIpValue.text = testModel.internalIP

@@ -2,8 +2,6 @@ package com.example.speedtest_rework.viewmodel
 
 import android.net.wifi.ScanResult
 import android.net.wifi.WifiInfo
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
@@ -13,6 +11,7 @@ import com.example.speedtest_rework.common.custom_view.UnitType
 import com.example.speedtest_rework.core.getIP.AddressInfo
 import com.example.speedtest_rework.core.getIP.CurrentNetworkInfo
 import com.example.speedtest_rework.data.model.HistoryModel
+import com.example.speedtest_rework.data.model.UsagePackageModel
 import com.example.speedtest_rework.data.repositories.AppRepository
 import com.example.speedtest_rework.ui.data_usage.model.DataUsageModel
 import com.example.speedtest_rework.ui.main.analyzer.band.WiFiBand
@@ -26,8 +25,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SpeedTestViewModel @Inject constructor(
     private val appRepository: AppRepository,
-) :
-    BaseViewModel() {
+) : BaseViewModel() {
     var currentLanguage = ""
     var unitType = MutableLiveData(UnitType.MBPS)
     var isMultiTaskDone: MutableLiveData<Boolean> = MutableLiveData()
@@ -36,6 +34,7 @@ class SpeedTestViewModel @Inject constructor(
     var userActionRate: Boolean = false
     var wiFiBand = MutableLiveData(WiFiBand.GHZ2)
     private val listDataUsage: MutableLiveData<List<DataUsageModel>> = MutableLiveData()
+    private val listAppDataUsage: MutableLiveData<List<UsagePackageModel>> = MutableLiveData()
     var wifiName = MutableLiveData("")
 
 
@@ -54,7 +53,6 @@ class SpeedTestViewModel @Inject constructor(
         else -> listDataUsage.let { it.value?.take(1) }
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
     fun getListOfDataUsage(): LiveData<List<DataUsageModel>> {
         viewModelScope.launch {
             listDataUsage.value = appRepository.getDataUsageList()
@@ -63,11 +61,11 @@ class SpeedTestViewModel @Inject constructor(
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.M)
-    fun getListAppDataUsage() {
+    fun getListAppDataUsage(): LiveData<List<UsagePackageModel>> {
         viewModelScope.launch {
-            appRepository.getDataUsageApp()
+            listAppDataUsage.value = appRepository.getDataUsageApp()
         }
+        return listAppDataUsage
 
     }
 
@@ -106,8 +104,7 @@ class SpeedTestViewModel @Inject constructor(
         dataCache.removeSource(data)
     }
 
-    private var isWifiEnabled: MediatorLiveData<Boolean> =
-        MediatorLiveData<Boolean>()
+    private var isWifiEnabled: MediatorLiveData<Boolean> = MediatorLiveData<Boolean>()
     val mWifiEnabled: LiveData<Boolean>
         get() = isWifiEnabled
 

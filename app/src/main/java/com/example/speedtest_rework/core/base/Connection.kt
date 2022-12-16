@@ -1,6 +1,7 @@
 package com.example.speedtest_rework.core.base
 
 import android.os.Build
+import android.util.Log
 import java.io.InputStream
 import java.io.InputStreamReader
 import java.io.OutputStream
@@ -155,6 +156,7 @@ class Connection(
         try {
             if (!path.startsWith("/")) path = "/$path"
             val ps = printStream
+            Log.d("TAG", "GET: "+path)
             ps!!.print("GET $path HTTP/1.1\r\n")
             ps.print("Host: $host\r\n")
             ps.print("User-Agent: " + USER_AGENT)
