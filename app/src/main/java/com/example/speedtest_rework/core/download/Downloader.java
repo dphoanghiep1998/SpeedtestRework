@@ -48,10 +48,10 @@ public abstract class Downloader extends Thread {
                     bytesLeft += ckBytes;
                 }
                 int l = in.read(buf);
-                if(l < 0){
+                if (l < 0) {
                     break;
                 }
-                    bytesLeft -= l;
+                bytesLeft -= l;
                 if (resetASAP) {
                     totDownloaded = 0;
                     resetASAP = false;

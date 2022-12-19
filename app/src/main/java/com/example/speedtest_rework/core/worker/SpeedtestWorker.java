@@ -1,5 +1,7 @@
 package com.example.speedtest_rework.core.worker;
 
+import android.util.Log;
+
 import com.example.speedtest_rework.core.base.Utils;
 import com.example.speedtest_rework.core.config.SpeedtestConfig;
 import com.example.speedtest_rework.core.download.DownloadStream;
@@ -44,7 +46,6 @@ public abstract class SpeedtestWorker extends Thread {
     private void dlTest() {
         if (dlCalled) return;
         else dlCalled = true;
-        final long start = System.currentTimeMillis();
         onDownloadUpdate(0, 0);
         DownloadStream[] streams = new DownloadStream[config.getDl_parallelStreams()];
         for (int i = 0; i < streams.length; i++) {
@@ -82,7 +83,7 @@ public abstract class SpeedtestWorker extends Thread {
                 }
                 double progress = (t + bonusT) / (double) (config.getTime_dl_max() * 1000);
                 speed = (speed * 8 * config.getOverheadCompensationFactor()) / (config.getUseMebibits() ? 1048576.0 : 1000000.0);
-
+                Log.d("TAG", "dlTest: "+totDownloaded);
                 dl = speed;
                 if (progress >= 1) {
                     break;
@@ -138,7 +139,9 @@ public abstract class SpeedtestWorker extends Thread {
                     bonusT += b > 200 ? 200 : b;
                 }
                 double progress = (t + bonusT) / (double) (config.getTime_ul_max() * 1000);
-                speed = (speed * 16 * config.getOverheadCompensationFactor()) / (config.getUseMebibits() ? 1048576.0 : 1000000.0);
+                speed = (speed * 8 * config.getOverheadCompensationFactor()) / (config.getUseMebibits() ? 1048576.0 : 1000000.0);
+                Log.d("TAG", "ulTest: "+totUploaded);
+
                 ul = speed;
                 onUploadUpdate(ul, progress>1?1:progress);
             }
@@ -153,7 +156,6 @@ public abstract class SpeedtestWorker extends Thread {
     private void pingTest() {
         if (pingCalled) return;
         else pingCalled = true;
-        final long start = System.currentTimeMillis();
         onPingJitterUpdate(0, 0, 0);
         PingStream ps = new PingStream(backend.getServer()) {
 
@@ -169,8 +171,9 @@ public abstract class SpeedtestWorker extends Thread {
 
             @Override
             public boolean onPong(long ns) {
+                Log.d("TAG", "onPong: "+ns);
                 counter++;
-                double ms = ns / 1000000.0;
+                long ms = ns;
                 if (ms < minPing) minPing = ms;
                 ping = minPing;
                 if (prevPing == -1) {
@@ -184,7 +187,7 @@ public abstract class SpeedtestWorker extends Thread {
                 }
                 prevPing = ms;
                 double progress = counter / (double) config.getCount_ping();
-                onPingJitterUpdate(ping, jitter, progress > 1 ? 1 : progress);
+                onPingJitterUpdate(ns, jitter, progress > 1 ? 1 : progress);
                 return !stopASAP;
             }
 

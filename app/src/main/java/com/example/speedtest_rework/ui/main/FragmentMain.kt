@@ -400,12 +400,14 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
     }
 
 
-
     private fun changeBackPressCallBack() {
         val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 if (binding.drawerContainer.isDrawerOpen(GravityCompat.START)) {
                     binding.drawerContainer.close()
+                } else if (viewModel.mScanStatus.value == ScanStatus.SCANNING) {
+                    toastShort(getString(R.string.scan_canceled))
+                    viewModel.setScanStatus(ScanStatus.HARD_RESET)
                 } else {
                     activity?.finish()
                 }
@@ -435,6 +437,11 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
         AppForegroundService.getInstance().startService(
             requireContext(), ServiceType.DATA_USAGE
         )
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.setScanStatus(ScanStatus.HARD_RESET)
     }
 
     override fun negativeAction() {

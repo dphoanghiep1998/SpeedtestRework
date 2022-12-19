@@ -5,7 +5,6 @@ import android.app.Dialog
 import android.content.Context
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.view.animation.LinearInterpolator
 import android.view.inputmethod.InputMethodManager
@@ -52,7 +51,6 @@ open class FragmentAdvancedPing(private val itemContentPingTest: ContentPingTest
     init {
         cUrl = itemContentPingTest.url
     }
-
 
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -156,6 +154,7 @@ open class FragmentAdvancedPing(private val itemContentPingTest: ContentPingTest
             data.barWidth = .5f
             binding.graphView.data = data
             binding.graphView.invalidate()
+
             if (normalType) {
                 viewMoDel.getPingResultAdvanced(itemContentPingTest.url)
             } else {
@@ -258,15 +257,15 @@ open class FragmentAdvancedPing(private val itemContentPingTest: ContentPingTest
     }
 
     private fun genColorBar(value: Int) = when (value) {
-        in 0..50 -> {
-            getColor(R.color.gradient_green_start)
-        }
-        in 51..100 -> {
-            getColor(R.color.gradient_yellow_end)
-        }
-        else -> {
-            getColor(R.color.gradient_red_start)
-        }
+        in 0..50 -> getColor(R.color.gradient_green_start)
+
+        in 51..100 -> getColor(R.color.gradient_yellow_end)
+
+        in 100..99999999 -> getColor(R.color.gradient_red_start)
+
+
+        else -> getColor(R.color.transparent)
+
     }
 
 
@@ -274,50 +273,11 @@ open class FragmentAdvancedPing(private val itemContentPingTest: ContentPingTest
         viewMoDel.listPingResultLive.observe(viewLifecycleOwner) {
 
             if (it.isNotEmpty()) {
-                val isPingReachable = it[it.size - 1].isReachable
-                setProgressAnimate(binding.pbLoading, 9)
                 packetSent = it.size
                 binding.tvPacketSentValue.text = packetSent.toString()
-                if (isPingReachable) {
-                    countMaxMinAvg(it[it.size - 1].ping_value.roundToInt())
-                    showPing(it[it.size - 1].ping_value.roundToInt())
-                    countPacketReceived()
-                } else if (it.size == 1) {
-                    countPacketLoss()
-                    hidePing()
-                } else {
-                    countPacketLoss()
-                }
+                if (it.size == 1) {
+                    setProgressAnimate(binding.pbLoading, 9, 10000)
 
-                colorsText[it.size - 1] = genColorBar(it[it.size - 1].ping_value.roundToInt())
-                val data = BarData()
-                data.barWidth = .5f
-                if (maxValue == 0) {
-                    binding.graphView.axisLeft.axisMaximum = (maxValue + 100).toFloat()
-                } else {
-                    binding.graphView.axisLeft.axisMaximum = (maxValue + 50).toFloat()
-                }
-                binding.graphView.data = data
-                barChart[it.size - 1] =
-                    BarEntry(it.size.toFloat(), it[it.size - 1].ping_value.roundToInt() + 10f)
-                BarDataSet(barChart, null).also { it1 ->
-                    it1.setGradientColor(
-                        getColor(R.color.gradient_green_start_zero),
-                        getColor(R.color.gradient_green_start)
-                    )
-                    it1.valueFormatter = ValueBarFormatter()
-                    data.addDataSet(it1)
-                }
-                binding.graphView.data = data
-                binding.graphView.renderer = BarChartCustomRender(
-                    binding.graphView,
-                    binding.graphView.animator,
-                    binding.graphView.viewPortHandler,
-                    colorsText
-                )
-                with(binding.graphView) {
-                    this.notifyDataSetChanged()
-                    this.invalidate()
                 }
                 if (it.size == 10) {
                     setProgressAnimate(binding.pbLoading, 10, 1000)
@@ -355,6 +315,49 @@ open class FragmentAdvancedPing(private val itemContentPingTest: ContentPingTest
                     }
 
                 }
+                val data = BarData()
+                data.barWidth = .5f
+
+                binding.graphView.data = data
+                it.mapIndexed { index, item ->
+                    if (!item.isReachable && index == 0) {
+                        countPacketLoss()
+                        hidePing()
+                    } else if (!item.isReachable) {
+                        countPacketLoss()
+                    }
+                    colorsText[index] = genColorBar(item.ping_value.roundToInt())
+                    barChart[index] = BarEntry(
+                        index.toFloat(), item.ping_value.roundToInt() + 10f
+                    )
+                    countMaxMinAvg(it[it.size - 1].ping_value.roundToInt())
+                    showPing(it[it.size - 1].ping_value.roundToInt())
+                    countPacketReceived()
+                    if (maxValue == 0) {
+                        binding.graphView.axisLeft.axisMaximum = (maxValue + 100).toFloat()
+                    } else {
+                        binding.graphView.axisLeft.axisMaximum = (maxValue + 50).toFloat()
+                    }
+                }
+                BarDataSet(barChart, null).also { it1 ->
+                    it1.setGradientColor(
+                        getColor(R.color.gradient_green_start_zero),
+                        getColor(R.color.gradient_green_start)
+                    )
+                    it1.valueFormatter = ValueBarFormatter()
+                    data.addDataSet(it1)
+                }
+                binding.graphView.data = data
+                binding.graphView.renderer = BarChartCustomRender(
+                    binding.graphView,
+                    binding.graphView.animator,
+                    binding.graphView.viewPortHandler,
+                    colorsText
+                )
+                with(binding.graphView) {
+                    this.notifyDataSetChanged()
+                    this.invalidate()
+                }
 
             } else {
                 resetData()
@@ -363,7 +366,9 @@ open class FragmentAdvancedPing(private val itemContentPingTest: ContentPingTest
     }
 
 
-    private fun setProgressAnimate(pb: ProgressBar, progressTo: Int, duration: Long = 8000) {
+    private fun setProgressAnimate(
+        pb: ProgressBar, progressTo: Int, duration: Long = 8000
+    ) {
         val animation: ObjectAnimator =
             ObjectAnimator.ofInt(pb, "progress", pb.progress, progressTo * 100)
         animation.duration = duration
@@ -553,6 +558,7 @@ open class FragmentAdvancedPing(private val itemContentPingTest: ContentPingTest
         avgLatency = 0
         maxValue = 0
         initBarArrayData()
+
     }
 
     private fun getColor(resId: Int): Int {

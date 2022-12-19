@@ -52,7 +52,6 @@ class BarChartCustomRender(
             var colorIndex = 0
 
             while (j < buffer.buffer.size * mAnimator.phaseX) {
-
                 mPaint.color = colors[colorIndex]
                 textPaint.color = colors[colorIndex]
 

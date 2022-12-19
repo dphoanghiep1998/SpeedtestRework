@@ -59,9 +59,12 @@ class FragmentWifiDetector : BaseFragment(), ItemDeviceHelper {
                 discoveryDevice()
                 binding.requestWifiContainer.visibility = View.GONE
                 binding.btnReload.visibility = View.VISIBLE
+                initAnimation()
+
             } else {
                 binding.requestWifiContainer.visibility = View.VISIBLE
                 binding.btnReload.visibility = View.GONE
+                binding.btnReload.clearAnimation()
             }
         }
     }
@@ -71,7 +74,6 @@ class FragmentWifiDetector : BaseFragment(), ItemDeviceHelper {
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     findNavController().popBackStack()
-
                 }
             }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)

@@ -55,6 +55,7 @@ class FragmentPingTestViewModel @Inject constructor() : BaseViewModel() {
                         .doPing(object : Ping.PingListener {
                             override fun onResult(pingResult: PingResult) {
                             }
+
                             override fun onFinished(pingStats: PingStats) {
                                 if (loop == 11) {
                                     pingStatus.postValue(ScanStatus.DONE)
@@ -91,6 +92,13 @@ class FragmentPingTestViewModel @Inject constructor() : BaseViewModel() {
                                         pingResult.timeTaken,
                                         pingResult.isReachable
                                     )
+                                )
+                                Log.d("TAG", "listPingResult: " + listPingResult.value?.size)
+                                Log.d(
+                                    "TAG",
+                                    "listPingResult item : " + (listPingResult.value?.get(
+                                        listPingResult.value!!.size - 1
+                                    )?.ping_value)
                                 )
                                 listPingResult.notifyObserver()
                             }

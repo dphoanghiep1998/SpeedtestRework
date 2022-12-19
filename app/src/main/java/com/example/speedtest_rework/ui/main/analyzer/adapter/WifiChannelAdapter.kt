@@ -38,6 +38,11 @@ class WifiChannelAdapter(
         notifyDataSetChanged()
     }
 
+    fun resetSelectedItem() {
+        clickedPosition = -1
+        notifyDataSetChanged()
+    }
+
     private fun reIndex0(data: WiFiData) {
 
         val mList = data.wiFiDetails.filter {

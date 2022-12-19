@@ -5,7 +5,6 @@ import android.content.Intent
 import android.graphics.Insets
 import android.net.Uri
 import android.net.wifi.WifiManager
-import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.DisplayMetrics
@@ -13,7 +12,6 @@ import android.view.*
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import androidx.activity.OnBackPressedCallback
-import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -48,11 +46,8 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper, ListSizeListener {
     private var wiFiChannelPair = WiFiBand.GHZ2.wiFiChannels.wiFiChannelPairs()[0]
 
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
 
         binding = FragmentAnalyzerBinding.inflate(inflater, container, false)
@@ -69,6 +64,7 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper, ListSizeListener {
         observeWifiBand()
         observeWifiEnabled()
         changeBackPressCallBack()
+        observerWifiName()
     }
 
 
@@ -77,6 +73,11 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper, ListSizeListener {
         linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
         binding.rcvWifi.layoutManager = linearLayoutManager
         binding.rcvWifi.adapter = adapter
+    }
+
+    private fun observerWifiName() {
+        mainWifi?.startScan()
+
     }
 
     private fun observePermissionChange() {
@@ -92,6 +93,7 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper, ListSizeListener {
     private fun observeWifiEnabled() {
         viewModel.mWifiEnabled.observe(viewLifecycleOwner) { isWifiEnabled ->
             if (isWifiEnabled) {
+                mainWifi?.startScan()
                 hideRequestWifiEnable()
             } else {
                 showRequestWifiEnable()
@@ -101,18 +103,14 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper, ListSizeListener {
 
     private fun observeWifiBand() {
         val navButton = listOf(
-            binding.graphNavigationSet1,
-            binding.graphNavigationSet2,
-            binding.graphNavigationSet3
+            binding.graphNavigationSet1, binding.graphNavigationSet2, binding.graphNavigationSet3
         )
 
 
         viewModel.wiFiBand.observe(viewLifecycleOwner) {
-            val adapterAction = listOf(
-                { adapter.setData(wiFiData.copy(), 5320, 4900) },
+            val adapterAction = listOf({ adapter.setData(wiFiData.copy(), 5320, 4900) },
                 { adapter.setData(wiFiData.copy(), 5720, 5500) },
-                { adapter.setData(wiFiData.copy(), 5885, 5745) }
-            )
+                { adapter.setData(wiFiData.copy(), 5885, 5745) })
             if (::wiFiData.isInitialized) {
                 when (it) {
                     WiFiBand.GHZ5 -> {
@@ -120,9 +118,7 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper, ListSizeListener {
                         binding.tvInfo.text = getString(R.string.GHZ5)
                         wiFiChannelPair = it.wiFiChannels.wiFiChannelPairs()[0]
                         channelGraphAdapter = ChannelGraphAdapter(
-                            requireContext(),
-                            it,
-                            wiFiChannelPair
+                            requireContext(), it, wiFiChannelPair
                         )
                         adapter.setData(wiFiData.copy(), 5320, 4900)
                         navButton[0].isSelected = true
@@ -143,9 +139,7 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper, ListSizeListener {
 
                                     wiFiChannelPair = it.wiFiChannels.wiFiChannelPairs()[index]
                                     channelGraphAdapter = ChannelGraphAdapter(
-                                        requireContext(),
-                                        it,
-                                        wiFiChannelPair
+                                        requireContext(), it, wiFiChannelPair
                                     )
                                     updateView()
                                 }
@@ -157,15 +151,12 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper, ListSizeListener {
                         wiFiChannelPair = it.wiFiChannels.wiFiChannelPairs()[0]
                         adapter.setData(wiFiData.copy(), 2499, 2400)
                         channelGraphAdapter = ChannelGraphAdapter(
-                            requireContext(),
-                            it,
-                            wiFiChannelPair
+                            requireContext(), it, wiFiChannelPair
                         )
                         updateView()
                         binding.graphNavigation.visibility = View.GONE
                         navButton.forEach { item ->
-                            item.clickWithDebounce {
-                            }
+                            item.clickWithDebounce {}
                         }
                     }
                 }
@@ -191,9 +182,7 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper, ListSizeListener {
                 adapter.setData(wiFiData.copy(), 5885, 5745)
             }
             channelGraphAdapter = ChannelGraphAdapter(
-                requireContext(),
-                viewModel.wiFiBand.value!!,
-                wiFiChannelPair
+                requireContext(), viewModel.wiFiBand.value!!, wiFiChannelPair
             )
             updateView()
             hideLoadingMain()
@@ -235,13 +224,13 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper, ListSizeListener {
 
 
     fun initView() {
+        rcvWifiInit()
         showLoadingMain()
         initPopupWindow()
         initPopupWindowTop()
         initButton()
         mainWifi =
             requireContext().applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
-        rcvWifiInit()
 
 
     }
@@ -252,16 +241,13 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper, ListSizeListener {
         }
 
         binding.btnPermission.clickWithDebounce {
-            val intent =
-                Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-            val uri =
-                Uri.fromParts("package", requireActivity().packageName, null)
+            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+            val uri = Uri.fromParts("package", requireActivity().packageName, null)
             intent.data = uri
             requireActivity().startActivity(intent)
         }
         binding.btnSetting.clickWithDebounce {
-            val intent =
-                Intent(Settings.ACTION_WIFI_SETTINGS)
+            val intent = Intent(Settings.ACTION_WIFI_SETTINGS)
             startActivity(intent)
         }
         binding.tvInfo.setOnClickListener {
@@ -279,8 +265,8 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper, ListSizeListener {
 
         val width = if (buildMinVersionR()) {
             val windowMetrics: WindowMetrics = requireActivity().windowManager.currentWindowMetrics
-            val insets: Insets = windowMetrics.windowInsets
-                .getInsetsIgnoringVisibility(WindowInsets.Type.systemBars())
+            val insets: Insets =
+                windowMetrics.windowInsets.getInsetsIgnoringVisibility(WindowInsets.Type.systemBars())
             windowMetrics.bounds.width() - insets.left - insets.right
 
         } else {
@@ -294,11 +280,18 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper, ListSizeListener {
             popupWindow.dismiss()
         }
         bindingLayout.tv2GHZ.clickWithDebounce {
-            viewModel.wiFiBand.value = WiFiBand.GHZ2
+            if (viewModel.wiFiBand.value != WiFiBand.GHZ2) {
+                viewModel.wiFiBand.value = WiFiBand.GHZ2
+                adapter.resetSelectedItem()
+            }
+
             popupWindow.dismiss()
         }
         bindingLayout.tv5GHZ.clickWithDebounce {
-            viewModel.wiFiBand.value = WiFiBand.GHZ5
+            if (viewModel.wiFiBand.value != WiFiBand.GHZ5) {
+                viewModel.wiFiBand.value = WiFiBand.GHZ5
+                adapter.resetSelectedItem()
+            }
             popupWindow.dismiss()
         }
 
@@ -359,14 +352,14 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper, ListSizeListener {
             binding.rcvWifi.visibility = View.VISIBLE
         }
     }
-    private fun changeBackPressCallBack() {
-        val callback: OnBackPressedCallback =
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    findNavController().popBackStack()
 
-                }
+    private fun changeBackPressCallBack() {
+        val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findNavController().popBackStack()
+
             }
+        }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
 
     }

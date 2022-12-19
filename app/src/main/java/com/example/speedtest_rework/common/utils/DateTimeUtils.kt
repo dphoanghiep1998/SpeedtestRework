@@ -4,13 +4,13 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 object DateTimeUtils {
-    fun getDateConverted(date: Date?): String? {
-        val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
+    fun getDateConverted(date: Date?): String {
+        val formatter = SimpleDateFormat("dd/MM/yyyy")
         return formatter.format(date).toString()
     }
 
-    fun getDateConvertedToResult(date: Date?): String? {
-        val formatter = SimpleDateFormat("dd/MM/yyyy, HH:mm", Locale.ENGLISH)
+    fun getDateConvertedToResult(date: Date?): String {
+        val formatter = SimpleDateFormat("dd/MM/yyyy, HH:mm")
         return formatter.format(date).toString()
     }
 
@@ -21,7 +21,7 @@ object DateTimeUtils {
         if (cCalendar.get(Calendar.DATE) == dCalendar.get(Calendar.DATE)) {
             return "Today"
         }
-        val formatter = SimpleDateFormat("MM-dd", Locale.ENGLISH)
+        val formatter = SimpleDateFormat("MM-dd")
         return formatter.format(date).toString()
     }
 }

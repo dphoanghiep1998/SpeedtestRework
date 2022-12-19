@@ -56,7 +56,6 @@ public abstract class UploadStream {
                             }
                             if(errorHandlingMode.equals(SpeedtestConfig.ONERROR_ATTEMPT_RESTART)||errorHandlingMode.equals(SpeedtestConfig.ONERROR_MUST_RESTART)){
                                 previouslyUploaded+=currentUploaded;
-                                Utils.sleep(100);
                                 init();
                             }
                         }

@@ -1,9 +1,11 @@
 package com.example.speedtest_rework.ui.signal_test
 
 import android.content.Context
+import android.content.Intent
 import android.net.wifi.WifiInfo
 import android.net.wifi.WifiManager
 import android.os.Bundle
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -50,6 +52,7 @@ class FragmentSignalTest : BaseFragment() {
         initView()
         changeBackPressCallBack()
         observeWifiName()
+        observeWifiEnabled()
     }
 
     private fun initView() {
@@ -62,6 +65,22 @@ class FragmentSignalTest : BaseFragment() {
     private fun observeWifiName() {
         shareViewModel.wifiName.observe(viewLifecycleOwner) {
             binding.tvWifi.text = it
+        }
+    }
+    private fun observeWifiEnabled() {
+        shareViewModel.mWifiEnabled.observe(viewLifecycleOwner) {
+            if (it) {
+                binding.requestWifiContainer.visibility = View.GONE
+            } else {
+                binding.requestWifiContainer.visibility = View.VISIBLE
+                if (::job.isInitialized) {
+                    job.cancel()
+                    currentValue = 0
+                    binding.signalMeter.initSignalView()
+                    viewModel.setSignalScanning(false)
+                    viewModel.setListSignalLocation(mutableListOf())
+                }
+            }
         }
     }
 
@@ -138,6 +157,11 @@ class FragmentSignalTest : BaseFragment() {
                 viewModel.setSignalScanning(false)
                 viewModel.setListSignalLocation(mutableListOf())
             }
+        }
+        binding.btnSetting.clickWithDebounce {
+            val intent =
+                Intent(Settings.ACTION_WIFI_SETTINGS)
+            startActivity(intent)
         }
 
         binding.tvStart.clickWithDebounce {
