@@ -120,7 +120,6 @@ class AppForegroundService : Service() {
         }
 
         val builder = NotificationCompat.Builder(this, getString(R.string.channel_id))
-        builder.setAutoCancel(true)
         builder.setSmallIcon(R.drawable.ic_logo_menu)
             .setStyle(NotificationCompat.DecoratedCustomViewStyle())
             .setCustomContentView(remoteViews).setAutoCancel(false).setShowWhen(false)

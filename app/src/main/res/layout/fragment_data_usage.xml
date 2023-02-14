@@ -6,13 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/gray_700">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_38sdp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+
         <ImageView
             android:id="@+id/btn_back"
             android:layout_width="@dimen/_38sdp"
@@ -21,7 +15,6 @@
             android:foreground="@drawable/ripple_effect_corner_fg"
             android:padding="@dimen/_8sdp"
             android:src="@drawable/ic_back"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -30,15 +23,13 @@
             android:layout_height="wrap_content"
             android:text="@string/data_usage"
             android:textColor="@color/white"
-            android:textFontWeight="800"
             android:textSize="@dimen/_18sdp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/btn_back"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/btn_back" />
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/container_header"
@@ -49,7 +40,7 @@
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:weightSum="4"
-        app:layout_constraintTop_toBottomOf="@id/toolbar">
+        app:layout_constraintTop_toBottomOf="@id/btn_back">
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="0dp"

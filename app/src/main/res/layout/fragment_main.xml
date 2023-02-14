@@ -14,13 +14,6 @@
             android:layout_height="match_parent"
             android:background="@color/background_main">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?actionBarSize"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
                     android:id="@+id/menu"
@@ -31,7 +24,6 @@
                     android:padding="@dimen/_8sdp"
                     android:scaleType="centerInside"
                     android:src="@drawable/ic_menu"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -48,7 +40,6 @@
                     android:scaleType="centerInside"
                     android:src="@drawable/ic_back"
                     android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:ignore="RtlSymmetry" />
@@ -60,12 +51,12 @@
                     android:layout_height="wrap_content"
                     android:text="@string/speed_test_title"
                     android:textColor="@color/white"
-                    android:fontFamily="@font/app_font_bold"
+                    android:fontFamily="@font/app_font_700"
                     android:textSize="@dimen/_18sdp"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@id/menu"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="@id/menu" />
 
                 <ImageView
                     android:id="@+id/imv_vip"
@@ -77,7 +68,6 @@
                     android:focusable="true"
                     android:padding="@dimen/_8sdp"
                     android:src="@drawable/ic_vip"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -95,7 +85,6 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
             <androidx.viewpager2.widget.ViewPager2
@@ -103,7 +92,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toTopOf="@id/nav_bottom"
-                app:layout_constraintTop_toBottomOf="@id/toolbar" />
+                app:layout_constraintTop_toBottomOf="@id/back_btn" />
 
 
             <com.google.android.material.bottomnavigation.BottomNavigationView

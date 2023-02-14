@@ -19,7 +19,6 @@
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="4dp"
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical">
@@ -40,20 +39,14 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_weight="1.2"
-            app:autoSizeMinTextSize="@dimen/_6sdp"
-            app:autoSizeMaxTextSize="@dimen/_16sdp"
-            app:autoSizeStepGranularity="1dp"
-            app:autoSizeTextType="uniform"
             android:gravity="center"
             android:maxLines="2"
-            android:text="Aug 18"
             android:textColor="@color/white" />
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginHorizontal="4dp"
             android:layout_weight="1.2"
             android:gravity="center"
             android:orientation="vertical">
@@ -62,10 +55,7 @@
                 android:id="@+id/tv_downloadRate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/app_font_black"
-                android:text="30.04"
                 android:textColor="@color/white"
-                android:textFontWeight="400"
                 android:textSize="16dp" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -73,7 +63,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginHorizontal="4dp"
             android:layout_weight="1.2"
             android:gravity="center"
             android:orientation="vertical">
@@ -82,9 +71,7 @@
                 android:id="@+id/tv_uploadRate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/app_font_black"
                 android:gravity="center"
-                android:text="32.67"
                 android:textColor="@color/white"
                 android:textSize="16dp" />
 

@@ -34,12 +34,6 @@ open class BaseFragment : Fragment() {
         findNavController().navigate(actionId)
     }
 
-    protected fun showLoading(isShow: Boolean) {
-        val activity = requireActivity()
-        if (activity is BaseActivity) {
-            activity.showLoading(isShow)
-        }
-    }
 
     protected fun getColor(resId: Int): Int {
         return ContextCompat.getColor(requireContext(), resId)
@@ -50,53 +44,7 @@ open class BaseFragment : Fragment() {
     }
 
 
-    protected fun showErrorMessage(message: String) {
-        val activity = requireActivity()
-        if (activity is BaseActivity) {
-            activity.showErrorDialog(message)
-        }
-    }
-
-    protected fun showNotify(title: String?, message: String) {
-        val activity = requireActivity()
-        if (activity is BaseActivity) {
-            activity.showNotifyDialog(title ?: getDefaultNotifyTitle(), message)
-        }
-    }
-
-    protected fun showNotify(titleId: Int = R.string.default_notify_title, messageId: Int) {
-        val activity = requireActivity()
-        if (activity is BaseActivity) {
-            activity.showNotifyDialog(titleId, messageId)
-        }
-    }
 
 
-    protected fun registerObserverLoadingMoreEvent(
-        viewModel: BaseViewModel,
-        viewLifecycleOwner: LifecycleOwner
-    ) {
-        viewModel.isLoadingMore.observe(viewLifecycleOwner, EventObserver { isShow ->
-            showLoadingMore(isShow)
-        })
-    }
-
-    protected fun showLoadingMore(isShow: Boolean) {
-
-    }
-
-
-    private fun getDefaultNotifyTitle(): String {
-        return getString(R.string.default_notify_title)
-    }
-
-    protected fun registerObserverLoadingEvent(
-        viewModel: BaseViewModel,
-        viewLifecycleOwner: LifecycleOwner
-    ) {
-        viewModel.isLoading.observe(viewLifecycleOwner, EventObserver { isShow ->
-            showLoading(isShow)
-        })
-    }
 
 }

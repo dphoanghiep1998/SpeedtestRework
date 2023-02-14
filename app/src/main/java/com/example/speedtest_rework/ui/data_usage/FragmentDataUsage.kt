@@ -1,18 +1,22 @@
 package com.example.speedtest_rework.ui.data_usage
 
+import android.app.Dialog
 import android.content.Context
 import android.graphics.Insets
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.*
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import androidx.activity.OnBackPressedCallback
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.speedtest_rework.R
-import com.example.speedtest_rework.base.fragment.BaseFragment
 import com.example.speedtest_rework.common.utils.buildMinVersionR
 import com.example.speedtest_rework.common.utils.clickWithDebounce
 import com.example.speedtest_rework.databinding.FragmentDataUsageBinding
@@ -23,12 +27,27 @@ import com.example.speedtest_rework.viewmodel.Order
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
 import java.math.RoundingMode
 
-class FragmentDataUsage : BaseFragment() {
+class FragmentDataUsage : DialogFragment() {
     private lateinit var binding: FragmentDataUsageBinding
     private lateinit var adapter: DataUsageAdapter
     private val viewModel: SpeedTestViewModel by activityViewModels()
     private lateinit var popupWindow: PopupWindow
 
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val root = ConstraintLayout(requireContext())
+        root.layoutParams = ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
+        )
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(root)
+        dialog.window!!.setBackgroundDrawable(ColorDrawable(getColor(R.color.background_main)))
+        dialog.window!!.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
+        )
+
+        return dialog
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -37,6 +56,10 @@ class FragmentDataUsage : BaseFragment() {
         binding = FragmentDataUsageBinding.inflate(inflater, container, false)
         initView()
         return binding.root
+    }
+
+    private fun getColor(resId: Int): Int {
+        return ContextCompat.getColor(requireContext(), resId)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -57,7 +80,7 @@ class FragmentDataUsage : BaseFragment() {
             findNavController().popBackStack()
         }
         binding.containerBottom.clickWithDebounce {
-            navigateToPage(R.id.action_fragmentDataUsage_to_fragmentAppDataUsage)
+            findNavController().navigate(R.id.action_fragmentDataUsage_to_fragmentAppDataUsage)
         }
         binding.tvFilter.clickWithDebounce {
             popupWindow.showAsDropDown(binding.containerHeader, 20, 0);

@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_8sdp"
         android:orientation="vertical"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -36,29 +36,17 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <androidx.appcompat.widget.LinearLayoutCompat
+                <TextView
+                    android:id="@+id/tv_downloadSpeed"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center">
-
-                    <ImageView
-                        android:id="@+id/imv_downArrow"
-                        android:layout_width="@dimen/_16sdp"
-                        android:layout_height="@dimen/_16sdp"
-                        android:src="@drawable/ic_download" />
-
-                    <TextView
-                        android:id="@+id/tv_downloadSpeed"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_toEndOf="@id/imv_downArrow"
-                        android:paddingStart="@dimen/_6sdp"
-                        android:text="@string/download"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/_10sdp"
-                        android:textStyle="bold" />
-
-                </androidx.appcompat.widget.LinearLayoutCompat>
+                    android:drawablePadding="@dimen/_6sdp"
+                    android:text="@string/download"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_10sdp"
+                    android:layout_gravity="center"
+                    android:textStyle="bold"
+                    app:drawableStartCompat="@drawable/ic_download" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -121,29 +109,17 @@
                 app:layout_constraintStart_toEndOf="@+id/v_view"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <androidx.appcompat.widget.LinearLayoutCompat
+                <TextView
+                    android:id="@+id/tv_uploadSpeed"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center">
-
-                    <ImageView
-                        android:id="@+id/imv_upArrow"
-                        android:layout_width="@dimen/_16sdp"
-                        android:layout_height="@dimen/_16sdp"
-                        android:src="@drawable/ic_upload" />
-
-                    <TextView
-                        android:id="@+id/tv_uploadSpeed"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_toEndOf="@id/imv_upArrow"
-                        android:paddingStart="8dp"
-                        android:text="@string/upload"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/_10sdp"
-                        android:textStyle="bold" />
-
-                </androidx.appcompat.widget.LinearLayoutCompat>
+                    android:drawablePadding="@dimen/_6sdp"
+                    android:text="@string/upload"
+                    android:textColor="@color/white"
+                    android:layout_gravity="center"
+                    android:textSize="@dimen/_10sdp"
+                    android:textStyle="bold"
+                    app:drawableStartCompat="@drawable/ic_upload" />
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="wrap_content"
@@ -208,19 +184,15 @@
                 android:gravity="center"
                 android:orientation="horizontal">
 
-                <ImageView
-                    android:id="@+id/imv_ping"
-                    android:layout_width="20dp"
-                    android:layout_height="16dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_ping" />
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginStart="4dp"
                     android:layout_marginEnd="4dp"
+                    android:drawableStart="@drawable/ic_ping"
+                    android:drawablePadding="@dimen/_2sdp"
+                    android:gravity="center"
                     android:text="@string/ping"
                     android:textColor="#d7d7d7"
                     android:textSize="@dimen/_10sdp" />
@@ -244,22 +216,18 @@
                 android:gravity="center"
                 android:orientation="horizontal">
 
-                <ImageView
-                    android:id="@+id/imv_jitter"
-                    android:layout_width="20dp"
-                    android:layout_height="16dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_jitter" />
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginStart="4dp"
                     android:layout_marginEnd="4dp"
+                    android:drawablePadding="@dimen/_2sdp"
+                    android:gravity="center"
                     android:text="@string/jitter"
                     android:textColor="#d7d7d7"
-                    android:textSize="@dimen/_10sdp" />
+                    android:textSize="@dimen/_10sdp"
+                    app:drawableStartCompat="@drawable/ic_jitter" />
 
                 <TextView
                     android:id="@+id/tv_jitterCount"
@@ -280,22 +248,18 @@
                 android:gravity="center"
                 android:orientation="horizontal">
 
-                <ImageView
-                    android:id="@+id/imv_loss"
-                    android:layout_width="20dp"
-                    android:layout_height="16dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_loss" />
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginStart="4dp"
                     android:layout_marginEnd="4dp"
+                    android:drawablePadding="@dimen/_2sdp"
+                    android:gravity="center"
                     android:text="@string/loss"
                     android:textColor="#d7d7d7"
-                    android:textSize="@dimen/_10sdp" />
+                    android:textSize="@dimen/_10sdp"
+                    app:drawableStartCompat="@drawable/ic_loss" />
 
                 <TextView
                     android:id="@+id/tv_lossCount"
@@ -327,8 +291,6 @@
             android:id="@+id/btn_start_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:outlineAmbientShadowColor="@color/transparent"
-            android:outlineSpotShadowColor="@color/transparent"
             app:cardBackgroundColor="@color/background_main"
             app:cardCornerRadius="@dimen/_100sdp"
             app:layout_constraintStart_toStartOf="parent"
@@ -340,11 +302,9 @@
 
                 <com.airbnb.lottie.LottieAnimationView
                     android:id="@+id/btn_start"
-                    android:layout_width="@dimen/_200sdp"
-                    android:layout_height="@dimen/_200sdp"
+                    android:layout_width="@dimen/_250sdp"
+                    android:layout_height="@dimen/_250sdp"
                     android:scaleType="centerCrop"
-                    android:scaleX="1.1"
-                    android:scaleY="1.1"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -391,6 +351,8 @@
                         android:text="@string/no_network"
                         android:textColor="@color/white"
                         android:textSize="@dimen/_16sdp"
+                        app:layout_constraintEnd_toEndOf="@id/imv_no_network"
+                        app:layout_constraintStart_toStartOf="@id/imv_no_network"
                         app:layout_constraintTop_toBottomOf="@id/imv_no_network" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>

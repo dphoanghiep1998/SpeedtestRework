@@ -23,7 +23,6 @@
             android:layout_weight="1"
             android:gravity="center"
             android:maxLines="1"
-            android:text="60 ms"
             android:textColor="@color/white"
             android:textSize="@dimen/_12sdp" />
 
@@ -34,7 +33,6 @@
             android:layout_weight="1"
             android:gravity="center"
             android:maxLines="1"
-            android:text="Aug 18"
             android:textColor="@color/white"
             android:textSize="@dimen/_12sdp"
             app:autoSizeTextType="uniform" />
@@ -45,10 +43,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:fontFamily="@font/app_font_black"
             android:gravity="center"
             android:maxLines="1"
-            android:text="30.04"
             android:textColor="@color/white"
             android:textSize="@dimen/_12sdp" />
 
@@ -58,10 +54,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:fontFamily="@font/app_font_black"
             android:gravity="center"
             android:maxLines="1"
-            android:text="32.67"
             android:textColor="@color/white"
             android:textSize="@dimen/_12sdp" />
 

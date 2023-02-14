@@ -227,7 +227,6 @@ class SpeedView(
             }
 
         })
-        binding.speedView.isWithPointer = false
         binding.speedView.textSize = 40f
         binding.speedView.withTremble = false
     }
@@ -473,6 +472,8 @@ class SpeedView(
             override fun onEnd() {
                 (context as Activity).runOnUiThread {
                     testModel?.name_network = NetworkUtils.getNameWifi(context)
+                    testModel?.time = System.currentTimeMillis()
+
                     viewModel?.insertNewHistoryAction(testModel!!)
                     viewModel?.setScanStatus(ScanStatus.DONE)
                     binding.speedView.stop()

@@ -5,8 +5,12 @@
         <item name="android:windowAnimationStyle">@style/WindowAnimationTransition</item>
         <item name="android:actionMenuTextColor">@color/selected</item>
     </style>
+
     <style name="OverPassTextViewStyle" parent="android:Widget.TextView">
-        <item name="android:fontFamily">@font/font_weight_generic</item>
+        <item name="android:fontFamily">@font/app_font_400</item>
+        <item name="android:textSize">@dimen/_12sdp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:text">@string/test</item>
     </style>
 
     <style name="ThemeDarkNoActionBar" parent="ThemeDark">
@@ -56,42 +60,7 @@
         <item name="textAllCaps">false</item>
         <item name="android:textSize">@dimen/_14ssp</item>
     </style>
-    <style name="title_page_style">
-        <item name="fontFamily">@font/font_weight_generic</item>
-        <item name="android:textSize">20sp</item>
-        <item name="android:textColor">@color/white</item>
-    </style>
 
-
-    <style name="body_text_style">
-        <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="fontFamily">@font/font_weight_generic</item>
-        <item name="android:includeFontPadding">false</item>
-    </style>
-
-    <style name="second_body_text_style">
-        <item name="android:textSize">14sp</item>
-        <item name="android:textColor">#8D8D8D</item>
-        <item name="fontFamily">@font/font_weight_generic</item>
-    </style>
-
-    <style name="error_text_style">
-        <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@color/gradient_orange_start</item>
-        <item name="fontFamily">@font/font_weight_generic</item>
-    </style>
-    <style name="special_price_hightlight_style">
-        <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="fontFamily">@font/font_weight_generic</item>
-    </style>
-
-    <style name="regular_price_detail_style">
-        <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="fontFamily">@font/font_weight_generic</item>
-    </style>
 
     <style name="category_name_style">
         <item name="android:textSize">18sp</item>
@@ -108,7 +77,7 @@
     <style name="button_style_normal">
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/white</item>
-        <item name="fontFamily">@font/font_weight_generic</item>
+        <item name="fontFamily">@font/app_font_400</item>
         <item name="android:stateListAnimator">@null</item>
         <item name="android:background">@drawable/bg_background_splash</item>
     </style>
@@ -116,28 +85,11 @@
     <style name="text_button_style">
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/white</item>
-        <item name="fontFamily">@font/font_weight_generic</item>
+        <item name="fontFamily">@font/app_font_400</item>
         <item name="android:stateListAnimator">@null</item>
         <item name="android:background">@drawable/button_background_start</item>
     </style>
-    <style name="h2_style">
-        <item name="android:textSize">16sp</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="fontFamily">@font/font_weight_generic</item>
-    </style>
 
-    <style name="h2_highlight_style">
-        <item name="android:textSize">16sp</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="fontFamily">@font/font_weight_generic</item>
-    </style>
-
-
-    <style name="h3_style">
-        <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="fontFamily">@font/font_weight_generic</item>
-    </style>
 
     <style name="PermissionDialogAnimation">
         <item name="android:windowEnterAnimation">@anim/fade_in</item>
@@ -146,7 +98,7 @@
     <style name="edittext_style">
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/white</item>
-        <item name="android:fontFamily">@font/font_weight_generic</item>
+        <item name="android:fontFamily">@font/app_font_400</item>
         <item name="android:background">@drawable/bg_background_splash</item>
         <item name="android:paddingTop">12dp</item>
         <item name="android:paddingBottom">12dp</item>

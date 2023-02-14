@@ -16,7 +16,7 @@ class HistoryModel(
     var loss: Double = 0.0,
     var network: String = "wifi",
     var ping: Double = 0.0,
-    var time: Date = Date(),
+    var time: Long = 0,
     var upload: Double = 0.0,
     var download: Double = 0.0,
 

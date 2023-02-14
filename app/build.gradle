@@ -26,7 +26,7 @@ android {
         Calendar calendar = GregorianCalendar.getInstance()
         def hour = calendar.get(Calendar.HOUR_OF_DAY)
         def minute = calendar.get(Calendar.MINUTE)
-        setProperty("archivesBaseName", "com.nekosoft.internet.android.speedtest__" + versionCode + "__" + versionName + "__${formattedDate}__${hour}h${minute}")
+        setProperty("archivesBaseName", "speedtest__" + versionCode + "__" + versionName + "__${formattedDate}__${hour}h${minute}")
     }
     buildFeatures {
         viewBinding = true

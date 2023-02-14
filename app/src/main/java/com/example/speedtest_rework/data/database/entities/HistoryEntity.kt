@@ -16,7 +16,7 @@ data class HistoryEntity(
      var name_network: String,
      var network: String,
      var ping: Double,
-     var time: Date,
+     var time: Long,
      var upload: Double,
      var download: Double
 ) {

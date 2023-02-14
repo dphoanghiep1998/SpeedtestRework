@@ -107,9 +107,9 @@
     <string name="delete_all_recent">All recent will be deleted</string>
 
     <!--    Detail Results Fragment    -->
-    <string name="signal_weak">WEAK</string>
-    <string name="signal_normal">NORMAL</string>
-    <string name="signal_strong">STRONG</string>
+    <string name="signal_weak">Weak</string>
+    <string name="signal_normal">Normal</string>
+    <string name="signal_strong">Strong</string>
     <string name="isp" translatable="false">ISP</string>
     <string name="scan_again">Test Again</string>
     <string name="connection_name" translatable="false">SSID</string>

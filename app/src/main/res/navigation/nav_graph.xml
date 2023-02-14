@@ -53,7 +53,7 @@
         android:name="com.example.speedtest_rework.ui.result_detail.FragmentResultDetail"
         android:label="FragmentDetailResult"
         tools:layout="@layout/fragment_detail_result" />
-    <fragment
+    <dialog
         android:id="@+id/fragmentDataUsage"
         android:name="com.example.speedtest_rework.ui.data_usage.FragmentDataUsage"
         android:label="FragmentDataUsage"
@@ -61,7 +61,7 @@
         <action
             android:id="@+id/action_fragmentDataUsage_to_fragmentAppDataUsage"
             app:destination="@id/fragmentAppDataUsage" />
-    </fragment>
+    </dialog>
     <fragment
         android:id="@+id/languageFragment"
         android:name="com.example.speedtest_rework.ui.main.languages.FragmentLanguage"

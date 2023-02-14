@@ -9,9 +9,9 @@ object DateTimeUtils {
         return formatter.format(date).toString()
     }
 
-    fun getDateConvertedToResult(date: Date?): String {
-        val formatter = SimpleDateFormat("dd/MM/yyyy, HH:mm")
-        return formatter.format(date).toString()
+    fun getDateConvertedToResult(time:Long): String {
+        val formatter = SimpleDateFormat("dd/MM/yyyy, HH:mm", Locale.US)
+        return formatter.format(time).toString()
     }
 
     fun convertToDateMonth(date: Date): String {

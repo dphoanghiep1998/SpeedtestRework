@@ -28,7 +28,7 @@ open class PointerSpeedometer @JvmOverloads constructor(
     private val speedometerRect = RectF()
     private var speedometerColor = 0xFFEEEEEE.toInt()
     private var pointerColor = 0xFFFFFFFF.toInt()
-    private var downloadColorsList = intArrayOf(0xFF00FACC.toInt(), 0xFF36E7E7.toInt())
+    private var downloadColorsList = intArrayOf(0xFF36E7E7.toInt(), 0xFF00FACC.toInt())
     private var uploadColorsList = intArrayOf(0xFFFF981F.toInt(), 0xFFFF7F0A.toInt())
     private val gradientPositions = floatArrayOf(0 / 360f, 310 / 360f)
     private var state = "none"
@@ -36,20 +36,7 @@ open class PointerSpeedometer @JvmOverloads constructor(
     private var initDone = false
     private var rectF = RectF()
 
-    /**
-     * change the color of the center circle.
-     */
-    var centerCircleColor: Int
-        get() = circlePaint.color
-        set(centerCircleColor) {
-            circlePaint.color = centerCircleColor
-            if (isAttachedToWindow)
-                invalidate()
-        }
 
-    /**
-     * change the width of the center circle.
-     */
     var centerCircleRadius = dpTOpx(12f)
         set(centerCircleRadius) {
             field = centerCircleRadius
@@ -57,21 +44,6 @@ open class PointerSpeedometer @JvmOverloads constructor(
                 invalidate()
         }
 
-    /**
-     * enable to draw circle pointer on speedometer arc.
-     *
-     * this will not make any change for the Indicator.
-     *
-     * true: draw the pointer,
-     * false: don't draw the pointer.
-     */
-    var isWithPointer: Boolean
-        get() = withPointer
-        set(withPointer) {
-            this.withPointer = withPointer
-            if (isAttachedToWindow)
-                invalidate()
-        }
 
     init {
         init()
@@ -124,12 +96,6 @@ open class PointerSpeedometer @JvmOverloads constructor(
 
     }
 
-    fun setStrokeCapRound(){
-        speedometerPaint.strokeCap = Paint.Cap.ROUND
-        darkPaint.strokeCap = Paint.Cap.ROUND
-        blurPaint.strokeCap = Paint.Cap.ROUND
-
-    }
     private fun initAttributeSet(context: Context, attrs: AttributeSet?) {
         if (attrs == null) {
             initAttributeValue()
@@ -216,7 +182,7 @@ open class PointerSpeedometer @JvmOverloads constructor(
 
         if (initDone) {
             drawIndicator(canvas)
-            drawTicks(canvas, getStartDegree() + position,false)
+            drawTicks(canvas, getStartDegree() + position, false)
         }
     }
 
@@ -226,7 +192,7 @@ open class PointerSpeedometer @JvmOverloads constructor(
         initDraw()
         drawMarks(c)
         if (ticks.isNotEmpty())
-            drawTicks(c, 0f,false)
+            drawTicks(c, 0f, false)
     }
 
     fun setState(state: String) {

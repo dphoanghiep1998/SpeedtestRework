@@ -45,10 +45,6 @@ class KiteIndicator(context: Context) : Indicator<KiteIndicator>(context) {
         indicatorPath.lineTo(getCenterX() + 10f, getViewSize() * 0.25f)
         indicatorPath.lineTo(getCenterX() + (width + 10) / 2, getViewSize() / 2 +30)
         indicatorPath.lineTo(getCenterX() - (width-10) / 2, getViewSize()  / 2+30)
-
-
-
-
         indicatorPaint.color = color
     }
 
