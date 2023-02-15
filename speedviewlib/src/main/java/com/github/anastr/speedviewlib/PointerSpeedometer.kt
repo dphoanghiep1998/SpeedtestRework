@@ -36,6 +36,13 @@ open class PointerSpeedometer @JvmOverloads constructor(
     private var initDone = false
     private var rectF = RectF()
 
+    private val indicatorPath = Path()
+    private var bottomY: Float = 0.toFloat()
+    private var alpha = 255
+    private var indicatorWidth = dpTOpx(12f)
+    private var indicatorPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private var speedDone = false
+
 
     var centerCircleRadius = dpTOpx(12f)
         set(centerCircleRadius) {
@@ -119,6 +126,11 @@ open class PointerSpeedometer @JvmOverloads constructor(
         pointerPaint.color = pointerColor
     }
 
+    private fun getViewSize(): Float {
+        this.let { return it.size.toFloat() - it.padding * 2f }
+        return 0f
+    }
+
 
     override fun onSizeChanged(w: Int, h: Int, oldW: Int, oldH: Int) {
         super.onSizeChanged(w, h, oldW, oldH)
@@ -135,6 +147,11 @@ open class PointerSpeedometer @JvmOverloads constructor(
         invalidate()
     }
 
+    fun setSpeedDone(status: Boolean){
+        speedDone = status
+        invalidate()
+    }
+
     override fun stop() {
         setState("download")
         super.stop()
@@ -148,6 +165,8 @@ open class PointerSpeedometer @JvmOverloads constructor(
             speedometerRect.right - 5f,
             speedometerRect.bottom - 5f
         )
+        initIndicator()
+
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -181,10 +200,49 @@ open class PointerSpeedometer @JvmOverloads constructor(
         )
 
         if (initDone) {
-            drawIndicator(canvas)
+            if(speedDone){
+                animate(canvas)
+            }else{
+                drawIndicatorLmao(canvas)
+            }
             drawTicks(canvas, getStartDegree() + position, false)
         }
     }
+
+    private fun drawIndicatorLmao(canvas: Canvas) {
+        canvas.save()
+        canvas.translate(size * (fulcrumX - .5f), size * (fulcrumY - .5f))
+        canvas.rotate(90f + degree, size * .5f, size * .5f)
+
+        canvas.drawPath(indicatorPath, indicatorPaint)
+        canvas.restore()
+    }
+
+    private fun initIndicator() {
+        indicatorPaint.shader = LinearGradient(
+
+            getCenterX() - (indicatorWidth - 10) / 2,
+            getViewSize() / 2 + 30,
+            getCenterX() - 10f,
+            getViewSize() * 0.25f,
+            0xFF1A1B2F.toInt(),
+            Color.WHITE,
+            Shader.TileMode.CLAMP
+        )
+        indicatorPath.reset()
+        indicatorPath.moveTo(getCenterX() - 10f, getViewSize() * 0.2f)
+        indicatorPath.lineTo(getCenterX() + 10f, getViewSize() * 0.2f)
+        indicatorPath.lineTo(getCenterX() + (indicatorWidth + 20) / 2, getViewSize() / 2 + 30)
+        indicatorPath.lineTo(getCenterX() - (indicatorWidth - 20) / 2, getViewSize() / 2 + 30)
+        indicatorPaint.color = 0xFFFFFFFF.toInt()
+    }
+
+    fun getCenterX(): Float = this.size / 2f
+
+    /**
+     * @return y center of speedometer.
+     */
+    fun getCenterY(): Float = this.size / 2f
 
 
     override fun updateBackgroundBitmap() {
@@ -239,6 +297,15 @@ open class PointerSpeedometer @JvmOverloads constructor(
             Shader.TileMode.CLAMP
         )
         pointerBackPaint.shader = pointerGradient
+    }
+
+    private fun animate(canvas: Canvas) {
+        alpha -= 10
+        if (alpha < 0) alpha = 0
+        indicatorPaint.alpha = alpha
+
+        drawIndicatorLmao(canvas)
+        if (alpha > 0) invalidate()
     }
 
 

@@ -312,6 +312,54 @@ class SpeedView(
         countDownTimer?.start()
     }
 
+    private fun hideSpeedView() {
+
+        binding.speedView.clearAnimation()
+
+        val animation = ArcAnimationEnd(binding.speedView)
+        animation.duration = 400
+
+        var count = 16
+        val countDownTimer = object : CountDownTimer(1000, 50) {
+            override fun onTick(p0: Long) {
+                count--
+                if (count < currentTicks.size && count >= 0) {
+                    binding.speedView.ticks = currentTicks.subList(0, count)
+                }
+            }
+
+            override fun onFinish() {
+                Log.d("TAG123", "onFinish: ")
+                binding.speedView.setInitDone(true)
+                animation.setAnimationListener(object : Animation.AnimationListener {
+                    override fun onAnimationStart(animation: Animation) {
+                    }
+
+                    override fun onAnimationEnd(animation: Animation) {
+                        binding.speedView.setSpeedDone(true)
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            viewModel?.setScanStatus(ScanStatus.DONE)
+
+                            val bundle = Bundle()
+                            bundle.putParcelable(Constant.KEY_TEST_MODEL, testModel)
+
+                            bundle.putBoolean(Constant.KEY_FROM_SPEED_TEST_FRAGMENT, true)
+
+                            Navigation.findNavController(binding.root)
+                                .navigate(R.id.action_fragmentMain_to_fragmentResultDetail, bundle)
+                        }, 1000)
+
+                    }
+
+                    override fun onAnimationRepeat(animation: Animation) {}
+                })
+                binding.speedView.startAnimation(animation)
+            }
+
+        }
+        countDownTimer.start()
+    }
+
     private fun showSpeedView() {
 
         binding.speedView.clearAnimation()
@@ -475,16 +523,8 @@ class SpeedView(
                     testModel?.time = System.currentTimeMillis()
 
                     viewModel?.insertNewHistoryAction(testModel!!)
-                    viewModel?.setScanStatus(ScanStatus.DONE)
-                    binding.speedView.stop()
+                    hideSpeedView()
 
-                    val bundle = Bundle()
-                    bundle.putParcelable(Constant.KEY_TEST_MODEL, testModel)
-
-                    bundle.putBoolean(Constant.KEY_FROM_SPEED_TEST_FRAGMENT, true)
-
-                    Navigation.findNavController(binding.root)
-                        .navigate(R.id.action_fragmentMain_to_fragmentResultDetail, bundle)
 
                 }
             }
@@ -556,14 +596,13 @@ class SpeedView(
         )
         binding.speedView.ticks = listOf()
         binding.speedView.setInitDone(false)
-        binding.speedView.stop()
         showBtnStart()
         binding.placeholderUpload.clearAnimation()
         binding.placeholderDownload.clearAnimation()
         binding.btnStart.isEnabled = true
         binding.tvSpeedValue.text = context.getString(R.string.zero_value_dec)
         binding.tvSpeedValue.visibility = View.GONE
-        hideContainerSpeed()
+//        hideContainerSpeed()
         binding.speedView.visibility = GONE
 
     }

@@ -5,6 +5,7 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import com.github.anastr.speedviewlib.Speedometer
 import java.util.*
+import kotlin.math.max
 
 /**
  * this Library build By Anas Altair
@@ -81,6 +82,9 @@ abstract class Indicator<out I : Indicator<I>>(context: Context) : Observable() 
      * this indicator must be observed by Speedometer when to call this method.
      */
     abstract fun updateIndicator()
+
+
+
 
     /**
      * @param withEffects if indicator have effects like BlurMaskFilter.

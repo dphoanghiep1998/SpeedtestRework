@@ -142,7 +142,6 @@ public class AddressInfo {
     }
 
     public final String getDownloadUrl() {
-        String dlUrl = this.host;
         return "https://" + this.host + "/random4000x4000.jpg";
     }
 

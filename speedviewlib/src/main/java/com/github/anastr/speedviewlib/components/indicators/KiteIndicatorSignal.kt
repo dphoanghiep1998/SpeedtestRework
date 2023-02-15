@@ -43,12 +43,9 @@ class KiteIndicatorSignal(context: Context) : Indicator<KiteIndicatorSignal>(con
         indicatorPath.lineTo(getCenterX() + 10f, getViewSize() * 0.2f)
         indicatorPath.lineTo(getCenterX() + (width + 20) / 2, getViewSize() / 2 + 30)
         indicatorPath.lineTo(getCenterX() - (width - 20) / 2, getViewSize() / 2 + 30)
-
-
-
-
         indicatorPaint.color = color
     }
+
 
     override fun setWithEffects(withEffects: Boolean) {
         if (withEffects && !speedometer!!.isInEditMode)

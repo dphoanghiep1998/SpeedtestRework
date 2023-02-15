@@ -1,6 +1,8 @@
 package com.example.speedtest_rework.core.download;
 
 
+import android.util.Log;
+
 import com.example.speedtest_rework.core.base.Connection;
 
 import java.io.InputStream;
@@ -24,7 +26,7 @@ public abstract class Downloader extends Thread {
         start();
     }
 
-    private static final int BUFFER_SIZE = 10240;
+    private static final int BUFFER_SIZE = 1024;
 
     public void run() {
         try {
@@ -44,9 +46,9 @@ public abstract class Downloader extends Thread {
             InputStream in = httpsConn.getInputStream();
             byte[] buf = new byte[BUFFER_SIZE];
             while (!stopASAP) {
-                if (bytesLeft <= newRequestThreshold) {
-                    bytesLeft += ckBytes;
-                }
+//                if (bytesLeft <= newRequestThreshold) {
+                bytesLeft += ckBytes;
+//                }
                 int l = in.read(buf);
                 if (l < 0) {
                     break;
@@ -57,6 +59,7 @@ public abstract class Downloader extends Thread {
                     resetASAP = false;
                 }
                 totDownloaded += l;
+                Log.d("TAG", "run: " + totDownloaded);
                 if (System.currentTimeMillis() - lastProgressEvent > 200) {
                     lastProgressEvent = System.currentTimeMillis();
                     onProgress(totDownloaded);

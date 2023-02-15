@@ -49,6 +49,8 @@ class NeedleIndicator(context: Context) : Indicator<NeedleIndicator>(context) {
         circlePaint.strokeWidth = circleWidth
     }
 
+
+
     override fun setWithEffects(withEffects: Boolean) {
         if (withEffects && !speedometer!!.isInEditMode)
             indicatorPaint.maskFilter = BlurMaskFilter(15f, BlurMaskFilter.Blur.SOLID)

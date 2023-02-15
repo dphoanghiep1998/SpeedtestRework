@@ -83,7 +83,6 @@ public abstract class SpeedtestWorker extends Thread {
                 }
                 double progress = (t + bonusT) / (double) (config.getTime_dl_max() * 1000);
                 speed = (speed * 8 * config.getOverheadCompensationFactor()) / (config.getUseMebibits() ? 1048576.0 : 1000000.0);
-                Log.d("TAG", "dlTest: "+totDownloaded);
                 dl = speed;
                 if (progress >= 1) {
                     break;
@@ -140,7 +139,6 @@ public abstract class SpeedtestWorker extends Thread {
                 }
                 double progress = (t + bonusT) / (double) (config.getTime_ul_max() * 1000);
                 speed = (speed * 8 * config.getOverheadCompensationFactor()) / (config.getUseMebibits() ? 1048576.0 : 1000000.0);
-                Log.d("TAG", "ulTest: "+totUploaded);
 
                 ul = speed;
                 onUploadUpdate(ul, progress>1?1:progress);

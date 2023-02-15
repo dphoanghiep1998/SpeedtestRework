@@ -26,5 +26,7 @@ constructor(context: Context, private val bitmapIndicator: Drawable) : Indicator
         bitmapIndicator.setBounds(0, 0, getViewSize().toInt(), getViewSize().toInt())
     }
 
+
+
     override fun setWithEffects(withEffects: Boolean) {}
 }

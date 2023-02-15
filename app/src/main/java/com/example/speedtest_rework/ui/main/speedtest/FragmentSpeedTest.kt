@@ -1,6 +1,7 @@
 package com.example.speedtest_rework.ui.main.speedtest
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -287,6 +288,7 @@ class FragmentSpeedTest : BaseFragment() {
     private fun createTestPoint(addressInfo: List<AddressInfo>) {
         if (addressInfo.isNotEmpty()) {
             val server = addressInfo[0]
+            Log.d("TAG", "createTestPoint: "+server.toString())
             testPoint = TestPoint(
                 server.name, "https://" + server.host, server.downloadUrl, "speedtest/upload", ""
             )

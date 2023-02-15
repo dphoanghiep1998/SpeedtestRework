@@ -5,8 +5,6 @@ import android.graphics.*
 import android.opengl.ETC1.getHeight
 
 
-
-
 /**
  * this Library build By Anas Altair
  * see it on [GitHub](https://github.com/anastr/SpeedView)
@@ -16,6 +14,7 @@ class KiteIndicator(context: Context) : Indicator<KiteIndicator>(context) {
 
     private val indicatorPath = Path()
     private var bottomY: Float = 0.toFloat()
+    private var alpha = 255
 
     init {
         width = dpTOpx(12f)
@@ -28,8 +27,8 @@ class KiteIndicator(context: Context) : Indicator<KiteIndicator>(context) {
     override fun draw(canvas: Canvas) {
         indicatorPaint.shader = LinearGradient(
 
-            getCenterX() - (width-10) / 2,
-            getViewSize()  / 2+30,
+            getCenterX() - (width - 10) / 2,
+            getViewSize() / 2 + 30,
             getCenterX() - 10f,
             getViewSize() * 0.25f,
             0xFF1A1B2F.toInt(),
@@ -43,10 +42,12 @@ class KiteIndicator(context: Context) : Indicator<KiteIndicator>(context) {
         indicatorPath.reset()
         indicatorPath.moveTo(getCenterX() - 10f, getViewSize() * 0.25f)
         indicatorPath.lineTo(getCenterX() + 10f, getViewSize() * 0.25f)
-        indicatorPath.lineTo(getCenterX() + (width + 10) / 2, getViewSize() / 2 +30)
-        indicatorPath.lineTo(getCenterX() - (width-10) / 2, getViewSize()  / 2+30)
+        indicatorPath.lineTo(getCenterX() + (width + 10) / 2, getViewSize() / 2 + 30)
+        indicatorPath.lineTo(getCenterX() - (width - 10) / 2, getViewSize() / 2 + 30)
         indicatorPaint.color = color
     }
+
+
 
     override fun setWithEffects(withEffects: Boolean) {
         if (withEffects && !speedometer!!.isInEditMode)

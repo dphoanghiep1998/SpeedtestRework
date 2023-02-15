@@ -156,7 +156,6 @@ class Connection(
         try {
             if (!path.startsWith("/")) path = "/$path"
             val ps = printStream
-            Log.d("TAG", "GET: "+path)
             ps!!.print("GET $path HTTP/1.1\r\n")
             ps.print("Host: $host\r\n")
             ps.print("User-Agent: " + USER_AGENT)
@@ -178,6 +177,7 @@ class Connection(
     @Throws(Exception::class)
     fun POST(path: String, keepAlive: Boolean, contentType: String?, contentLength: Long) {
         var path = path
+
         try {
             if (!path.startsWith("/")) path = "/$path"
             val ps = printStream
