@@ -20,10 +20,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/Mbs"
                 android:textColor="@color/white"
-                android:maxLines="1"
-                android:autoSizeMaxTextSize="@dimen/_16sdp"
-                android:autoSizeMinTextSize="@dimen/_5sdp"
-                android:autoSizeStepGranularity="1dp" />
+                android:maxLines="1" />
 
             <View
                 android:id="@+id/line"

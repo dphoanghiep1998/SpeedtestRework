@@ -135,8 +135,6 @@ class AppForegroundService : Service() {
             }
             else -> Unit
         }
-
-
     }
 
     private fun startRepeatingJob(timeInterval: Long, builder: NotificationCompat.Builder) {

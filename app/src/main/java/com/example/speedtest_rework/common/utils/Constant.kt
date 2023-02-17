@@ -2,6 +2,7 @@ package com.example.speedtest_rework.common.utils
 
 object Constant {
 
+    const val KEY_DATA_BASE ="DATA_BASE_SPEED_TEST_1"
     const val POLICY_LINK = "http://www.facebook.com"
     const val SERVER_LIST = "http://speedtest.net/"
     const val SERVER_ENDPOINT = ""

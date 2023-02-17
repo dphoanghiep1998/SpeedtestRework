@@ -4,8 +4,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class SpeedtestConfig {
-    private int dl_ckSize=100, ul_ckSize=100;
-    private int dl_parallelStreams=4, ul_parallelStreams=4;
+    private int dl_ckSize=100, ul_ckSize=20;
+    private int dl_parallelStreams=7, ul_parallelStreams=7;
     private int dl_streamDelay=300, ul_streamDelay=300;
     private double dl_graceTime=1.5, ul_graceTime=1.5;
     private int dl_connectTimeout=5000, dl_soTimeout=10000, ul_connectTimeout=5000, ul_soTimeout=10000, ping_connectTimeout=2000, ping_soTimeout=5000;

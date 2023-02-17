@@ -17,7 +17,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?actionBarSize"
+                android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -58,28 +58,16 @@
                     android:id="@+id/tv_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/app_font_700"
                     android:text="@string/speed_test_title"
                     android:textColor="@color/white"
-                    android:fontFamily="@font/app_font_700"
                     android:textSize="@dimen/_18sdp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <ImageView
-                    android:id="@+id/imv_vip"
-                    android:layout_width="@dimen/_40sdp"
-                    android:layout_height="@dimen/_40sdp"
-                    android:background="@drawable/ripple_effect_corner_fg"
-                    android:clickable="true"
-                    android:contentDescription="@string/test"
-                    android:focusable="true"
-                    android:padding="@dimen/_8sdp"
-                    android:src="@drawable/ic_vip"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+
 
                 <ImageView
                     android:id="@+id/imv_stop"
@@ -142,6 +130,7 @@
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -169,21 +158,21 @@
                         app:layout_constraintTop_toBottomOf="@+id/ic_logo_menu">
 
                         <ImageView
-                            android:paddingVertical="@dimen/_10sdp"
-                            android:layout_marginStart="@dimen/_minus10sdp"
                             android:id="@+id/imv_speed_monitor"
                             android:layout_width="@dimen/_40sdp"
                             android:layout_height="@dimen/_40sdp"
+                            android:layout_marginStart="@dimen/_minus10sdp"
+                            android:paddingVertical="@dimen/_10sdp"
                             android:src="@drawable/ic_speed_monitor"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
-                            android:layout_marginStart="@dimen/_6sdp"
                             android:id="@+id/tv_speed_monitor"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_6sdp"
                             android:layout_marginLeft="@dimen/_16sdp"
                             android:text="@string/speed_monitor"
                             android:textColor="@color/white"
@@ -198,25 +187,25 @@
                             android:layout_height="wrap_content"
                             android:maxWidth="@dimen/_160sdp"
                             android:maxLines="1"
-                            app:autoSizeTextType="uniform"
-                            app:autoSizeMaxTextSize="@dimen/_12sdp"
-                            app:autoSizeMinTextSize="@dimen/_6sdp"
-                            app:autoSizeStepGranularity="1dp"
-                            android:visibility="gone"
                             android:text="@string/check_it_notification"
                             android:textColor="@color/gray_400"
                             android:textSize="@dimen/_10sdp"
+                            android:visibility="gone"
+                            app:autoSizeMaxTextSize="@dimen/_12sdp"
+                            app:autoSizeMinTextSize="@dimen/_6sdp"
+                            app:autoSizeStepGranularity="1dp"
+                            app:autoSizeTextType="uniform"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="@+id/tv_speed_monitor"
                             app:layout_constraintTop_toBottomOf="@+id/tv_speed_monitor" />
 
                         <Switch
                             android:id="@+id/sw_switch_monitor"
-                            android:thumb="@drawable/custom_switch_thumb"
-                            android:track="@drawable/custom_track"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
+                            android:thumb="@drawable/custom_switch_thumb"
+                            android:track="@drawable/custom_track"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -232,21 +221,21 @@
                         app:layout_constraintTop_toBottomOf="@id/container_speed_monitor">
 
                         <ImageView
-                            android:paddingVertical="@dimen/_10sdp"
-                            android:layout_marginStart="@dimen/_minus10sdp"
                             android:id="@+id/imv_speed_data_usage"
                             android:layout_width="@dimen/_40sdp"
                             android:layout_height="@dimen/_40sdp"
+                            android:layout_marginStart="@dimen/_minus10sdp"
+                            android:paddingVertical="@dimen/_10sdp"
                             android:src="@drawable/ic_data_usage"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
-                            android:layout_marginStart="@dimen/_6sdp"
                             android:id="@+id/tv_data_usage"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_6sdp"
                             android:layout_marginLeft="@dimen/_16sdp"
                             android:text="@string/data_usage_menu"
                             android:textColor="@color/white"
@@ -261,29 +250,30 @@
                             android:layout_height="wrap_content"
                             android:maxWidth="@dimen/_160sdp"
                             android:maxLines="1"
-                            app:autoSizeTextType="uniform"
-                            app:autoSizeMaxTextSize="@dimen/_12sdp"
-                            app:autoSizeMinTextSize="@dimen/_6sdp"
-                            app:autoSizeStepGranularity="1dp"
-                            android:visibility="gone"
                             android:text="@string/check_it_notification"
                             android:textColor="@color/gray_400"
                             android:textSize="@dimen/_10sdp"
+                            android:visibility="gone"
+                            app:autoSizeMaxTextSize="@dimen/_12sdp"
+                            app:autoSizeMinTextSize="@dimen/_6sdp"
+                            app:autoSizeStepGranularity="1dp"
+                            app:autoSizeTextType="uniform"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="@+id/tv_data_usage"
                             app:layout_constraintTop_toBottomOf="@+id/tv_data_usage" />
 
                         <Switch
                             android:id="@+id/sw_switch_data_usage"
-                            android:thumb="@drawable/custom_switch_thumb"
-                            android:track="@drawable/custom_track"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
+                            android:thumb="@drawable/custom_switch_thumb"
+                            android:track="@drawable/custom_track"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
+
                     <include
                         android:id="@+id/container_language"
                         layout="@layout/item_menu"

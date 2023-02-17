@@ -1,6 +1,7 @@
 package com.example.speedtest_rework.base.fragment
 
 import android.graphics.drawable.Drawable
+import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -30,8 +31,13 @@ open class BaseFragment : Fragment() {
 
     }
 
-    protected fun navigateToPage(actionId: Int) {
+    protected fun navigateToPage(actionId: Int,bundle: Bundle?=null) {
+        if(bundle != null){
+            findNavController().navigate(actionId,bundle)
+            return
+        }
         findNavController().navigate(actionId)
+
     }
 
 

@@ -19,58 +19,42 @@
             android:id="@+id/infor_hidden"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cl_speedview">
 
-            <ImageView
-                android:id="@+id/imv_wifi_hidden"
-                android:layout_width="@dimen/_25sdp"
-                android:layout_height="@dimen/_25sdp"
-                android:layout_marginStart="16dp"
-                android:layout_marginBottom="@dimen/_8sdp"
-                android:src="@drawable/ic_wifi"
-                app:layout_constraintBottom_toTopOf="@id/imv_global_isp_hidden"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/gray_600" />
 
             <TextView
                 android:id="@+id/tv_wifi_name_hidden"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
+                android:drawablePadding="@dimen/_6sdp"
                 android:maxLines="1"
                 android:paddingStart="@dimen/_6sdp"
                 android:text="@string/neko"
                 android:textColor="@color/gray_400"
                 android:textSize="@dimen/_15sdp"
-                app:layout_constraintBottom_toBottomOf="@id/imv_wifi_hidden"
-                app:layout_constraintStart_toEndOf="@id/imv_wifi_hidden"
-                app:layout_constraintTop_toTopOf="@id/imv_wifi_hidden" />
+                app:layout_constraintBottom_toTopOf="@id/tv_isp_name_hidden"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:drawableStartCompat="@drawable/ic_wifi_fade" />
 
-            <ImageView
-                android:id="@+id/imv_global_isp_hidden"
-                android:layout_width="@dimen/_25sdp"
-                android:layout_height="@dimen/_25sdp"
-                android:src="@drawable/ic_global_isp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@id/imv_wifi_hidden"
-                app:layout_constraintTop_toBottomOf="@id/imv_wifi_hidden"
-                app:tint="@color/gray_600" />
 
             <TextView
                 android:id="@+id/tv_isp_name_hidden"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingStart="@dimen/_6sdp"
-                android:text="FPT TELECOM"
+                android:drawablePadding="@dimen/_6sdp"
+                android:text=""
                 android:textColor="@color/gray_400"
                 android:textSize="@dimen/_15sdp"
-                app:layout_constraintBottom_toBottomOf="@id/imv_global_isp_hidden"
-                app:layout_constraintStart_toEndOf="@id/imv_global_isp_hidden"
-                app:layout_constraintTop_toTopOf="@id/imv_global_isp_hidden" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_wifi_name_hidden"
+                app:drawableStartCompat="@drawable/ic_global_isp_fade" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -143,7 +127,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/_6sdp"
-                            android:text="FPT TELECOM"
+                            android:text=""
                             android:textColor="@color/gray_100"
                             app:autoSizeMaxTextSize="@dimen/_16sdp"
                             app:autoSizeMinTextSize="@dimen/_6sdp"

@@ -56,9 +56,9 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentMainBinding.inflate(layoutInflater, container, false)
-        changeBackPressCallBack()
         loadLanguage()
         initView()
+        changeBackPressCallBack()
         observeIsScanning()
         return binding.root
     }
@@ -279,19 +279,15 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
                 when (position) {
                     0 -> {
                         binding.tvTitle.text = getString(R.string.speed_test_title)
-                        binding.imvVip.visibility = View.VISIBLE
                     }
                     1 -> {
                         binding.tvTitle.text = getString(R.string.tools_title)
-                        binding.imvVip.visibility = View.GONE
                     }
                     2 -> {
                         binding.tvTitle.text = getString(R.string.results_title)
-                        binding.imvVip.visibility = View.VISIBLE
                     }
                     else -> {
                         binding.tvTitle.text = getString(R.string.speed_test_title)
-                        binding.imvVip.visibility = View.VISIBLE
                     }
                 }
             }
@@ -302,7 +298,6 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
         if (binding.menu.visibility == View.VISIBLE) {
             return
         }
-        binding.tvTitle.text = getString(R.string.vpn_title)
         YoYo.with(Techniques.FadeOut).duration(400).onEnd {
             binding.backBtn.visibility = View.GONE
         }.playOn(binding.backBtn)
@@ -331,7 +326,10 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
         try {
             val shareIntent = Intent(Intent.ACTION_SEND)
             shareIntent.type = "text/plain"
-            shareIntent.putExtra(Intent.EXTRA_SUBJECT, Constant.INTENT_VALUE_SPEED_TEST)
+            shareIntent.putExtra(
+                Intent.EXTRA_TEXT,
+                "https://play.google.com/store/apps/details?id=" + requireActivity().packageName
+            )
             startActivity(Intent.createChooser(shareIntent, "Choose one"))
         } catch (e: Exception) {
             e.printStackTrace()
@@ -357,12 +355,13 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
     }
 
     private fun showStopBtn() {
-        YoYo.with(Techniques.FadeOut).duration(100).onEnd {
-            binding.imvVip.visibility = View.GONE
-        }.playOn(binding.imvVip)
         YoYo.with(Techniques.FadeIn).duration(100).onEnd {
             binding.imvStop.visibility = View.VISIBLE
         }.playOn(binding.imvStop)
+
+        YoYo.with(Techniques.FadeOut).duration(100).onEnd {
+            binding.menu.visibility = View.GONE
+        }.playOn(binding.menu)
     }
 
     @Suppress("DEPRECATION")
@@ -382,9 +381,10 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
         YoYo.with(Techniques.FadeOut).duration(100).onEnd {
             binding.imvStop.visibility = View.GONE
         }.playOn(binding.imvStop)
-        YoYo.with(Techniques.FadeIn).duration(100).onEnd {
-            binding.imvVip.visibility = View.VISIBLE
-        }.playOn(binding.imvVip)
+
+        YoYo.with(Techniques.FadeIn).duration(100).onStart {
+            binding.menu.visibility = View.VISIBLE
+        }.playOn(binding.menu)
     }
 
     private fun observeIsScanning() {

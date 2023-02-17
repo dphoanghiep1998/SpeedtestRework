@@ -13,6 +13,7 @@ import com.daimajia.androidanimations.library.YoYo
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.fragment.BaseFragment
 import com.example.speedtest_rework.common.custom_view.ConnectionType
+import com.example.speedtest_rework.common.custom_view.SpeedView
 import com.example.speedtest_rework.common.custom_view.UnitType
 import com.example.speedtest_rework.common.utils.AppSharePreference.Companion.INSTANCE
 import com.example.speedtest_rework.common.utils.Constant
@@ -44,6 +45,7 @@ class FragmentSpeedTest : BaseFragment() {
         observerMultiTaskDone()
         observeScanStatus()
         observeWifiName()
+        observeUnitType()
         return binding.root
     }
 
@@ -65,6 +67,12 @@ class FragmentSpeedTest : BaseFragment() {
 
     private fun loadServer() {
         viewModel.doMultiTask()
+    }
+
+    private fun observeUnitType() {
+        viewModel.unitType.observe(viewLifecycleOwner) {
+            binding.clSpeedview.setUniType(it)
+        }
     }
 
     private fun initExpandView() {
@@ -252,7 +260,7 @@ class FragmentSpeedTest : BaseFragment() {
                     externalIP = viewModel.currentNetworkInfo.selfIspIp,
                     internalIP = NetworkUtils.wifiIpAddress()
                 )
-                binding.clSpeedview.setData(testPoint!!, ConnectionType.WIFI, testModel, viewModel)
+                binding.clSpeedview.setData(testPoint!!, ConnectionType.WIFI, testModel)
 
             } else if (NetworkUtils.isMobileConnected(requireContext())) {
                 val testModel = HistoryModel(
@@ -262,7 +270,7 @@ class FragmentSpeedTest : BaseFragment() {
                     externalIP = viewModel.currentNetworkInfo.selfIspIp,
                 )
                 binding.clSpeedview.setData(
-                    testPoint!!, ConnectionType.MOBILE, testModel, viewModel
+                    testPoint!!, ConnectionType.MOBILE, testModel
                 )
             } else {
                 binding.clSpeedview.setData(ConnectionType.UNKNOWN)
@@ -288,7 +296,7 @@ class FragmentSpeedTest : BaseFragment() {
     private fun createTestPoint(addressInfo: List<AddressInfo>) {
         if (addressInfo.isNotEmpty()) {
             val server = addressInfo[0]
-            Log.d("TAG", "createTestPoint: "+server.toString())
+            Log.d("TAG", "createTestPoint: " + server.toString())
             testPoint = TestPoint(
                 server.name, "https://" + server.host, server.downloadUrl, "speedtest/upload", ""
             )
@@ -357,7 +365,28 @@ class FragmentSpeedTest : BaseFragment() {
             binding.tvWifiName.text = it
             binding.tvWifiNameHidden.text = it
         }
+        binding.clSpeedview.onEndListener(object : SpeedView.OnEndListener {
+            override fun onEnd(historyModel: HistoryModel?) {
+                if (historyModel != null) {
+                    viewModel.insertNewHistoryAction(historyModel)
+                    viewModel.setScanStatus(ScanStatus.DONE)
+                    val bundle = Bundle()
+                    bundle.putParcelable(Constant.KEY_TEST_MODEL, historyModel)
+                    bundle.putBoolean(Constant.KEY_FROM_SPEED_TEST_FRAGMENT, true)
+                    navigateToPage(R.id.action_fragmentMain_to_fragmentResultDetail, bundle)
+                }
+            }
 
+            override fun onError() {
+                viewModel.setScanStatus(ScanStatus.HARD_RESET)
+            }
+
+            override fun onStart() {
+                viewModel.setScanStatus(ScanStatus.SCANNING)
+
+            }
+
+        })
     }
 
 
@@ -387,11 +416,9 @@ class FragmentSpeedTest : BaseFragment() {
             when (it) {
                 ScanStatus.DONE -> {
                     binding.clSpeedview.onScanningDone()
-
                     YoYo.with(Techniques.SlideInLeft).duration(300L).onStart {
                         YoYo.with(Techniques.FadeOut).duration(100L).onEnd {
                             binding.inforHidden.visibility = View.GONE
-
                         }.playOn(binding.inforHidden)
                     }.playOn(binding.containerExpandView)
                 }
@@ -404,7 +431,7 @@ class FragmentSpeedTest : BaseFragment() {
                 }
 
                 else -> {
-
+                    binding.clSpeedview.forceStop()
                     binding.clSpeedview.resetView()
                     YoYo.with(Techniques.SlideInLeft).duration(300L).onStart {
                         YoYo.with(Techniques.FadeOut).duration(100L).onEnd {
@@ -416,4 +443,14 @@ class FragmentSpeedTest : BaseFragment() {
             }
         }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        try {
+            binding.clSpeedview.forceStop()
+        } catch (e: java.lang.Exception) {
+
+        }
+    }
+
 }

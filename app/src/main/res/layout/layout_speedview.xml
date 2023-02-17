@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_8sdp"
         android:orientation="vertical"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -40,12 +40,12 @@
                     android:id="@+id/tv_downloadSpeed"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:drawablePadding="@dimen/_6sdp"
+                    android:fontFamily="@font/app_font_700"
                     android:text="@string/download"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_10sdp"
-                    android:layout_gravity="center"
-                    android:textStyle="bold"
                     app:drawableStartCompat="@drawable/ic_download" />
 
                 <LinearLayout
@@ -113,10 +113,11 @@
                     android:id="@+id/tv_uploadSpeed"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:drawablePadding="@dimen/_6sdp"
+                    android:fontFamily="@font/app_font_700"
                     android:text="@string/upload"
                     android:textColor="@color/white"
-                    android:layout_gravity="center"
                     android:textSize="@dimen/_10sdp"
                     android:textStyle="bold"
                     app:drawableStartCompat="@drawable/ic_upload" />
@@ -190,12 +191,12 @@
                     android:layout_gravity="center"
                     android:layout_marginStart="4dp"
                     android:layout_marginEnd="4dp"
-                    android:drawableStart="@drawable/ic_ping"
                     android:drawablePadding="@dimen/_2sdp"
                     android:gravity="center"
                     android:text="@string/ping"
                     android:textColor="#d7d7d7"
-                    android:textSize="@dimen/_10sdp" />
+                    android:textSize="@dimen/_10sdp"
+                    app:drawableStartCompat="@drawable/ic_ping" />
 
                 <TextView
                     android:id="@+id/tv_pingCount"
@@ -414,41 +415,28 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="-50dp"
+            android:fontFamily="@font/app_font_700"
             android:text="0.0"
             android:textColor="@color/white"
             android:textSize="@dimen/_18sdp"
-            android:textStyle="bold"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="@id/speedView"
             app:layout_constraintStart_toStartOf="@id/speedView"
             app:layout_constraintTop_toBottomOf="@id/speedView" />
 
-        <LinearLayout
-            android:id="@+id/container_speed"
+        <TextView
+            android:id="@+id/tv_currency"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal"
+            android:text="@string/Mbps"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_13sdp"
             android:visibility="gone"
+            android:drawablePadding="@dimen/_4sdp"
+            app:drawableStartCompat="@drawable/ic_download"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_speed_value">
-
-            <ImageView
-                android:id="@+id/icon_speed_value"
-                android:layout_width="@dimen/_15sdp"
-                android:layout_height="@dimen/_15sdp"
-                android:src="@drawable/ic_download" />
-
-            <TextView
-                android:id="@+id/tv_currency"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingStart="@dimen/_4sdp"
-                android:text="@string/Mbps"
-                android:textColor="@color/white"
-                android:textSize="@dimen/_13sdp" />
-        </LinearLayout>
+            app:layout_constraintTop_toBottomOf="@+id/tv_speed_value" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </merge>

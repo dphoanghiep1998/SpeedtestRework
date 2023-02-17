@@ -55,15 +55,22 @@ class SpeedView(
     private var testModel: HistoryModel? = null
     private var type = ConnectionType.UNKNOWN
     private var testPoint: TestPoint? = null
-    private var viewModel: SpeedTestViewModel? = null
 
     private lateinit var btnStartComposeShow: YoYo.AnimationComposer
     private lateinit var btnStartComposeHide: YoYo.AnimationComposer
     private lateinit var tvConnectingShow: YoYo.AnimationComposer
     private lateinit var tvConnectingHide: YoYo.AnimationComposer
     private lateinit var btnStartStringShow: YoYo.YoYoString
+    private var currentUnit: UnitType = UnitType.MBPS
+    private var listener: OnEndListener? = null
 
     private var currentTicks = listOf<Float>()
+
+    interface OnEndListener {
+        fun onEnd(historyModel: HistoryModel?)
+        fun onError()
+        fun onStart()
+    }
 
     init {
         val inflater = LayoutInflater.from(context)
@@ -72,18 +79,20 @@ class SpeedView(
         initView()
     }
 
-    private fun initAnimation() {
-        btnStartComposeShow = YoYo.with(Techniques.FadeIn)
-            .onStart {
-                binding.btnStartContainer.visibility = View.VISIBLE
-            }
+    fun onEndListener(listener: OnEndListener) {
+        this.listener = listener
+    }
 
-        btnStartComposeHide =
-            YoYo.with(Techniques.FadeOut).onEnd {
-                binding.btnStartContainer.visibility = View.GONE
-            }.onCancel {
-                binding.btnStartContainer.visibility = View.VISIBLE
-            }
+    private fun initAnimation() {
+        btnStartComposeShow = YoYo.with(Techniques.FadeIn).onStart {
+            binding.btnStartContainer.visibility = View.VISIBLE
+        }
+
+        btnStartComposeHide = YoYo.with(Techniques.FadeOut).onEnd {
+            binding.btnStartContainer.visibility = View.GONE
+        }.onCancel {
+            binding.btnStartContainer.visibility = View.VISIBLE
+        }
         btnStartStringShow = btnStartComposeShow.playOn(binding.btnStartContainer)
         btnStartComposeShow.playOn(binding.tvGo)
 
@@ -95,17 +104,19 @@ class SpeedView(
             YoYo.with(Techniques.FadeOut).onEnd { binding.tvConnecting.visibility = View.GONE }
     }
 
+    fun setUniType(unitType: UnitType) {
+        currentUnit = unitType
+        changeUnitType()
+    }
 
     fun setData(
         testPoint: TestPoint,
         type: ConnectionType,
         testModel: HistoryModel,
-        viewModel: SpeedTestViewModel
     ) {
         this.testPoint = testPoint
         this.type = type
         this.testModel = testModel
-        this.viewModel = viewModel
         speedTest = SpeedTest()
         speedTest?.addTestPoint(testPoint)
         if (type == ConnectionType.UNKNOWN) {
@@ -163,8 +174,7 @@ class SpeedView(
                 currentTicks = listOf(0f, .05f, .1f, .15f, .2f, .3f, .5f, .8f, 1f)
             }
             15000f -> {
-                currentTicks =
-                    listOf(0f, 1 / 30f, 1 / 15f, 0.1f, 2 / 15f, 0.2f, 1 / 3f, 2 / 3f, 1f)
+                currentTicks = listOf(0f, 1 / 30f, 1 / 15f, 0.1f, 2 / 15f, 0.2f, 1 / 3f, 2 / 3f, 1f)
             }
             50f -> {
                 currentTicks = listOf(0f, .02f, .04f, .06f, .1f, .2f, .3f, .6f, 1f)
@@ -189,7 +199,6 @@ class SpeedView(
                 hideTvConnecting()
                 showSpeedView()
                 showContainerSpeed()
-                showTvSpeed()
             }
 
             override fun onAnimationCancel(p0: Animator) {
@@ -213,7 +222,7 @@ class SpeedView(
                             openConnectivitySetting()
                             return true
                         }
-                        viewModel?.setScanStatus(ScanStatus.SCANNING)
+                        listener?.onStart()
                         prepareViewSpeedTest()
                     }
                     MotionEvent.ACTION_CANCEL -> {
@@ -232,19 +241,15 @@ class SpeedView(
     }
 
     private fun openConnectivitySetting() {
-        if (buildMinVersionQ())
-            context.startActivity(Intent(Settings.Panel.ACTION_INTERNET_CONNECTIVITY))
-        else
-            context.startActivity(Intent(Settings.ACTION_WIFI_SETTINGS))
+        if (buildMinVersionQ()) context.startActivity(Intent(Settings.Panel.ACTION_INTERNET_CONNECTIVITY))
+        else context.startActivity(Intent(Settings.ACTION_WIFI_SETTINGS))
     }
 
     private fun changeColorWhenPressDown() {
         val filter = SimpleColorFilter(Color.WHITE)
         val callback: LottieValueCallback<ColorFilter> = LottieValueCallback(filter)
         binding.btnStart.addValueCallback(
-            KeyPath("**"),
-            LottieProperty.COLOR_FILTER,
-            callback
+            KeyPath("**"), LottieProperty.COLOR_FILTER, callback
         )
         binding.tvGo.reset()
     }
@@ -261,9 +266,9 @@ class SpeedView(
     }
 
     private fun changeUnitType() {
-        binding.tvDownloadCurrency.text = context.getString(viewModel?.unitType?.value!!.unit)
-        binding.tvUploadCurrency.text = context.getString(viewModel?.unitType?.value!!.unit)
-        binding.tvCurrency.text = context.getString(viewModel?.unitType?.value!!.unit)
+        binding.tvDownloadCurrency.text = context.getString(currentUnit.unit)
+        binding.tvUploadCurrency.text = context.getString(currentUnit.unit)
+        binding.tvCurrency.text = context.getString(currentUnit.unit)
     }
 
     fun prepareViewSpeedTest() {
@@ -273,8 +278,9 @@ class SpeedView(
         binding.tvDownloadValue.visibility = GONE
         binding.tvUploadValue.visibility = GONE
         binding.speedView.setInitDone(false)
-
+        binding.speedView.setSpeedDone(false)
         changeUnitType()
+
         var count = 0
         countDownTimer = object : CountDownTimer(4000, 1000) {
             override fun onTick(l: Long) {
@@ -282,9 +288,7 @@ class SpeedView(
                 if (count == 3) {
                     if (type == ConnectionType.UNKNOWN) {
                         Toast.makeText(
-                            context,
-                            context.getString(R.string.no_connection),
-                            Toast.LENGTH_SHORT
+                            context, context.getString(R.string.no_connection), Toast.LENGTH_SHORT
                         ).show()
                         resetView()
                         return
@@ -292,8 +296,7 @@ class SpeedView(
                         if (binding.topView.visibility != VISIBLE) {
                             showTopView()
                             TransitionManager.beginDelayedTransition(
-                                binding.testBackground,
-                                AutoTransition()
+                                binding.testBackground, AutoTransition()
                             )
                         }
                     }
@@ -315,7 +318,6 @@ class SpeedView(
     private fun hideSpeedView() {
 
         binding.speedView.clearAnimation()
-
         val animation = ArcAnimationEnd(binding.speedView)
         animation.duration = 400
 
@@ -329,7 +331,6 @@ class SpeedView(
             }
 
             override fun onFinish() {
-                Log.d("TAG123", "onFinish: ")
                 binding.speedView.setInitDone(true)
                 animation.setAnimationListener(object : Animation.AnimationListener {
                     override fun onAnimationStart(animation: Animation) {
@@ -337,17 +338,13 @@ class SpeedView(
 
                     override fun onAnimationEnd(animation: Animation) {
                         binding.speedView.setSpeedDone(true)
+                        hideContainerSpeed()
                         Handler(Looper.getMainLooper()).postDelayed({
-                            viewModel?.setScanStatus(ScanStatus.DONE)
-
-                            val bundle = Bundle()
-                            bundle.putParcelable(Constant.KEY_TEST_MODEL, testModel)
-
-                            bundle.putBoolean(Constant.KEY_FROM_SPEED_TEST_FRAGMENT, true)
-
-                            Navigation.findNavController(binding.root)
-                                .navigate(R.id.action_fragmentMain_to_fragmentResultDetail, bundle)
-                        }, 1000)
+                            onScanningDone()
+                        }, 200)
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            listener?.onEnd(testModel)
+                        }, 1400)
 
                     }
 
@@ -360,10 +357,9 @@ class SpeedView(
         countDownTimer.start()
     }
 
+
     private fun showSpeedView() {
-
         binding.speedView.clearAnimation()
-
         val animation = ArcAnimation(binding.speedView)
         animation.duration = 400
         animation.setAnimationListener(object : Animation.AnimationListener {
@@ -376,8 +372,8 @@ class SpeedView(
                 val countDownTimer = object : CountDownTimer(1000, 50) {
                     override fun onTick(p0: Long) {
                         count++
-                        if (count <= currentTicks.size)
-                            binding.speedView.ticks = currentTicks.subList(0, count)
+                        if (count <= currentTicks.size) binding.speedView.ticks =
+                            currentTicks.subList(0, count)
                     }
 
                     override fun onFinish() {
@@ -395,18 +391,30 @@ class SpeedView(
 
     private fun showContainerSpeed() {
         YoYo.with(Techniques.FadeIn).onStart {
-            binding.containerSpeed.visibility = View.VISIBLE
-        }.playOn(binding.containerSpeed)
+            binding.tvSpeedValue.visibility = View.VISIBLE
+        }.playOn(binding.tvSpeedValue)
+        YoYo.with(Techniques.FadeIn).onStart {
+            binding.tvCurrency.visibility = View.VISIBLE
+        }.playOn(binding.tvCurrency)
     }
 
     private fun hideContainerSpeed() {
-        binding.containerSpeed.visibility = View.GONE
+        YoYo.with(Techniques.FadeOut).onStart {
+            binding.tvSpeedValue.visibility = View.GONE
+        }.playOn(binding.tvSpeedValue)
+        YoYo.with(Techniques.FadeOut).onStart {
+            binding.tvCurrency.visibility = View.GONE
+        }.playOn(binding.tvCurrency)
     }
 
-    private fun showTvSpeed() {
-        YoYo.with(Techniques.FadeIn).onStart {
-            binding.tvSpeedValue.visibility = View.VISIBLE
-        }.playOn(binding.tvSpeedValue)
+    private fun changeDrawableTvCurrency() {
+        YoYo.with(Techniques.FadeOut).onEnd {
+            YoYo.with(Techniques.FadeIn).duration(500).onStart {
+                binding.tvCurrency.setCompoundDrawablesWithIntrinsicBounds(
+                    R.drawable.ic_upload, 0, 0, 0
+                )
+            }.playOn(binding.tvCurrency)
+        }.duration(500).playOn(binding.tvCurrency)
     }
 
     private fun hideLoading() {
@@ -463,8 +471,7 @@ class SpeedView(
     fun runSpeedTest() {
         speedTest = SpeedTest()
         speedTest?.addTestPoint(testPoint)
-        speedTest?.start(object :
-            SpeedTest.SpeedtestHandler() {
+        speedTest?.start(object : SpeedTest.SpeedtestHandler() {
 
             override fun onDownloadUpdate(dl: Double, progress: Double) {
                 if (progress == 0.0) {
@@ -490,6 +497,7 @@ class SpeedView(
             override fun onUploadUpdate(ul: Double, progress: Double) {
                 (context as Activity).runOnUiThread {
                     if (progress == 0.0) {
+                        Log.d("TAG", "onUploadUpdate: ")
                         uploadView()
                     }
                     binding.speedView.speedTo(convert(ul).toFloat())
@@ -503,7 +511,6 @@ class SpeedView(
                         binding.speedView.withTremble = false
                         binding.tvSpeedValue.text = context.getString(R.string.zero_value)
                         testModel?.upload = roundOffDecimal(ul)
-
                     }
                 }
             }
@@ -521,18 +528,15 @@ class SpeedView(
                 (context as Activity).runOnUiThread {
                     testModel?.name_network = NetworkUtils.getNameWifi(context)
                     testModel?.time = System.currentTimeMillis()
-
-                    viewModel?.insertNewHistoryAction(testModel!!)
                     hideSpeedView()
-
-
                 }
             }
 
 
             override fun onCriticalFailure(err: String?) {
                 (context as Activity).runOnUiThread {
-                    viewModel?.setScanStatus(ScanStatus.HARD_RESET)
+                    forceStop()
+                    resetView()
                 }
             }
         })
@@ -547,15 +551,11 @@ class SpeedView(
         binding.speedView.setState("download")
         binding.speedView.setSpeedometerColor(
             ContextCompat.getColor(
-                context,
-                R.color.gradient_green_start
+                context, R.color.gradient_green_start
             )
         )
-        binding.iconSpeedValue.setImageDrawable(
-            ContextCompat.getDrawable(
-                context,
-                R.drawable.ic_download
-            )
+        binding.tvCurrency.setCompoundDrawablesWithIntrinsicBounds(
+            R.drawable.ic_download, 0, 0, 0
         )
         binding.placeholderDownload.startAnimation(anim)
     }
@@ -565,19 +565,14 @@ class SpeedView(
         anim.duration = 100
         anim.startOffset = 50
         anim.repeatCount = Animation.INFINITE
-        binding.iconSpeedValue.setImageDrawable(
-            ContextCompat.getDrawable(
-                context,
-                R.drawable.ic_upload
-            )
-        )
+
+        changeDrawableTvCurrency()
         binding.speedView.indicatorLightColor =
             ContextCompat.getColor(context, R.color.gradient_orange_start)
         binding.placeholderUpload.startAnimation(anim)
         binding.speedView.setSpeedometerColor(
             ContextCompat.getColor(
-                context,
-                R.color.gradient_orange_start
+                context, R.color.gradient_orange_start
             )
         )
         Handler(Looper.getMainLooper()).postDelayed({
@@ -588,11 +583,8 @@ class SpeedView(
     }
 
     fun onScanningDone() {
-        binding.iconSpeedValue.setImageDrawable(
-            ContextCompat.getDrawable(
-                context,
-                R.drawable.ic_download
-            )
+        binding.tvCurrency.setCompoundDrawablesWithIntrinsicBounds(
+            R.drawable.ic_download, 0, 0, 0
         )
         binding.speedView.ticks = listOf()
         binding.speedView.setInitDone(false)
@@ -602,7 +594,6 @@ class SpeedView(
         binding.btnStart.isEnabled = true
         binding.tvSpeedValue.text = context.getString(R.string.zero_value_dec)
         binding.tvSpeedValue.visibility = View.GONE
-//        hideContainerSpeed()
         binding.speedView.visibility = GONE
 
     }
@@ -614,18 +605,15 @@ class SpeedView(
         if (countDownTimer != null) {
             countDownTimer?.cancel()
         }
-        binding.iconSpeedValue.setImageDrawable(
-            ContextCompat.getDrawable(
-                context,
-                R.drawable.ic_download
-            )
+        binding.tvCurrency.setCompoundDrawablesWithIntrinsicBounds(
+            R.drawable.ic_download, 0, 0, 0
         )
         binding.speedView.ticks = listOf()
         binding.speedView.setInitDone(false)
         binding.speedView.stop()
         hideTopView()
         binding.loading.cancelAnimation()
-        binding.containerSpeed.visibility = GONE
+        binding.tvCurrency.visibility = GONE
         binding.speedView.visibility = GONE
         binding.tvDownloadValue.visibility = GONE
         binding.placeholderDownload.visibility = VISIBLE
@@ -657,13 +645,16 @@ class SpeedView(
     }
 
     private fun convert(value: Double): Double {
-        if (viewModel?.unitType?.value == UnitType.MBS) {
+        if (currentUnit == UnitType.MBS) {
             return convertMbpsToMbs(value)
         }
-        if (viewModel?.unitType?.value == UnitType.KBS) {
+        if (currentUnit == UnitType.KBS) {
             return convertMbpsToKbs(value)
         }
         return value
     }
 
+    fun forceStop() {
+        speedTest?.abort()
+    }
 }
