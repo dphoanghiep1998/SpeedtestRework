@@ -44,7 +44,7 @@ class GraphViewWrapper(
         } else {
             seriesCache.put(wiFiDetail, series)
             series.title =
-                wiFiDetail.wiFiIdentifier.ssid + " " + wiFiDetail.wiFiSignal.channelDisplay()
+                wiFiDetail.wiFiIdentifier.ssid
             seriesOptions.setSeriesColor(series)
             seriesOptions.drawBackground(series, drawBackground)
             graphView.addSeries(series)

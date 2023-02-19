@@ -1,5 +1,6 @@
 package com.example.speedtest_rework.ui.main
 
+import android.Manifest
 import android.app.AppOpsManager
 import android.content.Context
 import android.content.Intent
@@ -11,9 +12,11 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.*
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -46,11 +49,7 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
     private val viewModel: SpeedTestViewModel by activityViewModels()
     private lateinit var languageDialog: FragmentLanguage
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        notificationHandleIntentFlow()
 
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -60,6 +59,7 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
         initView()
         changeBackPressCallBack()
         observeIsScanning()
+        notificationHandleIntentFlow()
         return binding.root
     }
 
@@ -254,10 +254,22 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
     private fun notificationHandleIntentFlow() {
         val actionShowDataUsage =
             requireActivity().intent.extras?.getString(getString(R.string.action_show_data_usage))
+        val actionDoSpeedTest =
+            requireActivity().intent.extras?.getString(getString(R.string.action_do_speed_test))
 
         if (actionShowDataUsage != null) {
-            navigateToPage(R.id.action_fragmentMain_to_fragmentDataUsage)
+            if (viewModel.mScanStatus.value != ScanStatus.SCANNING)
+                navigateToPage(R.id.action_fragmentMain_to_fragmentDataUsage)
         }
+
+        if (actionDoSpeedTest != null) {
+            if (viewModel.mScanStatus.value != ScanStatus.SCANNING){
+                Log.d("TAG", "notificationHandleIntentFlow: ")
+                viewModel.setScanStatus(ScanStatus.SCANNING)
+            }
+        }
+        requireActivity().intent.removeExtra(getString(R.string.action_do_speed_test))
+        requireActivity().intent.removeExtra(getString(R.string.action_show_data_usage))
     }
 
 
@@ -409,7 +421,7 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
                     toastShort(getString(R.string.scan_canceled))
                     viewModel.setScanStatus(ScanStatus.HARD_RESET)
                 } else {
-                    activity?.finish()
+                    requireActivity().finishAffinity()
                 }
             }
         }

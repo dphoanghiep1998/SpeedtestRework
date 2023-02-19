@@ -84,7 +84,7 @@
     <string name="no_connection_isp">Không có dữ liệu</string>
     <string name="go">ĐI</string>
 
-    <string name="graph_y">Cường độ tín hiệu (dbm)</string>
+    <string name="graph_y">Cường độ tín hiệu (dBm)</string>
     <string name="graph_x">\nKênh Wi-Fi</string>
     <string name="open_setting">MỞ CÀI ĐẶT</string>
     <string name="no_permission">Để sử dụng tính năng này, vui lòng chấp nhận quyền vị trí trên thiết bị của bạn</string>

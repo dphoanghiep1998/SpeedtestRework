@@ -17,37 +17,7 @@ abstract class Downloader(
     private var coroutineScope: CoroutineScope? = null
     private var inputStream: InputStream? = null
 
-    private  fun trustEveryone() {
-        try {
-            HttpsURLConnection.setDefaultHostnameVerifier { hostname, session -> true }
-            val context: SSLContext = SSLContext.getInstance("TLS")
-            context.init(null, arrayOf<X509TrustManager>(object : X509TrustManager {
-                @Throws(CertificateException::class)
-                override fun checkClientTrusted(
-                    chain: Array<X509Certificate?>?,
-                    authType: String?
-                ) {
-                }
 
-                @Throws(CertificateException::class)
-                override fun checkServerTrusted(
-                    chain: Array<X509Certificate?>?,
-                    authType: String?
-                ) {
-                }
-
-                override fun getAcceptedIssuers(): Array<X509Certificate> {
-                    return arrayOf(arrayOf<X509Certificate>()[0])
-                }
-
-            }), SecureRandom())
-            HttpsURLConnection.setDefaultSSLSocketFactory(
-                context.socketFactory
-            )
-        } catch (e: Exception) { // should never happen
-            e.printStackTrace()
-        }
-    }
     fun startDownload() {
         stopASAP = true
         coroutineScope = CoroutineScope(Dispatchers.IO)

@@ -30,6 +30,7 @@ import com.example.speedtest_rework.common.utils.format
 import com.example.speedtest_rework.data.database.file_provider.DatabaseHelper
 import com.example.speedtest_rework.data.model.HistoryModel
 import com.example.speedtest_rework.databinding.FragmentDetailResultBinding
+import com.example.speedtest_rework.viewmodel.ScanStatus
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
 
 class FragmentResultDetail : DialogFragment(), ConfirmDialog.ConfirmCallback, AskRateCallBack,
@@ -65,6 +66,7 @@ class FragmentResultDetail : DialogFragment(), ConfirmDialog.ConfirmCallback, As
         changeBackPressCallBack()
         observeUnitType()
         initView()
+        viewModel.speedTestDone = true
         return binding.root
     }
 
@@ -162,19 +164,14 @@ class FragmentResultDetail : DialogFragment(), ConfirmDialog.ConfirmCallback, As
             binding.btnClose.visibility = View.VISIBLE
 
             binding.btnScanAgain.clickWithDebounce {
-                findNavController().previousBackStackEntry?.savedStateHandle?.set(
-                    Constant.KEY_SCAN_AGAIN,
-                    true
-                )
                 findNavController().popBackStack()
+                viewModel.setScanStatus(ScanStatus.SCANNING)
             }
 
             binding.btnClose.clickWithDebounce {
-                findNavController().previousBackStackEntry?.savedStateHandle?.set(
-                    Constant.KEY_RESET,
-                    true
-                )
                 findNavController().popBackStack()
+                viewModel.setScanStatus(ScanStatus.HARD_RESET)
+
             }
         }
     }

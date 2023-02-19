@@ -7,6 +7,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.speedtest_rework.base.viewmodel.BaseViewModel
+import com.example.speedtest_rework.common.custom_view.ConnectionType
 import com.example.speedtest_rework.common.custom_view.UnitType
 import com.example.speedtest_rework.core.getIP.AddressInfo
 import com.example.speedtest_rework.core.getIP.CurrentNetworkInfo
@@ -35,7 +36,9 @@ class SpeedTestViewModel @Inject constructor(
     var wiFiBand = MutableLiveData(WiFiBand.GHZ2)
     private val listDataUsage: MutableLiveData<List<DataUsageModel>> = MutableLiveData()
     private val listAppDataUsage: MutableLiveData<List<UsagePackageModel>> = MutableLiveData()
-    var wifiName = MutableLiveData("")
+    var networkName = MutableLiveData("")
+    var typeNetwork = MutableLiveData(ConnectionType.WIFI)
+    var speedTestDone = true
 
 
     private var scanStatus = MutableLiveData<ScanStatus>()

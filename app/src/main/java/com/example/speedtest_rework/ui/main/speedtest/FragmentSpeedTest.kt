@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.NavHostFragment
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
 import com.example.speedtest_rework.R
@@ -26,6 +25,10 @@ import com.example.speedtest_rework.data.model.HistoryModel
 import com.example.speedtest_rework.databinding.FragmentSpeedTestBinding
 import com.example.speedtest_rework.viewmodel.ScanStatus
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 class FragmentSpeedTest : BaseFragment() {
@@ -41,33 +44,57 @@ class FragmentSpeedTest : BaseFragment() {
     ): View {
         binding = FragmentSpeedTestBinding.inflate(inflater, container, false)
         observeIsLoading()
-        observeConnectivityChanged()
         observerMultiTaskDone()
         observeScanStatus()
         observeWifiName()
         observeUnitType()
+        handleWhenNoConnection()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        observeBackStackArg()
         initView()
-        initData()
     }
 
 
     private fun initView() {
         initExpandView()
+        initSpeedView()
     }
 
-    private fun initData() {
-        loadServer()
+    private fun initSpeedView() {
+        binding.clSpeedview.onCallBackListener(object : SpeedView.OnCallbackListener {
+            override fun onEnd(historyModel: HistoryModel?) {
+                if (historyModel != null) {
+                    viewModel.insertNewHistoryAction(historyModel)
+                    viewModel.setScanStatus(ScanStatus.DONE)
+                    CoroutineScope(Dispatchers.Main).launch {
+                        delay(1000)
+                        val bundle = Bundle()
+                        bundle.putParcelable(Constant.KEY_TEST_MODEL, historyModel)
+                        bundle.putBoolean(Constant.KEY_FROM_SPEED_TEST_FRAGMENT, true)
+                        navigateToPage(R.id.action_fragmentMain_to_fragmentResultDetail, bundle)
+                        viewModel.speedTestDone = true
+                    }
+
+                }
+            }
+
+            override fun onError() {
+                viewModel.setScanStatus(ScanStatus.HARD_RESET)
+            }
+
+            override fun onStart() {
+                if (viewModel.speedTestDone){
+                    viewModel.setScanStatus(ScanStatus.SCANNING)
+                    viewModel.speedTestDone = false
+                }
+            }
+
+        })
     }
 
-    private fun loadServer() {
-        viewModel.doMultiTask()
-    }
 
     private fun observeUnitType() {
         viewModel.unitType.observe(viewLifecycleOwner) {
@@ -249,36 +276,56 @@ class FragmentSpeedTest : BaseFragment() {
             if (viewModel.isError.value == true) {
                 binding.clSpeedview.setData(testPoint!!, ConnectionType.UNKNOWN)
                 if (viewModel.mScanStatus.value == ScanStatus.SCANNING) {
+                    binding.clSpeedview.forceStop()
                     binding.clSpeedview.resetView()
                 }
                 return
             }
-            if (NetworkUtils.isWifiConnected(requireContext())) {
-                val testModel = HistoryModel(
-                    name_network = binding.tvWifiName.text.toString(),
-                    isp = binding.tvIspName.text.toString(),
-                    externalIP = viewModel.currentNetworkInfo.selfIspIp,
-                    internalIP = NetworkUtils.wifiIpAddress()
-                )
-                binding.clSpeedview.setData(testPoint!!, ConnectionType.WIFI, testModel)
+            when (viewModel.typeNetwork.value) {
+                ConnectionType.WIFI -> {
+                    val testModel = HistoryModel(
+                        name_network = binding.tvWifiName.text.toString(),
+                        isp = binding.tvIspName.text.toString(),
+                        externalIP = viewModel.currentNetworkInfo.selfIspIp,
+                        internalIP = NetworkUtils.wifiIpAddress()
+                    )
+                    binding.clSpeedview.setData(testPoint!!, ConnectionType.WIFI, testModel)
 
-            } else if (NetworkUtils.isMobileConnected(requireContext())) {
-                val testModel = HistoryModel(
-                    network = "mobile",
-                    name_network = binding.tvWifiName.text.toString(),
-                    isp = binding.tvIspName.text.toString(),
-                    externalIP = viewModel.currentNetworkInfo.selfIspIp,
-                )
-                binding.clSpeedview.setData(
-                    testPoint!!, ConnectionType.MOBILE, testModel
-                )
-            } else {
-                binding.clSpeedview.setData(ConnectionType.UNKNOWN)
-
+                }
+                ConnectionType.MOBILE -> {
+                    val testModel = HistoryModel(
+                        network = "mobile",
+                        name_network = binding.tvWifiName.text.toString(),
+                        isp = binding.tvIspName.text.toString(),
+                        externalIP = viewModel.currentNetworkInfo.selfIspIp,
+                    )
+                    binding.clSpeedview.setData(
+                        testPoint!!, ConnectionType.MOBILE, testModel
+                    )
+                }
+                else -> {
+                    binding.tvWifiName.text = getString(R.string.no_connection)
+                    binding.tvIspName.text = getString(R.string.no_connection_isp)
+                    binding.clSpeedview.setData(ConnectionType.UNKNOWN)
+                }
             }
 
         } catch (e: Exception) {
             e.printStackTrace()
+        }
+    }
+
+    private fun handleWhenNoConnection() {
+        viewModel.typeNetwork.observe(viewLifecycleOwner) {
+            if (viewModel.typeNetwork.value == ConnectionType.UNKNOWN) {
+                binding.tvWifiName.text = getString(R.string.no_connection)
+                binding.tvIspName.text = getString(R.string.no_connection_isp)
+                binding.clSpeedview.setData(ConnectionType.UNKNOWN)
+                if (viewModel.mScanStatus.value == ScanStatus.SCANNING) {
+                    viewModel.setScanStatus(ScanStatus.HARD_RESET)
+                    binding.clSpeedview.forceStop()
+                }
+            }
         }
     }
 
@@ -296,7 +343,6 @@ class FragmentSpeedTest : BaseFragment() {
     private fun createTestPoint(addressInfo: List<AddressInfo>) {
         if (addressInfo.isNotEmpty()) {
             val server = addressInfo[0]
-            Log.d("TAG", "createTestPoint: " + server.toString())
             testPoint = TestPoint(
                 server.name, "https://" + server.host, server.downloadUrl, "speedtest/upload", ""
             )
@@ -308,11 +354,13 @@ class FragmentSpeedTest : BaseFragment() {
         if (network.selfIsp != "") {
             binding.tvIspName.text = network.selfIsp
             binding.tvIspNameHidden.text = network.selfIsp
+        } else {
+            binding.tvIspNameHidden.text = getString(R.string.no_connection_isp)
         }
+
     }
 
     private fun observerMultiTaskDone() {
-
         viewModel.isMultiTaskDone.observe(viewLifecycleOwner) {
             if (it) {
                 createTestPoint(viewModel.addressInfoList)
@@ -332,84 +380,13 @@ class FragmentSpeedTest : BaseFragment() {
         binding.containerLoading.visibility = View.GONE
     }
 
-
-    private fun observeConnectivityChanged() {
-        viewModel.mConnectivityChanged.observe(viewLifecycleOwner) {
-            onConnectivityChange()
-        }
-    }
-
-    private fun onConnectivityChange() {
-        if (NetworkUtils.isWifiConnected(requireContext())) {
-            viewModel.wifiName.value = NetworkUtils.getNameWifi(requireContext())
-            loadServer()
-        } else if (NetworkUtils.isMobileConnected(requireContext())) {
-
-            val info = NetworkUtils.getInforMobileConnected(requireContext())
-            val name = if (info != null) info.typeName + " - " + info.subtypeName else "Mobile"
-            binding.tvWifiName.text = name
-            binding.tvWifiNameHidden.text = name
-            loadServer()
-        } else {
-            binding.tvWifiName.text = getString(R.string.no_connection)
-            binding.tvIspName.text = getString(R.string.no_connection_isp)
-            binding.clSpeedview.setData(ConnectionType.UNKNOWN)
-            if (viewModel.mScanStatus.value == ScanStatus.SCANNING) {
-                viewModel.setScanStatus(ScanStatus.HARD_RESET)
-            }
-        }
-    }
-
     private fun observeWifiName() {
-        viewModel.wifiName.observe(viewLifecycleOwner) {
+        viewModel.networkName.observe(viewLifecycleOwner) {
             binding.tvWifiName.text = it
             binding.tvWifiNameHidden.text = it
         }
-        binding.clSpeedview.onEndListener(object : SpeedView.OnEndListener {
-            override fun onEnd(historyModel: HistoryModel?) {
-                if (historyModel != null) {
-                    viewModel.insertNewHistoryAction(historyModel)
-                    viewModel.setScanStatus(ScanStatus.DONE)
-                    val bundle = Bundle()
-                    bundle.putParcelable(Constant.KEY_TEST_MODEL, historyModel)
-                    bundle.putBoolean(Constant.KEY_FROM_SPEED_TEST_FRAGMENT, true)
-                    navigateToPage(R.id.action_fragmentMain_to_fragmentResultDetail, bundle)
-                }
-            }
 
-            override fun onError() {
-                viewModel.setScanStatus(ScanStatus.HARD_RESET)
-            }
-
-            override fun onStart() {
-                viewModel.setScanStatus(ScanStatus.SCANNING)
-
-            }
-
-        })
     }
-
-
-    private fun observeBackStackArg() {
-        val navHostFragment = activity?.supportFragmentManager?.findFragmentById(
-            R.id.nav_host_fragment
-        ) as NavHostFragment
-        val navController = navHostFragment.navController
-        navController.currentBackStackEntry?.savedStateHandle?.getLiveData<Boolean>(Constant.KEY_SCAN_AGAIN)
-            ?.observe(viewLifecycleOwner) {
-                if (it) {
-                    viewModel.setScanStatus(ScanStatus.SCANNING)
-                    binding.clSpeedview.prepareViewSpeedTest()
-                }
-            }
-        navController.currentBackStackEntry?.savedStateHandle?.getLiveData<Boolean>(Constant.KEY_RESET)
-            ?.observe(viewLifecycleOwner) {
-                if (it) {
-                    binding.clSpeedview.resetView()
-                }
-            }
-    }
-
 
     private fun observeScanStatus() {
         viewModel.mScanStatus.observe(viewLifecycleOwner) {
@@ -423,6 +400,7 @@ class FragmentSpeedTest : BaseFragment() {
                     }.playOn(binding.containerExpandView)
                 }
                 ScanStatus.SCANNING -> {
+                    binding.clSpeedview.prepareViewSpeedTest()
                     YoYo.with(Techniques.SlideOutLeft).duration(300L).onEnd {
                         YoYo.with(Techniques.FadeIn).duration(100L).onStart {
                             binding.inforHidden.visibility = View.VISIBLE

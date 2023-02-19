@@ -188,7 +188,7 @@ class FragmentWifiDetector : BaseFragment(), ItemDeviceHelper {
         }
     }
     private fun observeWifiName(){
-        shareViewModel.wifiName.observe(viewLifecycleOwner){
+        shareViewModel.networkName.observe(viewLifecycleOwner){
             binding.tvWifi.text = it
         }
     }

@@ -1,6 +1,5 @@
 package com.example.speedtest_rework.activities
 
-import android.Manifest
 import android.content.Context
 import android.content.IntentFilter
 import android.content.SharedPreferences
@@ -14,6 +13,7 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.NavHostFragment
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.activity.BaseActivity
+import com.example.speedtest_rework.common.custom_view.ConnectionType
 import com.example.speedtest_rework.common.utils.AppSharePreference
 import com.example.speedtest_rework.common.utils.Constant
 import com.example.speedtest_rework.common.utils.NetworkUtils
@@ -42,7 +42,7 @@ class MainActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceChangeL
         registerConnectivityListener()
         observeConnectivityChange()
         initNavController()
-        handlePermissionFlow()
+        loadServer()
     }
 
     override fun attachBaseContext(newBase: Context) = super.attachBaseContext(
@@ -69,6 +69,28 @@ class MainActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceChangeL
         unregisterConnectivityListener()
     }
 
+    private fun loadServer() {
+        viewModel.doMultiTask()
+    }
+
+
+
+    private fun onConnectivityChange() {
+        if (NetworkUtils.isWifiConnected(this)) {
+            viewModel.typeNetwork.postValue(ConnectionType.WIFI)
+            viewModel.networkName.value = NetworkUtils.getNameWifi(this)
+            loadServer()
+        } else if (NetworkUtils.isMobileConnected(this)) {
+            viewModel.typeNetwork.postValue(ConnectionType.MOBILE)
+            val info = NetworkUtils.getInforMobileConnected(this)
+            viewModel.networkName.value = if (info != null) info.typeName + " - " + info.subtypeName else "Mobile"
+            loadServer()
+        }else{
+            viewModel.typeNetwork.postValue(ConnectionType.UNKNOWN)
+        }
+    }
+
+
 
     private fun initNavController() {
         navHostFragment =
@@ -87,16 +109,7 @@ class MainActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceChangeL
         window.statusBarColor = ContextCompat.getColor(this, R.color.gray_700)
     }
 
-    private fun handlePermissionFlow() {
-        if (ContextCompat.checkSelfPermission(
-                this, Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-                this, Manifest.permission.ACCESS_COARSE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            navHostFragment?.navController?.navigate(R.id.fragmentMain)
-        }
-    }
+
 
     private fun registerConnectivityListener() {
         connectivityListener = ConnectivityListener(applicationContext)
@@ -146,9 +159,7 @@ class MainActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceChangeL
 
     private fun observeConnectivityChange() {
         viewModel.mConnectivityChanged.observe(this) {
-            if (NetworkUtils.isWifiConnected(this)) {
-                viewModel.wifiName.value = NetworkUtils.getNameWifi(this)
-            }
+            onConnectivityChange()
         }
     }
 

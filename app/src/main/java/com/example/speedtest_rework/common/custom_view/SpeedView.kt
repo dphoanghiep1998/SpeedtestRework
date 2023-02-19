@@ -62,11 +62,11 @@ class SpeedView(
     private lateinit var tvConnectingHide: YoYo.AnimationComposer
     private lateinit var btnStartStringShow: YoYo.YoYoString
     private var currentUnit: UnitType = UnitType.MBPS
-    private var listener: OnEndListener? = null
+    private var listener: OnCallbackListener? = null
 
     private var currentTicks = listOf<Float>()
 
-    interface OnEndListener {
+    interface OnCallbackListener {
         fun onEnd(historyModel: HistoryModel?)
         fun onError()
         fun onStart()
@@ -79,7 +79,7 @@ class SpeedView(
         initView()
     }
 
-    fun onEndListener(listener: OnEndListener) {
+    fun onCallBackListener(listener: OnCallbackListener) {
         this.listener = listener
     }
 
@@ -223,7 +223,6 @@ class SpeedView(
                             return true
                         }
                         listener?.onStart()
-                        prepareViewSpeedTest()
                     }
                     MotionEvent.ACTION_CANCEL -> {
                         changeColorWhenRelease()
@@ -339,12 +338,8 @@ class SpeedView(
                     override fun onAnimationEnd(animation: Animation) {
                         binding.speedView.setSpeedDone(true)
                         hideContainerSpeed()
-                        Handler(Looper.getMainLooper()).postDelayed({
-                            onScanningDone()
-                        }, 200)
-                        Handler(Looper.getMainLooper()).postDelayed({
-                            listener?.onEnd(testModel)
-                        }, 1400)
+                        listener?.onEnd(testModel)
+
 
                     }
 

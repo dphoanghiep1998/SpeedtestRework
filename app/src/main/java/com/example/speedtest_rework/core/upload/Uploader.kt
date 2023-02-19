@@ -47,7 +47,7 @@ abstract class Uploader(private val c: Connection, private val path: String, ckS
                         offset += BUFFER_SIZE
                     }
                     if (stopASAP) break
-                    while (!c.readLineUnbuffered()!!.trim { it <= ' ' }.isEmpty());
+                    while (c.readLineUnbuffered()!!.trim { it <= ' ' }.isNotEmpty());
                 }
                 c.close()
             } catch (t: Throwable) {

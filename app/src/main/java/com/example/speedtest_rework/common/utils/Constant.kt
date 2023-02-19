@@ -2,7 +2,7 @@ package com.example.speedtest_rework.common.utils
 
 object Constant {
 
-    const val KEY_DATA_BASE ="DATA_BASE_SPEED_TEST_1"
+    const val KEY_DATA_BASE = "DATA_BASE_SPEED_TEST_1"
     const val POLICY_LINK = "http://www.facebook.com"
     const val SERVER_LIST = "http://speedtest.net/"
     const val SERVER_ENDPOINT = ""
@@ -22,8 +22,7 @@ object Constant {
     const val KEY_RECENT_LIST = "KEY_RECENT_LIST"
     const val KEY_ITEM_ADVANCE = "KEY_ITEM_ADVANCE"
     const val KEY_ITEM_PING = "KEY_ITEM_PING"
-    const val KEY_SPEED_TEST = "KEY_SPEED_TEST"
-    const val KEY_DATA_USAGE = "KEY_DATA_USAGE"
+
     const val KEY_LANGUAGE = "KEY_LANGUAGE"
     const val KEY_UNIT = "KEY_UNIT"
     const val KEY_UNIT_VALUE = "KEY_UNIT_VALUE"
@@ -32,6 +31,10 @@ object Constant {
     const val KEY_SERVICE_TYPE = "KEY_SERVICE_TYPE"
     const val MAIL_TO = "nekosoft.app@gmail.com"
     const val URL_APP = "nekosoft.app@gmail.com"
+
+    const val KEY_ACTION_SPEED_TEST = "KEY_ACTION_SPEED_TEST"
+    const val KEY_ACTION_DATA_USAGE = "KEY_DATA_USAGE"
+    const val KEY_ACTION_MAIN = "KEY_ACTION_MAIN"
 
 
 }

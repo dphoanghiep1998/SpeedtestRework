@@ -81,7 +81,7 @@
     <string name="no_connection_isp">No data</string>
     <string name="go">GO</string>
     <!--    Wifi Analyzer Fragment    -->
-    <string name="graph_y">Signal Strength (dbm)</string>
+    <string name="graph_y">Signal Strength (dBm)</string>
     <string name="graph_x"> \n Wi-Fi Channels</string>
     <string name="open_setting">OPEN SETTING</string>
     <string name="no_permission">To use this feature, please accept location permission on your device</string>
@@ -131,10 +131,8 @@
     <!--    Share Preference-->
     <string name="unit_preference" translatable="false">unit_preference</string>
     <string name="unit_value_preference" translatable="false">unit_value_preference</string>
-    <string name="channel_id" translatable="false">1</string>
+    <string name="channel_id" translatable="false">CHANNEL_SPEED_TEST_ID</string>
     <string name="channel_name" translatable="false">channel_name</string>
-    <string name="action_do_speed_test" translatable="false">do speed test</string>
-    <string name="action_show_data_usage" translatable="false">show data usage</string>
     <string name="data_usage">DATA USAGE</string>
     <string name="service_type_key" translatable="false">service_type_key</string>
     <string name="usage_permission">The data access service will be used to get the data consumption of all the apps in your device. You can always modify the authorization in the \"Settings\"  of the app</string>

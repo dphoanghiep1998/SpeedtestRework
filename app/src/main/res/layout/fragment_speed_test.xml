@@ -22,9 +22,8 @@
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="@dimen/_12sdp"
             app:layout_constraintTop_toBottomOf="@id/cl_speedview">
-
-
             <TextView
                 android:id="@+id/tv_wifi_name_hidden"
                 android:layout_width="wrap_content"
@@ -32,7 +31,6 @@
                 android:ellipsize="end"
                 android:drawablePadding="@dimen/_6sdp"
                 android:maxLines="1"
-                android:paddingStart="@dimen/_6sdp"
                 android:text="@string/neko"
                 android:textColor="@color/gray_400"
                 android:textSize="@dimen/_15sdp"
@@ -46,7 +44,6 @@
                 android:id="@+id/tv_isp_name_hidden"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingStart="@dimen/_6sdp"
                 android:drawablePadding="@dimen/_6sdp"
                 android:text=""
                 android:textColor="@color/gray_400"
