@@ -77,6 +77,7 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
         binding.imvStop.clickWithDebounce {
             toastShort(getString(R.string.scan_canceled))
             viewModel.setScanStatus(ScanStatus.HARD_RESET)
+            viewModel.speedTestDone = true
         }
     }
 

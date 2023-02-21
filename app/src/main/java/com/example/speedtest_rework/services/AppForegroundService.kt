@@ -143,8 +143,10 @@ class AppForegroundService : Service() {
         isServiceSpeedMonitorStarted = true
         scope.launch {
             while (isServiceSpeedMonitorStarted) {
-                if (CustomApplication.app.currentActivity != null && CustomApplication.app.currentActivity is MainActivity) {
+                if (CustomApplication.app.currentActivity != null) {
                     hideButtonSpeedTest()
+                }else{
+                    showButtonSpeedTest()
                 }
                 setDataSpeedMonitor(builder)
                 delay(timeInterval)
@@ -302,6 +304,9 @@ class AppForegroundService : Service() {
 
     private fun hideButtonSpeedTest() {
         remoteViews.setViewVisibility(R.id.btn_start, View.GONE)
+    }
+    private fun showButtonSpeedTest(){
+        remoteViews.setViewVisibility(R.id.btn_start,View.VISIBLE)
     }
 
     private fun hideViewDataUsage() {

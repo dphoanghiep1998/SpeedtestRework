@@ -83,6 +83,7 @@ class FragmentSpeedTest : BaseFragment() {
 
             override fun onError() {
                 viewModel.setScanStatus(ScanStatus.HARD_RESET)
+                viewModel.speedTestDone = true
             }
 
             override fun onStart() {

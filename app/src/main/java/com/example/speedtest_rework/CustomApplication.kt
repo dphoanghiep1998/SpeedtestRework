@@ -30,7 +30,7 @@ class CustomApplication() : Application(),Application.ActivityLifecycleCallbacks
         app = this
         AppSharePreference.getInstance(applicationContext)
         Configuration.getInstance()
-
+        registerActivityLifecycleCallbacks(this)
         AppForegroundService.getInstance()
         NetworkUtils(applicationContext)
         createChannelNotification()
@@ -73,5 +73,6 @@ class CustomApplication() : Application(),Application.ActivityLifecycleCallbacks
     }
 
     override fun onActivityDestroyed(p0: Activity) {
+        currentActivity = null
     }
 }

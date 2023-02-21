@@ -40,7 +40,7 @@ abstract class Uploader(private val c: Connection, private val path: String, ckS
                             resetASAP = false
                         }
                         totUploaded += l.toLong()
-                        if (System.currentTimeMillis() - lastProgressEvent > 200) {
+                        if (System.currentTimeMillis() - lastProgressEvent > 100) {
                             lastProgressEvent = System.currentTimeMillis()
                             onProgress(totUploaded)
                         }
