@@ -32,23 +32,30 @@ class CurrentNetworkInfo {
                             urlConnection.inputStream
                         )
                     )
-                    var line: String
-                    while (br.readLine().also { line = it } != null) {
-                        if (!line.contains("isp=")) {
-                            continue
+
+                    br.use { r->
+                        if(r != null){
+                            r.lineSequence().forEach {
+                                if(it != null){
+                                    if (!it.contains("isp=")) {
+                                        return@forEach
+                                    }
+                                    selfLat = it.split("lat=\"".toRegex()).dropLastWhile { it.isEmpty() }
+                                        .toTypedArray()[1].split(" ".toRegex()).dropLastWhile { it.isEmpty() }
+                                        .toTypedArray()[0].replace("\"", "").toDouble()
+                                    selfLon = it.split("lon=\"".toRegex()).dropLastWhile { it.isEmpty() }
+                                        .toTypedArray()[1].split(" ".toRegex()).dropLastWhile { it.isEmpty() }
+                                        .toTypedArray()[0].replace("\"", "").toDouble()
+                                    selfIsp = it.split("isp=\"".toRegex()).dropLastWhile { it.isEmpty() }
+                                        .toTypedArray()[1].split(" ".toRegex()).dropLastWhile { it.isEmpty() }
+                                        .toTypedArray()[0].replace("\"", "")
+                                    selfIspIp = it.split("ip=\"".toRegex()).dropLastWhile { it.isEmpty() }
+                                        .toTypedArray()[1].split(" ".toRegex()).dropLastWhile { it.isEmpty() }
+                                        .toTypedArray()[0].replace("\"", "")
+                                }
+
+                            }
                         }
-                        selfLat = line.split("lat=\"".toRegex()).dropLastWhile { it.isEmpty() }
-                            .toTypedArray()[1].split(" ".toRegex()).dropLastWhile { it.isEmpty() }
-                            .toTypedArray()[0].replace("\"", "").toDouble()
-                        selfLon = line.split("lon=\"".toRegex()).dropLastWhile { it.isEmpty() }
-                            .toTypedArray()[1].split(" ".toRegex()).dropLastWhile { it.isEmpty() }
-                            .toTypedArray()[0].replace("\"", "").toDouble()
-                        selfIsp = line.split("isp=\"".toRegex()).dropLastWhile { it.isEmpty() }
-                            .toTypedArray()[1].split(" ".toRegex()).dropLastWhile { it.isEmpty() }
-                            .toTypedArray()[0].replace("\"", "")
-                        selfIspIp = line.split("ip=\"".toRegex()).dropLastWhile { it.isEmpty() }
-                            .toTypedArray()[1].split(" ".toRegex()).dropLastWhile { it.isEmpty() }
-                            .toTypedArray()[0].replace("\"", "")
                     }
                     br.close()
                 }

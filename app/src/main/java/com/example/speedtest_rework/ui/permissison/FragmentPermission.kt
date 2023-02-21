@@ -12,15 +12,18 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.activityViewModels
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.fragment.BaseFragment
 import com.example.speedtest_rework.common.utils.Constant
 import com.example.speedtest_rework.common.utils.NetworkUtils
 import com.example.speedtest_rework.common.utils.clickWithDebounce
 import com.example.speedtest_rework.databinding.FragmentPermissionBinding
+import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
 
 class FragmentPermission : BaseFragment() {
     private lateinit var binding: FragmentPermissionBinding
+    private val viewModel: SpeedTestViewModel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -54,6 +57,7 @@ class FragmentPermission : BaseFragment() {
                 requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
+            viewModel.setIsPermissionGranted(true)
             navigateToPage(R.id.fragmentMain)
         }
     }
@@ -77,6 +81,7 @@ class FragmentPermission : BaseFragment() {
             if (permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true ||
                 permissions[Manifest.permission.ACCESS_COARSE_LOCATION] == true
             ) {
+                viewModel.setIsPermissionGranted(true)
                 navigateToPage(R.id.fragmentMain)
             }
         }

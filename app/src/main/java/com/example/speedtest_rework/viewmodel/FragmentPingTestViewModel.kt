@@ -23,6 +23,7 @@ import kotlin.math.roundToInt
 class FragmentPingTestViewModel @Inject constructor() : BaseViewModel() {
 
     var pingStatus = MutableLiveData(ScanStatus.NONE)
+    var pingListStatus = MutableLiveData(ScanStatus.NONE)
     var pingNormal: Ping? = null
     var listRecent = MutableLiveData<List<String>>()
     var stopPing = true
@@ -40,6 +41,7 @@ class FragmentPingTestViewModel @Inject constructor() : BaseViewModel() {
 
 
     fun getPingResult(listItem: List<ItemPingTest>) {
+        pingListStatus.postValue(ScanStatus.SCANNING)
         var loop = 0
         viewModelScope.launch(Dispatchers.IO) {
             listItem.filter {
@@ -58,15 +60,15 @@ class FragmentPingTestViewModel @Inject constructor() : BaseViewModel() {
 
                             override fun onFinished(pingStats: PingStats) {
                                 if (loop == 11) {
-                                    pingStatus.postValue(ScanStatus.DONE)
-                                } else {
-                                    pingStatus.postValue(ScanStatus.SCANNING)
+                                    pingListStatus.postValue(ScanStatus.DONE)
                                 }
                                 it.value = pingStats.averageTimeTaken.roundToInt()
                             }
 
                             override fun onError(e: Exception) {
-                                Log.d("TAG", "onError: ")
+                                if(loop == 11){
+                                    pingListStatus.postValue(ScanStatus.DONE)
+                                }
                             }
                         })
             }

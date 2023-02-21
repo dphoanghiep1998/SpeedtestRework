@@ -41,6 +41,7 @@ class MainActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceChangeL
         setContentView(binding.root)
         registerConnectivityListener()
         observeConnectivityChange()
+        observePermissionChange()
         initNavController()
         loadServer()
     }
@@ -74,7 +75,6 @@ class MainActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceChangeL
     }
 
 
-
     private fun onConnectivityChange() {
         if (NetworkUtils.isWifiConnected(this)) {
             viewModel.typeNetwork.postValue(ConnectionType.WIFI)
@@ -83,13 +83,13 @@ class MainActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceChangeL
         } else if (NetworkUtils.isMobileConnected(this)) {
             viewModel.typeNetwork.postValue(ConnectionType.MOBILE)
             val info = NetworkUtils.getInforMobileConnected(this)
-            viewModel.networkName.value = if (info != null) info.typeName + " - " + info.subtypeName else "Mobile"
+            viewModel.networkName.value =
+                if (info != null) info.typeName + " - " + info.subtypeName else "Mobile"
             loadServer()
-        }else{
+        } else {
             viewModel.typeNetwork.postValue(ConnectionType.UNKNOWN)
         }
     }
-
 
 
     private fun initNavController() {
@@ -108,7 +108,6 @@ class MainActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceChangeL
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.statusBarColor = ContextCompat.getColor(this, R.color.gray_700)
     }
-
 
 
     private fun registerConnectivityListener() {
@@ -160,6 +159,18 @@ class MainActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceChangeL
     private fun observeConnectivityChange() {
         viewModel.mConnectivityChanged.observe(this) {
             onConnectivityChange()
+        }
+    }
+
+    private fun observePermissionChange() {
+        viewModel.mPermissionGranted.observe(this) {
+            if (NetworkUtils.isWifiConnected(this)) {
+                viewModel.networkName.value = NetworkUtils.getNameWifi(this)
+            } else if (NetworkUtils.isMobileConnected(this)) {
+                val info = NetworkUtils.getInforMobileConnected(this)
+                viewModel.networkName.value =
+                    if (info != null) info.typeName + " - " + info.subtypeName else "Mobile"
+            }
         }
     }
 

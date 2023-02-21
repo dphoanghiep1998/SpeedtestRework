@@ -1,9 +1,13 @@
 package com.example.speedtest_rework.ui.ping_test.adapter
 
 import android.content.Context
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.speedtest_rework.R
@@ -14,14 +18,25 @@ import com.example.speedtest_rework.ui.ping_test.interfaces.ItemHelper
 import com.example.speedtest_rework.ui.ping_test.model.ContentPingTest
 import com.example.speedtest_rework.ui.ping_test.model.ItemPingTest
 import com.example.speedtest_rework.ui.ping_test.model.TitlePingTest
+import java.util.*
 
 class PingTestAdapter(val context: Context, private val listener: ItemHelper) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var mData: List<ItemPingTest> = mutableListOf()
+    private var loading = false
+    private val handler = Handler()
+    private var timer = Timer()
+
 
     fun setData(list: List<ItemPingTest>) {
         this.mData = list
-        notifyItemRangeChanged(0,mData.size)
+//        stopAnimation()
+        notifyItemRangeChanged(0, mData.size)
+    }
+
+    fun setLoading(status: Boolean) {
+        loading = status
+        notifyDataSetChanged()
     }
 
     inner class PingTestTitleViewHolder(val binding: ItemPingTestTitleBinding) :
@@ -83,43 +98,49 @@ class PingTestAdapter(val context: Context, private val listener: ItemHelper) :
 
                     binding.tvTitle.text = itemContent.title
                     if (itemContent.normal) {
-                        binding.tvValue.text =
-                            if (itemContent.value == 0) "_ _" else itemContent.value.toString()
-                        when (itemContent.value) {
-                            0 -> {
-                                binding.tvValue.setTextColor(
-                                    ContextCompat.getColor(
-                                        context,
-                                        R.color.gray_100
+                        if (loading) {
+                            val animation: Animation =
+                                AnimationUtils.loadAnimation(holder.itemView.context, R.anim.three_dot)
+                            binding.tvValue.text = "..."
+                            binding.tvValue.startAnimation(animation)
+                        } else {
+                            binding.tvValue.clearAnimation()
+                            binding.tvValue.text =
+                                if (itemContent.value == 0) "_ _" else itemContent.value.toString()
+                            when (itemContent.value) {
+                                0 -> {
+                                    binding.tvValue.setTextColor(
+                                        ContextCompat.getColor(
+                                            context,
+                                            R.color.gray_100
+                                        )
                                     )
-                                )
-                            }
-                            in 1..50 -> {
-                                binding.tvValue.setTextColor(
-                                    ContextCompat.getColor(
-                                        context,
-                                        R.color.gradient_green_start
+                                }
+                                in 1..50 -> {
+                                    binding.tvValue.setTextColor(
+                                        ContextCompat.getColor(
+                                            context,
+                                            R.color.gradient_green_start
+                                        )
                                     )
-                                )
-                            }
-                            in 51..100 -> {
-                                binding.tvValue.setTextColor(
-                                    ContextCompat.getColor(
-                                        context,
-                                        R.color.gradient_yellow_start
+                                }
+                                in 51..100 -> {
+                                    binding.tvValue.setTextColor(
+                                        ContextCompat.getColor(
+                                            context,
+                                            R.color.gradient_yellow_start
+                                        )
                                     )
-                                )
-                            }
-                            else -> {
-                                binding.tvValue.setTextColor(
-                                    ContextCompat.getColor(
-                                        context,
-                                        R.color.gradient_red_start
+                                }
+                                else -> {
+                                    binding.tvValue.setTextColor(
+                                        ContextCompat.getColor(
+                                            context,
+                                            R.color.gradient_red_start
+                                        )
                                     )
-                                )
+                                }
                             }
-
-
                         }
 
                     } else {
@@ -134,6 +155,4 @@ class PingTestAdapter(val context: Context, private val listener: ItemHelper) :
     override fun getItemCount(): Int {
         return mData.size
     }
-
-
 }

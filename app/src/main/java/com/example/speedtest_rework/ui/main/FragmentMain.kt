@@ -50,7 +50,6 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
     private lateinit var languageDialog: FragmentLanguage
 
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -253,9 +252,9 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
 
     private fun notificationHandleIntentFlow() {
         val actionShowDataUsage =
-            requireActivity().intent.extras?.getString(getString(R.string.action_show_data_usage))
+            requireActivity().intent.extras?.getString(Constant.KEY_ACTION_DATA_USAGE)
         val actionDoSpeedTest =
-            requireActivity().intent.extras?.getString(getString(R.string.action_do_speed_test))
+            requireActivity().intent.extras?.getString(Constant.KEY_ACTION_SPEED_TEST)
 
         if (actionShowDataUsage != null) {
             if (viewModel.mScanStatus.value != ScanStatus.SCANNING)
@@ -263,13 +262,13 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
         }
 
         if (actionDoSpeedTest != null) {
-            if (viewModel.mScanStatus.value != ScanStatus.SCANNING){
+            if (viewModel.mScanStatus.value != ScanStatus.SCANNING) {
                 Log.d("TAG", "notificationHandleIntentFlow: ")
                 viewModel.setScanStatus(ScanStatus.SCANNING)
             }
         }
-        requireActivity().intent.removeExtra(getString(R.string.action_do_speed_test))
-        requireActivity().intent.removeExtra(getString(R.string.action_show_data_usage))
+        requireActivity().intent.removeExtra(Constant.KEY_ACTION_DATA_USAGE)
+        requireActivity().intent.removeExtra(Constant.KEY_ACTION_SPEED_TEST)
     }
 
 

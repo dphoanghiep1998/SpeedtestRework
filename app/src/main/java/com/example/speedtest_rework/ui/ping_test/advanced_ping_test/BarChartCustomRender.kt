@@ -65,7 +65,7 @@ class BarChartCustomRender(
                 )
 
                 val trueValue = textValue.replace(",",".").toFloat() - 10
-                if (trueValue.toString() != "" && trueValue.toString() != "0.0" && trueValue.toString() != "0") {
+                if (trueValue.toString() != "" && trueValue.toString() != "0.0" && trueValue.toString() != "0" && trueValue.toString() != "-10.0" && trueValue.toString() != "-10") {
                     rect = RectF(left - 10, top - 60, right + 10, top - 10)
                     c?.drawRoundRect(rect, 5f, 5f, mPaint)
 //                    val number3digits:Double = String.format("%.2f", trueValue).toDouble()
