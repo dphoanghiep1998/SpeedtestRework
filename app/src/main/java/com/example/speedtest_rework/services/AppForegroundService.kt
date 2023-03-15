@@ -67,25 +67,23 @@ class AppForegroundService : Service() {
 
 
     private fun generateNotification() {
-        Log.d("TAG", "generateNotification: " + serviceType)
         when (serviceType) {
             ServiceType.SPEED_MONITOR -> {
                 remoteViews.setViewVisibility(R.id.tv_upload_value_notification, View.VISIBLE)
                 remoteViews.setViewVisibility(R.id.tv_download_value_notification, View.VISIBLE)
                 remoteViews.setViewVisibility(R.id.mobile_usage_value, View.GONE)
                 remoteViews.setViewVisibility(R.id.wifi_usage_value, View.GONE)
-                remoteViews.setViewVisibility(R.id.btn_start, View.VISIBLE)
+                remoteViews.setViewVisibility(R.id.btn_start, View.GONE)
                 remoteViews.setOnClickPendingIntent(
-                    R.id.btn_start, startPendingIntent(
+                    R.id.btn_start, startPendingIntentSingle(
                         Constant.KEY_ACTION_SPEED_TEST, Constant.KEY_ACTION_SPEED_TEST, REQUEST_CODE
                     )
                 )
                 remoteViews.setOnClickPendingIntent(
-                    R.id.root, startPendingIntent(
+                    R.id.root, startPendingIntentSingle(
                         Constant.KEY_ACTION_MAIN, Constant.KEY_ACTION_MAIN, REQUEST_CODE_2
                     )
                 )
-
             }
             ServiceType.DATA_USAGE -> {
                 remoteViews.setOnClickPendingIntent(
@@ -104,7 +102,7 @@ class AppForegroundService : Service() {
             }
             ServiceType.BOTH -> {
                 remoteViews.setOnClickPendingIntent(
-                    R.id.root, startPendingIntent(
+                    R.id.root, startPendingIntentSingle(
                         Constant.KEY_ACTION_MAIN, Constant.KEY_ACTION_MAIN, REQUEST_CODE_2
                     )
                 )
@@ -126,8 +124,12 @@ class AppForegroundService : Service() {
         startForeground(SERVICE_ID, builder.build())
 
         when (serviceType) {
-            ServiceType.SPEED_MONITOR -> startRepeatingJob(2000L, builder)
-            ServiceType.DATA_USAGE -> startRepeatingJob(builder)
+            ServiceType.SPEED_MONITOR -> {
+                startRepeatingJob(2000L, builder)
+            }
+            ServiceType.DATA_USAGE -> {
+                startRepeatingJob(builder)
+            }
             ServiceType.BOTH -> {
                 startRepeatingJob(2000L, builder)
                 startRepeatingJob(builder)
@@ -143,9 +145,9 @@ class AppForegroundService : Service() {
         isServiceSpeedMonitorStarted = true
         scope.launch {
             while (isServiceSpeedMonitorStarted) {
-                if (CustomApplication.app.currentActivity != null) {
+                if (CustomApplication.app.currentActivity != null || serviceType == ServiceType.BOTH) {
                     hideButtonSpeedTest()
-                }else{
+                } else {
                     showButtonSpeedTest()
                 }
                 setDataSpeedMonitor(builder)
@@ -248,10 +250,28 @@ class AppForegroundService : Service() {
         return context.getSystemService(Context.NETWORK_STATS_SERVICE) as NetworkStatsManager
     }
 
-    private fun startPendingIntent(key: String, value: String, requestCode: Int): PendingIntent {
+    private fun startPendingIntentSingle(
+        key: String,
+        value: String,
+        requestCode: Int
+    ): PendingIntent {
         val speedIntent = Intent(this, MainActivity::class.java)
         speedIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
         speedIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        speedIntent.putExtra(key, value)
+        return if (buildMinVersionM()) {
+            PendingIntent.getActivity(
+                this, requestCode, speedIntent, PendingIntent.FLAG_IMMUTABLE
+            )
+        } else {
+            PendingIntent.getActivity(
+                this, requestCode, speedIntent, PendingIntent.FLAG_UPDATE_CURRENT
+            )
+        }
+    }
+
+    private fun startPendingIntent(key: String, value: String, requestCode: Int): PendingIntent {
+        val speedIntent = Intent(this, MainActivity::class.java)
         speedIntent.putExtra(key, value)
         return if (buildMinVersionM()) {
             PendingIntent.getActivity(
@@ -296,24 +316,17 @@ class AppForegroundService : Service() {
         return value.toBigDecimal().setScale(1, RoundingMode.UP).toFloat()
     }
 
-    private fun hideViewSpeedMonitor() {
-        remoteViews.setViewVisibility(R.id.tv_upload_value_notification, View.GONE)
-        remoteViews.setViewVisibility(R.id.tv_download_value_notification, View.GONE)
-        remoteViews.setViewVisibility(R.id.btn_start, View.GONE)
-    }
+
 
     private fun hideButtonSpeedTest() {
         remoteViews.setViewVisibility(R.id.btn_start, View.GONE)
     }
-    private fun showButtonSpeedTest(){
-        remoteViews.setViewVisibility(R.id.btn_start,View.VISIBLE)
-    }
 
-    private fun hideViewDataUsage() {
-        remoteViews.setViewVisibility(R.id.mobile_usage_value, View.GONE)
-        remoteViews.setViewVisibility(R.id.wifi_usage_value, View.GONE)
+    private fun showButtonSpeedTest() {
         remoteViews.setViewVisibility(R.id.btn_start, View.VISIBLE)
     }
+
+
 
     fun startService(context: Context, sType: ServiceType) {
         val intent = Intent(context, AppForegroundService::class.java)
@@ -337,9 +350,8 @@ class AppForegroundService : Service() {
             ServiceType.BOTH -> {
                 serviceType = when (sType) {
                     ServiceType.DATA_USAGE -> {
-                        hideViewDataUsage()
+//                        hideViewDataUsage()
                         AppSharePreference.INSTANCE.saveServiceType(
-
                             ServiceType.SPEED_MONITOR
                         )
                         isServiceDataUsageStarted = false
@@ -347,14 +359,19 @@ class AppForegroundService : Service() {
                         ServiceType.SPEED_MONITOR
                     }
                     else -> {
-                        hideViewSpeedMonitor()
+//                        hideViewSpeedMonitor()
                         AppSharePreference.INSTANCE.saveServiceType(
-
                             ServiceType.DATA_USAGE
                         )
                         isServiceSpeedMonitorStarted = false
                         ServiceType.DATA_USAGE
                     }
+                }
+                val intent = Intent(context, AppForegroundService::class.java)
+                if (buildMinVersionO()) {
+                    context.applicationContext.startForegroundService(intent)
+                } else {
+                    context.applicationContext.startService(intent)
                 }
             }
             else -> {

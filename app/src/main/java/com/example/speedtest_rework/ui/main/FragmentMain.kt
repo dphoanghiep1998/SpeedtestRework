@@ -28,6 +28,7 @@ import com.example.speedtest_rework.base.dialog.PermissionDialog
 import com.example.speedtest_rework.base.dialog.RateCallBack
 import com.example.speedtest_rework.base.dialog.RateDialog
 import com.example.speedtest_rework.base.fragment.BaseFragment
+import com.example.speedtest_rework.common.extensions.showBannerAds
 import com.example.speedtest_rework.common.utils.*
 import com.example.speedtest_rework.common.utils.AppSharePreference.Companion.INSTANCE
 import com.example.speedtest_rework.databinding.FragmentMainBinding
@@ -55,16 +56,16 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
     ): View {
         binding = FragmentMainBinding.inflate(layoutInflater, container, false)
         loadLanguage()
-        initView()
         changeBackPressCallBack()
+        initView()
         observeIsScanning()
+        showBannerAds(binding.bannerAds)
         notificationHandleIntentFlow()
         return binding.root
     }
 
 
     private fun initView() {
-
         initLanguageDialog()
         initViewPager()
         initBottomNavigation()
@@ -104,7 +105,7 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
 
     private fun initDrawerAction() {
         binding.containerFeedback.root.clickWithDebounce { feedBack() }
-        binding.containerPolicy.root.clickWithDebounce { openLink("http://www.facebook.com") }
+        binding.containerPolicy.root.clickWithDebounce { openLink(Constant.POLICY_LINK) }
         binding.containerShare.root.clickWithDebounce { shareApp() }
         binding.containerRate.root.clickWithDebounce { rateApp() }
         val saveServiceType =
@@ -159,7 +160,6 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
                     AppForegroundService.getInstance()
                         .stopService(requireContext(), ServiceType.DATA_USAGE)
                     binding.tvDesDataUsage.visibility = View.GONE
-
                 }
             }
             if (saveServiceType == ServiceType.SPEED_MONITOR || saveServiceType == ServiceType.BOTH) {
@@ -252,19 +252,21 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
     }
 
     private fun notificationHandleIntentFlow() {
+        Log.d("TAG", "notificationHandleIntentFlow: ")
         val actionShowDataUsage =
             requireActivity().intent.extras?.getString(Constant.KEY_ACTION_DATA_USAGE)
         val actionDoSpeedTest =
             requireActivity().intent.extras?.getString(Constant.KEY_ACTION_SPEED_TEST)
 
         if (actionShowDataUsage != null) {
-            if (viewModel.mScanStatus.value != ScanStatus.SCANNING)
-                navigateToPage(R.id.action_fragmentMain_to_fragmentDataUsage)
+            if (viewModel.mScanStatus.value != ScanStatus.SCANNING) navigateToPage(
+                R.id.fragmentMain,
+                R.id.action_fragmentMain_to_fragmentDataUsage
+            )
         }
 
         if (actionDoSpeedTest != null) {
             if (viewModel.mScanStatus.value != ScanStatus.SCANNING) {
-                Log.d("TAG", "notificationHandleIntentFlow: ")
                 viewModel.setScanStatus(ScanStatus.SCANNING)
             }
         }
@@ -281,7 +283,6 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
             fragmentList, childFragmentManager, lifecycle
         )
         binding.viewPager.adapter = adapter
-
         binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
 
             override fun onPageSelected(position: Int) {
@@ -436,6 +437,20 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
             }
         }
 
+//    private val notificationPermissionLauncher =
+//        registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+//            if(checkNotificationPermission()){
+//
+//            }
+//        }
+//
+//    private fun checkNotificationPermission(): Boolean {
+//        return ContextCompat.checkSelfPermission(
+//            requireContext(),
+//            Manifest.permission.POST_NOTIFICATIONS
+//        ) == PackageManager.PERMISSION_GRANTED
+//    }
+
     private fun actionWhenPermissionGranted() {
         binding.swSwitchDataUsage.isChecked = true
         binding.tvDesDataUsage.visibility = View.VISIBLE
@@ -469,7 +484,7 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
         if (star < 4) {
             return
         }
-        openLink("http://www.facebook.com")
+        openLink(Constant.URL_APP)
     }
 
     override fun onStartClicked() {

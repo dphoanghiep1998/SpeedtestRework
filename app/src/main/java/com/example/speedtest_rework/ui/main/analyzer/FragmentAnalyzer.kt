@@ -114,6 +114,7 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper, ListSizeListener {
             if (::wiFiData.isInitialized) {
                 when (it) {
                     WiFiBand.GHZ5 -> {
+
                         binding.graphNavigation.visibility = View.VISIBLE
                         binding.tvInfo.text = getString(R.string.GHZ5)
                         wiFiChannelPair = it.wiFiChannels.wiFiChannelPairs()[0]
@@ -123,6 +124,13 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper, ListSizeListener {
                         adapter.setData(wiFiData.copy(), 5320, 4900)
                         navButton[0].isSelected = true
                         navButton[0].setTextColor(getColor(R.color.gray_900))
+                        navButton.forEachIndexed { index, textView ->
+                            if (index != 0) {
+                                textView.isSelected = false
+                                textView.setTextColor(getColor(R.color.gray_100))
+                            }
+
+                        }
                         updateView()
                         navButton.forEachIndexed { index, item ->
                             kotlin.run {
@@ -147,6 +155,10 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper, ListSizeListener {
                         }
                     }
                     WiFiBand.GHZ2 -> {
+                        navButton.forEach { textview ->
+                            textview.isSelected = false
+                            textview.setTextColor(getColor(R.color.gray_100))
+                        }
                         binding.tvInfo.text = getString(R.string.GHZ2)
                         wiFiChannelPair = it.wiFiChannels.wiFiChannelPairs()[0]
                         adapter.setData(wiFiData.copy(), 2499, 2400)

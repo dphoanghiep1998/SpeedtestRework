@@ -42,7 +42,11 @@ class WifiDetectorAdapter(private val listener: ItemDeviceHelper) :
             } else {
                 binding.imvFlag.setImageResource(R.drawable.ic_flag_inactive)
             }
-            binding.tvDeviceName.text = mList[position].device_name
+            if(position != 0){
+                binding.tvDeviceName.text = itemView.context.getString(mList[position].device_name.toInt())
+            }else{
+                binding.tvDeviceName.text = "${mList[position].device_name} (${itemView.context.getString(R.string.my_device)})"
+            }
             binding.tvDeviceIp.text = mList[position].device_ip
             binding.imvFlag.clickWithDebounce {
                 if (checkDevice(mList[position].device_ip)) {

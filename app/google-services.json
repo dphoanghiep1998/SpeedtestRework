@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "656290821700",
+    "project_id": "speed-test-nekosoft",
+    "storage_bucket": "speed-test-nekosoft.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:656290821700:android:2e894810383f068a786e11",
+        "android_client_info": {
+          "package_name": "com.nekosoft.internet.android.speedtest"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "656290821700-fmmuh71hbkvi3skh0b0f9d4bdecnrdv8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nekosoft.internet.android.speedtest",
+            "certificate_hash": "c439bb9ccfba67a57f4ba5a108162e139f7a6c97"
+          }
+        },
+        {
+          "client_id": "656290821700-odps4dkr6mrm9cpmsc6dbn8o293919if.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBphpYT84aMv8PCuCR8g4se22V7W5gn7I8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "656290821700-odps4dkr6mrm9cpmsc6dbn8o293919if.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

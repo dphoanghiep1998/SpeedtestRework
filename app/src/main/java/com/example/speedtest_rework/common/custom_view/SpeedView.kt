@@ -32,11 +32,7 @@ import com.airbnb.lottie.value.LottieValueCallback
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
 import com.example.speedtest_rework.R
-import com.example.speedtest_rework.common.utils.Constant
-import com.example.speedtest_rework.common.utils.NetworkUtils
-import com.example.speedtest_rework.common.utils.buildMinVersionQ
-import com.example.speedtest_rework.common.utils.format
-import com.example.speedtest_rework.common.utils.roundOffDecimal
+import com.example.speedtest_rework.common.utils.*
 import com.example.speedtest_rework.core.SpeedTest
 import com.example.speedtest_rework.core.serverSelector.TestPoint
 import com.example.speedtest_rework.data.model.HistoryModel
@@ -151,6 +147,7 @@ class SpeedView(
             binding.containerNoNetwork.visibility = View.GONE
             binding.tvGo.visibility = View.VISIBLE
         }
+
     }
 
 
@@ -191,7 +188,6 @@ class SpeedView(
         binding.loading.addAnimatorListener(object : Animator.AnimatorListener {
 
             override fun onAnimationStart(p0: Animator) {
-                showLoading()
             }
 
             override fun onAnimationEnd(p0: Animator) {
@@ -208,33 +204,16 @@ class SpeedView(
             override fun onAnimationRepeat(p0: Animator) {
             }
 
-
         })
-        binding.btnStart.setOnTouchListener(object : OnTouchListener {
-            override fun onTouch(p0: View?, p1: MotionEvent?): Boolean {
-                when (p1?.action) {
-                    MotionEvent.ACTION_DOWN -> {
-                        changeColorWhenPressDown()
-                    }
-                    MotionEvent.ACTION_UP -> {
-                        changeColorWhenRelease()
-                        if (type == ConnectionType.UNKNOWN) {
-                            openConnectivitySetting()
-                            return true
-                        }
-                        listener?.onStart()
-                    }
-                    MotionEvent.ACTION_CANCEL -> {
-                        changeColorWhenRelease()
-                    }
-                    MotionEvent.ACTION_OUTSIDE -> {
-                        changeColorWhenRelease()
-                    }
+        binding.btnStart.touchWithDebounce(action_press = { changeColorWhenPressDown() },
+            action_press_release = { changeColorWhenRelease() },
+            action_release = {
+                if (type == ConnectionType.UNKNOWN) {
+                    openConnectivitySetting()
+                } else {
+                    listener?.onStart()
                 }
-                return true
-            }
-
-        })
+            })
         binding.speedView.textSize = 40f
         binding.speedView.withTremble = false
     }
@@ -530,8 +509,9 @@ class SpeedView(
 
             override fun onCriticalFailure(err: String?) {
                 (context as Activity).runOnUiThread {
-                    forceStop()
-                    resetView()
+                    listener?.onError()
+//                    forceStop()
+//                    resetView()
                 }
             }
         })
@@ -603,13 +583,13 @@ class SpeedView(
         binding.tvCurrency.setCompoundDrawablesWithIntrinsicBounds(
             R.drawable.ic_download, 0, 0, 0
         )
+        binding.speedView.visibility = GONE
         binding.speedView.ticks = listOf()
         binding.speedView.setInitDone(false)
         binding.speedView.stop()
-        hideTopView()
+//        hideTopView()
         binding.loading.cancelAnimation()
         binding.tvCurrency.visibility = GONE
-        binding.speedView.visibility = GONE
         binding.tvDownloadValue.visibility = GONE
         binding.placeholderDownload.visibility = VISIBLE
         binding.placeholderDownload.clearAnimation()

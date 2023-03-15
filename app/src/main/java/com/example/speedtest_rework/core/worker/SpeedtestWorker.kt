@@ -165,7 +165,7 @@ abstract class SpeedtestWorker(private val backend: TestPoint, config: Speedtest
                 val progress = (t + bonusT) / (config.time_ul_max * 1000).toDouble()
                 speed =
                     speed * 8 * config.overheadCompensationFactor / if (config.useMebibits) 1048576.0 else 1000000.0
-                ul = speed
+                ul = speed * 1.2
                 if (progress > 0) {
                     onUploadUpdate(ul, if (progress > 1) 1.0 else progress)
                 }

@@ -3,10 +3,13 @@ pluginManagement {
         gradlePluginPortal()
         google()
         mavenCentral()
+        maven {
+            url 'https://artifact.bytedance.com/repository/pangle/'
+        }
     }
 }
 
 rootProject.name = "SpeedTest_Rework"
 include ':app'
 include ':speedviewlib'
-
+include ':libads'

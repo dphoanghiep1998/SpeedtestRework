@@ -192,7 +192,7 @@ open class PointerSpeedometer @JvmOverloads constructor(
             speedometerPaint
         )
         canvas.drawArc(
-            rectF,
+            speedometerRect,
             getStartDegree().toFloat(),
             position,
             false,
@@ -230,8 +230,8 @@ open class PointerSpeedometer @JvmOverloads constructor(
             Shader.TileMode.CLAMP
         )
         indicatorPath.reset()
-        indicatorPath.moveTo(getCenterX() - 10f, getViewSize() * 0.2f)
-        indicatorPath.lineTo(getCenterX() + 10f, getViewSize() * 0.2f)
+        indicatorPath.moveTo(getCenterX() - 10f, getViewSize() * 0.3f)
+        indicatorPath.lineTo(getCenterX() + 10f, getViewSize() * 0.3f)
         indicatorPath.lineTo(getCenterX() + (indicatorWidth + 20) / 2, getViewSize() / 2 + 30)
         indicatorPath.lineTo(getCenterX() - (indicatorWidth - 20) / 2, getViewSize() / 2 + 30)
         indicatorPaint.color = 0xFFFFFFFF.toInt()

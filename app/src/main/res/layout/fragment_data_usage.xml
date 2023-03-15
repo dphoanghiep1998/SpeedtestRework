@@ -7,40 +7,41 @@
     android:background="@color/gray_700">
 
 
-        <ImageView
-            android:id="@+id/btn_back"
-            android:layout_width="@dimen/_38sdp"
-            android:layout_height="@dimen/_38sdp"
-            android:contentDescription="@string/test"
-            android:foreground="@drawable/ripple_effect_corner_fg"
-            android:padding="@dimen/_8sdp"
-            android:src="@drawable/ic_back"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <ImageView
+        android:id="@+id/btn_back"
+        android:layout_width="@dimen/_38sdp"
+        android:layout_height="@dimen/_38sdp"
+        android:contentDescription="@string/test"
+        android:foreground="@drawable/ripple_effect_corner_fg"
+        android:padding="@dimen/_8sdp"
+        android:src="@drawable/ic_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/data_usage"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_18sdp"
-            app:layout_constraintBottom_toBottomOf="@id/btn_back"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/btn_back" />
-
+    <TextView
+        android:id="@id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/app_font_700"
+        android:text="@string/data_usage"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_18sdp"
+        app:layout_constraintBottom_toBottomOf="@id/btn_back"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/btn_back" />
 
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/container_header"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_40sdp"
-        android:layout_marginTop="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/_12sdp"
         android:background="@color/gray_900"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:weightSum="4"
-        app:layout_constraintTop_toBottomOf="@id/btn_back">
+        app:layout_constraintTop_toBottomOf="@id/tv_title">
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="0dp"
@@ -51,9 +52,9 @@
 
             <TextView
                 android:id="@+id/tv_filter"
-                android:drawablePadding="@dimen/_2sdp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:drawablePadding="@dimen/_2sdp"
                 android:text="@string/thirty_day"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_14sdp"
@@ -131,7 +132,7 @@
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:weightSum="4"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintBottom_toTopOf="@id/banner_ads">
 
         <TextView
             android:layout_width="0dp"
@@ -172,13 +173,20 @@
             android:textColor="@color/white"
             android:textSize="@dimen/_14sdp" />
     </androidx.appcompat.widget.LinearLayoutCompat>
-    <LinearLayout
-        android:visibility="gone"
-        android:id="@+id/container_loading"
-        android:gravity="center"
-        android:background="@color/background_main"
+
+    <FrameLayout
+        android:id="@+id/banner_ads"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/container_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background_main"
+        android:gravity="center"
+        android:visibility="gone">
 
         <ProgressBar
             android:layout_width="@dimen/_50sdp"

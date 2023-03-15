@@ -1,22 +1,19 @@
 package com.example.speedtest_rework.ui.data_usage
 
-import android.app.Dialog
 import android.content.Context
 import android.graphics.Insets
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.*
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import androidx.activity.OnBackPressedCallback
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.speedtest_rework.R
+import com.example.speedtest_rework.base.fragment.BaseFragment
+import com.example.speedtest_rework.common.extensions.showBannerAds
 import com.example.speedtest_rework.common.utils.buildMinVersionR
 import com.example.speedtest_rework.common.utils.clickWithDebounce
 import com.example.speedtest_rework.databinding.FragmentDataUsageBinding
@@ -27,39 +24,34 @@ import com.example.speedtest_rework.viewmodel.Order
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
 import java.math.RoundingMode
 
-class FragmentDataUsage : DialogFragment() {
+class FragmentDataUsage : BaseFragment() {
     private lateinit var binding: FragmentDataUsageBinding
     private lateinit var adapter: DataUsageAdapter
     private val viewModel: SpeedTestViewModel by activityViewModels()
     private lateinit var popupWindow: PopupWindow
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val root = ConstraintLayout(requireContext())
-        root.layoutParams = ViewGroup.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
-        )
-        val dialog = Dialog(requireContext())
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setContentView(root)
-        dialog.window!!.setBackgroundDrawable(ColorDrawable(getColor(R.color.background_main)))
-        dialog.window!!.setLayout(
-            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
-        )
-
-        return dialog
-    }
+    //    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+//        val root = ConstraintLayout(requireContext())
+//        root.layoutParams = ViewGroup.LayoutParams(
+//            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
+//        )
+//        val dialog = Dialog(requireContext())
+//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+//        dialog.setContentView(root)
+//        dialog.window!!.setBackgroundDrawable(ColorDrawable(getColor(R.color.background_main)))
+//        dialog.window!!.setLayout(
+//            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
+//        )
+//
+//        return dialog
+//    }
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentDataUsageBinding.inflate(inflater, container, false)
+        showBannerAds(binding.bannerAds)
         initView()
         return binding.root
-    }
-
-    private fun getColor(resId: Int): Int {
-        return ContextCompat.getColor(requireContext(), resId)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -139,8 +131,8 @@ class FragmentDataUsage : DialogFragment() {
         var width = 0
         width = if (buildMinVersionR()) {
             val windowMetrics: WindowMetrics = requireActivity().windowManager.currentWindowMetrics
-            val insets: Insets = windowMetrics.windowInsets
-                .getInsetsIgnoringVisibility(WindowInsets.Type.systemBars())
+            val insets: Insets =
+                windowMetrics.windowInsets.getInsetsIgnoringVisibility(WindowInsets.Type.systemBars())
             windowMetrics.bounds.width() - insets.left - insets.right
 
         } else {
@@ -192,12 +184,11 @@ class FragmentDataUsage : DialogFragment() {
     }
 
     private fun changeBackPressCallBack() {
-        val callback: OnBackPressedCallback =
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    findNavController().popBackStack()
-                }
+        val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findNavController().popBackStack()
             }
+        }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
     }
 

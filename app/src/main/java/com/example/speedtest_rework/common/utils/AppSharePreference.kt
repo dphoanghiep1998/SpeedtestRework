@@ -6,6 +6,7 @@ import androidx.preference.PreferenceManager
 import com.example.speedtest_rework.services.ServiceType
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import java.lang.reflect.Type
 
 
 inline fun SharedPreferences.edit(func: SharedPreferences.Editor.() -> Unit) {
@@ -25,6 +26,29 @@ class AppSharePreference(private val context: Context) {
             }
             return INSTANCE
         }
+    }
+    inline fun <reified T> saveObjectToSharePreference(key: String, data: T) {
+        val gson = Gson()
+        val json = gson.toJson(data)
+        sharedPreferences().edit().putString(key, json).apply()
+    }
+
+    inline fun <reified T> getObjectFromSharePreference(key: String): T? {
+        val serializedObject: String? = sharedPreferences().getString(key, null)
+        if (serializedObject != null) {
+            val gson = Gson()
+            val type: Type = object : TypeToken<T?>() {}.type
+            return gson.fromJson(serializedObject, type)
+        }
+        return null
+    }
+
+    fun saveListIndexNotification(values: List<String>) {
+        saveStringList(Constant.KEY_INDEX_NOTIFY, values)
+    }
+
+    fun getListIndexNotification(defaultValues: ArrayList<String>): ArrayList<String> {
+        return getStringList(Constant.KEY_INDEX_NOTIFY, defaultValues)
     }
 
     fun saveRecentList(values: List<String>) {
@@ -57,12 +81,26 @@ class AppSharePreference(private val context: Context) {
         return getString(Constant.KEY_LANGUAGE, defaultValues)
     }
 
+    fun saveIsLangSet(values: Boolean){
+        saveBoolean(Constant.KEY_LANG_SET,values)
+    }
+    fun getIsLangSet(defaultValues: Boolean):Boolean{
+        return getBoolean(Constant.KEY_LANG_SET,defaultValues)
+    }
+
     fun saveUnitType(values: String) {
         saveString(Constant.KEY_UNIT, values)
     }
 
     fun getUnitType(defaultValues: String): String {
         return getString(Constant.KEY_UNIT, defaultValues)
+    }
+    fun saveNumNotify(values: Int) {
+        saveInt(Constant.KEY_NUM_NOTI, values)
+    }
+
+    fun getNumNotify(defaultValues: Int): Int {
+        return getInt(Constant.KEY_NUM_NOTI, defaultValues)
     }
 
     fun saveUnitValue(values: String) {
@@ -119,9 +157,44 @@ class AppSharePreference(private val context: Context) {
             defaultValues
         }
     }
+    private fun getStringList(key: String, defaultValues: ArrayList<String>): ArrayList<String> {
+        val gson = Gson()
+        val type = object : TypeToken<ArrayList<String>>() {}.type
+        return try {
+            val returnString = sharedPreferences().getString(key, gson.toJson(defaultValues))
+            gson.fromJson(returnString, type)
+        } catch (e: Exception) {
+            sharedPreferences().edit { putString(key, gson.toJson(defaultValues)) }
+            defaultValues
+        }
+    }
+    private fun saveBoolean(key: String, values: Boolean) {
+        sharedPreferences().edit { putBoolean(key, values) }
+    }
+
+    private fun getBoolean(key: String, defaultValues: Boolean): Boolean {
+        return try {
+            sharedPreferences().getBoolean(key, defaultValues)
+        } catch (e: Exception) {
+            sharedPreferences().edit { putBoolean(key, defaultValues) }
+            defaultValues
+        }
+    }
 
 
 
+    private fun saveInt(key: String, values: Int) = sharedPreferences().edit {
+        putInt(key, values)
+    }
+
+    private fun getInt(key: String, defaultValues: Int): Int {
+        return try {
+            sharedPreferences().getInt(key, defaultValues)
+        } catch (e: Exception) {
+            sharedPreferences().edit { putInt(key, defaultValues) }
+            defaultValues
+        }
+    }
     private fun saveStringSet(key: String, values: HashSet<String>) {
         sharedPreferences().edit { putStringSet(key, values) }
     }
@@ -137,7 +210,7 @@ class AppSharePreference(private val context: Context) {
     private fun defaultSharedPreferences(context: Context): SharedPreferences =
         PreferenceManager.getDefaultSharedPreferences(context)
 
-    private fun sharedPreferences(): SharedPreferences = defaultSharedPreferences(context)
+     fun sharedPreferences(): SharedPreferences = defaultSharedPreferences(context)
 
 
 }

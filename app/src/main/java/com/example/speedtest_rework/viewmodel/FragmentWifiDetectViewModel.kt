@@ -32,13 +32,12 @@ class FragmentWifiDetectViewModel @Inject constructor(@ApplicationContext val co
                     override fun onDeviceFound(device: Device?) {
                         device?.let { it1 ->
                             if (it1.ip == NetworkUtils.wifiIpAddress()) {
-                                val mDeviceName =
-                                    "${Build.MODEL} (${context.getString(R.string.my_device)})"
+                                val mDeviceName = "${Build.MODEL}"
                                 mList.add(0, DeviceModel(mDeviceName, it1.ip))
                             } else {
                                 mList.add(
                                     (DeviceModel(
-                                        context.getString(R.string.unknown_device),
+                                       R.string.unknown_device.toString(),
                                         it1.ip
                                     ))
                                 )

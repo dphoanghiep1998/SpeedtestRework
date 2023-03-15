@@ -1,5 +1,6 @@
 package com.example.speedtest_rework.base.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.speedtest_rework.common.utils.Event
@@ -65,6 +66,7 @@ open class BaseViewModel : ViewModel() {
         onNavigateToPage.postValue(Event(actionId))
     }
     protected open fun parseErrorCallApi(e: Throwable) {
+        Log.d("TAG", "parseErrorCallApi: ")
         isError.value = true
         when (e) {
             is BaseNetworkException -> {

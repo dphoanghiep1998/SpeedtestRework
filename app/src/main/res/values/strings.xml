@@ -43,7 +43,6 @@
     <!--    Bottom Nav    -->
     <string name="speed">Speed</string>
     <string name="wifi_analyzer">Wifi Analyzer</string>
-    <string name="vpn">Vpn</string>
     <string name="result_bottom">Results</string>
     <!--    Unit    -->
     <string name="Mbps" translatable="false">Mbps</string>
@@ -84,6 +83,7 @@
     <string name="graph_y">Signal Strength (dBm)</string>
     <string name="graph_x"> \n Wi-Fi Channels</string>
     <string name="open_setting">OPEN SETTING</string>
+    <string name="open_setting_permission">Open setting</string>
     <string name="no_permission">To use this feature, please accept location permission on your device</string>
     <string name="location_permission">Location permission</string>
     <string name="wifi_standard_legacy" translatable="false">"Wi-Fi 802.11a/b/g"</string>
@@ -102,7 +102,6 @@
     <string name="date">Date</string>
     <string name="delete_all_title">DELETE ALL RESULTS ?</string>
     <string name="delete_all_recent_title">DELETE ALL RECENT ?</string>
-
     <string name="delete_all_content">All results will be deleted</string>
     <string name="delete_all_recent">All recent will be deleted</string>
 
@@ -197,7 +196,7 @@
     <string name="des_signal_first">-Tap Start to test</string>
     <string name="des_signal_second">-Move around, tap Record to note down signal strength on your spot</string>
     <string name="wifi_detector_title">WIFI DETECTOR</string>
-    <string name="device_detector">"devices are using this Wi-Fi"</string>
+    <string name="device_detector">devices are using this Wi-Fi</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="ping_test_title">PING TEST</string>
     <string name="customized">Customized</string>
@@ -255,6 +254,11 @@
     <string name="desc_packet_loss_rate">Packet Loss Rate refers to the ratio of the number of packets lost in the test to the transmitted packets, which is used to reflect the network quality.</string>
     <string name="desc_packet_sent">Packet sent reports the number of times a task went into a send sleep state while waiting for the network to send each packet to the client.</string>
     <string name="packet_received_desc">A task received part of a multipacket batch and was switched out waiting for the client to send the next packet of the batch, or. A task completely finished ...</string>
+    <string name="record">Record</string>
+    <string name="location">Location</string>
+    <string name="unknown_host">Unkown host !</string>
+    <string name="error_ocurred">An error occurred during the scan!</string>
+    <string name="content_notification">We find your network speed seems slow, try to check!</string>
 
 
 </resources>

@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_8sdp"
         android:orientation="vertical"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -278,22 +278,28 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/testBackground"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/topView">
+        app:layout_constraintTop_toBottomOf="@id/topView"
+        app:layout_constraintWidth_percent="0.8">
 
 
         <androidx.cardview.widget.CardView
             android:id="@+id/btn_start_container"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             app:cardBackgroundColor="@color/background_main"
             app:cardCornerRadius="@dimen/_100sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.95"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -303,8 +309,8 @@
 
                 <com.airbnb.lottie.LottieAnimationView
                     android:id="@+id/btn_start"
-                    android:layout_width="@dimen/_250sdp"
-                    android:layout_height="@dimen/_250sdp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:scaleType="centerCrop"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -319,7 +325,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/go"
-                    android:textSize="@dimen/_30sdp"
+                    android:textSize="@dimen/_28sdp"
                     app:colorFirst="@color/gradient_green_start"
                     app:colorSecond="@color/gradient_green_end"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -349,7 +355,10 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/no_network"
+                        android:layout_marginTop="@dimen/_4sdp"
+                        android:gravity="center"
+                        android:maxWidth="@dimen/_100sdp"
+                        android:text="@string/open_setting_permission"
                         android:textColor="@color/white"
                         android:textSize="@dimen/_16sdp"
                         app:layout_constraintEnd_toEndOf="@id/imv_no_network"
@@ -363,13 +372,15 @@
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/loading"
-            android:layout_width="@dimen/_200sdp"
-            android:layout_height="@dimen/_200sdp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.8"
             app:lottie_autoPlay="true"
             app:lottie_rawRes="@raw/connecting" />
 
@@ -390,13 +401,15 @@
 
         <com.github.anastr.speedviewlib.PointerSpeedometer
             android:id="@+id/speedView"
-            android:layout_width="@dimen/_220sdp"
-            android:layout_height="@dimen/_220sdp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.8"
             app:sv_backgroundCircleColor="@android:color/transparent"
             app:sv_indicator="KiteIndicator"
             app:sv_markStyle="ROUND"
@@ -414,7 +427,7 @@
             android:id="@+id/tv_speed_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="-50dp"
+            android:layout_marginTop="@dimen/_minus50sdp"
             android:fontFamily="@font/app_font_700"
             android:text="0.0"
             android:textColor="@color/white"
@@ -428,11 +441,11 @@
             android:id="@+id/tv_currency"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:drawablePadding="@dimen/_4sdp"
             android:text="@string/Mbps"
             android:textColor="@color/white"
             android:textSize="@dimen/_13sdp"
             android:visibility="gone"
-            android:drawablePadding="@dimen/_4sdp"
             app:drawableStartCompat="@drawable/ic_download"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

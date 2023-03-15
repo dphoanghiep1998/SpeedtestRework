@@ -29,15 +29,11 @@ class AskRateDialog(context: Context, private val callback: AskRateCallBack) : D
 
     private fun initView() {
         window?.setLayout(
-            (context.resources.displayMetrics.widthPixels),
-            ViewGroup.LayoutParams.MATCH_PARENT
+            (context.resources.displayMetrics.widthPixels), ViewGroup.LayoutParams.MATCH_PARENT
         )
         window?.setBackgroundDrawableResource(R.color.transparent)
         binding.containerMain.setPadding(
-            0,
-            toDp(16),
-            0,
-            if (getNavBarHeight() > 0) getNavBarHeight() else 16
+            0, toDp(16), 0, if (getNavBarHeight() > 0) getNavBarHeight() else 16
         )
         binding.root.clickWithDebounce {
             dismiss()
@@ -49,6 +45,9 @@ class AskRateDialog(context: Context, private val callback: AskRateCallBack) : D
         binding.btnDeny.clickWithDebounce {
             callback.onDeny()
             dismiss()
+        }
+        binding.containerMain.setOnClickListener {
+
         }
     }
 

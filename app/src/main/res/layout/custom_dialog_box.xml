@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textSize="@dimen/_16sdp"
+        android:fontFamily="@font/app_font_700"
         android:layout_marginHorizontal="@dimen/_12sdp"
         android:text="@string/delete_title"
         android:textColor="@color/white" />
@@ -41,6 +42,7 @@
             android:layout_marginEnd="50dp"
             android:background="@drawable/button_background_start"
             android:clickable="true"
+            android:fontFamily="@font/app_font_500"
             android:textColor="@color/black"
             android:focusable="true" />
 
@@ -51,6 +53,7 @@
             android:layout_marginStart="@dimen/_5sdp"
             android:background="@drawable/button_negative_dialog_box"
             android:clickable="true"
+            android:fontFamily="@font/app_font_500"
             android:textColor="@color/white"
             android:focusable="true" />
     </LinearLayout>

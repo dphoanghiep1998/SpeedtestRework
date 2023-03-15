@@ -14,9 +14,12 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.navigation.fragment.findNavController
+import com.example.speedtest_rework.CustomApplication
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.dialog.PermissionDialog
 import com.example.speedtest_rework.base.fragment.BaseFragment
+import com.example.speedtest_rework.common.extensions.InterAds
+import com.example.speedtest_rework.common.extensions.showInterAds
 import com.example.speedtest_rework.common.utils.buildMinVersionQ
 import com.example.speedtest_rework.common.utils.clickWithDebounce
 import com.example.speedtest_rework.databinding.FragmentToolsBinding
@@ -25,19 +28,21 @@ import com.example.speedtest_rework.services.ServiceType
 
 class FragmentTools : BaseFragment(), PermissionDialog.ConfirmCallback {
     private lateinit var binding: FragmentToolsBinding
+    private lateinit var app: CustomApplication
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentToolsBinding.inflate(layoutInflater)
+        binding = FragmentToolsBinding.inflate(inflater, container, false)
+        app = requireActivity().application as CustomApplication
+        showAdsBottomNav()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        changeBackPressCallBack()
         initView()
     }
 
@@ -45,10 +50,18 @@ class FragmentTools : BaseFragment(), PermissionDialog.ConfirmCallback {
         initButton()
     }
 
+    private fun showAdsBottomNav() {
+        if (!app.showAdsClickBottomNav) {
+            showInterAds(action = {
+                app.showAdsClickBottomNav = true
+            }, InterAds.SWITCH_TAB)
+        }
+    }
+
     private fun initButton() {
         binding.containerDataUsage.clickWithDebounce {
             if (checkAccessSettingPermission(requireContext())) {
-                navigateToPage(R.id.action_fragmentMain_to_fragmentDataUsage)
+                navigateToPage(R.id.fragmentMain, R.id.action_fragmentMain_to_fragmentDataUsage)
             } else {
                 val permissionDialog = PermissionDialog(requireContext(), this)
                 permissionDialog.window?.attributes?.windowAnimations =
@@ -57,17 +70,17 @@ class FragmentTools : BaseFragment(), PermissionDialog.ConfirmCallback {
             }
         }
         binding.containerSignalTest.clickWithDebounce {
-            navigateToPage(R.id.action_fragmentMain_to_fragmentSignalTest)
+            navigateToPage(R.id.fragmentMain, R.id.action_fragmentMain_to_fragmentSignalTest)
         }
 
         binding.containerWifiDetector.clickWithDebounce {
-            navigateToPage(R.id.action_fragmentMain_to_fragmentWifiDetector)
+            navigateToPage(R.id.fragmentMain, R.id.action_fragmentMain_to_fragmentWifiDetector)
         }
-        binding.containerPingTest.clickWithDebounce{
-            navigateToPage(R.id.action_fragmentMain_to_fragmentPingTest)
+        binding.containerPingTest.clickWithDebounce {
+            navigateToPage(R.id.fragmentMain, R.id.action_fragmentMain_to_fragmentPingTest)
         }
         binding.containerWifiAnalyzer.clickWithDebounce {
-            navigateToPage(R.id.action_fragmentMain_to_fragmentAnalyzer)
+            navigateToPage(R.id.fragmentMain, R.id.action_fragmentMain_to_fragmentAnalyzer)
         }
     }
 
@@ -96,15 +109,6 @@ class FragmentTools : BaseFragment(), PermissionDialog.ConfirmCallback {
             false
         }
 
-    private fun changeBackPressCallBack() {
-        val callback: OnBackPressedCallback =
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    findNavController().popBackStack()
-                }
-            }
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
-    }
 
     override fun negativeAction() {
         //do nothing
@@ -113,6 +117,7 @@ class FragmentTools : BaseFragment(), PermissionDialog.ConfirmCallback {
     override fun positiveAction() {
         requestAccessSettingPermission(requireContext())
     }
+
     private val settingPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (checkAccessSettingPermission(requireContext())) {
@@ -121,7 +126,7 @@ class FragmentTools : BaseFragment(), PermissionDialog.ConfirmCallback {
         }
 
     private fun actionWhenPermissionGranted() {
-        navigateToPage(R.id.action_fragmentMain_to_fragmentDataUsage)
+        navigateToPage(R.id.fragmentMain, R.id.action_fragmentMain_to_fragmentDataUsage)
     }
 
     private fun requestAccessSettingPermission(context: Context) {

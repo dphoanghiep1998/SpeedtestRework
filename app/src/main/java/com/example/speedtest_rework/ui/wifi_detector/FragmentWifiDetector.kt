@@ -18,6 +18,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.fragment.BaseFragment
+import com.example.speedtest_rework.common.extensions.showBannerAds
 import com.example.speedtest_rework.common.utils.clickWithDebounce
 import com.example.speedtest_rework.databinding.FragmentWifiDetectorBinding
 import com.example.speedtest_rework.ui.wifi_detector.adapter.WifiDetectorAdapter
@@ -39,7 +40,8 @@ class FragmentWifiDetector : BaseFragment(), ItemDeviceHelper {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentWifiDetectorBinding.inflate(layoutInflater)
+        binding = FragmentWifiDetectorBinding.inflate(inflater, container, false)
+        showBannerAds(binding.bannerAds)
         return binding.root
     }
 
@@ -89,7 +91,12 @@ class FragmentWifiDetector : BaseFragment(), ItemDeviceHelper {
 
     private fun setProgressAnimate(progressTo: Int, duration: Long = 5000) {
         val animation: ObjectAnimator =
-            ObjectAnimator.ofInt(binding.pbProgress, "progress", binding.pbProgress.progress, progressTo)
+            ObjectAnimator.ofInt(
+                binding.pbProgress,
+                "progress",
+                binding.pbProgress.progress,
+                progressTo
+            )
         animation.duration = duration
         animation.interpolator = LinearInterpolator()
         animation.setAutoCancel(true)
@@ -169,7 +176,7 @@ class FragmentWifiDetector : BaseFragment(), ItemDeviceHelper {
     }
 
     private fun onScanFinished() {
-        setProgressAnimate(100,1000)
+        setProgressAnimate(100, 1000)
         binding.imvWifiDetector.setImageDrawable(getDrawable(R.drawable.ic_wifi_detector))
         binding.tvPlaceholder.visibility = View.VISIBLE
         binding.tvNumbers.visibility = View.VISIBLE
@@ -187,8 +194,9 @@ class FragmentWifiDetector : BaseFragment(), ItemDeviceHelper {
 
         }
     }
-    private fun observeWifiName(){
-        shareViewModel.networkName.observe(viewLifecycleOwner){
+
+    private fun observeWifiName() {
+        shareViewModel.networkName.observe(viewLifecycleOwner) {
             binding.tvWifi.text = it
         }
     }

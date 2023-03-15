@@ -24,11 +24,11 @@ abstract class Downloader(
         job = coroutineScope?.launch {
             try {
                 var lastProgressEvent = System.currentTimeMillis()
-                val ckBytes = ckSize * 1048576L
+                val ckBytes = ckSize * 1024
                 var bytesLeft: Long = 0
                 val url = URL(path)
                 val httpsConn = url.openConnection() as HttpsURLConnection
-                httpsConn.sslSocketFactory = SSLCertificateSocketFactory.getInsecure(0, null);
+                httpsConn.sslSocketFactory = SSLCertificateSocketFactory.getInsecure(0, null)
                 httpsConn.setRequestProperty("Cache-Control", "no-cache")
                 httpsConn.setRequestProperty("Expires", "-1")
                 httpsConn.setRequestProperty("Pragma", "no-cache")
@@ -50,7 +50,6 @@ abstract class Downloader(
                             onProgress(totDownloaded)
                         }
                     }
-                    Log.d("TAG", "startDownload: "+totDownloaded)
 
                     if (!stopASAP) {
                         break

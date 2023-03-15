@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.activityViewModels
 import com.daimajia.androidanimations.library.Techniques
@@ -48,6 +49,7 @@ class FragmentSpeedTest : BaseFragment() {
         observeScanStatus()
         observeWifiName()
         observeUnitType()
+        observeGetInformation()
         handleWhenNoConnection()
         return binding.root
     }
@@ -57,6 +59,32 @@ class FragmentSpeedTest : BaseFragment() {
         initView()
     }
 
+    private fun observeGetInformation() {
+        viewModel.isGetInformation.observe(viewLifecycleOwner) {
+            if (!it) {
+                binding.clSpeedview.setData(ConnectionType.UNKNOWN)
+                binding.tvIspName.text = getString(R.string.no_connection_isp)
+                if (viewModel.mScanStatus.value == ScanStatus.SCANNING) {
+                    binding.clSpeedview.forceStop()
+                    binding.clSpeedview.resetView()
+                }
+            } else {
+                binding.clSpeedview.setData(viewModel.typeNetwork.value!!)
+            }
+        }
+    }
+//    private fun observeError(){
+//        viewModel.isError.observe(viewLifecycleOwner){
+//            if(it){
+//                binding.clSpeedview.setData(ConnectionType.UNKNOWN)
+//                binding.tvIspName.text = getString(R.string.no_connection_isp)
+//                if (viewModel.mScanStatus.value == ScanStatus.SCANNING) {
+//                    binding.clSpeedview.forceStop()
+//                    binding.clSpeedview.resetView()
+//                }
+//            }
+//        }
+//    }
 
     private fun initView() {
         initExpandView()
@@ -65,6 +93,7 @@ class FragmentSpeedTest : BaseFragment() {
 
     private fun initSpeedView() {
         binding.clSpeedview.onCallBackListener(object : SpeedView.OnCallbackListener {
+
             override fun onEnd(historyModel: HistoryModel?) {
                 if (historyModel != null) {
                     viewModel.insertNewHistoryAction(historyModel)
@@ -74,20 +103,20 @@ class FragmentSpeedTest : BaseFragment() {
                         val bundle = Bundle()
                         bundle.putParcelable(Constant.KEY_TEST_MODEL, historyModel)
                         bundle.putBoolean(Constant.KEY_FROM_SPEED_TEST_FRAGMENT, true)
-                        navigateToPage(R.id.action_fragmentMain_to_fragmentResultDetail, bundle)
+                        navigateToPage(R.id.fragmentMain,R.id.action_fragmentMain_to_fragmentResultDetail, bundle)
                         viewModel.speedTestDone = true
                     }
-
                 }
             }
 
             override fun onError() {
                 viewModel.setScanStatus(ScanStatus.HARD_RESET)
                 viewModel.speedTestDone = true
+                viewModel.setIsConnectivityChanged(true)
             }
 
             override fun onStart() {
-                if (viewModel.speedTestDone){
+                if (viewModel.speedTestDone) {
                     viewModel.setScanStatus(ScanStatus.SCANNING)
                     viewModel.speedTestDone = false
                 }
@@ -104,11 +133,20 @@ class FragmentSpeedTest : BaseFragment() {
     }
 
     private fun initExpandView() {
+        if(!isExpanded){
+            binding.viewSmall.visibility = View.VISIBLE
+            binding.viewExpanded.visibility = View.GONE
+        }else{
+            binding.viewSmall.visibility = View.GONE
+            binding.viewExpanded.visibility = View.VISIBLE
+        }
         binding.containerConfig.clickWithDebounce {
             val layoutParams = binding.containerExpandView.layoutParams
             if (!isExpanded) {
                 YoYo.with(Techniques.SlideInLeft).duration(400L).onStart {
                     binding.containerExpandView.setBackgroundResource(R.drawable.background_gradient_config)
+                    binding.viewSmall.visibility = View.GONE
+                    binding.viewExpanded.visibility = View.VISIBLE
                     layoutParams.width = 0
                     binding.containerExpandView.layoutParams = layoutParams
                     binding.line2.visibility = View.VISIBLE
@@ -120,6 +158,8 @@ class FragmentSpeedTest : BaseFragment() {
                     layoutParams.width = ConstraintLayout.LayoutParams.WRAP_CONTENT
                     binding.containerExpandView.setBackgroundResource(R.drawable.background_gradient_config_sizing)
                     binding.line2.visibility = View.GONE
+                    binding.viewSmall.visibility = View.VISIBLE
+                    binding.viewExpanded.visibility = View.GONE
                     binding.containerExpandView.layoutParams = layoutParams
                     isExpanded = false
                 }.playOn(binding.containerConfig2)
@@ -274,14 +314,6 @@ class FragmentSpeedTest : BaseFragment() {
 
     private fun loadServerAndNetWorkInfo() {
         try {
-            if (viewModel.isError.value == true) {
-                binding.clSpeedview.setData(testPoint!!, ConnectionType.UNKNOWN)
-                if (viewModel.mScanStatus.value == ScanStatus.SCANNING) {
-                    binding.clSpeedview.forceStop()
-                    binding.clSpeedview.resetView()
-                }
-                return
-            }
             when (viewModel.typeNetwork.value) {
                 ConnectionType.WIFI -> {
                     val testModel = HistoryModel(
@@ -325,6 +357,9 @@ class FragmentSpeedTest : BaseFragment() {
                 if (viewModel.mScanStatus.value == ScanStatus.SCANNING) {
                     viewModel.setScanStatus(ScanStatus.HARD_RESET)
                     binding.clSpeedview.forceStop()
+                    binding.clSpeedview.resetView()
+                    viewModel.speedTestDone = true
+                    Toast.makeText(requireContext(),getString(R.string.error_ocurred),Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -357,6 +392,7 @@ class FragmentSpeedTest : BaseFragment() {
             binding.tvIspNameHidden.text = network.selfIsp
         } else {
             binding.tvIspNameHidden.text = getString(R.string.no_connection_isp)
+            binding.tvIspName.text = getString(R.string.no_connection_isp)
         }
 
     }
@@ -391,6 +427,7 @@ class FragmentSpeedTest : BaseFragment() {
 
     private fun observeScanStatus() {
         viewModel.mScanStatus.observe(viewLifecycleOwner) {
+            Log.d("TAG", "observeScanStatus: " + it)
             when (it) {
                 ScanStatus.DONE -> {
                     binding.clSpeedview.onScanningDone()
@@ -418,6 +455,7 @@ class FragmentSpeedTest : BaseFragment() {
 
                         }.playOn(binding.inforHidden)
                     }.playOn(binding.containerExpandView)
+                    viewModel.speedTestDone = true
                 }
             }
         }

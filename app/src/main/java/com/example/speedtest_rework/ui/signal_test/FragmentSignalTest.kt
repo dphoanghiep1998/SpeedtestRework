@@ -18,6 +18,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.dialog.SignalInfoDialog
 import com.example.speedtest_rework.base.fragment.BaseFragment
+import com.example.speedtest_rework.common.extensions.InterAds
+import com.example.speedtest_rework.common.extensions.showBannerAds
+import com.example.speedtest_rework.common.extensions.showInterAds
 import com.example.speedtest_rework.common.utils.NetworkUtils
 import com.example.speedtest_rework.common.utils.clickWithDebounce
 import com.example.speedtest_rework.databinding.FragmentSignalTestBinding
@@ -41,7 +44,8 @@ class FragmentSignalTest : BaseFragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        binding = FragmentSignalTestBinding.inflate(layoutInflater)
+        binding = FragmentSignalTestBinding.inflate(inflater,container,false)
+        showBannerAds(binding.bannerAds)
         return binding.root
     }
 
@@ -117,6 +121,7 @@ class FragmentSignalTest : BaseFragment() {
                         binding.signalMeter.initSignalView()
                         viewModel.setSignalScanning(false)
                     }
+                    showInterAds({},InterAds.SIGNAL_TEST_STOP)
 
                 }
             } else {
@@ -172,7 +177,7 @@ class FragmentSignalTest : BaseFragment() {
             mList?.let {
                 it.add(
                     (Pair(
-                        "Location ${adapter.itemCount + 1}", "$currentValue dBm"
+                        "${getString(R.string.location)} ${adapter.itemCount + 1}", "$currentValue dBm"
                     ))
                 )
                 viewModel.setListSignalLocation(it)

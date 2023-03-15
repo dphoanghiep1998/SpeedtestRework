@@ -4,21 +4,23 @@ import android.content.Context
 import android.content.Intent
 import android.widget.Toast
 import com.example.speedtest_rework.R
+import com.example.speedtest_rework.common.custom_view.UnitType
+import com.example.speedtest_rework.common.utils.DateTimeUtils
 import com.example.speedtest_rework.common.utils.FileUtils
+import com.example.speedtest_rework.common.utils.format
 import com.example.speedtest_rework.data.model.HistoryModel
 import com.github.doyaaaaaken.kotlincsv.dsl.csvWriter
 import java.io.File
 
 class DatabaseHelper
-    (val context: Context) {
+    (val context: Context, val unitType: UnitType) {
 
     private fun getCSVFile(): String {
         return "SpeedTestResult.csv"
     }
 
     fun exportDatabaseToCSVFile(item: HistoryModel) {
-        Toast.makeText(context, context.getText(R.string.generating_csv), Toast.LENGTH_LONG)
-            .show()
+        Toast.makeText(context, context.getText(R.string.generating_csv), Toast.LENGTH_LONG).show()
         val csvFile = FileUtils.generateFile(context, getCSVFile())
         if (csvFile != null) {
             exportHistoryModel(item, csvFile)
@@ -36,7 +38,6 @@ class DatabaseHelper
         csvWriter().open(file, append = false) {
             writeRow(
                 listOf(
-                    "[Id]",
                     "[Name Network]",
                     "[Internal IP]",
                     "[External IP]",
@@ -53,22 +54,39 @@ class DatabaseHelper
 
             writeRow(
                 listOf(
-                    item.id,
                     item.name_network,
                     item.internalIP,
                     item.externalIP,
                     item.isp,
-                    item.jitter,
-                    item.loss,
+                    "${item.jitter} ms",
+                    "${item.loss} ms",
                     item.network,
-                    item.ping,
-                    item.time,
-                    item.upload,
-                    item.download,
+                    "${item.ping} ms",
+                    DateTimeUtils.getDateConvertedToResult(item.time),
+                    "${format(convert(item.upload))} ${context.getString(unitType.unit)}",
+                    "${format(convert(item.download))} ${context.getString(unitType.unit)}",
                 )
             )
 
 
         }
+    }
+
+    private fun convert(value: Double): Double {
+        if (unitType == UnitType.MBS) {
+            return convertMbpsToMbs(value)
+        }
+        if (unitType == UnitType.KBS) {
+            return convertMbpsToKbs(value)
+        }
+        return value
+    }
+
+    private fun convertMbpsToMbs(value: Double): Double {
+        return value * .125
+    }
+
+    private fun convertMbpsToKbs(value: Double): Double {
+        return value * 125
     }
 }

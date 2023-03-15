@@ -22,18 +22,15 @@ import kotlin.math.roundToInt
 @HiltViewModel
 class FragmentPingTestViewModel @Inject constructor() : BaseViewModel() {
 
-    var pingStatus = MutableLiveData(ScanStatus.NONE)
     var pingListStatus = MutableLiveData(ScanStatus.NONE)
     var pingNormal: Ping? = null
     var listRecent = MutableLiveData<List<String>>()
     var stopPing = true
     var pingAdvanced: Ping? = null
-    var flagChangeBack = MutableLiveData(false)
-    private val listPingResult = MutableLiveData<MutableList<PingResultTest>>()
-    val listPingResultLive: LiveData<MutableList<PingResultTest>> = listPingResult
-    fun setDataPingResult(list: MutableList<PingResultTest>) {
-        listPingResult.postValue(list)
-    }
+    var isGetHostError = MutableLiveData(false)
+
+    val listPingResultLive: MutableLiveData<MutableList<PingResultTest>> = MutableLiveData()
+
 
     init {
         listRecent.value = AppSharePreference.INSTANCE.getRecentList(listOf())
@@ -66,7 +63,7 @@ class FragmentPingTestViewModel @Inject constructor() : BaseViewModel() {
                             }
 
                             override fun onError(e: Exception) {
-                                if(loop == 11){
+                                if (loop == 11) {
                                     pingListStatus.postValue(ScanStatus.DONE)
                                 }
                             }
@@ -77,44 +74,41 @@ class FragmentPingTestViewModel @Inject constructor() : BaseViewModel() {
 
     fun getPingResultAdvanced(address: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val url = URL(address)
-            val labels = url.host.split("\\.")
-            val result = labels.joinToString(separator = ".") { s ->
-                java.net.IDN.toASCII(s)
-            }
-            pingAdvanced =
-                Ping.onAddress(result).setTimeOutMillis(0).setTimes(10).setDelayMillis(1000)
-                    .doPing(object : Ping.PingListener {
-                        override fun onResult(pingResult: PingResult) {
-                            if (!stopPing) {
-                                Log.d("TAG", "onResult: " + pingResult.timeTaken)
-
-                                listPingResult.value?.add(
-                                    PingResultTest(
-                                        pingResult.timeTaken,
-                                        pingResult.isReachable
+            try {
+                isGetHostError.postValue(false)
+                val url = URL(address)
+                val labels = url.host.split("\\.")
+                val result = labels.joinToString(separator = ".") { s ->
+                    java.net.IDN.toASCII(s)
+                }
+                pingAdvanced =
+                    Ping.onAddress(result).setTimeOutMillis(0).setTimes(10).setDelayMillis(1000)
+                        .doPing(object : Ping.PingListener {
+                            override fun onResult(pingResult: PingResult) {
+                                if (!stopPing) {
+                                    listPingResultLive.value?.add(
+                                        PingResultTest(
+                                            pingResult.timeTaken, pingResult.isReachable
+                                        )
                                     )
-                                )
-                                Log.d("TAG", "listPingResult: " + listPingResult.value?.size)
-                                Log.d(
-                                    "TAG",
-                                    "listPingResult item : " + (listPingResult.value?.get(
-                                        listPingResult.value!!.size - 1
-                                    )?.ping_value)
-                                )
-                                listPingResult.notifyObserver()
+                                    listPingResultLive.notifyObserver()
+                                }
+
                             }
 
-                        }
+                            override fun onFinished(pingStats: PingStats) {
+                            }
 
-                        override fun onFinished(pingStats: PingStats) {
-                        }
+                            override fun onError(e: Exception) {
+                                Log.d("TAG", "onError: $e")
+                                isGetHostError.postValue(true)
+                            }
+                        })
+            } catch (e: Exception) {
+                Log.d("TAG", "getPingResultAdvanced: " + e.message)
+                isGetHostError.postValue(true)
+            }
 
-                        override fun onError(e: Exception) {
-                            Log.d("TAG", "onError: $e")
-
-                        }
-                    })
         }
 
 

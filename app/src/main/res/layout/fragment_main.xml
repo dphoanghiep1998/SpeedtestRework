@@ -7,7 +7,8 @@
         android:id="@+id/drawer_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/background_main">
+        android:background="@color/background_main"
+        android:tag="fragment_main">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -37,8 +38,8 @@
 
                 <ImageView
                     android:id="@+id/back_btn"
-                    android:layout_width="40dp"
-                    android:layout_height="50dp"
+                    android:layout_width="@dimen/_38sdp"
+                    android:layout_height="@dimen/_38sdp"
                     android:background="@drawable/mask"
                     android:clickable="true"
                     android:contentDescription="@string/test"
@@ -68,11 +69,10 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
 
-
                 <ImageView
                     android:id="@+id/imv_stop"
-                    android:layout_width="@dimen/_40sdp"
-                    android:layout_height="@dimen/_40sdp"
+                    android:layout_width="@dimen/_38sdp"
+                    android:layout_height="@dimen/_38sdp"
                     android:background="@drawable/ripple_effect_corner_fg"
                     android:contentDescription="@string/test"
                     android:padding="@dimen/_8sdp"
@@ -110,12 +110,16 @@
                 app:itemTextAppearanceInactive="@style/BottomNavigationView"
                 app:itemTextColor="@color/custom_color_bottom_nav"
                 app:labelVisibilityMode="labeled"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/banner_ads"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:menu="@menu/bottom_nav_menu" />
 
-
+            <FrameLayout
+                android:id="@+id/banner_ads"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -170,7 +174,7 @@
 
                         <TextView
                             android:id="@+id/tv_speed_monitor"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/_6sdp"
                             android:layout_marginLeft="@dimen/_16sdp"
@@ -178,12 +182,13 @@
                             android:textColor="@color/white"
                             android:textSize="@dimen/_14sdp"
                             app:layout_constraintBottom_toTopOf="@id/tv_des_monitor"
+                            app:layout_constraintEnd_toStartOf="@id/sw_switch_monitor"
                             app:layout_constraintStart_toEndOf="@+id/imv_speed_monitor"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
                             android:id="@+id/tv_des_monitor"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:maxWidth="@dimen/_160sdp"
                             android:maxLines="1"
@@ -196,6 +201,7 @@
                             app:autoSizeStepGranularity="1dp"
                             app:autoSizeTextType="uniform"
                             app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/sw_switch_monitor"
                             app:layout_constraintStart_toStartOf="@+id/tv_speed_monitor"
                             app:layout_constraintTop_toBottomOf="@+id/tv_speed_monitor" />
 
@@ -233,7 +239,7 @@
 
                         <TextView
                             android:id="@+id/tv_data_usage"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/_6sdp"
                             android:layout_marginLeft="@dimen/_16sdp"
@@ -241,12 +247,13 @@
                             android:textColor="@color/white"
                             android:textSize="@dimen/_14sdp"
                             app:layout_constraintBottom_toTopOf="@id/tv_des_data_usage"
+                            app:layout_constraintEnd_toStartOf="@id/sw_switch_data_usage"
                             app:layout_constraintStart_toEndOf="@+id/imv_speed_data_usage"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
                             android:id="@+id/tv_des_data_usage"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:maxWidth="@dimen/_160sdp"
                             android:maxLines="1"
@@ -259,6 +266,7 @@
                             app:autoSizeStepGranularity="1dp"
                             app:autoSizeTextType="uniform"
                             app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/sw_switch_data_usage"
                             app:layout_constraintStart_toStartOf="@+id/tv_data_usage"
                             app:layout_constraintTop_toBottomOf="@+id/tv_data_usage" />
 

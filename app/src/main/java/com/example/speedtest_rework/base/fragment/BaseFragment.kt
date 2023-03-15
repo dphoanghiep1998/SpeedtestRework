@@ -2,6 +2,7 @@ package com.example.speedtest_rework.base.fragment
 
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -15,11 +16,12 @@ import com.example.speedtest_rework.common.utils.EventObserver
 
 
 open class BaseFragment : Fragment() {
-    protected fun toastShort(message: String){
-        Toast.makeText(requireContext(),message,Toast.LENGTH_SHORT).show()
+    protected fun toastShort(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
-    protected fun toastLong(message: String){
-        Toast.makeText(requireContext(),message,Toast.LENGTH_LONG).show()
+
+    protected fun toastLong(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
     }
 
     protected fun hideView(view: View) {
@@ -31,12 +33,15 @@ open class BaseFragment : Fragment() {
 
     }
 
-    protected fun navigateToPage(actionId: Int,bundle: Bundle?=null) {
-        if(bundle != null){
-            findNavController().navigate(actionId,bundle)
-            return
+    protected fun navigateToPage(fragmentId: Int, actionId: Int, bundle: Bundle? = null) {
+        if (fragmentId == findNavController().currentDestination?.id) {
+            if (bundle != null) {
+                findNavController().navigate(actionId, bundle)
+                return
+            }
+            findNavController().navigate(actionId)
         }
-        findNavController().navigate(actionId)
+
 
     }
 
@@ -48,9 +53,6 @@ open class BaseFragment : Fragment() {
     protected fun getDrawable(resId: Int): Drawable? {
         return ContextCompat.getDrawable(requireContext(), resId)
     }
-
-
-
 
 
 }

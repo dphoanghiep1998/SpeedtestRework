@@ -102,6 +102,12 @@ class PingTestAdapter(val context: Context, private val listener: ItemHelper) :
                             val animation: Animation =
                                 AnimationUtils.loadAnimation(holder.itemView.context, R.anim.three_dot)
                             binding.tvValue.text = "..."
+                            binding.tvValue.setTextColor(
+                                ContextCompat.getColor(
+                                    context,
+                                    R.color.white
+                                )
+                            )
                             binding.tvValue.startAnimation(animation)
                         } else {
                             binding.tvValue.clearAnimation()

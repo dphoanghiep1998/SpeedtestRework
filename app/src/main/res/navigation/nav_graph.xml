@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/fragmentPermission">
+    app:startDestination="@id/fragmentLanguageFirstTime">
 
     <fragment
         android:id="@+id/fragmentPermission"
@@ -53,7 +53,7 @@
         android:name="com.example.speedtest_rework.ui.result_detail.FragmentResultDetail"
         android:label="FragmentDetailResult"
         tools:layout="@layout/fragment_detail_result" />
-    <dialog
+    <fragment
         android:id="@+id/fragmentDataUsage"
         android:name="com.example.speedtest_rework.ui.data_usage.FragmentDataUsage"
         android:label="FragmentDataUsage"
@@ -61,7 +61,7 @@
         <action
             android:id="@+id/action_fragmentDataUsage_to_fragmentAppDataUsage"
             app:destination="@id/fragmentAppDataUsage" />
-    </dialog>
+    </fragment>
     <fragment
         android:id="@+id/languageFragment"
         android:name="com.example.speedtest_rework.ui.main.languages.FragmentLanguage"
@@ -87,8 +87,20 @@
         android:id="@+id/fragmentAnalyzer"
         android:name="com.example.speedtest_rework.ui.main.analyzer.FragmentAnalyzer"
         android:label="FragmentAnalyzer" />
-    <fragment
+    <dialog
         android:id="@+id/fragmentAppDataUsage"
         android:name="com.example.speedtest_rework.ui.data_usage.app_data_usage.FragmentAppDataUsage"
         android:label="FragmentAppDataUsage" />
+    <fragment
+        tools:layout="@layout/fragment_language_first_time"
+        android:id="@+id/fragmentLanguageFirstTime"
+        android:name="com.example.speedtest_rework.ui.languages.FragmentLanguageFirstTime"
+        android:label="FragmentLanguageFirstTime" >
+        <action
+            android:id="@+id/action_fragmentLanguageFirstTime_to_fragmentPermission"
+            app:destination="@id/fragmentPermission" />
+        <action
+            android:id="@+id/action_fragmentLanguageFirstTime_to_fragmentMain"
+            app:destination="@id/fragmentMain" />
+    </fragment>
 </navigation>

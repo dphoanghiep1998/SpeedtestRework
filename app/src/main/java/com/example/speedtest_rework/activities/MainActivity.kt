@@ -158,6 +158,7 @@ class MainActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceChangeL
 
     private fun observeConnectivityChange() {
         viewModel.mConnectivityChanged.observe(this) {
+            viewModel.isGetInformation.postValue(false)
             onConnectivityChange()
         }
     }
@@ -173,6 +174,10 @@ class MainActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceChangeL
             }
         }
     }
+
+
+
+
 
 
 }

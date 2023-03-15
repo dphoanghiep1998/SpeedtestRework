@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.fragment.BaseFragment
 import com.example.speedtest_rework.common.custom_view.ConnectionType
+import com.example.speedtest_rework.common.extensions.showBannerAds
 import com.example.speedtest_rework.common.utils.AppSharePreference
 import com.example.speedtest_rework.common.utils.clickWithDebounce
 import com.example.speedtest_rework.databinding.FragmentPingTestBinding
@@ -43,7 +44,8 @@ class FragmentPingTest : BaseFragment(), ItemHelper {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        binding = FragmentPingTestBinding.inflate(layoutInflater)
+        binding = FragmentPingTestBinding.inflate(inflater,container,false)
+        showBannerAds(binding.bannerAds)
         return binding.root
     }
 
@@ -136,6 +138,7 @@ class FragmentPingTest : BaseFragment(), ItemHelper {
             val intent = Intent(Settings.ACTION_WIFI_SETTINGS)
             startActivity(intent)
         }
+        binding.requestWifiContainer.setOnClickListener {  }
 
     }
 

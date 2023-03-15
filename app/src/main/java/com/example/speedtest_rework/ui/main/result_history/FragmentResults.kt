@@ -7,9 +7,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.speedtest_rework.CustomApplication
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.dialog.ConfirmDialog
 import com.example.speedtest_rework.base.fragment.BaseFragment
+import com.example.speedtest_rework.common.extensions.InterAds
+import com.example.speedtest_rework.common.extensions.showInterAds
 import com.example.speedtest_rework.common.utils.Constant
 import com.example.speedtest_rework.common.utils.clickWithDebounce
 import com.example.speedtest_rework.data.model.HistoryModel
@@ -23,7 +26,7 @@ class FragmentResults(private val onStartClickedListener: OnStartClickedListener
     private lateinit var binding: FragmentResultsBinding
     private val viewModel: SpeedTestViewModel by activityViewModels()
     private var adapter: HistoryAdapter = HistoryAdapter(this)
-
+    private lateinit var app: CustomApplication
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,12 +36,21 @@ class FragmentResults(private val onStartClickedListener: OnStartClickedListener
         binding = FragmentResultsBinding.inflate(inflater, container, false)
         observeUnitType()
         rcvInit()
+        app = requireActivity().application as CustomApplication
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+    }
+    private fun showAdsBottomNav() {
+        if (!app.showAdsClickBottomNav) {
+            showInterAds(action = {
+                app.showAdsClickBottomNav = true
+            }, InterAds.SWITCH_TAB)
+        }
     }
 
     private fun initView() {
@@ -73,6 +85,9 @@ class FragmentResults(private val onStartClickedListener: OnStartClickedListener
         linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
         binding.rcvConnectTestResult.layoutManager = linearLayoutManager
         binding.rcvConnectTestResult.adapter = adapter
+        binding.rcvConnectTestResult.isMotionEventSplittingEnabled = false
+
+
         viewModel.getListHistory().observe(viewLifecycleOwner) { list ->
             if (list.isEmpty()) {
                 binding.containerEmpty.visibility = View.VISIBLE
@@ -109,7 +124,7 @@ class FragmentResults(private val onStartClickedListener: OnStartClickedListener
     override fun onClickResultTest(historyModel: HistoryModel?) {
         val bundle = Bundle()
         bundle.putParcelable(Constant.KEY_TEST_MODEL, historyModel)
-        findNavController().navigate(R.id.action_fragmentMain_to_fragmentResultDetail, bundle)
+        navigateToPage(R.id.fragmentMain,R.id.action_fragmentMain_to_fragmentResultDetail, bundle)
     }
 
     interface OnStartClickedListener {

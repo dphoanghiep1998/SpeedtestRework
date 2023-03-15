@@ -52,7 +52,7 @@ internal fun makeGraphViewWrapper(
     wiFiBand: WiFiBand,
     wiFiChannelPair: WiFiChannelPair
 ): GraphViewWrapper {
-    val graphMaximumY = -20
+    val graphMaximumY = 0
     val graphView = makeGraphView(context, graphMaximumY, wiFiBand, wiFiChannelPair)
     val graphViewWrapper = GraphViewWrapper(context,graphView, GraphLegend.HIDE)
     val minX = wiFiChannelPair.first.frequency - WiFiChannels.FREQUENCY_OFFSET
@@ -77,7 +77,7 @@ internal class ChannelGraphView(
         dataManager.addSeriesData(
             graphViewWrapper,
             newSeries,
-            -20
+            0
         )
 //        graphViewWrapper.removeSeries(newSeries)
         graphViewWrapper.updateLegend(GraphLegend.HIDE)

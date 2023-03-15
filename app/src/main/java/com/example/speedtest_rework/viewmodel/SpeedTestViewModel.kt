@@ -2,6 +2,7 @@ package com.example.speedtest_rework.viewmodel
 
 import android.net.wifi.ScanResult
 import android.net.wifi.WifiInfo
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
@@ -38,6 +39,7 @@ class SpeedTestViewModel @Inject constructor(
     private val listAppDataUsage: MutableLiveData<List<UsagePackageModel>> = MutableLiveData()
     var networkName = MutableLiveData("")
     var typeNetwork = MutableLiveData(ConnectionType.WIFI)
+    var isGetInformation = MutableLiveData(false)
     var speedTestDone = true
 
 
@@ -85,6 +87,10 @@ class SpeedTestViewModel @Inject constructor(
     private var isConnectivityChanged: MediatorLiveData<Boolean> = MediatorLiveData<Boolean>()
     val mConnectivityChanged: LiveData<Boolean>
         get() = isConnectivityChanged
+
+    fun setIsConnectivityChanged(status: Boolean) {
+        isConnectivityChanged.value = status
+    }
 
     fun addIsConnectivityChangedSource(data: LiveData<Boolean>) {
         isConnectivityChanged.addSource(data, isConnectivityChanged::setValue)
@@ -139,6 +145,7 @@ class SpeedTestViewModel @Inject constructor(
     fun doMultiTask() {
         showLoading(true)
         isError.value = false
+        isGetInformation.postValue(false)
         parentJob = viewModelScope.launch(handler) {
             val list = async { appRepository.getAddressInfo() }
             val netInfo = async { appRepository.getCurrentNetworkInfo() }
@@ -146,6 +153,7 @@ class SpeedTestViewModel @Inject constructor(
             addressInfoList = dList as MutableList<AddressInfo>
             currentNetworkInfo = dNetWorkInfo as CurrentNetworkInfo
             isMultiTaskDone.postValue(true)
+            isGetInformation.postValue(true)
         }
         registerJobFinish()
     }

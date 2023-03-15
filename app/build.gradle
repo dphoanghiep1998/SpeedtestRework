@@ -11,10 +11,18 @@ plugins {
 apply plugin: 'kotlin-android'
 
 android {
+    signingConfigs {
+        release {
+            storeFile file('D:\\keystore\\keystore.jks')
+            storePassword '123321'
+            keyPassword '123321'
+            keyAlias 'key0'
+        }
+    }
     compileSdk 32
 
     defaultConfig {
-        applicationId "com.nekosoft.internet.android.speedtest"
+        applicationId "com.internet.speedtest.wifianalyzer.networkspeedtest"
         minSdk 23
         targetSdk 32
         versionCode 1
@@ -28,14 +36,54 @@ android {
         def hour = calendar.get(Calendar.HOUR_OF_DAY)
         def minute = calendar.get(Calendar.MINUTE)
         setProperty("archivesBaseName", "speedtest__" + versionCode + "__" + versionName + "__${formattedDate}__${hour}h${minute}")
+
+        //ConfigKEy
+
+        def addConstant = { constantName, constantValue ->
+            manifestPlaceholders += [(constantName): constantValue]
+            buildConfigField "String", "${constantName}", "\"${constantValue}\""
+        }
+        addConstant("facebook_app_id", "1594945330930660")
+        addConstant("facebook_client_token", "0b2cd552ad59ead7244d1b3ef177bce6")
+        addConstant("adjust_token_key", "ijexu619l3wg")
+        addConstant("app_lovin_sdk_key", "lBnu4FPbTxGUi8cqgwNENfRfqINTVk8B9NxC2Japp2DqKPThsIhPCF7zcC6wr9_IN8OLTcG9SR4dT4OJwQPTBf")
+        addConstant("ads_app_id", "ca-app-pub-4636496778732615~8542570893")
+        addConstant("application_id", "${applicationId}")
     }
     buildFeatures {
         viewBinding = true
         dataBinding = true
     }
+    bundle {
+        language {
+            enableSplit = false
+        }
+        density {
+            // This property is set to true by default.
+            enableSplit = true
+        }
+        abi {
+            // This property is set to true by default.
+            enableSplit = true
+        }
+    }
     buildTypes {
+        debug {
+            def addConstant = { constantName, constantValue ->
+                manifestPlaceholders += [(constantName): constantValue]
+                buildConfigField "String", "${constantName}", "\"${constantValue}\""
+            }
+            addConstant("ads_app_id", "ca-app-pub-3940256099942544~3347511713")
+        }
         release {
-            minifyEnabled false
+            def addConstant = { constantName, constantValue ->
+                manifestPlaceholders += [(constantName): constantValue]
+                buildConfigField "String", "${constantName}", "\"${constantValue}\""
+            }
+//            addConstant("ads_app_id", "ca-app-pub-4636496778732615~8542570893")
+            addConstant("ads_app_id", "ca-app-pub-3940256099942544~3347511713")
+
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -46,6 +94,169 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    flavorDimensions "ads"
+
+    productFlavors {
+        noads {
+            dimension "ads"
+            buildConfigField('String', 'inter_splash_id1', '""')
+            buildConfigField('String', 'inter_splash_id2', '""')
+            buildConfigField('String', 'inter_splash_id3', '""')
+
+            buildConfigField('String', 'open_app_id', '""')
+
+            buildConfigField('String', 'native_languages_id1', '""')
+            buildConfigField('String', 'native_languages_id2', '""')
+            buildConfigField('String', 'native_languages_id3', '""')
+
+            buildConfigField('String', 'banner_home_id1', '""')
+            buildConfigField('String', 'banner_home_id2', '""')
+            buildConfigField('String', 'banner_home_id3', '""')
+
+
+            buildConfigField('String', 'inter_switch_tab_id1', '""')
+            buildConfigField('String', 'inter_switch_tab_id2', '""')
+            buildConfigField('String', 'inter_switch_tab_id3', '""')
+
+            buildConfigField('String', 'inter_speedtest_result_id1', '""')
+            buildConfigField('String', 'inter_speedtest_result_id2', '""')
+            buildConfigField('String', 'inter_speedtest_result_id3', '""')
+
+            buildConfigField('String', 'native_speedtest_result_id1', '""')
+            buildConfigField('String', 'native_speedtest_result_id2', '""')
+            buildConfigField('String', 'native_speedtest_result_id3', '""')
+
+            buildConfigField('String', 'native_tool_id1', '""')
+            buildConfigField('String', 'native_tool_id2', '""')
+            buildConfigField('String', 'native_tool_id3', '""')
+
+            buildConfigField('String', 'native_result_id1', '""')
+            buildConfigField('String', 'native_result_id2', '""')
+            buildConfigField('String', 'native_result_id3', '""')
+
+            buildConfigField('String', 'inter_tools_function_back_id1', '""')
+            buildConfigField('String', 'inter_tools_function_back_id2', '""')
+            buildConfigField('String', 'inter_tools_function_back_id3', '""')
+
+            buildConfigField('String', 'native_back_exit_id1', '""')
+            buildConfigField('String', 'native_back_exit_id2', '""')
+            buildConfigField('String', 'native_back_exit_id3', '""')
+
+            buildConfigField('String', 'inter_pingtest_success_id1', '""')
+            buildConfigField('String', 'inter_pingtest_success_id2', '""')
+            buildConfigField('String', 'inter_pingtest_success_id3', '""')
+
+            buildConfigField('String', 'inter_wifi_signal_test_stop_id1', '""')
+            buildConfigField('String', 'inter_wifi_signal_test_stop_id2', '""')
+            buildConfigField('String', 'inter_wifi_signal_test_stop_id3', '""')
+        }
+        adstest {
+            dimension "ads"
+            buildConfigField('String', 'inter_splash_id1', '"ca-app-pub-3940256099942544/1033173712"')
+            buildConfigField('String', 'inter_splash_id2', '"ca-app-pub-3940256099942544/1033173712"')
+            buildConfigField('String', 'inter_splash_id3', '"ca-app-pub-3940256099942544/1033173712"')
+
+            buildConfigField('String', 'open_app_id', '"ca-app-pub-3940256099942544/3419835294"')
+
+            buildConfigField('String', 'native_languages_id1', '"ca-app-pub-3940256099942544/2247696110"')
+            buildConfigField('String', 'native_languages_id2', '"ca-app-pub-3940256099942544/2247696110"')
+            buildConfigField('String', 'native_languages_id3', '"ca-app-pub-3940256099942544/2247696110"')
+
+            buildConfigField('String', 'banner_home_id1', '"ca-app-pub-3940256099942544/6300978111"')
+            buildConfigField('String', 'banner_home_id2', '"ca-app-pub-3940256099942544/6300978111"')
+            buildConfigField('String', 'banner_home_id3', '"ca-app-pub-3940256099942544/6300978111"')
+
+
+            buildConfigField('String', 'inter_switch_tab_id1', '"ca-app-pub-3940256099942544/1033173712"')
+            buildConfigField('String', 'inter_switch_tab_id2', '"ca-app-pub-3940256099942544/1033173712"')
+            buildConfigField('String', 'inter_switch_tab_id3', '"ca-app-pub-3940256099942544/1033173712"')
+
+            buildConfigField('String', 'inter_speedtest_result_id1', '"ca-app-pub-3940256099942544/1033173712"')
+            buildConfigField('String', 'inter_speedtest_result_id2', '"ca-app-pub-3940256099942544/1033173712"')
+            buildConfigField('String', 'inter_speedtest_result_id3', '"ca-app-pub-3940256099942544/1033173712"')
+
+            buildConfigField('String', 'native_speedtest_result_id1', '"ca-app-pub-3940256099942544/2247696110"')
+            buildConfigField('String', 'native_speedtest_result_id2', '"ca-app-pub-3940256099942544/2247696110"')
+            buildConfigField('String', 'native_speedtest_result_id3', '"ca-app-pub-3940256099942544/2247696110"')
+
+            buildConfigField('String', 'native_tool_id1', '"ca-app-pub-3940256099942544/2247696110"')
+            buildConfigField('String', 'native_tool_id2', '"ca-app-pub-3940256099942544/2247696110"')
+            buildConfigField('String', 'native_tool_id3', '"ca-app-pub-3940256099942544/2247696110"')
+
+            buildConfigField('String', 'native_result_id1', '"ca-app-pub-3940256099942544/2247696110"')
+            buildConfigField('String', 'native_result_id2', '"ca-app-pub-3940256099942544/2247696110"')
+            buildConfigField('String', 'native_result_id3', '"ca-app-pub-3940256099942544/2247696110"')
+
+            buildConfigField('String', 'inter_tools_function_back_id1', '"ca-app-pub-3940256099942544/1033173712"')
+            buildConfigField('String', 'inter_tools_function_back_id2', '"ca-app-pub-3940256099942544/1033173712"')
+            buildConfigField('String', 'inter_tools_function_back_id3', '"ca-app-pub-3940256099942544/1033173712"')
+
+            buildConfigField('String', 'native_back_exit_id1', '"ca-app-pub-3940256099942544/2247696110"')
+            buildConfigField('String', 'native_back_exit_id2', '"ca-app-pub-3940256099942544/2247696110"')
+            buildConfigField('String', 'native_back_exit_id3', '"ca-app-pub-3940256099942544/2247696110"')
+
+            buildConfigField('String', 'inter_pingtest_success_id1', '"ca-app-pub-3940256099942544/1033173712"')
+            buildConfigField('String', 'inter_pingtest_success_id2', '"ca-app-pub-3940256099942544/1033173712"')
+            buildConfigField('String', 'inter_pingtest_success_id3', '"ca-app-pub-3940256099942544/1033173712"')
+
+            buildConfigField('String', 'inter_wifi_signal_test_stop_id1', '"ca-app-pub-3940256099942544/1033173712"')
+            buildConfigField('String', 'inter_wifi_signal_test_stop_id2', '"ca-app-pub-3940256099942544/1033173712"')
+            buildConfigField('String', 'inter_wifi_signal_test_stop_id3', '"ca-app-pub-3940256099942544/1033173712"')
+        }
+        adsreal {
+            dimension "ads"
+            buildConfigField('String', 'inter_splash_id1', '"ca-app-pub-4636496778732615/7274006664"')
+            buildConfigField('String', 'inter_splash_id2', '"ca-app-pub-4636496778732615/4675478071"')
+            buildConfigField('String', 'inter_splash_id3', '"ca-app-pub-4636496778732615/3350239375"')
+
+            buildConfigField('String', 'open_app_id', '"ca-app-pub-4636496778732615/5796988057"')
+
+            buildConfigField('String', 'native_languages_id1', '"ca-app-pub-4636496778732615/3170824712"')
+            buildConfigField('String', 'native_languages_id2', '"ca-app-pub-4636496778732615/6890863287"')
+            buildConfigField('String', 'native_languages_id3', '"ca-app-pub-4636496778732615/8040008015"')
+
+            buildConfigField('String', 'banner_home_id1', '"ca-app-pub-4636496778732615/8969946309"')
+            buildConfigField('String', 'banner_home_id2', '"ca-app-pub-4636496778732615/1063821531"')
+            buildConfigField('String', 'banner_home_id3', '"ca-app-pub-4636496778732615/3498413187"')
+
+
+            buildConfigField('String', 'inter_switch_tab_id1', '"ca-app-pub-4636496778732615/2212966265"')
+            buildConfigField('String', 'inter_switch_tab_id2', '"ca-app-pub-4636496778732615/8678851005"')
+            buildConfigField('String', 'inter_switch_tab_id3', '"ca-app-pub-4636496778732615/4455986227"')
+
+            buildConfigField('String', 'inter_speedtest_result_id1', '"ca-app-pub-4636496778732615/5577496207"')
+            buildConfigField('String', 'inter_speedtest_result_id2', '"ca-app-pub-4636496778732615/9489106464"')
+            buildConfigField('String', 'inter_speedtest_result_id3', '"ca-app-pub-4636496778732615/8942026142"')
+
+            buildConfigField('String', 'native_speedtest_result_id1', '"ca-app-pub-4636496778732615/6260307892"')
+            buildConfigField('String', 'native_speedtest_result_id2', '"ca-app-pub-4636496778732615/9105963081"')
+            buildConfigField('String', 'native_speedtest_result_id3', '"ca-app-pub-4636496778732615/4755654531"')
+
+            buildConfigField('String', 'native_tool_id1', '"ca-app-pub-4636496778732615/4592003008"')
+            buildConfigField('String', 'native_tool_id2', '"ca-app-pub-4636496778732615/1027328366"')
+            buildConfigField('String', 'native_tool_id3', '"ca-app-pub-4636496778732615/8339676321"')
+
+            buildConfigField('String', 'native_result_id1', '"ca-app-pub-4636496778732615/4208859623"')
+            buildConfigField('String', 'native_result_id2', '"ca-app-pub-4636496778732615/3031509320"')
+            buildConfigField('String', 'native_result_id3', '"ca-app-pub-4636496778732615/7018021645"')
+
+            buildConfigField('String', 'inter_tools_function_back_id1', '"ca-app-pub-4636496778732615/4791576888"')
+            buildConfigField('String', 'inter_tools_function_back_id2', '"ca-app-pub-4636496778732615/6287942647"')
+            buildConfigField('String', 'inter_tools_function_back_id3', '"ca-app-pub-4636496778732615/3797510675"')
+
+            buildConfigField('String', 'native_back_exit_id1', '"ca-app-pub-4636496778732615/5593259330"')
+            buildConfigField('String', 'native_back_exit_id2', '"ca-app-pub-4636496778732615/9788203952"')
+            buildConfigField('String', 'native_back_exit_id3', '"ca-app-pub-4636496778732615/9596632265"')
+
+            buildConfigField('String', 'inter_pingtest_success_id1', '"ca-app-pub-4636496778732615/1718142249"')
+            buildConfigField('String', 'inter_pingtest_success_id2', '"ca-app-pub-4636496778732615/7900407213"')
+            buildConfigField('String', 'inter_pingtest_success_id3', '"ca-app-pub-4636496778732615/1334998865"')
+
+            buildConfigField('String', 'inter_wifi_signal_test_stop_id1', '"ca-app-pub-4636496778732615/5529943487"')
+            buildConfigField('String', 'inter_wifi_signal_test_stop_id2', '"ca-app-pub-4636496778732615/3470207618"')
+            buildConfigField('String', 'inter_wifi_signal_test_stop_id3', '"ca-app-pub-4636496778732615/3578018826"')
+        }
+    }
 
 }
 kapt {
@@ -53,7 +264,9 @@ kapt {
 }
 
 dependencies {
+    implementation project(path: ':libads')
     implementation project(path: ':speedviewlib')
+
     implementation 'androidx.preference:preference-ktx:1.2.0'
     implementation 'com.android.volley:volley:1.2.0'
     def room_version = "2.4.3"
@@ -70,7 +283,6 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     implementation 'com.google.android.material:material:1.6.1'
-
 
 
     //room
@@ -129,6 +341,31 @@ dependencies {
     implementation 'com.github.stealthcopter:AndroidNetworkTools:0.4.5.3'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation("com.github.doyaaaaaken:kotlin-csv-jvm:1.6.0")
+
+    //Ads
+
+    implementation("com.github.doyaaaaaken:kotlin-csv-jvm:1.6.0")
+
+    implementation 'com.google.android.gms:play-services-ads:21.5.0'
+
+    implementation "com.google.android.datatransport:transport-runtime:3.1.8"
+    //FIREBASE
+    implementation 'com.google.firebase:firebase-crashlytics:18.3.5'
+    implementation 'com.google.firebase:firebase-analytics:21.2.0'
+
+    implementation 'com.google.ads.mediation:applovin:11.7.1.0'
+    implementation 'com.google.ads.mediation:facebook:6.12.0.0'
+    implementation 'com.facebook.android:facebook-android-sdk:latest.release'
+    implementation 'com.google.ads.mediation:vungle:6.12.1.0'
+    implementation 'com.google.ads.mediation:pangle:5.0.0.6.0'
+
+
+/*Adjust tracking*/
+    implementation 'com.adjust.sdk:adjust-android:4.33.0'
+    implementation 'com.android.installreferrer:installreferrer:2.2'
+    implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
+// Add the following if you are using the Adjust SDK inside web views on your app
+    implementation 'com.adjust.sdk:adjust-android-webbridge:4.33.0'
 
 }
 repositories {

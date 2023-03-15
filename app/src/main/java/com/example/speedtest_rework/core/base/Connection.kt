@@ -190,9 +190,7 @@ class Connection(
                 """Connection: ${if (keepAlive) "keep-alive" else "close"}"""
             )
             ps.print("Accept-Encoding: identity\r\n")
-            ps.print(
-                """Accept-Language: $LOCALE"""
-            )
+            ps.print("""Accept-Language: $LOCALE""")
             if (contentType != null) ps.print("Content-Type: $contentType\r\n")
             ps.print("Content-Encoding: identity\r\n")
             if (contentLength >= 0) ps.print("Content-Length: $contentLength\r\n")

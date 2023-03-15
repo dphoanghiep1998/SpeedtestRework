@@ -13,7 +13,7 @@ abstract class Uploader(private val c: Connection, private val path: String, ckS
     private var coroutineScope: CoroutineScope? = null
 
     init {
-        garbage = ByteArray(ckSize * 1024)
+        garbage = ByteArray(ckSize * 1048576)
         val r = Random(System.nanoTime())
         r.nextBytes(garbage)
     }

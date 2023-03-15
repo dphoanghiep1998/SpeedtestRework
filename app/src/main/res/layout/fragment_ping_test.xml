@@ -56,8 +56,16 @@
         android:id="@+id/rcv_ping_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:clipToPadding="false"
+        android:paddingBottom="@dimen/_12sdp"
+        app:layout_constraintBottom_toTopOf="@id/banner_ads"
         app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+    <FrameLayout
+        android:id="@+id/banner_ads"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/requestWifiContainer"

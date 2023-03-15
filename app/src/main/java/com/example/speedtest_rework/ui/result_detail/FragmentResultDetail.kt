@@ -2,6 +2,7 @@ package com.example.speedtest_rework.ui.result_detail
 
 import android.animation.ValueAnimator
 import android.app.Dialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
@@ -39,7 +40,7 @@ class FragmentResultDetail : DialogFragment(), ConfirmDialog.ConfirmCallback, As
     private var testModel: HistoryModel = HistoryModel()
     private var fromSpeedTestFragment: Boolean = false
     private val viewModel: SpeedTestViewModel by activityViewModels()
-
+    private var askRateDialog: AskRateDialog? = null
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val root = ConstraintLayout(requireContext())
         root.layoutParams = ViewGroup.LayoutParams(
@@ -57,14 +58,13 @@ class FragmentResultDetail : DialogFragment(), ConfirmDialog.ConfirmCallback, As
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentDetailResultBinding.inflate(inflater, container, false)
         getDataFromBundle()
         changeBackPressCallBack()
         observeUnitType()
+        askRateDialog = AskRateDialog(requireContext(), this)
         initView()
         viewModel.speedTestDone = true
         return binding.root
@@ -177,12 +177,11 @@ class FragmentResultDetail : DialogFragment(), ConfirmDialog.ConfirmCallback, As
     }
 
     private fun changeBackPressCallBack() {
-        val callback: OnBackPressedCallback =
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    findNavController().popBackStack()
-                }
+        val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findNavController().popBackStack()
             }
+        }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
     }
 
@@ -294,8 +293,18 @@ class FragmentResultDetail : DialogFragment(), ConfirmDialog.ConfirmCallback, As
     }
 
     private fun exportFile() {
-        val databaseHelper = DatabaseHelper(requireContext())
+        val databaseHelper = DatabaseHelper(requireContext(), viewModel.unitType.value!!)
         databaseHelper.exportDatabaseToCSVFile(testModel)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        askRateDialog?.dismiss()
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        askRateDialog?.dismiss()
     }
 
 
