@@ -3,6 +3,8 @@ package com.example.speedtest_rework.ui.data_usage
 import android.content.Context
 import android.graphics.Insets
 import android.os.Bundle
+import android.os.Handler
+import android.os.SystemClock
 import android.util.DisplayMetrics
 import android.view.*
 import android.widget.LinearLayout
@@ -13,7 +15,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.fragment.BaseFragment
+import com.example.speedtest_rework.common.extensions.InterAds
 import com.example.speedtest_rework.common.extensions.showBannerAds
+import com.example.speedtest_rework.common.extensions.showInterAds
 import com.example.speedtest_rework.common.utils.buildMinVersionR
 import com.example.speedtest_rework.common.utils.clickWithDebounce
 import com.example.speedtest_rework.databinding.FragmentDataUsageBinding
@@ -22,6 +26,7 @@ import com.example.speedtest_rework.ui.data_usage.adapter.DataUsageAdapter
 import com.example.speedtest_rework.ui.data_usage.model.DataUsageModel
 import com.example.speedtest_rework.viewmodel.Order
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
+import com.gianghv.libads.InterstitialSingleReqAdManager
 import java.math.RoundingMode
 
 class FragmentDataUsage : BaseFragment() {
@@ -29,6 +34,23 @@ class FragmentDataUsage : BaseFragment() {
     private lateinit var adapter: DataUsageAdapter
     private val viewModel: SpeedTestViewModel by activityViewModels()
     private lateinit var popupWindow: PopupWindow
+    var lastClickTime: Long = 0
+    var handler = Handler()
+    var runnable = Runnable {
+        InterstitialSingleReqAdManager.isShowingAds = false
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (lastClickTime > 0) {
+            handler.postDelayed(runnable, 1000)
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        handler.removeCallbacks(runnable)
+    }
 
     //    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 //        val root = ConstraintLayout(requireContext())
@@ -69,7 +91,11 @@ class FragmentDataUsage : BaseFragment() {
         adapter = DataUsageAdapter()
         binding.rcvDataUsage.adapter = adapter
         binding.btnBack.clickWithDebounce {
-            findNavController().popBackStack()
+            if (SystemClock.elapsedRealtime() - lastClickTime < 30000 && InterstitialSingleReqAdManager.isShowingAds) return@clickWithDebounce
+            else showInterAds(action = {
+                findNavController().popBackStack()
+            }, InterAds.TOOLS_FUNCTION_BACK)
+            lastClickTime = SystemClock.elapsedRealtime()
         }
         binding.containerBottom.clickWithDebounce {
             findNavController().navigate(R.id.action_fragmentDataUsage_to_fragmentAppDataUsage)
@@ -186,7 +212,11 @@ class FragmentDataUsage : BaseFragment() {
     private fun changeBackPressCallBack() {
         val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                findNavController().popBackStack()
+                if (SystemClock.elapsedRealtime() - lastClickTime < 30000 && InterstitialSingleReqAdManager.isShowingAds) return
+                else showInterAds(action = {
+                    findNavController().popBackStack()
+                }, InterAds.TOOLS_FUNCTION_BACK)
+                lastClickTime = SystemClock.elapsedRealtime()
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)

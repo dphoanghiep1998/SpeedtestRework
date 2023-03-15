@@ -22,9 +22,9 @@ class AdaptiveBannerManager(
 ) {
     companion object {
         var isBannerLoaded = false
+        var adView: AdManagerAdView? = null
     }
 
-    var adView = AdManagerAdView(context)
     private val adSize: AdSize
         get() {
             val display = context.windowManager.defaultDisplay
@@ -65,10 +65,11 @@ class AdaptiveBannerManager(
         onAdLoader: (() -> Unit)? = null,
         onAdLoadFail: (() -> Unit)? = null
     ) {
+        adView = AdManagerAdView(context)
         parent?.removeAllViews()
-        adView.adUnitId = idBanner
-        adView.setAdSizes(adSize)
-        adView.adListener = object : AdListener() {
+        adView?.adUnitId = idBanner
+        adView?.setAdSizes(adSize)
+        adView?.adListener = object : AdListener() {
             override fun onAdLoaded() {
                 super.onAdLoaded()
                 isBannerLoaded = true
@@ -83,14 +84,17 @@ class AdaptiveBannerManager(
                 onAdLoadFail?.invoke()
             }
         }
-        adView.setOnPaidEventListener {
-            Utils.postRevenueAdjust(it, adView.adUnitId)
+        adView?.setOnPaidEventListener {
+            Utils.postRevenueAdjust(it, adView?.adUnitId)
         }
         val adRequest = AdManagerAdRequest.Builder().build()
-        adView.loadAd(adRequest)
+        adView?.loadAd(adRequest)
     }
 
     fun loadAdViewToParent(parent: ViewGroup?) {
+        if(adView?.parent != null){
+            (adView?.parent as ViewGroup).removeAllViews()
+        }
         parent?.removeAllViews()
         parent?.addView(adView)
         parent?.isVisible = true

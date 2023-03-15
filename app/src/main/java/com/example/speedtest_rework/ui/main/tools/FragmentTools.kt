@@ -19,7 +19,9 @@ import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.dialog.PermissionDialog
 import com.example.speedtest_rework.base.fragment.BaseFragment
 import com.example.speedtest_rework.common.extensions.InterAds
+import com.example.speedtest_rework.common.extensions.NativeType
 import com.example.speedtest_rework.common.extensions.showInterAds
+import com.example.speedtest_rework.common.extensions.showNativeAds
 import com.example.speedtest_rework.common.utils.buildMinVersionQ
 import com.example.speedtest_rework.common.utils.clickWithDebounce
 import com.example.speedtest_rework.databinding.FragmentToolsBinding
@@ -38,6 +40,7 @@ class FragmentTools : BaseFragment(), PermissionDialog.ConfirmCallback {
         binding = FragmentToolsBinding.inflate(inflater, container, false)
         app = requireActivity().application as CustomApplication
         showAdsBottomNav()
+        showNativeAds(binding.nativeAdMediumView,null,null,null,NativeType.TOOL)
         return binding.root
     }
 

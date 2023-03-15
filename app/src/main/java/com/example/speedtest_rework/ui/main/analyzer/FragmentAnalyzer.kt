@@ -6,6 +6,8 @@ import android.graphics.Insets
 import android.net.Uri
 import android.net.wifi.WifiManager
 import android.os.Bundle
+import android.os.Handler
+import android.os.SystemClock
 import android.provider.Settings
 import android.util.DisplayMetrics
 import android.view.*
@@ -17,6 +19,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.fragment.BaseFragment
+import com.example.speedtest_rework.common.extensions.InterAds
+import com.example.speedtest_rework.common.extensions.showInterAds
 import com.example.speedtest_rework.common.utils.buildMinVersionR
 import com.example.speedtest_rework.common.utils.clickWithDebounce
 import com.example.speedtest_rework.databinding.FragmentAnalyzerBinding
@@ -32,6 +36,7 @@ import com.example.speedtest_rework.ui.main.analyzer.model.Transformer
 import com.example.speedtest_rework.ui.main.analyzer.model.WiFiData
 import com.example.speedtest_rework.ui.main.analyzer.model.WiFiDetail
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
+import com.gianghv.libads.InterstitialSingleReqAdManager
 
 
 class FragmentAnalyzer : BaseFragment(), ItemTouchHelper, ListSizeListener {
@@ -44,7 +49,23 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper, ListSizeListener {
     private lateinit var popupWindow: PopupWindow
     private lateinit var popupWindowTop: PopupWindow
     private var wiFiChannelPair = WiFiBand.GHZ2.wiFiChannels.wiFiChannelPairs()[0]
+    var lastClickTime: Long = 0
+    var handler = Handler()
+    var runnable = Runnable {
+        InterstitialSingleReqAdManager.isShowingAds = false
+    }
 
+    override fun onResume() {
+        super.onResume()
+        if (lastClickTime > 0) {
+            handler.postDelayed(runnable, 1000)
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        handler.removeCallbacks(runnable)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -266,7 +287,11 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper, ListSizeListener {
             popupWindow.showAsDropDown(it, 0, -100)
         }
         binding.btnBack.clickWithDebounce {
-            findNavController().popBackStack()
+            if (SystemClock.elapsedRealtime() - lastClickTime < 30000 && InterstitialSingleReqAdManager.isShowingAds) return@clickWithDebounce
+            else showInterAds(action = {
+                findNavController().popBackStack()
+            }, InterAds.TOOLS_FUNCTION_BACK)
+            lastClickTime = SystemClock.elapsedRealtime()
         }
     }
 
@@ -368,7 +393,11 @@ class FragmentAnalyzer : BaseFragment(), ItemTouchHelper, ListSizeListener {
     private fun changeBackPressCallBack() {
         val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                findNavController().popBackStack()
+                if (SystemClock.elapsedRealtime() - lastClickTime < 30000 && InterstitialSingleReqAdManager.isShowingAds) return
+                else showInterAds(action = {
+                    findNavController().popBackStack()
+                }, InterAds.TOOLS_FUNCTION_BACK)
+                lastClickTime = SystemClock.elapsedRealtime()
 
             }
         }

@@ -2,6 +2,8 @@ package com.example.speedtest_rework.ui.ping_test
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.SystemClock
 import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
@@ -17,7 +19,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.fragment.BaseFragment
 import com.example.speedtest_rework.common.custom_view.ConnectionType
+import com.example.speedtest_rework.common.extensions.InterAds
 import com.example.speedtest_rework.common.extensions.showBannerAds
+import com.example.speedtest_rework.common.extensions.showInterAds
 import com.example.speedtest_rework.common.utils.AppSharePreference
 import com.example.speedtest_rework.common.utils.clickWithDebounce
 import com.example.speedtest_rework.databinding.FragmentPingTestBinding
@@ -30,6 +34,7 @@ import com.example.speedtest_rework.ui.ping_test.model.TitlePingTest
 import com.example.speedtest_rework.viewmodel.FragmentPingTestViewModel
 import com.example.speedtest_rework.viewmodel.ScanStatus
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
+import com.gianghv.libads.InterstitialSingleReqAdManager
 
 
 class FragmentPingTest : BaseFragment(), ItemHelper {
@@ -39,7 +44,23 @@ class FragmentPingTest : BaseFragment(), ItemHelper {
     private val mainViewModel: SpeedTestViewModel by activityViewModels()
     private lateinit var data: List<ItemPingTest>
     private lateinit var rotate: RotateAnimation
+    var lastClickTime: Long = 0
+    var handler = Handler()
+    var runnable = Runnable {
+        InterstitialSingleReqAdManager.isShowingAds = false
+    }
 
+    override fun onResume() {
+        super.onResume()
+        if (lastClickTime > 0) {
+            handler.postDelayed(runnable, 1000)
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        handler.removeCallbacks(runnable)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -70,14 +91,20 @@ class FragmentPingTest : BaseFragment(), ItemHelper {
     }
 
     private fun changeBackPressCallBack() {
-        val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                findNavController().popBackStack()
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (SystemClock.elapsedRealtime() - lastClickTime < 30000 && InterstitialSingleReqAdManager.isShowingAds) return
+                    else showInterAds(action = {
+                        findNavController().popBackStack()
+                    }, InterAds.TOOLS_FUNCTION_BACK)
+                    lastClickTime = SystemClock.elapsedRealtime()
+                }
             }
-        }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
 
     }
+
 
     private fun initView() {
         data = mutableListOf(
@@ -128,7 +155,11 @@ class FragmentPingTest : BaseFragment(), ItemHelper {
 
     private fun initButton() {
         binding.btnBack.clickWithDebounce {
-            findNavController().popBackStack()
+            if (SystemClock.elapsedRealtime() - lastClickTime < 30000 && InterstitialSingleReqAdManager.isShowingAds) return@clickWithDebounce
+            else showInterAds(action = {
+                findNavController().popBackStack()
+            }, InterAds.TOOLS_FUNCTION_BACK)
+            lastClickTime = SystemClock.elapsedRealtime()
         }
         binding.btnReload.setOnClickListener {
             viewModel.getPingResult(data)

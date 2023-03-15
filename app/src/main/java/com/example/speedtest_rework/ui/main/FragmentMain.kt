@@ -24,6 +24,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
 import com.example.speedtest_rework.R
+import com.example.speedtest_rework.base.dialog.DialogExitApp
 import com.example.speedtest_rework.base.dialog.PermissionDialog
 import com.example.speedtest_rework.base.dialog.RateCallBack
 import com.example.speedtest_rework.base.dialog.RateDialog
@@ -422,7 +423,13 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
                     toastShort(getString(R.string.scan_canceled))
                     viewModel.setScanStatus(ScanStatus.HARD_RESET)
                 } else {
-                    requireActivity().finishAffinity()
+                   val dialogExitApp = DialogExitApp(requireContext(), callback = object :DialogExitApp.ExitCallback{
+                       override fun exitAction() {
+                           requireActivity().finishAffinity()
+                       }
+
+                   })
+                    dialogExitApp.show()
                 }
             }
         }

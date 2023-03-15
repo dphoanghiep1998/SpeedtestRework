@@ -4,6 +4,8 @@ import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.SystemClock
 import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
@@ -18,7 +20,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.fragment.BaseFragment
+import com.example.speedtest_rework.common.extensions.InterAds
 import com.example.speedtest_rework.common.extensions.showBannerAds
+import com.example.speedtest_rework.common.extensions.showInterAds
 import com.example.speedtest_rework.common.utils.clickWithDebounce
 import com.example.speedtest_rework.databinding.FragmentWifiDetectorBinding
 import com.example.speedtest_rework.ui.wifi_detector.adapter.WifiDetectorAdapter
@@ -26,6 +30,7 @@ import com.example.speedtest_rework.ui.wifi_detector.interfaces.ItemDeviceHelper
 import com.example.speedtest_rework.ui.wifi_detector.model.DeviceModel
 import com.example.speedtest_rework.viewmodel.FragmentWifiDetectViewModel
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
+import com.gianghv.libads.InterstitialSingleReqAdManager
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -35,6 +40,24 @@ class FragmentWifiDetector : BaseFragment(), ItemDeviceHelper {
     private val viewModel: FragmentWifiDetectViewModel by viewModels()
     private val shareViewModel: SpeedTestViewModel by activityViewModels()
     private lateinit var rotate: RotateAnimation
+
+    var lastClickTime: Long = 0
+    var handler = Handler()
+    var runnable = Runnable {
+        InterstitialSingleReqAdManager.isShowingAds = false
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (lastClickTime > 0) {
+            handler.postDelayed(runnable, 1000)
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        handler.removeCallbacks(runnable)
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -75,7 +98,11 @@ class FragmentWifiDetector : BaseFragment(), ItemDeviceHelper {
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    findNavController().popBackStack()
+                    if (SystemClock.elapsedRealtime() - lastClickTime < 30000 && InterstitialSingleReqAdManager.isShowingAds) return
+                    else showInterAds(action = {
+                        findNavController().popBackStack()
+                    }, InterAds.TOOLS_FUNCTION_BACK)
+                    lastClickTime = SystemClock.elapsedRealtime()
                 }
             }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
@@ -140,7 +167,11 @@ class FragmentWifiDetector : BaseFragment(), ItemDeviceHelper {
     @SuppressLint("MissingPermission")
     private fun initButton() {
         binding.btnBack.clickWithDebounce {
-            findNavController().popBackStack()
+            if (SystemClock.elapsedRealtime() - lastClickTime < 30000 && InterstitialSingleReqAdManager.isShowingAds) return@clickWithDebounce
+            else showInterAds(action = {
+                findNavController().popBackStack()
+            }, InterAds.TOOLS_FUNCTION_BACK)
+            lastClickTime = SystemClock.elapsedRealtime()
         }
         binding.btnReload.clickWithDebounce {
             discoveryDevice()

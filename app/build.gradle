@@ -11,14 +11,7 @@ plugins {
 apply plugin: 'kotlin-android'
 
 android {
-    signingConfigs {
-        release {
-            storeFile file('D:\\keystore\\keystore.jks')
-            storePassword '123321'
-            keyPassword '123321'
-            keyAlias 'key0'
-        }
-    }
+
     compileSdk 32
 
     defaultConfig {

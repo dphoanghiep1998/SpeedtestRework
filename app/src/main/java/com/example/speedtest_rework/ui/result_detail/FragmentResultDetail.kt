@@ -24,6 +24,9 @@ import androidx.navigation.fragment.findNavController
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.dialog.*
 import com.example.speedtest_rework.common.custom_view.UnitType
+import com.example.speedtest_rework.common.extensions.NativeType
+import com.example.speedtest_rework.common.extensions.showInterAds
+import com.example.speedtest_rework.common.extensions.showNativeAds
 import com.example.speedtest_rework.common.utils.Constant
 import com.example.speedtest_rework.common.utils.DateTimeUtils
 import com.example.speedtest_rework.common.utils.clickWithDebounce
@@ -66,6 +69,7 @@ class FragmentResultDetail : DialogFragment(), ConfirmDialog.ConfirmCallback, As
         observeUnitType()
         askRateDialog = AskRateDialog(requireContext(), this)
         initView()
+        showNativeAds(binding.nativeAdMediumView,null,null,null,NativeType.SPEED_TEST_RESULT )
         viewModel.speedTestDone = true
         return binding.root
     }

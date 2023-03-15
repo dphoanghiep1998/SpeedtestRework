@@ -259,6 +259,7 @@
     <string name="unknown_host">Unkown host !</string>
     <string name="error_ocurred">An error occurred during the scan!</string>
     <string name="content_notification">We find your network speed seems slow, try to check!</string>
+    <string name="exit_app">Exit application!</string>
 
 
 </resources>

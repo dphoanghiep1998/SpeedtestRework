@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.speedtest_rework.BuildConfig
 import com.example.speedtest_rework.CustomApplication
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.dialog.ConfirmDialog
@@ -20,12 +21,16 @@ import com.example.speedtest_rework.databinding.FragmentResultsBinding
 import com.example.speedtest_rework.ui.main.result_history.adapter.HistoryAdapter
 import com.example.speedtest_rework.ui.main.result_history.adapter.ResultTouchHelper
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
+import com.gianghv.libads.NativeAdsManager
+import com.google.android.gms.ads.nativead.NativeAd
 
 class FragmentResults(private val onStartClickedListener: OnStartClickedListener) : BaseFragment(),
     ResultTouchHelper, ConfirmDialog.ConfirmCallback {
     private lateinit var binding: FragmentResultsBinding
     private val viewModel: SpeedTestViewModel by activityViewModels()
     private var adapter: HistoryAdapter = HistoryAdapter(this)
+    private var nativeAd: NativeAd? = null
+
     private lateinit var app: CustomApplication
 
     override fun onCreateView(
@@ -37,7 +42,7 @@ class FragmentResults(private val onStartClickedListener: OnStartClickedListener
         observeUnitType()
         rcvInit()
         app = requireActivity().application as CustomApplication
-
+        showAdsBottomNav()
         return binding.root
     }
 
@@ -107,9 +112,31 @@ class FragmentResults(private val onStartClickedListener: OnStartClickedListener
                     )
                     customDialog.show()
                 }
+                if (nativeAd != null) {
+                    adapter.insertAds(nativeAd!!)
+                } else {
+                    loadAds()
+                }
             }
+
             adapter.setData(list.toMutableList())
         }
+    }
+    private fun loadAds() {
+        if (nativeAd == null) {
+            val mNativeAdManager = NativeAdsManager(
+                requireContext(),
+                BuildConfig.native_result_id1,
+                BuildConfig.native_result_id2,
+                BuildConfig.native_result_id3,
+            )
+            mNativeAdManager.loadAds(onLoadSuccess = {
+                nativeAd = it
+                adapter.insertAds(it)
+
+            }, onLoadFail = {})
+        }
+
     }
 
 

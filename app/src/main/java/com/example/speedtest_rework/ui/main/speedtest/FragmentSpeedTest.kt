@@ -15,6 +15,8 @@ import com.example.speedtest_rework.base.fragment.BaseFragment
 import com.example.speedtest_rework.common.custom_view.ConnectionType
 import com.example.speedtest_rework.common.custom_view.SpeedView
 import com.example.speedtest_rework.common.custom_view.UnitType
+import com.example.speedtest_rework.common.extensions.InterAds
+import com.example.speedtest_rework.common.extensions.showInterAds
 import com.example.speedtest_rework.common.utils.AppSharePreference.Companion.INSTANCE
 import com.example.speedtest_rework.common.utils.Constant
 import com.example.speedtest_rework.common.utils.NetworkUtils
@@ -98,14 +100,16 @@ class FragmentSpeedTest : BaseFragment() {
                 if (historyModel != null) {
                     viewModel.insertNewHistoryAction(historyModel)
                     viewModel.setScanStatus(ScanStatus.DONE)
-                    CoroutineScope(Dispatchers.Main).launch {
-                        delay(1000)
-                        val bundle = Bundle()
-                        bundle.putParcelable(Constant.KEY_TEST_MODEL, historyModel)
-                        bundle.putBoolean(Constant.KEY_FROM_SPEED_TEST_FRAGMENT, true)
-                        navigateToPage(R.id.fragmentMain,R.id.action_fragmentMain_to_fragmentResultDetail, bundle)
-                        viewModel.speedTestDone = true
-                    }
+                    showInterAds(action = {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            val bundle = Bundle()
+                            bundle.putParcelable(Constant.KEY_TEST_MODEL, historyModel)
+                            bundle.putBoolean(Constant.KEY_FROM_SPEED_TEST_FRAGMENT, true)
+                            navigateToPage(R.id.fragmentMain,R.id.action_fragmentMain_to_fragmentResultDetail, bundle)
+                            viewModel.speedTestDone = true
+                        }
+                    },InterAds.SPEED_TEST_RESULT)
+
                 }
             }
 

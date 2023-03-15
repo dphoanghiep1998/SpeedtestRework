@@ -22,7 +22,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.dialog.*
 import com.example.speedtest_rework.common.custom_view.ConnectionType
+import com.example.speedtest_rework.common.extensions.InterAds
 import com.example.speedtest_rework.common.extensions.showBannerAds
+import com.example.speedtest_rework.common.extensions.showInterAds
 import com.example.speedtest_rework.common.utils.AppSharePreference
 import com.example.speedtest_rework.common.utils.clickWithDebounce
 import com.example.speedtest_rework.databinding.FragmentAdvancedPingBinding
@@ -364,29 +366,13 @@ open class FragmentAdvancedPing(private val itemContentPingTest: ContentPingTest
                         this.visibility = View.VISIBLE
                     }
                     if (packetReceived == 0) {
-                        val dialogPing = PingInfoDialog(
-                            requireContext(),
-                            cUrl,
-                            binding.tvPacketLossValue.text.toString(),
-                            packetSent.toString(),
-                            packetReceived.toString(),
-                            "NaN",
-                            "NaN",
-                            "NaN"
-                        )
-                        dialogPing.show()
+                        showInterAds(action = {
+                            showFailedResult()
+                        },InterAds.PING_TEST_SUCCESS)
                     } else {
-                        val dialogPing = PingInfoDialog(
-                            requireContext(),
-                            cUrl,
-                            binding.tvPacketLossValue.text.toString(),
-                            packetSent.toString(),
-                            packetReceived.toString(),
-                            minLatency.toString(),
-                            (avgLatency / packetReceived).toString(),
-                            maxValue.toString()
-                        )
-                        dialogPing.show()
+                        showInterAds(action = {
+                            showSuccessResult()
+                        },InterAds.PING_TEST_SUCCESS)
                     }
 
                 }
@@ -413,6 +399,34 @@ open class FragmentAdvancedPing(private val itemContentPingTest: ContentPingTest
 
             }
         }
+    }
+
+    private fun showFailedResult(){
+        val dialogPing = PingInfoDialog(
+            requireContext(),
+            cUrl,
+            binding.tvPacketLossValue.text.toString(),
+            packetSent.toString(),
+            packetReceived.toString(),
+            "NaN",
+            "NaN",
+            "NaN"
+        )
+        dialogPing.show()
+    }
+
+    private fun showSuccessResult(){
+        val dialogPing = PingInfoDialog(
+            requireContext(),
+            cUrl,
+            binding.tvPacketLossValue.text.toString(),
+            packetSent.toString(),
+            packetReceived.toString(),
+            minLatency.toString(),
+            (avgLatency / packetReceived).toString(),
+            maxValue.toString()
+        )
+        dialogPing.show()
     }
 
 

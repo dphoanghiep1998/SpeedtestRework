@@ -5,6 +5,8 @@ import android.content.Intent
 import android.net.wifi.WifiInfo
 import android.net.wifi.WifiManager
 import android.os.Bundle
+import android.os.Handler
+import android.os.SystemClock
 import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
@@ -27,6 +29,7 @@ import com.example.speedtest_rework.databinding.FragmentSignalTestBinding
 import com.example.speedtest_rework.ui.signal_test.adapter.SignalLocationAdapter
 import com.example.speedtest_rework.viewmodel.FragmentSignalTestViewModel
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
+import com.gianghv.libads.InterstitialSingleReqAdManager
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -40,11 +43,29 @@ class FragmentSignalTest : BaseFragment() {
     private var currentValue = 0
     private lateinit var job: Job
 
+    var lastClickTime: Long = 0
+    var handler = Handler()
+    var runnable = Runnable {
+        InterstitialSingleReqAdManager.isShowingAds = false
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (lastClickTime > 0) {
+            handler.postDelayed(runnable, 1000)
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        handler.removeCallbacks(runnable)
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        binding = FragmentSignalTestBinding.inflate(inflater,container,false)
+        binding = FragmentSignalTestBinding.inflate(inflater, container, false)
         showBannerAds(binding.bannerAds)
         return binding.root
     }
@@ -71,6 +92,7 @@ class FragmentSignalTest : BaseFragment() {
             binding.tvWifi.text = it
         }
     }
+
     private fun observeWifiEnabled() {
         shareViewModel.mWifiEnabled.observe(viewLifecycleOwner) {
             if (it) {
@@ -121,7 +143,7 @@ class FragmentSignalTest : BaseFragment() {
                         binding.signalMeter.initSignalView()
                         viewModel.setSignalScanning(false)
                     }
-                    showInterAds({},InterAds.SIGNAL_TEST_STOP)
+                    showInterAds({}, InterAds.SIGNAL_TEST_STOP)
 
                 }
             } else {
@@ -139,29 +161,35 @@ class FragmentSignalTest : BaseFragment() {
     private fun changeBackPressCallBack() {
         val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                findNavController().popBackStack()
-                if (::job.isInitialized) {
-                    job.cancel()
-                    currentValue = 0
-                    binding.signalMeter.initSignalView()
-                    viewModel.setSignalScanning(false)
-                    viewModel.setListSignalLocation(mutableListOf())
-                }
+                if (SystemClock.elapsedRealtime() - lastClickTime < 30000 && InterstitialSingleReqAdManager.isShowingAds) return
+                else showInterAds(action = {
+                    cancelWhenDestroy()
+                }, InterAds.TOOLS_FUNCTION_BACK)
+                lastClickTime = SystemClock.elapsedRealtime()
+
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
     }
 
+    private fun cancelWhenDestroy() {
+        if (::job.isInitialized) {
+            job.cancel()
+            currentValue = 0
+            binding.signalMeter.initSignalView()
+            viewModel.setSignalScanning(false)
+            viewModel.setListSignalLocation(mutableListOf())
+        }
+        findNavController().popBackStack()
+    }
+
     private fun initButton() {
         binding.btnBack.clickWithDebounce {
-            findNavController().popBackStack()
-            if (::job.isInitialized) {
-                job.cancel()
-                currentValue = 0
-                binding.signalMeter.initSignalView()
-                viewModel.setSignalScanning(false)
-                viewModel.setListSignalLocation(mutableListOf())
-            }
+            if (SystemClock.elapsedRealtime() - lastClickTime < 30000 && InterstitialSingleReqAdManager.isShowingAds) return@clickWithDebounce
+            else showInterAds(action = {
+                cancelWhenDestroy()
+            }, InterAds.TOOLS_FUNCTION_BACK)
+            lastClickTime = SystemClock.elapsedRealtime()
         }
         binding.btnSetting.clickWithDebounce {
             val intent =
@@ -177,7 +205,8 @@ class FragmentSignalTest : BaseFragment() {
             mList?.let {
                 it.add(
                     (Pair(
-                        "${getString(R.string.location)} ${adapter.itemCount + 1}", "$currentValue dBm"
+                        "${getString(R.string.location)} ${adapter.itemCount + 1}",
+                        "$currentValue dBm"
                     ))
                 )
                 viewModel.setListSignalLocation(it)

@@ -7,24 +7,29 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.common.custom_view.UnitType
 import com.example.speedtest_rework.common.utils.DateTimeUtils
 import com.example.speedtest_rework.common.utils.clickWithDebounce
 import com.example.speedtest_rework.common.utils.format
 import com.example.speedtest_rework.data.model.HistoryModel
+import com.example.speedtest_rework.databinding.ItemNativeAdsBinding
+import com.example.speedtest_rework.databinding.ItemResultBinding
+import com.google.android.gms.ads.nativead.NativeAd
 
 class HistoryAdapter(resultTouchHelper: ResultTouchHelper) :
-    RecyclerView.Adapter<HistoryAdapter.ConnectivityTestViewHolder>() {
-    private var mList: MutableList<HistoryModel> = mutableListOf()
+    RecyclerView.Adapter<ViewHolder>() {
+    private var mList: MutableList<Any> = mutableListOf()
     private val resultTouchHelper: ResultTouchHelper
     private var unitType = UnitType.MBPS
+    private var insideNativeAd: NativeAd? = null
+
 
     fun setData(newList: MutableList<HistoryModel>) {
-        val result = DiffUtil.calculateDiff(MyDiffUtilCallBack(newList, mList))
         mList.clear()
         mList.addAll(newList)
-        result.dispatchUpdatesTo(this)
+        notifyDataSetChanged()
     }
 
     fun setData(unitType: UnitType) {
@@ -32,32 +37,81 @@ class HistoryAdapter(resultTouchHelper: ResultTouchHelper) :
         notifyItemRangeChanged(0, mList.size)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ConnectivityTestViewHolder {
-        val view: View =
-            LayoutInflater.from(parent.context).inflate(R.layout.item_result, parent, false)
-        return ConnectivityTestViewHolder(view)
+    fun insertAds(nativeAd: NativeAd) {
+        if (mList.contains("ads")) {
+            return
+        }
+        insideNativeAd = nativeAd
+        if (mList.size <= 3) {
+            mList.add("ads")
+        } else {
+            mList.add(2, "ads")
+        }
+        notifyItemInserted(3)
     }
 
-    override fun onBindViewHolder(holder: ConnectivityTestViewHolder, position: Int) {
 
-        with(mList) {
-            val model: HistoryModel = this[position]
-            if (model.network == "wifi") {
-                val source: Int =
-                    if (model.download >= 40) R.drawable.ic_signal_good else if (model.download < 40 && model.download >= 20) R.drawable.ic_signal_normal else R.drawable.ic_signal_low
-                holder.connectionType.setImageResource(source)
-            } else {
-                holder.connectionType.setImageResource(R.drawable.ic_mobiledata)
-            }
-            holder.date.text = DateTimeUtils.getDateConvertedToResult(model.time)
-            holder.uploadRate.text = format(convert(model.upload))
-            holder.downloadRate.text = format(convert(model.download))
-            holder.itemView.clickWithDebounce {
-                resultTouchHelper.onClickResultTest(
-                    model
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        return when (viewType) {
+            0 -> {
+                val binding = ItemResultBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
                 )
+                ConnectivityTestViewHolder(binding)
+            }
+            else -> {
+                val binding =
+                    ItemNativeAdsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                ConnectivityTestAdsViewHolder(binding)
             }
         }
+    }
+    override fun getItemViewType(position: Int): Int {
+        if (mList[position] == "ads") {
+            return 1
+        }
+        return 0
+    }
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        when (holder.itemViewType) {
+            0 -> {
+                with(holder as ConnectivityTestViewHolder) {
+                    val model = mList[position] as HistoryModel
+                    if (model.network == "wifi") {
+                        val source: Int =
+                            if (model.download >= 40) R.drawable.ic_signal_good else if (model.download < 40 && model.download >= 20) R.drawable.ic_signal_normal else R.drawable.ic_signal_low
+                        binding.imvConnectionType.setImageResource(source)
+                    } else {
+                        binding.imvConnectionType.setImageResource(R.drawable.ic_mobiledata)
+                    }
+                    binding.tvDateScan.text = DateTimeUtils.getDateConvertedToResult(model.time)
+                    binding.tvUploadRate.text = format(convert(model.upload))
+                    binding.tvDownloadRate.text = format(convert(model.download))
+                    holder.itemView.clickWithDebounce {
+                        resultTouchHelper.onClickResultTest(
+                            model
+                        )
+                    }
+                }
+            }
+            else -> {
+                with(holder as ConnectivityTestAdsViewHolder) {
+                    if (insideNativeAd != null) {
+                        with(binding.nativeAdMediumView) {
+                            visibility = View.VISIBLE
+                            setNativeAd(insideNativeAd!!)
+                            showShimmer(false)
+                        }
+                    } else {
+                        with(binding.nativeAdMediumView) {
+                            visibility = View.GONE
+                            showShimmer(true)
+                        }
+                    }
+                }
+            }
+        }
+
 
     }
 
@@ -65,20 +119,12 @@ class HistoryAdapter(resultTouchHelper: ResultTouchHelper) :
         return mList.size
     }
 
-    inner class ConnectivityTestViewHolder(itemView: View) :
-        RecyclerView.ViewHolder(itemView) {
-        var date: TextView
-        var downloadRate: TextView
-        var uploadRate: TextView
-        var connectionType: ImageView
-
-        init {
-            date = itemView.findViewById(R.id.tv_dateScan)
-            downloadRate = itemView.findViewById(R.id.tv_downloadRate)
-            uploadRate = itemView.findViewById(R.id.tv_uploadRate)
-            connectionType = itemView.findViewById(R.id.imv_connectionType)
-        }
+    inner class ConnectivityTestViewHolder(val binding: ItemResultBinding) :
+        ViewHolder(binding.root) {
     }
+
+    inner class ConnectivityTestAdsViewHolder(val binding: ItemNativeAdsBinding) :
+        ViewHolder(binding.root)
 
     init {
         this.resultTouchHelper = resultTouchHelper
