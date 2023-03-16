@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.LifecycleCoroutineScope
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
 import com.example.speedtest_rework.R
@@ -97,22 +98,28 @@ class FragmentSpeedTest : BaseFragment() {
 
             override fun onEnd(historyModel: HistoryModel?) {
                 if (historyModel != null) {
-                    viewModel.insertNewHistoryAction(historyModel)
-                    val bundle = Bundle()
-                    bundle.putParcelable(Constant.KEY_TEST_MODEL, historyModel)
-                    bundle.putBoolean(Constant.KEY_FROM_SPEED_TEST_FRAGMENT, true)
+                    CoroutineScope(Dispatchers.Main).launch {
+                        val id = viewModel.insertNewHistoryAction(historyModel)
+                        val model = historyModel.copy()
+                        model.id = id
+                        val bundle = Bundle()
+                        bundle.putParcelable(Constant.KEY_TEST_MODEL, model)
+                        bundle.putBoolean(Constant.KEY_FROM_SPEED_TEST_FRAGMENT, true)
 
-                    showInterAds(action = {
-                        CoroutineScope(Dispatchers.Main).launch {
-                            navigateToPage(
-                                R.id.fragmentMain,
-                                R.id.action_fragmentMain_to_fragmentResultDetail,
-                                bundle
-                            )
-                            viewModel.setScanStatus(ScanStatus.DONE)
-                            viewModel.speedTestDone = true
-                        }
-                    }, InterAds.SPEED_TEST_RESULT)
+
+
+                        showInterAds(action = {
+                            CoroutineScope(Dispatchers.Main).launch {
+                                navigateToPage(
+                                    R.id.fragmentMain,
+                                    R.id.action_fragmentMain_to_fragmentResultDetail,
+                                    bundle
+                                )
+                                viewModel.setScanStatus(ScanStatus.DONE)
+                                viewModel.speedTestDone = true
+                            }
+                        }, InterAds.SPEED_TEST_RESULT)
+                    }
 
                 }
             }

@@ -27,7 +27,7 @@ class AppRepository @Inject constructor(
 ) {
 
 
-    suspend fun insertHistoryModel(model: HistoryModel) = withContext(dispatcher) {
+    suspend fun insertHistoryModel(model: HistoryModel):Long = withContext(dispatcher) {
         historyLocalService.historyDao.insertHistory(model.toHistoryEntity())
     }
 

@@ -6,8 +6,8 @@ import kotlinx.android.parcel.Parcelize
 import java.util.*
 
 @Parcelize
-class HistoryModel(
-    val id: Int = -1,
+data class HistoryModel(
+    var id: Long = -1L,
     var name_network: String="",
     var internalIP: String = "0.0.0.0",
     var externalIP: String = "0.0.0.0",
@@ -42,7 +42,7 @@ class HistoryModel(
     }
 
     fun toHistoryEntity(): HistoryEntity {
-        val historyId = if (id == -1) 0 else id
+        val historyId = if (id == -1L) 0 else id
         return HistoryEntity(
             id = historyId,
             internalIP = internalIP,

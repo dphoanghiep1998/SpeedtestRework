@@ -7,6 +7,7 @@ import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
 import com.example.speedtest_rework.R
@@ -25,6 +26,7 @@ class FragmentLocationToggle : BaseFragment() {
     ): View {
         binding = FragmentLocationToggleBinding.inflate(inflater, container, false)
         handlePermissionFlow()
+        changeBackPressCallBack()
         return binding.root
     }
 
@@ -68,6 +70,16 @@ class FragmentLocationToggle : BaseFragment() {
                 InterstitialSingleReqAdManager.isShowingAds = false
             }, 1000)
         }
+
+    private fun changeBackPressCallBack() {
+        val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                requireActivity().finishAffinity()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+    }
+
 
 
 }

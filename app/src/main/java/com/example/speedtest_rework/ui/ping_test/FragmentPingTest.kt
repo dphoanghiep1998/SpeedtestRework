@@ -45,6 +45,7 @@ class FragmentPingTest : BaseFragment(), ItemHelper {
     private lateinit var data: List<ItemPingTest>
     private lateinit var rotate: RotateAnimation
     var lastClickTime: Long = 0
+    var lastClickTime1: Long = 0
     var handler = Handler()
     var runnable = Runnable {
         InterstitialSingleReqAdManager.isShowingAds = false
@@ -65,7 +66,7 @@ class FragmentPingTest : BaseFragment(), ItemHelper {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        binding = FragmentPingTestBinding.inflate(inflater,container,false)
+        binding = FragmentPingTestBinding.inflate(inflater, container, false)
         showBannerAds(binding.bannerAds)
         return binding.root
     }
@@ -91,16 +92,15 @@ class FragmentPingTest : BaseFragment(), ItemHelper {
     }
 
     private fun changeBackPressCallBack() {
-        val callback: OnBackPressedCallback =
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    if (SystemClock.elapsedRealtime() - lastClickTime < 30000 && InterstitialSingleReqAdManager.isShowingAds) return
-                    else showInterAds(action = {
-                        findNavController().popBackStack()
-                    }, InterAds.TOOLS_FUNCTION_BACK)
-                    lastClickTime = SystemClock.elapsedRealtime()
-                }
+        val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (SystemClock.elapsedRealtime() - lastClickTime < 30000 && InterstitialSingleReqAdManager.isShowingAds) return
+                else showInterAds(action = {
+                    findNavController().popBackStack()
+                }, InterAds.TOOLS_FUNCTION_BACK)
+                lastClickTime = SystemClock.elapsedRealtime()
             }
+        }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
 
     }
@@ -169,7 +169,7 @@ class FragmentPingTest : BaseFragment(), ItemHelper {
             val intent = Intent(Settings.ACTION_WIFI_SETTINGS)
             startActivity(intent)
         }
-        binding.requestWifiContainer.setOnClickListener {  }
+        binding.requestWifiContainer.setOnClickListener { }
 
     }
 
@@ -204,8 +204,13 @@ class FragmentPingTest : BaseFragment(), ItemHelper {
     }
 
     override fun onClickItemPing(item: ContentPingTest) {
-        val fragmentAdvancedPing = FragmentAdvancedPing(item)
-        fragmentAdvancedPing.show(childFragmentManager, "")
+        if (SystemClock.elapsedRealtime() - lastClickTime1 < 500) return
+        else {
+            val fragmentAdvancedPing = FragmentAdvancedPing(item)
+            fragmentAdvancedPing.show(childFragmentManager, "")
+        }
+        lastClickTime1 = SystemClock.elapsedRealtime()
+
     }
 
 }

@@ -10,7 +10,7 @@ import com.example.speedtest_rework.data.model.HistoryModel
 @Dao
 interface HistoryDao {
     @Insert
-    fun insertHistory(historyEntity: HistoryEntity)
+    fun insertHistory(historyEntity: HistoryEntity):Long
 
     @Delete
     fun deleteHistory(historyEntity: HistoryEntity)

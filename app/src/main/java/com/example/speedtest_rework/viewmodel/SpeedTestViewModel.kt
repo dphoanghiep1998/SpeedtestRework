@@ -129,8 +129,8 @@ class SpeedTestViewModel @Inject constructor(
         return appRepository.getAllHistory()
     }
 
-    fun insertNewHistoryAction(historyModel: HistoryModel) {
-        viewModelScope.launch { appRepository.insertHistoryModel(historyModel) }
+    suspend fun insertNewHistoryAction(historyModel: HistoryModel): Long {
+        return appRepository.insertHistoryModel(historyModel)
     }
 
     fun deleteHistoryAction(historyModel: HistoryModel) {

@@ -6,16 +6,20 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.os.SystemClock
 import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.fragment.BaseFragment
+import com.example.speedtest_rework.common.extensions.InterAds
+import com.example.speedtest_rework.common.extensions.showInterAds
 import com.example.speedtest_rework.common.utils.clickWithDebounce
 import com.example.speedtest_rework.databinding.FragmentPermisisonRequestBinding
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
@@ -29,6 +33,7 @@ class FragmentPermission : BaseFragment() {
     ): View {
         binding = FragmentPermisisonRequestBinding.inflate(inflater, container, false)
         handlePermissionFlow()
+        changeBackPressCallBack()
         return binding.root
     }
 
@@ -142,6 +147,15 @@ class FragmentPermission : BaseFragment() {
                 InterstitialSingleReqAdManager.isShowingAds = false
             }, 1000)
         }
+
+    private fun changeBackPressCallBack() {
+        val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                requireActivity().finishAffinity()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+    }
 
 
 }
