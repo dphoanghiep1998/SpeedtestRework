@@ -1,12 +1,9 @@
 import android.net.SSLCertificateSocketFactory
-import android.util.Log
 import kotlinx.coroutines.*
 import java.io.InputStream
 import java.net.URL
-import java.security.SecureRandom
-import java.security.cert.CertificateException
-import java.security.cert.X509Certificate
-import javax.net.ssl.*
+import javax.net.ssl.HttpsURLConnection
+import javax.net.ssl.SSLSocketFactory
 
 abstract class Downloader(
     private val path: String, private val ckSize: Int,
@@ -28,7 +25,8 @@ abstract class Downloader(
                 var bytesLeft: Long = 0
                 val url = URL(path)
                 val httpsConn = url.openConnection() as HttpsURLConnection
-                httpsConn.sslSocketFactory = SSLCertificateSocketFactory.getInsecure(0, null)
+//                httpsConn.sslSocketFactory = SSLCertificateSocketFactory.getInsecure(0, null)
+                httpsConn.sslSocketFactory = SSLSocketFactory.getDefault() as SSLSocketFactory
                 httpsConn.setRequestProperty("Cache-Control", "no-cache")
                 httpsConn.setRequestProperty("Expires", "-1")
                 httpsConn.setRequestProperty("Pragma", "no-cache")

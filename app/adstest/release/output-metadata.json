@@ -1,0 +1,20 @@
+{
+  "version": 3,
+  "artifactType": {
+    "type": "APK",
+    "kind": "Directory"
+  },
+  "applicationId": "com.internet.speedtest.wifianalyzer.networkspeedtest",
+  "variantName": "adstestRelease",
+  "elements": [
+    {
+      "type": "SINGLE",
+      "filters": [],
+      "attributes": [],
+      "versionCode": 1,
+      "versionName": "1.0",
+      "outputFile": "speedtest__1__1.0__16-03__15h37-adstest-release.apk"
+    }
+  ],
+  "elementType": "File"
+}

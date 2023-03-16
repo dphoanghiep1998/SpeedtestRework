@@ -8,7 +8,6 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.Uri
 import android.os.Bundle
-import android.os.SystemClock
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
@@ -206,7 +205,11 @@ fun Fragment.showNativeAds(
         }, onLoadFail = { _ ->
             action_fail?.invoke()
             it.errorShimmer()
-            it.visibility = View.GONE
+            if (type == NativeType.TOOL) {
+                it.visibility = View.INVISIBLE
+            } else {
+                it.visibility = View.GONE
+            }
         })
     }
 

@@ -207,5 +207,10 @@ class SplashActivity : BaseActivity() {
         finish()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        dialogLoadingInterAds?.hideDialog()
+    }
+
 
 }

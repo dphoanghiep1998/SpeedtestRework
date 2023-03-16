@@ -7,17 +7,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:656290821700:android:2e894810383f068a786e11",
+        "mobilesdk_app_id": "1:656290821700:android:d06c8667002f05d6786e11",
         "android_client_info": {
-          "package_name": "com.nekosoft.internet.android.speedtest"
+          "package_name": "com.internet.speedtest.wifianalyzer.networkspeedtest"
         }
       },
       "oauth_client": [
         {
-          "client_id": "656290821700-fmmuh71hbkvi3skh0b0f9d4bdecnrdv8.apps.googleusercontent.com",
+          "client_id": "656290821700-rge2tephaipga24ash7rki1hi1ncl34o.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.nekosoft.internet.android.speedtest",
+            "package_name": "com.internet.speedtest.wifianalyzer.networkspeedtest",
             "certificate_hash": "c439bb9ccfba67a57f4ba5a108162e139f7a6c97"
           }
         },

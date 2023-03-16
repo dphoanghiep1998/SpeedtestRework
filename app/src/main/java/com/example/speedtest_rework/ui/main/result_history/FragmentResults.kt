@@ -52,8 +52,8 @@ class FragmentResults(private val onStartClickedListener: OnStartClickedListener
     }
     private fun showAdsBottomNav() {
         if (!app.showAdsClickBottomNav) {
+            app.showAdsClickBottomNav = true
             showInterAds(action = {
-                app.showAdsClickBottomNav = true
             }, InterAds.SWITCH_TAB)
         }
     }

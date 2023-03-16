@@ -191,6 +191,7 @@ class SpeedView(
             }
 
             override fun onAnimationEnd(p0: Animator) {
+                Log.d("TAG", "onAnimationEnd: ")
                 hideLoading()
                 hideTvConnecting()
                 showSpeedView()
@@ -198,6 +199,7 @@ class SpeedView(
             }
 
             override fun onAnimationCancel(p0: Animator) {
+                Log.d("TAG", "cancel: ")
                 showBtnStart()
             }
 
@@ -317,7 +319,6 @@ class SpeedView(
                     override fun onAnimationEnd(animation: Animation) {
                         binding.speedView.setSpeedDone(true)
                         hideContainerSpeed()
-                        listener?.onEnd(testModel)
 
 
                     }
@@ -452,6 +453,9 @@ class SpeedView(
                     (context as Activity).runOnUiThread { downloadView() }
                 }
                 (context as Activity).runOnUiThread {
+                    if(speedTest?.stopASAP == true){
+                        return@runOnUiThread
+                    }
                     binding.tvSpeedValue.text = format(convert(dl))
                     binding.speedView.speedTo(convert(dl).toFloat())
                     if (progress >= 1) {
@@ -470,8 +474,10 @@ class SpeedView(
 
             override fun onUploadUpdate(ul: Double, progress: Double) {
                 (context as Activity).runOnUiThread {
+                    if(speedTest?.stopASAP == true){
+                        return@runOnUiThread
+                    }
                     if (progress == 0.0) {
-                        Log.d("TAG", "onUploadUpdate: ")
                         uploadView()
                     }
                     binding.speedView.speedTo(convert(ul).toFloat())
@@ -503,6 +509,9 @@ class SpeedView(
                     testModel?.name_network = NetworkUtils.getNameWifi(context)
                     testModel?.time = System.currentTimeMillis()
                     hideSpeedView()
+                    listener?.onEnd(testModel)
+                    onScanningDone()
+
                 }
             }
 
@@ -583,12 +592,13 @@ class SpeedView(
         binding.tvCurrency.setCompoundDrawablesWithIntrinsicBounds(
             R.drawable.ic_download, 0, 0, 0
         )
+//        binding.loading.cancelAnimation()
+
         binding.speedView.visibility = GONE
         binding.speedView.ticks = listOf()
         binding.speedView.setInitDone(false)
         binding.speedView.stop()
 //        hideTopView()
-        binding.loading.cancelAnimation()
         binding.tvCurrency.visibility = GONE
         binding.tvDownloadValue.visibility = GONE
         binding.placeholderDownload.visibility = VISIBLE

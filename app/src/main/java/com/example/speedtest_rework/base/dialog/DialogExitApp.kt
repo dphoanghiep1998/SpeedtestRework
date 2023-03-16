@@ -38,13 +38,20 @@ class DialogExitApp(
     private fun initView() {
         window?.setLayout(
             (context.resources.displayMetrics.widthPixels * 0.9).toInt(),
-            ViewGroup.LayoutParams.WRAP_CONTENT
+            ViewGroup.LayoutParams.MATCH_PARENT
         )
         window?.setBackgroundDrawableResource(R.color.transparent)
 
         showNativeAds(context,binding.nativeAdMediumView)
         binding.btnExit.clickWithDebounce {
             callback?.exitAction()
+        }
+        binding.root.clickWithDebounce {
+            dismiss()
+        }
+
+        binding.containerMain.clickWithDebounce {
+
         }
 
     }

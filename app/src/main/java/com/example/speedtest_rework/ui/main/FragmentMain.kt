@@ -1,6 +1,6 @@
 package com.example.speedtest_rework.ui.main
 
-import android.Manifest
+import android.app.AlarmManager
 import android.app.AppOpsManager
 import android.content.Context
 import android.content.Intent
@@ -29,6 +29,7 @@ import com.example.speedtest_rework.base.dialog.PermissionDialog
 import com.example.speedtest_rework.base.dialog.RateCallBack
 import com.example.speedtest_rework.base.dialog.RateDialog
 import com.example.speedtest_rework.base.fragment.BaseFragment
+import com.example.speedtest_rework.common.daily_notification.NotificationMain
 import com.example.speedtest_rework.common.extensions.showBannerAds
 import com.example.speedtest_rework.common.utils.*
 import com.example.speedtest_rework.common.utils.AppSharePreference.Companion.INSTANCE
@@ -42,6 +43,7 @@ import com.example.speedtest_rework.ui.main.tools.FragmentTools
 import com.example.speedtest_rework.ui.viewpager.ViewPagerAdapter
 import com.example.speedtest_rework.viewmodel.ScanStatus
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
+import com.gianghv.libads.InterstitialSingleReqAdManager
 import java.util.*
 import kotlin.math.roundToInt
 
@@ -55,14 +57,48 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        binding = FragmentMainBinding.inflate(layoutInflater, container, false)
+        binding = FragmentMainBinding.inflate(inflater, container, false)
         loadLanguage()
         changeBackPressCallBack()
         initView()
         observeIsScanning()
         showBannerAds(binding.bannerAds)
+        requestPermissionAlarm()
         notificationHandleIntentFlow()
         return binding.root
+    }
+
+    private val pushNotificationPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            val alarmManager =
+                ContextCompat.getSystemService(requireContext(), AlarmManager::class.java)
+            if (buildMinVersionS() && alarmManager?.canScheduleExactAlarms() == true) {
+                runNotification()
+            } else if (buildMinVersionN()) {
+                runNotification()
+            }
+        }
+
+    private fun requestPermissionAlarm() {
+        InterstitialSingleReqAdManager.isShowingAds = true
+        if (buildMinVersionS()) {
+            val alarmManager =
+                ContextCompat.getSystemService(requireContext(), AlarmManager::class.java)
+            if (alarmManager?.canScheduleExactAlarms() == false) {
+                pushNotificationPermissionLauncher.launch(Intent().also { intent ->
+                    intent.action = Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
+                })
+            } else {
+                runNotification()
+            }
+        } else {
+            runNotification()
+        }
+
+    }
+
+    private fun runNotification() {
+        NotificationMain.scheduleDailyNotification(requireContext())
     }
 
 
@@ -261,8 +297,7 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
 
         if (actionShowDataUsage != null) {
             if (viewModel.mScanStatus.value != ScanStatus.SCANNING) navigateToPage(
-                R.id.fragmentMain,
-                R.id.action_fragmentMain_to_fragmentDataUsage
+                R.id.fragmentMain, R.id.action_fragmentMain_to_fragmentDataUsage
             )
         }
 
@@ -423,13 +458,20 @@ class FragmentMain : BaseFragment(), PermissionDialog.ConfirmCallback, RateCallB
                     toastShort(getString(R.string.scan_canceled))
                     viewModel.setScanStatus(ScanStatus.HARD_RESET)
                 } else {
-                   val dialogExitApp = DialogExitApp(requireContext(), callback = object :DialogExitApp.ExitCallback{
-                       override fun exitAction() {
-                           requireActivity().finishAffinity()
-                       }
+                    if (NetworkUtils.isConnected(requireContext())) {
+                        val dialogExitApp = DialogExitApp(
+                            requireContext(),
+                            callback = object : DialogExitApp.ExitCallback {
+                                override fun exitAction() {
+                                    requireActivity().finishAffinity()
+                                }
 
-                   })
-                    dialogExitApp.show()
+                            })
+                        dialogExitApp.show()
+                    } else {
+                        requireActivity().finishAffinity()
+                    }
+
                 }
             }
         }

@@ -1,10 +1,11 @@
 package com.example.speedtest_rework.core.getIP
 
-import android.net.SSLCertificateSocketFactory
+import android.util.Log
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.URL
 import javax.net.ssl.HttpsURLConnection
+import javax.net.ssl.SSLSocketFactory
 
 class CurrentNetworkInfo {
     var selfLat = 0.0
@@ -17,7 +18,9 @@ class CurrentNetworkInfo {
             try {
                 val url = URL("https://speedtest.net/speedtest-config.php")
                 val urlConnection = url.openConnection() as HttpsURLConnection
-                urlConnection.sslSocketFactory = SSLCertificateSocketFactory.getInsecure(0, null)
+//                urlConnection.sslSocketFactory = SSLCertificateSocketFactory.getInsecure(0, null)
+                urlConnection.sslSocketFactory = SSLSocketFactory.getDefault() as SSLSocketFactory
+
                 urlConnection.setRequestProperty("Cache-Control", "no-cache")
                 urlConnection.setRequestProperty("Expires", "-1")
                 urlConnection.setRequestProperty("Pragma", "no-cache")

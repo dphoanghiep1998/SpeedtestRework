@@ -6,15 +6,17 @@
     app:startDestination="@id/fragmentLanguageFirstTime">
 
     <fragment
-        android:id="@+id/fragmentPermission"
-        android:name="com.example.speedtest_rework.ui.permissison.FragmentPermission"
+        android:id="@+id/fragmentLocation"
+        android:name="com.example.speedtest_rework.ui.permissison.FragmentLocationToggle"
         android:label="FragmentPermission"
-        tools:layout="@layout/fragment_permission">
+        tools:layout="@layout/fragment_location_toggle">
         <action
-            android:id="@+id/action_fragmentPermission_to_fragmentMain"
-            app:destination="@id/fragmentMain"
-            app:enterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_left" />
+            android:id="@+id/action_fragmentLocation_to_fragmentPermission"
+            app:destination="@id/fragmentPermission" />
+        <action
+            android:id="@+id/action_fragmentLocation_to_fragmentMain"
+            app:destination="@id/fragmentMain" />
+
     </fragment>
     <fragment
         android:id="@+id/fragmentMain"
@@ -96,11 +98,21 @@
         android:id="@+id/fragmentLanguageFirstTime"
         android:name="com.example.speedtest_rework.ui.languages.FragmentLanguageFirstTime"
         android:label="FragmentLanguageFirstTime" >
-        <action
-            android:id="@+id/action_fragmentLanguageFirstTime_to_fragmentPermission"
-            app:destination="@id/fragmentPermission" />
+
         <action
             android:id="@+id/action_fragmentLanguageFirstTime_to_fragmentMain"
+            app:destination="@id/fragmentMain" />
+        <action
+            android:id="@+id/action_fragmentLanguageFirstTime_to_fragmentLocation"
+            app:destination="@id/fragmentLocation" />
+    </fragment>
+    <fragment
+        tools:layout="@layout/fragment_permisison_request"
+        android:id="@+id/fragmentPermission"
+        android:name="com.example.speedtest_rework.ui.permissison.FragmentPermission"
+        android:label="FragmentLocation" >
+        <action
+            android:id="@+id/action_fragmentPermission_to_fragmentMain"
             app:destination="@id/fragmentMain" />
     </fragment>
 </navigation>

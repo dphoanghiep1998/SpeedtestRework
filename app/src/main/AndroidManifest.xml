@@ -28,9 +28,6 @@
         tools:ignore="QueryAllPackagesPermission" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
 
-    <uses-permission
-        android:name="com.google.android.gms.permission.AD_ID"
-        tools:node="remove" />
 
     <application
         android:name=".CustomApplication"
@@ -38,6 +35,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SpeedTest_Rework"
@@ -63,8 +61,9 @@
         </activity>
         <activity
             android:name=".activities.SplashActivity"
-            android:exported="true"
             android:configChanges="uiMode"
+            android:exported="true"
+            android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -75,9 +74,11 @@
         <service android:name=".services.AppForegroundService" />
 
         <receiver
-            android:name=".common.daily_notification.AlarmsReceiver"
+            android:name=".common.daily_notification.TimeChangeReceiver"
             android:exported="false">
             <intent-filter>
+                <action android:name="android.intent.action.TIME_SET" />
+
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -85,13 +86,8 @@
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
             </intent-filter>
         </receiver>
-        <receiver
-            android:name=".common.daily_notification.TimeChangeReceiver"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.intent.action.TIME_SET" />
-            </intent-filter>
-        </receiver>
+
+
 
         <receiver
             android:name="com.adjust.sdk.AdjustReferrerReceiver"
@@ -103,23 +99,26 @@
         </receiver>
         <provider
             android:name="com.facebook.FacebookContentProvider"
-            android:authorities="${application_id}"
+            android:authorities="com.internet.speedtest.wifianalyzer.networkspeedtest"
             android:exported="false" />
+
         <meta-data
             android:name="applovin.sdk.key"
-            android:value="${app_lovin_sdk_key}" />
+            android:value="@string/app_lovin_sdk_key" />
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="${ads_app_id}" />
+            android:value="@string/ads_app_id" />
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
-            android:value="${facebook_app_id}" />
+            android:value="@string/facebook_app_id" />
         <meta-data
             android:name="com.facebook.sdk.ClientToken"
-            android:value="${facebook_client_token}" />
+            android:value="@string/facebook_client_token" />
         <meta-data
             android:name="firebase_performance_logcat_enabled"
             android:value="true" />
     </application>
-
+    <uses-permission
+        android:name="com.google.android.gms.permission.AD_ID"
+        tools:node="remove" />
 </manifest>

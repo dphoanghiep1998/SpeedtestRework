@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:id="@+id/root"
     android:orientation="horizontal">
 
 
@@ -12,7 +12,7 @@
         android:id="@+id/imv_logo"
         android:layout_width="@dimen/_25sdp"
         android:layout_height="@dimen/_25sdp"
-        android:src="@drawable/ic_logo_notification" />
+        android:src="@drawable/ic_logo_noti" />
 
 
     <RelativeLayout
@@ -28,13 +28,13 @@
             style="@style/NotificationText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/_4sdp"
             android:drawableStart="@drawable/ic_download_notification"
             android:drawablePadding="@dimen/_2sdp"
-            android:layout_marginStart="@dimen/_4sdp"
-            android:layout_centerVertical="true"
             android:gravity="center|start"
             android:maxLines="1"
-            android:layout_alignParentStart="true"
             android:text="0 kB/s" />
 
         <TextView
@@ -42,12 +42,12 @@
             style="@style/NotificationText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/_4sdp"
+            android:layout_toEndOf="@id/tv_download_value_notification"
             android:drawableStart="@drawable/ic_upload_notification"
             android:drawablePadding="@dimen/_2sdp"
-            android:layout_marginStart="@dimen/_4sdp"
             android:gravity="center|start"
-            android:layout_centerVertical="true"
-            android:layout_toEndOf="@id/tv_download_value_notification"
             android:maxLines="1"
             android:text="0 kB/s"
             app:autoSizeStepGranularity="1dp" />
@@ -58,11 +58,11 @@
             style="@style/NotificationText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableStart="@drawable/ic_mobile_usage"
-            android:layout_toEndOf="@id/tv_upload_value_notification"
-            android:layout_marginStart="@dimen/_4sdp"
-            android:drawablePadding="@dimen/_2sdp"
             android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/_4sdp"
+            android:layout_toEndOf="@id/tv_upload_value_notification"
+            android:drawableStart="@drawable/ic_mobile_usage"
+            android:drawablePadding="@dimen/_2sdp"
             android:maxLines="1"
             android:text="0 MB" />
 
@@ -71,12 +71,12 @@
             style="@style/NotificationText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/_4sdp"
             android:layout_toEndOf="@id/mobile_usage_value"
             android:drawableStart="@drawable/ic_wifi_usage_notification"
             android:drawablePadding="@dimen/_2sdp"
-            android:layout_marginStart="@dimen/_4sdp"
             android:gravity="center|start"
-            android:layout_centerVertical="true"
             android:maxLines="1"
             android:paddingStart="@dimen/_4sdp"
             android:text="0 MB" />
@@ -86,10 +86,10 @@
             style="@style/NotificationText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
             android:layout_gravity="end"
             android:background="@drawable/button_background_start"
             android:gravity="center"
-            android:layout_alignParentEnd="true"
             android:paddingHorizontal="@dimen/_6sdp"
             android:paddingVertical="@dimen/_6sdp"
             android:text="@string/speed_test"

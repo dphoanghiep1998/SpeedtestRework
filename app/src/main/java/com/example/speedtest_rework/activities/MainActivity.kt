@@ -46,6 +46,8 @@ class MainActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceChangeL
         loadServer()
     }
 
+
+
     override fun attachBaseContext(newBase: Context) = super.attachBaseContext(
         newBase.createContext(
             Locale(
@@ -143,16 +145,16 @@ class MainActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceChangeL
     override fun onSharedPreferenceChanged(
         sharedPreferences: SharedPreferences?, key: String?
     ) {
-        val settingLanguageLocale = viewModel.currentLanguage
-        val languageLocaleChanged = AppSharePreference.INSTANCE.getSavedLanguage(
-            Locale.getDefault().language
-        ) != settingLanguageLocale
-        if (languageLocaleChanged) {
-            viewModel.currentLanguage =
-                AppSharePreference.INSTANCE.getSavedLanguage(Locale.getDefault().language)
-            finish()
-            startActivity(intent)
-        }
+//        val settingLanguageLocale = viewModel.currentLanguage
+//        val languageLocaleChanged = AppSharePreference.INSTANCE.getSavedLanguage(
+//            Locale.getDefault().language
+//        ) != settingLanguageLocale
+//        if (languageLocaleChanged) {
+//            viewModel.currentLanguage =
+//                AppSharePreference.INSTANCE.getSavedLanguage(Locale.getDefault().language)
+//            finish()
+//            startActivity(intent)
+//        }
 
     }
 

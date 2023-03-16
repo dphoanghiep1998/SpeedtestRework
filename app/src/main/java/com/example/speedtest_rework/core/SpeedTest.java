@@ -8,6 +8,8 @@ import com.example.speedtest_rework.core.worker.SpeedtestWorker;
 public class SpeedTest {
     private TestPoint server = null;
     private SpeedtestConfig config = new SpeedtestConfig();
+
+    public boolean stopASAP = false;
     private int state = 0; //0=configs, 1=test points, 2=server selection, 3=ready, 4=testing, 5=finished
 
     private final Object mutex = new Object();
@@ -15,8 +17,7 @@ public class SpeedTest {
 
     public void addTestPoint(TestPoint t) {
         synchronized (mutex) {
-            if (state == 0)
-                state = 1;
+            if (state == 0) state = 1;
 //            if (state > 1)
 //                throw new IllegalStateException("Cannot add test points at this moment");
             server = t;
@@ -76,6 +77,7 @@ public class SpeedTest {
         }
         if (st != null) {
             st.abort();
+            stopASAP = true;
         }
     }
 

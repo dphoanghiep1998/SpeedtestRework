@@ -21,8 +21,7 @@
     <item>ko</item>  
     <item>it</item>  
     <item>de</item> 
-  </array>  
-  <string name="app_name" translatable="false">NET Speed Test</string>  
+  </array>\
   <string name="download">TẢI XUỐNG</string>  
   <string name="upload">TẢI LÊN</string>  
   <string name="test">Bài kiểm tra</string>  
@@ -113,7 +112,9 @@
   <string name="permission_title">Cho phép truy cập để sử dụng</string>  
   <string name="deny">Từ chối</string>  
   <string name="allow">Cho phép</string>  
-  <string name="data_usage_access">Truy cập sử dụng dữ liệu</string>  
+  <string name="data_usage_access">Truy cập sử dụng dữ liệu</string>
+  <string name="precise">Chính xác</string>
+  <string name="approximate">Xấp xỉ</string>
   <string name="speed_test" translatable="false">SpeedTest</string>  
   <string name="not_allowed">Không cho phép</string>  
   <string name="thirty_day">30 ngày</string>  
@@ -121,8 +122,8 @@
   <string name="three_day">3 ngày</string>  
   <string name="today">Hôm nay</string>  
   <string name="check_it_notification">Kiểm tra nó trong thanh thông báo</string>  
-  <string name="language_title">NGÔN NGỮ</string>  
-
+  <string name="language_title">NGÔN NGỮ</string>
+  <string name="instruction_permission_1">Speedtest sử dụng vị trí chính xác của bạn để xác định các máy chủ gần đó và kết nối di động của thiết bị của bạn để cài đặt cấu hình đúng cách.</string>
   <string name="no_list_found">Không có kết quả nào!</string>  
   <string name="total">Tổng cộng</string>  
   <string name="ask_rate">\"Bạn có hài lòng với ứng dụng của chúng tôi không?\"</string>  
@@ -227,4 +228,5 @@
   <string name="error_ocurred">Đã xảy ra lỗi trong quá trình quét!</string>
   <string name="unknown_host">Máy chủ không xác định!</string>
   <string name="packet_received_desc">Một tác vụ đã nhận được một phần của lô nhiều gói và được tắt chờ máy khách gửi gói tiếp theo của lô, hoặc. Một nhiệm vụ đã hoàn thành...</string>
+
 </resources>

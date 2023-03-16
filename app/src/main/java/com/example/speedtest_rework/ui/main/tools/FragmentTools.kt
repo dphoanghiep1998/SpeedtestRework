@@ -55,8 +55,8 @@ class FragmentTools : BaseFragment(), PermissionDialog.ConfirmCallback {
 
     private fun showAdsBottomNav() {
         if (!app.showAdsClickBottomNav) {
+            app.showAdsClickBottomNav = true
             showInterAds(action = {
-                app.showAdsClickBottomNav = true
             }, InterAds.SWITCH_TAB)
         }
     }

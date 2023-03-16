@@ -30,7 +30,6 @@ import com.example.speedtest_rework.viewmodel.ScanStatus
 import com.example.speedtest_rework.viewmodel.SpeedTestViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
@@ -99,16 +98,21 @@ class FragmentSpeedTest : BaseFragment() {
             override fun onEnd(historyModel: HistoryModel?) {
                 if (historyModel != null) {
                     viewModel.insertNewHistoryAction(historyModel)
-                    viewModel.setScanStatus(ScanStatus.DONE)
+                    val bundle = Bundle()
+                    bundle.putParcelable(Constant.KEY_TEST_MODEL, historyModel)
+                    bundle.putBoolean(Constant.KEY_FROM_SPEED_TEST_FRAGMENT, true)
+
                     showInterAds(action = {
                         CoroutineScope(Dispatchers.Main).launch {
-                            val bundle = Bundle()
-                            bundle.putParcelable(Constant.KEY_TEST_MODEL, historyModel)
-                            bundle.putBoolean(Constant.KEY_FROM_SPEED_TEST_FRAGMENT, true)
-                            navigateToPage(R.id.fragmentMain,R.id.action_fragmentMain_to_fragmentResultDetail, bundle)
+                            navigateToPage(
+                                R.id.fragmentMain,
+                                R.id.action_fragmentMain_to_fragmentResultDetail,
+                                bundle
+                            )
+                            viewModel.setScanStatus(ScanStatus.DONE)
                             viewModel.speedTestDone = true
                         }
-                    },InterAds.SPEED_TEST_RESULT)
+                    }, InterAds.SPEED_TEST_RESULT)
 
                 }
             }
@@ -116,7 +120,7 @@ class FragmentSpeedTest : BaseFragment() {
             override fun onError() {
                 viewModel.setScanStatus(ScanStatus.HARD_RESET)
                 viewModel.speedTestDone = true
-                viewModel.setIsConnectivityChanged(true)
+//                viewModel.setIsConnectivityChanged(true)
             }
 
             override fun onStart() {
@@ -137,10 +141,10 @@ class FragmentSpeedTest : BaseFragment() {
     }
 
     private fun initExpandView() {
-        if(!isExpanded){
+        if (!isExpanded) {
             binding.viewSmall.visibility = View.VISIBLE
             binding.viewExpanded.visibility = View.GONE
-        }else{
+        } else {
             binding.viewSmall.visibility = View.GONE
             binding.viewExpanded.visibility = View.VISIBLE
         }
@@ -360,10 +364,12 @@ class FragmentSpeedTest : BaseFragment() {
                 binding.clSpeedview.setData(ConnectionType.UNKNOWN)
                 if (viewModel.mScanStatus.value == ScanStatus.SCANNING) {
                     viewModel.setScanStatus(ScanStatus.HARD_RESET)
-                    binding.clSpeedview.forceStop()
-                    binding.clSpeedview.resetView()
+//                    binding.clSpeedview.forceStop()
+//                    binding.clSpeedview.resetView()
                     viewModel.speedTestDone = true
-                    Toast.makeText(requireContext(),getString(R.string.error_ocurred),Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(), getString(R.string.error_ocurred), Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
@@ -434,7 +440,6 @@ class FragmentSpeedTest : BaseFragment() {
             Log.d("TAG", "observeScanStatus: " + it)
             when (it) {
                 ScanStatus.DONE -> {
-                    binding.clSpeedview.onScanningDone()
                     YoYo.with(Techniques.SlideInLeft).duration(300L).onStart {
                         YoYo.with(Techniques.FadeOut).duration(100L).onEnd {
                             binding.inforHidden.visibility = View.GONE

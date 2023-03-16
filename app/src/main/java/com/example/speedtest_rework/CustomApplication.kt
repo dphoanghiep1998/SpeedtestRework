@@ -82,7 +82,7 @@ class CustomApplication : Application(),Application.ActivityLifecycleCallbacks,
 
     private fun initFBApp() {
 //        AudienceNetworkInitializeHelper.initialize(applicationContext)
-//        AppEventsLogger.activateApp(this)
+        AppEventsLogger.activateApp(this)
     }
 
     private fun initApplovinMediation() {
@@ -92,7 +92,7 @@ class CustomApplication : Application(),Application.ActivityLifecycleCallbacks,
 
     private fun initAdjust() {
         val config = AdjustConfig(
-            this, BuildConfig.adjust_token_key, AdjustConfig.ENVIRONMENT_PRODUCTION
+            this, getString(R.string.adjust_token_key), AdjustConfig.ENVIRONMENT_PRODUCTION
         )
         config.setLogLevel(LogLevel.WARN)
         Adjust.onCreate(config)
@@ -100,6 +100,8 @@ class CustomApplication : Application(),Application.ActivityLifecycleCallbacks,
             this
         )
     }
+    
+
 
     private fun initOpenAds() {
         appOpenAdsManager = AppOpenAdManager(
@@ -144,7 +146,6 @@ class CustomApplication : Application(),Application.ActivityLifecycleCallbacks,
     }
 
     override fun onActivityDestroyed(p0: Activity) {
-        currentActivity = null
     }
     override fun onConfigurationChanged(newConfig: android.content.res.Configuration) {
         super.onConfigurationChanged(newConfig)

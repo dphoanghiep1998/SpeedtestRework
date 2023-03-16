@@ -4,6 +4,7 @@ import com.example.speedtest_rework.BuildConfig
 
 object Constant {
 
+    const val NOTI_EVERYDAY ="NOTI_EVERYDAY"
     const val KEY_LANG_SET ="KEY_LANG_SET"
     const val KEY_DATA_BASE = "DATA_BASE_SPEED_TEST_1"
     const val POLICY_LINK = "https://sites.google.com/view/nksoftpolicy/home"
@@ -36,6 +37,7 @@ object Constant {
 
     const val CHANNEL_NAME = "CHANNEL_NAME_SPEED_TEST"
     const val CHANNEL_ID = "CHANNEL_ID_SPEED_TEST"
+    const val CHANNEL_ID_ALARM = "CHANNEL_ID_SPEED_TEST_ALARM"
 
     const val ALARM_ID = "ALARM_ID_SPEED_TEST"
     const val KEY_NOTIFY_POS = "KEY_NOTIFY_SPEED_TEST"

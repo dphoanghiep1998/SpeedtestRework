@@ -1,4 +1,11 @@
 <resources>
+    <string name="app_name" translatable="false">NET Speed Test</string>
+    <string name="app_lovin_sdk_key" translatable="false">lBnu4FPbTxGUi8cqgwNENfRfqINTVk8B9NxC2Japp2DqKPThsIhPCF7zcC6wr9_IN8OLTcG9SR4dT4OJwQPTBf</string>
+    <string name="facebook_app_id" translatable="false">6250472201669610</string>
+    <string name="facebook_client_token" translatable="false">20a405d511d863dc4e8e7997dd9e3b38</string>
+    <string name="adjust_token_key" translatable="false">ijexu619l3wg</string>
+    <string name="ads_app_id" translatable="false">ca-app-pub-3940256099942544~3347511713</string>
+    <!--    <string name="ads_app_id" translatable="false">ca-app-pub-4636496778732615~8542570893</string>-->
 
     <!--     Common    -->
     <array name="stringLan" translatable="false">
@@ -19,7 +26,6 @@
         <item>it</item>
         <item>de</item>
     </array>
-    <string name="app_name" translatable="false">NET Speed Test</string>
     <string name="download">DOWNLOAD</string>
     <string name="upload">UPLOAD</string>
     <string name="test">test</string>
@@ -81,7 +87,7 @@
     <string name="go">GO</string>
     <!--    Wifi Analyzer Fragment    -->
     <string name="graph_y">Signal Strength (dBm)</string>
-    <string name="graph_x"> \n Wi-Fi Channels</string>
+    <string name="graph_x">\n Wi-Fi Channels</string>
     <string name="open_setting">OPEN SETTING</string>
     <string name="open_setting_permission">Open setting</string>
     <string name="no_permission">To use this feature, please accept location permission on your device</string>
@@ -120,9 +126,9 @@
     <string name="delete_title">DELETE RESULT</string>
 
     <!--    Permission Fragment    -->
-    <string name="require_permission">"You need to grant location access for the app to use full features "</string>
-    <string name="permission_text">"Access to Location permission "</string>
-    <string name="des_permission">We need you, our respectable customers, please happy with 2 touch to permission granted.</string>
+    <string name="require_permission">Speedtest needs certain permissions to function correctly.</string>
+    <string name="permission_text">Access to Location permission</string>
+    <string name="des_permission">Agree for you to give the application to install the permissions granted to the application</string>
     <string name="ping" translatable="false">Ping</string>
     <string name="jitter" translatable="false">Jitter</string>
     <string name="loss" translatable="false">Loss</string>
@@ -260,6 +266,9 @@
     <string name="error_ocurred">An error occurred during the scan!</string>
     <string name="content_notification">We find your network speed seems slow, try to check!</string>
     <string name="exit_app">Exit application!</string>
-
+    <string name="precise">Precise</string>
+    <string name="approximate">Approximate</string>
+    <string name="instruction_permission_1">Speedtest user your precise location to identify nearby severs and your device’s cellular connection in order to properly configure your test.</string>
+    <string name="loading_ads">Loading ads, please wait.....</string>
 
 </resources>

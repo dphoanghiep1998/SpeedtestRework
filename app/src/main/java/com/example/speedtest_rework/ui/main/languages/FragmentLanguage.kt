@@ -9,6 +9,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.speedtest_rework.R
 import com.example.speedtest_rework.base.fragment.BaseFragment
+import com.example.speedtest_rework.common.extensions.NativeType
+import com.example.speedtest_rework.common.extensions.showNativeAds
 import com.example.speedtest_rework.common.utils.AppSharePreference.Companion.INSTANCE
 import com.example.speedtest_rework.common.utils.clickWithDebounce
 import com.example.speedtest_rework.databinding.FragmentLanguageBinding
@@ -24,6 +26,7 @@ class FragmentLanguage : BaseFragment(), TouchLanguageListener {
         binding = FragmentLanguageBinding.inflate(inflater, container, false)
         changeBackPressCallBack()
         initView()
+        showNativeAds(binding.nativeAdMediumView,null,null,null,NativeType.LANGUAGE)
         return binding.root
     }
 
@@ -54,6 +57,9 @@ class FragmentLanguage : BaseFragment(), TouchLanguageListener {
 
     override fun onClickLanguage(locale: Locale) {
         INSTANCE.saveLanguage(locale.language)
+//        INSTANCE.saveLanguage(currentLanguage)
+        startActivity(requireActivity().intent)
+        requireActivity().finish()
     }
 
 }

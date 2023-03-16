@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:behavior_hideable="true"
     android:layout_marginHorizontal="@dimen/_12sdp"
+    app:behavior_hideable="true"
     app:layout_behavior="android.support.design.widget.BottomSheetBehavior"
     tools:ignore="ContentDescription">
 
@@ -14,34 +14,36 @@
         android:id="@+id/container_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/background_ask_rate"
+        android:background="@drawable/background_exit_app"
         android:paddingTop="@dimen/_12sdp"
         android:paddingBottom="@dimen/_12sdp"
+        android:layout_marginBottom="@dimen/_12sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
         <com.gianghv.libads.NativeAdMediumView
-            android:visibility="visible"
             android:id="@+id/nativeAdMediumView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_12sdp"
+            android:visibility="visible"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_exit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_12sdp"
             android:background="@drawable/button_background_start"
             android:foreground="@drawable/ripple_effect_corner_fg"
             android:paddingHorizontal="@dimen/_16sdp"
             android:paddingVertical="@dimen/_8sdp"
-            android:layout_marginTop="@dimen/_12sdp"
             android:text="@string/exit_app"
             android:textAllCaps="false"
-            android:textSize="@dimen/_14sdp"
             android:textColor="@color/gray_900"
+            android:textSize="@dimen/_14sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
